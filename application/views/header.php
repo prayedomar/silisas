@@ -7,22 +7,22 @@
         <meta name="description" content="Inicio Directivo"/>
         <meta name="author" content="Omar Stevenson Rivera Correa"/>
         <!-- Favicon -->        
-        <link rel="shortcut icon" href="{base_url}images/favicon2.ico"/>
+        <link rel="shortcut icon" href="<?= base_url()  ?>images/favicon2.ico"/>
         <!-- CSS -->
-        <link  rel="stylesheet" href="{base_url}libraries/bootstrap_3.0.2/css_cerulean/bootstrap.min.css"/>
-        <link rel="stylesheet" href="{base_url}/css/bootstrapMio.css"/>
-        <link rel="stylesheet" href="{base_url}libraries/jqueryUI/jquery-ui.css"/>
-        <link rel="stylesheet" href="{base_url}libraries/datepicker_bootstrap/datepicker.css"/>
-        <link rel="stylesheet" href="{base_url}libraries/select_chosen/chosen.css"/>
+        <link  rel="stylesheet" href="<?= base_url()  ?>libraries/bootstrap_3.0.2/css_cerulean/bootstrap.min.css"/>
+        <link rel="stylesheet" href="<?= base_url()  ?>/css/bootstrapMio.css"/>
+        <link rel="stylesheet" href="<?= base_url()  ?>libraries/jqueryUI/jquery-ui.css"/>
+        <link rel="stylesheet" href="<?= base_url()  ?>libraries/datepicker_bootstrap/datepicker.css"/>
+        <link rel="stylesheet" href="<?= base_url()  ?>libraries/select_chosen/chosen.css"/>
 
         <!-- Js -->
-        <script src="{base_url}libraries/html5shim/html5.js"></script>
-        <script src="{base_url}libraries/respond/respond.min.js"></script>
-        <script src="{base_url}libraries/jquery/jquery1.7.2.min.js"></script>
-        <script src="{base_url}libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>
-        <script src="{base_url}libraries/jqueryUI/jquery1.18-ui.min.js"/></script>
-    <script src="{base_url}libraries/datepicker_bootstrap/bootstrap-datepicker.js"/></script>
-<script src="{base_url}libraries/select_chosen/chosen.jquery.js"/></script>
+        <script src="<?= base_url() ?>libraries/html5shim/html5.js"></script>
+        <script src="<?= base_url()  ?>libraries/respond/respond.min.js"></script>
+        <script src="<?= base_url()  ?>libraries/jquery/jquery1.7.2.min.js"></script>
+        <script src="<?= base_url()  ?>libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>
+        <script src="<?= base_url()  ?>libraries/jqueryUI/jquery1.18-ui.min.js"/></script>
+    <script src="<?= base_url()  ?>libraries/datepicker_bootstrap/bootstrap-datepicker.js"/></script>
+<script src="<?= base_url()  ?>libraries/select_chosen/chosen.jquery.js"/></script>
 
 <!--Style-->
 <style>
@@ -168,7 +168,7 @@
 <body>
     <div class="navbar navbar-default">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{base_url}" style="font-size: 40px;">SILI S.A.S</a>
+            <a class="navbar-brand" href="<?= base_url()  ?>" style="font-size: 40px;">SILI S.A.S</a>
         </div>
         <div class="navbar-collapse collapse navbar-responsive-collapse">
             <ul class="nav navbar-nav">
@@ -178,44 +178,44 @@
                         <li class="col-sm-3">
                             <ul>
                                 <li class="dropdown-header">Sedes</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_sede">Sede</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_salon">Salón</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_sede">Sede</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_salon">Salón</a></li>
                                 <li class="divider"></li>                                            
                                 <li class="dropdown-header">Empleados</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_salario">Salario Laboral</a></li>                                   
-                                <li><a href="{base_url}index_admon_sistema/crear_empleado">Empleado</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_sede_secundaria">Sedes Secundarias</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_despachar_placa">Despachar Placas</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_recibir_placa">Recibir Placas</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_ausencia_laboral">Ausencia Laboral</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_llamado_atencion">Llamado de Atención</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_salario">Salario Laboral</a></li>                                   
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_empleado">Empleado</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_sede_secundaria">Sedes Secundarias</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_despachar_placa">Despachar Placas</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_recibir_placa">Recibir Placas</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_ausencia_laboral">Ausencia Laboral</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_llamado_atencion">Llamado de Atención</a></li>
                                 <li class="divider"></li>
                                 <li class="dropdown-header">Clientes</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_titular">Titular</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_alumno">Alumno</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_cliente">Cliente Prestatario</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_titular">Titular</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_alumno">Alumno</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_cliente">Cliente Prestatario</a></li>
                                 <li class="divider"></li>
                                 <li class="dropdown-header">Proveedores</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_proveedor">Proveedor</a></li>                                
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_proveedor">Proveedor</a></li>                                
                             </ul>
                         </li>
                         <li class="col-sm-3">
                             <ul>
                                 <li class="dropdown-header">Cajas y Bancos</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_caja">Caja (Punto de Venta)</a></li>                                
-                                <li><a href="{base_url}index_admon_sistema/crear_cuenta">Cuenta Bancaria</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_asignar_cuenta_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_asignar_cuenta_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_caja">Caja (Punto de Venta)</a></li>                                
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_cuenta">Cuenta Bancaria</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_asignar_cuenta_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_asignar_cuenta_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
                                 <li class="divider"></li>                                
                                 <li class="dropdown-header">Transacciones</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_adelanto">Adelanto</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_prestamo">Préstamo</a></li> 
-                                <li><a href="{base_url}index_admon_sistema/crear_abono_adelanto">Abono a Adelanto</a></li>                                
-                                <li><a href="{base_url}index_admon_sistema/crear_abono_prestamo">Abono a Préstamo</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_ingreso">Ingreso</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_egreso">Egreso</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_adelanto">Adelanto</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_prestamo">Préstamo</a></li> 
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_abono_adelanto">Abono a Adelanto</a></li>                                
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_abono_prestamo">Abono a Préstamo</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_ingreso">Ingreso</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_egreso">Egreso</a></li>
                                 <li><a href="#">Factura</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_nomina">Nómina Laboral</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_nomina">Nómina Laboral</a></li>
                                 <li><a href="#">Nota Credito</a></li>
                                 <li><a href="#">Pago Proveedor</a></li>
                                 <li><a href="#">Cuentas por Pagar</a></li>
@@ -233,9 +233,9 @@
                                 <li><a href="#">Pedido de Insumos</a></li>
                                 <li class="divider"></li>                                    
                                 <li class="dropdown-header">Matrículas</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_contrato_fisico">Contratos Físicos</a></li>                                
-                                <li><a href="{base_url}index_admon_sistema/crear_matricula">Matrícula</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_liquidar_matricula/new">Liquidar Matrícula</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_contrato_fisico">Contratos Físicos</a></li>                                
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_matricula">Matrícula</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_liquidar_matricula/new">Liquidar Matrícula</a></li>
                                 <li><a href="#">Referido</a></li>
                                 <li><a href="#">Consolidar Referido</a></li>
                                 <li><a href="#">Material de Estudio</a></li>
@@ -250,7 +250,7 @@
                         <li class="col-sm-3">
                             <ul>
                                 <li class="dropdown-header">Traslados</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_traslado_contrato">Contratos Físicos</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_traslado_contrato">Contratos Físicos</a></li>
                                 <li><a href="#">Material de Estudio</a></li>
                                 <li><a href="#">Articulo de Inventario</a></li>                                   
                                 <li class="divider"></li>
@@ -275,12 +275,12 @@
                         <li class="col-sm-3">
                             <ul>
                                 <li class="dropdown-header">Sedes</li>
-                                <li><a href="{base_url}index_admon_sistema/crear_sede">Sede</a></li>
-                                <li><a href="{base_url}index_admon_sistema/crear_salon">Salon</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_sede">Sede</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/crear_salon">Salon</a></li>
                                 <li class="divider"></li>                                    
                                 <li class="dropdown-header">Empleados</li>
-                                <li><a href="{base_url}index_admon_sistema/editar_sedes_empleado">Sedes de Empleado</a></li>
-                                <li><a href="{base_url}index_admon_sistema/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/editar_sedes_empleado">Sedes de Empleado</a></li>
+                                <li><a href="<?= base_url()  ?>index_admon_sistema/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
                                 <li><a href="#">Renovar Contrato Laboral</a></li>                                
                                 <li><a href="#">Entrega de Placa</a></li>
                                 <li><a href="#">Contrato Laboral</a></li>
@@ -399,7 +399,7 @@
                                 <li><a href="#">Ver Perfil</a></li>
                                 <li><a href="#">Cambiar Contraseña</a></li>
                                 <li class="divider"></li>
-                                <li><a href="{base_url}login/logout_ci">Cerrar Sesión &raquo;</a></li>
+                                <li><a href="<?= base_url()  ?>login/logout_ci">Cerrar Sesión &raquo;</a></li>
                             </ul>
                         </li>
                     </ul>
