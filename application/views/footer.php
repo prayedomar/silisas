@@ -3,5 +3,11 @@
         <p>&copy;2006 - 2014, <a href="http://www.sili.com.co"  target="_blank" class="blanco">SILI S.A.S  </a></p>
     </footer>
 </div>
+<div id="coverDisplay">
+    <img id="imgLoading" src="<?= base_url() ?>public/images/loading.gif">
+</div>
+<?php if (isset($tab) && $tab == "consultar_sede") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_sede.js'></script>
+<?php } ?>
 </body>
 </html>
