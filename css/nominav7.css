@@ -1,0 +1,310 @@
+body {
+	margin:0;
+	padding:0;
+	font: bold 11px/1.5em Verdana;
+	background-color: #D6E8FF;
+}
+
+h2 {
+	font: bold 14px Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 0px 0px 0px 15px;
+}
+img {
+border: none;
+} 
+
+#listadoemp{
+background-color: #BBD1E1;
+border-color: #FF9834;
+}
+
+#error{
+color: red;
+font: bold 14px Verdana, Arial, Helvetica, sans-serif;
+}
+
+#noerror{
+color: green;
+font: bold 14px Verdana, Arial, Helvetica, sans-serif;
+}
+
+
+#menu3 {
+margin-top:1%;
+float: left;
+width: 14%;
+margin-right:1%;
+background-color: #E7E7E7;
+clear:both;
+}
+#contenido {
+background-color: #F0F7FC;
+}
+
+#central {
+clear:both;
+margin-left:10%;
+margin-right:10%;
+}
+
+#contenidoperm{
+	margin-top:1%;
+	margin-left:1%;
+	margin-right:1%;
+	border: 2px solid #BBD9EE;
+	background-color: #F0F7FC;
+	border-radius: 15px;
+	clear:both;
+	}
+/*- Menu Tabs--------------------------- */ 
+
+#tabespecial {
+		float:left;
+      display:block;
+      background:url("imagenes/tabspecial.gif") no-repeat right top;
+      padding:5px 15px 4px 6px;
+      color:#ff8105;
+ }
+ 
+ #tabs a:hover div {
+     color: red;
+ }
+ 
+    #tabs {
+      float:left;
+      width:100%;
+      background:#BBD9EE;
+      font-size:93%;
+      line-height:normal;
+      }
+    #tabs ul {
+	  margin:0;
+	  padding:10px 10px 0 50px;
+	  list-style:none;
+      }
+     ul.tabs {
+	  margin:0;
+	  padding:10px 10px 0 50px;
+	  list-style:none;
+      }
+    #tabs li {
+      display:inline;
+      margin:0;
+      padding:0;
+      }
+    #tabs a {
+      float:left;
+      margin:0;
+      padding:0 0 0 4px;
+      text-decoration:none;
+      }
+    #tabs a span {
+      float:left;
+      display:block;
+      background:url("imagenes/tabright.gif") no-repeat right top;
+      padding:5px 15px 4px 6px;
+      color:#666;
+      }
+     #tabs a span.selected {
+    	color:#FF9834;
+    	background-position:100% -42px;
+    }
+    /* Commented Backslash Hack hides rule from IE5-Mac \*/
+    #tabs a span {float:none;}
+    /* End IE5-Mac hack */
+    #tabs a:hover span {
+      color:#FF9834;
+      }
+    #tabs a:hover {
+      background-position:0% -42px;
+      }
+    #tabs a:hover span {
+      background-position:100% -42px;
+      }
+
+/*Menu Vertical para el empleado*/
+ul.menua {
+		clear: both;
+		float:left;
+        border: 1px solid #ACCFE8;
+        border-width: 1px 1px 0 1px;
+        width: 100%;
+		margin:0;
+		padding:0;
+}
+ul.menua li {
+		padding: .3em;
+        list-style-type: none;
+        border-bottom: 1px solid #ACCFE8;
+}
+
+ul.menua a {
+        text-decoration: none;
+        color: #3366CC;
+        background: #F0F7FC;
+        display: block;
+        padding: 3px 6px;
+}
+
+ul.menua a:hover {
+       background: #DBEBF6;
+}
+
+/* MENU HORIZONTAL */
+#tablist{
+padding: 3px 0;
+margin-left: 0;
+margin-bottom: 0;
+margin-top: 0.1em;
+font: bold 12px Verdana;
+border-bottom: 1px solid gray;
+}
+
+#tablist li{
+list-style: none;
+display: inline;
+margin: 0;
+}
+
+#tablist li a{
+text-decoration: none;
+padding: 3px 0.5em;
+margin-right: 3px;
+border: 1px solid #778;
+border-bottom: none;
+background: white;
+}
+
+#tablist li a:link, #tablist li a:visited{
+color: navy;
+}
+
+#tablist li a:hover{
+color: black;
+background: lightgreen;
+border-color: navy;
+}
+
+#tablist li a.current{
+background: lightgreen;
+}
+
+/* Tabla de estadisticas y de instalar.php */
+
+.tablaazul td{
+background-color:#F0F7FC;
+font-family:Arial;
+}
+
+.tablaazul th{
+background-color:#BBD9EE;
+font-family:Arial;
+}
+
+.tablaazul tr{
+font-family:Arial;
+}
+
+/* ACCESO DE LOGIN **/
+#login-form{
+	background:#F0F7FC;
+	background-position: center center;
+	text-align: center;
+	margin-right: 35%;
+	margin-top: 20%;
+	margin-left: 35%;
+	margin-bottom: 35%;
+	border: 2px solid #BBD9EE;
+	border-radius: 15px;
+}
+
+#login{
+	background-color: #F0F7FC;
+	border-color: #BBD9EE;
+}
+
+.requerido{
+	background-color: #FF9999;
+}
+
+.requerido:focus { 
+outline: 2px solid #FF0000; }
+
+.asteriskred{
+	color:#FF0000;
+}
+
+.asteriskgreen{
+	color:#32CD32;
+	font: bold;
+}
+
+
+/* TABLA HOVER **/
+#tablahover
+{
+	font-size: 12px;
+	width: 70%;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #6581c1;
+}
+#tablahover th
+{
+	font-size: 13px;
+	font-weight: bold;
+	padding: 4px;
+	background: #b9c9fe;
+	border-top: 4px solid #aabcfe;
+	border-bottom: 1px solid #fff;
+	border: 1px solid #6581c1;
+	color: #039;
+}
+#tablahover td
+{
+	padding: 4px;
+	background: #e8edff; 
+	border-bottom: 1px solid #fff;
+	color: #669;
+	border-top: 1px solid transparent;
+	border: 1px solid #6581c1;
+}
+#tablahover tr:hover td
+{
+	background: #d0dafd;
+	color: #339;
+}
+
+/* TABLA HOVER100 **/
+#tablahover100
+{
+	font-size: 12px;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #6581c1;
+}
+#tablahover100 th
+{
+	font-size: 13px;
+	font-weight: bold;
+	background: #b9c9fe;
+	border-top: 2px solid #aabcfe;
+	border-bottom: 1px solid #fff;
+	border: 1px solid #6581c1;
+	color: #039;
+}
+#tablahover100 td
+{
+	background: #e8edff; 
+	color: #669;
+	border-top: 1px solid transparent;
+	border: 1px solid #6581c1;
+}
+#tablahover100 tr:hover td
+{
+	background: #d0dafd;
+	color: #339;
+}
+
