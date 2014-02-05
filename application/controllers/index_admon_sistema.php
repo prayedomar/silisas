@@ -54,7 +54,7 @@ class Index_admon_sistema extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $usuario->id;
         $data['dni_responsable'] = $usuario->dni;
-        $this->parser->parse('index_admon_sistema', $data);
+        $this->parser->parse('header', $data);
         return $data;
     }
 
