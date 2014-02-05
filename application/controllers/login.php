@@ -82,7 +82,7 @@ class Login extends CI_Controller {
                 $this->form_validation->set_rules('dni', 'T.I', 'required|callback_select_default');
                 $this->form_validation->set_rules('id', 'Id de usuario', 'required|trim|min_length[1]|max_length[13]|xss_clean');
                 $this->form_validation->set_rules('password', 'Contraseña', 'required|trim|min_length[1]|max_length[30]|xss_clean');
-//lanzamos mensajes de error si es que los hay
+                //lanzamos mensajes de error si es que los hay
                 if ($this->form_validation->run() == FALSE) {
                     echo form_error('t_usuario') . form_error('dni') . form_error('id') . form_error('password');
                 } else {
@@ -113,11 +113,27 @@ class Login extends CI_Controller {
             $password = $this->input->post('password');
             $check_user = $this->select_model->login_user($id, $dni, $t_usuario, $password);
             if ($check_user == TRUE) {
+                if (file_exists("images/photos/" . $check_user->id . $check_user->dni . ".jpg")) {
+                    $rutaImg = base_url() . "images/photos/" . $check_user->id . $check_user->dni . ".jpg";
+                } else {
+                    if ($check_user->genero == 'M') {
+                        $rutaImg = base_url() . "images/photos/default_men.png";
+                    } else {
+                        $rutaImg = base_url() . "images/photos/default_woman.png";
+                    }
+                }
+                if ($check_user->genero == 'M') {
+                    $msnBienvenida = 'Bienvenido ' . $check_user->nombres . '!';
+                } else {
+                    $msnBienvenida = 'Bienvenida ' . $check_user->nombres . '!';
+                }
                 $data = array(
                     'is_logued_in' => TRUE,
                     'perfil' => $check_user->perfil,
-                    'id' => $check_user->id,
-                    'dni' => $check_user->dni
+                    'idResponsable' => $check_user->id,
+                    'dniResponsable' => $check_user->dni,
+                    'rutaImg' => $rutaImg,
+                    'msnBienvenida' => $msnBienvenida
                 );
                 $this->session->set_userdata($data);
             }
