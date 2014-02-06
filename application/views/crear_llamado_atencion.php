@@ -1,12 +1,12 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <legend>Crear llamado de atención, suspensión o terminación del contrato laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <form role="form" method="post" action="{action_crear}" id="formulario">
                         <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
+                            <div class="col-xs-6 col-xs-offset-3">
                                 <div class="form-group">
                                     <label>Empleado<em class="required_asterisco">*</em></label>
                                     <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos que pertenecen a cualquiera de sus sedes encargadas.</p>
@@ -34,7 +34,7 @@
                             </table>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
+                            <div class="col-xs-6 col-xs-offset-3">
                                 <div class="form-group">
                                     <label>Sanción a inponer<em class="required_asterisco">*</em></label>
                                     <select name="t_sancion" id="t_sancion" class="form-control exit_caution">
@@ -48,7 +48,7 @@
                         </div>
                         <div id="div_suspension" style="display:none;">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Fecha Inicial de la Suspensión<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
@@ -57,7 +57,7 @@
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Fecha Final de la suspensión<em class="required_asterisco">*</em></label>
                                         <div class="input-group">

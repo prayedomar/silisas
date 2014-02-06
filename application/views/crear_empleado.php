@@ -1,13 +1,13 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">          
                 <div class="row separar_div">
                     <legend>Crear Empleado</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p>               
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                         <select name="dni" id="dni" class="form-control exit_caution">
@@ -18,7 +18,7 @@
                                         </select>
                                     </div>   
                                 </div>
-                                <div class="col-md-6">  
+                                <div class="col-xs-6">  
                                     <div class="form-group">
                                         <label>Número de Identificación<em class="required_asterisco">*</em></label>
                                         <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
@@ -26,13 +26,13 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Primer Nombre<em class="required_asterisco">*</em></label>
                                         <input name="nombre1" id="nombre1" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Nombre" maxlength="30">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Segundo Nombre</label>
                                         <input name="nombre2" id="nombre2" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Nombre" maxlength="30">
@@ -40,13 +40,13 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Primer Apellido<em class="required_asterisco">*</em></label>
                                         <input name="apellido1" id="apellido1" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Apellido" maxlength="30">
                                     </div> 
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Segundo Apellido</label>
                                         <input name="apellido2" id="apellido2" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Apellido" maxlength="30">
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Fecha de Nacimiento<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
@@ -63,7 +63,7 @@
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Género<em class="required_asterisco">*</em></label>
                                         <select name="genero" id="genero" class="form-control exit_caution">
@@ -93,7 +93,7 @@
                                 </select>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Departamento<em class="required_asterisco">*</em></label>
                                         <select name="provincia" id="provincia" class="form-control exit_caution" disabled>
@@ -101,7 +101,7 @@
                                         </select>                                
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Ciudad<em class="required_asterisco">*</em></label>
                                         <select name="ciudad" id="ciudad" class="form-control exit_caution" disabled>
@@ -128,15 +128,15 @@
                                 <input name="barrio" id="barrio" type="text" class="form-control exit_caution letras_numeros" placeholder="Barrio o Sector" maxlength="40">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Telefonos<em class="required_asterisco">*</em></label>
                                         <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Telefonos" maxlength="40">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Celular</label>
                                         <input name="celular" id="celular" type="text" class="form-control exit_caution numerico" placeholder="Celular" maxlength="10">
@@ -196,7 +196,7 @@
                 <div class="row">
                     <legend>Contrato Laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
-                        <div class="col-md-8 col-md-offset-2">
+                        <div class="col-xs-8 col-xs-offset-2">
                             <div class="form-group">
                                 <label>Tipo de Contrato Laboral<em class="required_asterisco">*</em></label>
                                 <select name="t_contrato" id="t_contrato" class="form-control exit_caution">
@@ -207,7 +207,7 @@
                                 </select>
                             </div>                            
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Fecha Inicio de Labores<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
@@ -216,7 +216,7 @@
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="col-md-6" id="duracion_contrato" style="display:none;">
+                                <div class="col-xs-6" id="duracion_contrato" style="display:none;">
                                     <div class="form-group">
                                         <label>Duración en Meses<em class="required_asterisco">*</em></label>
                                         <select name="cant_meses" id="cant_meses" class="form-control exit_caution">
@@ -266,7 +266,7 @@
                 </div>  
                 <hr>    
                 <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
+                    <div class="col-xs-10 col-xs-offset-1">
                         <div class="form-group">
                             <label>Observación</label>
                             <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>

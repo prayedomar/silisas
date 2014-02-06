@@ -1,9 +1,9 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">       
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-xs-6">
                         <legend>Crear Salario Laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                         <div class="form-group">
                             <label>Nombre del salario<em class="required_asterisco">*</em></label>
@@ -25,7 +25,7 @@
                         <div id="validacion_alert">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-xs-6">
                         <legend>Conceptos Base para el salario:</legend>
                         <div id="div_t_conceptos">
                         </div>

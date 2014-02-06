@@ -1,15 +1,15 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-xs-10 col-xs-offset-1 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Consultar salones <span class="help-block pull-right">(<?= $cantidadSalones ?> salones encontrados)</span></legend>
+                <legend>Consultar salones <span class="help-block pull-right">(<?= $cantidad_empleados ?> empleados encontrados)</span></legend>
                 <div id="divCriterios" class="row">
-                    <div class="col-xs-2 col-xs-offset-2">
-                        <label> Nombre</label>
+                    <div class="col-xs-2">
+                        <label>Tipo de documento</label>
                         <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
                     </div>
                     <div class="col-xs-2">
-                        <label>Sede</label>
+                        <label>Num. de documento</label>
                         <select id="sede" class="form-control">
                             <option value="">Seleccionar...</option>
                             <?php foreach ($listaSedes as $row) { ?>
@@ -18,12 +18,41 @@
                         </select>
                     </div>
                     <div class="col-xs-2">
-                        <label>Vigente </label>
-                        <select id="vigente" class="form-control">
-                            <option value="">Seleccionar...</option>
-                            <option value="1" <?= isset($_GET["vigente"]) && $_GET["vigente"] == 1 ? "selected" : "" ?>>Vigente</option>
-                            <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == 0 ? "selected" : "" ?>>No vigente</option>
-                        </select>
+                        <label>Primer nombre</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                    </div>
+                    <div class="col-xs-2">
+                        <label>Segundo nombre</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                    </div>
+                    <div class="col-xs-2">
+                        <label>Primer apellido</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                    </div>
+
+                </div>
+                <br>
+               
+                <div class="row">
+                     <div class="col-xs-2">
+                    <label>Segundo apellido</label>
+                    <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                </div>
+                    <div class="col-xs-2">
+                        <label>Estado</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                    </div>
+                    <div class="col-xs-2">
+                        <label>Sede principal</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                    </div>
+                    <div class="col-xs-2">
+                        <label>Depto. empresarial</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                    </div>
+                    <div class="col-xs-2">
+                        <label>Cargo</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
                     </div>
                     <div class="col-xs-1">
                         <br>
@@ -31,7 +60,7 @@
                     </div>
                     <div class="col-xs-1">
                         <br>
-                        <a class='btn btn-primary' href="<?= base_url() ?>salon/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
+                        <a class='btn btn-primary' href="<?= base_url() ?>empleado/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                     </div>
                 </div>
                 <hr>
@@ -49,7 +78,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($listaSalones as $row) { ?>
+                                <?php foreach ($lista_empleados as $row) { ?>
                                     <tr>
                                         <td><?= $row->nombre ?></td>
                                         <td><?= $row->capacidad ?></td>

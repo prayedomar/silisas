@@ -1,20 +1,20 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <div class="row">
                 <legend>Crear Liquidación de Comisiones para una Matrícula</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <div class="row">
-                        <div class="col-md-8 col-md-offset-2 text-center">
+                        <div class="col-xs-8 col-xs-offset-2 text-center">
                             <div id="div_validacion_success">
                             </div>
                         </div>
                     </div>
                     <h4 class="text-center separar_div"><B>Nota: </B>Verifique el organigrama de RRPP de su sede (jefes y cargos), antes de realizar la liquidación de una matrícula.</h4>
                     <form role="form" method="post" action="{action_crear}" id="formulario">
-                        <div class="col-md-12">
+                        <div class="col-xs-12">
                             <div class="row">
-                                <div class="col-md-4 col-md-offset-4">
+                                <div class="col-xs-4 col-xs-offset-4">
                                     <div class="form-group" id="div_matricula">
                                         <label>Número de Matrícula<em class="required_asterisco">*</em></label>
                                         <p class="help-block"><B>> </B>Sólo aparecerán las matrículas no liquidadas, que pertenecen a su sede principal.</p>
@@ -43,7 +43,7 @@
                                 <p class="help-block"><B>> </B>Verifique que el cargo del ejecutivo de la tabla sí sea el correcto, de lo contrario, modifiquelo en la opción Modificar->Cargo y Jefe.</p>                                
                             </div>
                             <div class="row" id="div_comisiones"  style="display:none;">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <legend>Comisión Directa</legend>
                                     <div id="div_comision_directa">
                                         <div id="label_ejecutivo_directo"></div>
@@ -54,7 +54,7 @@
                                         </div>    
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <legend>Comisiones por Escala</legend>
                                     <div id="div_comision_escala">  
                                     </div>
@@ -91,10 +91,10 @@
             <div class="modal-body">
                 <div class="modal_loading">
                     <div class="row  text-center">
-                        <div class="col-md-2 col-md-offset-5 separar_div">
+                        <div class="col-xs-2 col-xs-offset-5 separar_div">
                             <img src="{base_url}images/loading_2.gif" class="img-responsive">
                         </div>
-                        <div  class="col-md-10 col-md-offset-1">
+                        <div  class="col-xs-10 col-xs-offset-1">
                             <h4 class="modal-title" id="myModalLabel">Estamos procesando su solicitud</h4>
                             <h6 class="modal-title" id="myModalLabel">Espere unos segundos</h6>
                         </div>

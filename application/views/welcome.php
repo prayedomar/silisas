@@ -1,11 +1,11 @@
 <div class="jumbotron">
     <div class="row">
-        <div class="col-md-10  col-md-offset-1">
+        <div class="col-xs-10  col-xs-offset-1">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-xs-3">
                     <img src="{base_url}images/huevo.png" class="img-responsive">
                 </div>
-                <div class="col-md-9">
+                <div class="col-xs-9">
                     <div class="row">
                         <h1><?= $_SESSION["msnBienvenida"] ?></h1>
                         <p><?= $_SESSION["textoBienvenida"] ?></p>
