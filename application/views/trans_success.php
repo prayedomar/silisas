@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="{base_url}" class="btn btn-success" role="button">Aceptar</a>
+                <a href="<?= base_url() ?>" class="btn btn-success" role="button">Aceptar</a>
                 <a href="{url_recrear}" class="btn btn-primary" role="button">{msn_recrear}</a>
             </div>
         </div><!-- /.modal-content -->

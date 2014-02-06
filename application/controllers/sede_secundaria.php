@@ -1,6 +1,6 @@
 <?php
 
-class Salon extends CI_Controller {
+class Sede_secundaria extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -8,20 +8,25 @@ class Salon extends CI_Controller {
         $this->load->model('insert_model');
         $this->load->model('update_model');
     }
-    
+
     function crear() {
-        $data = $this->navbar();
+        $data["tab"] = "crear_sede_secundaria";
+        $this->load->view("header", $data);
+        $data['base_url'] = base_url();
+        $data['id_responsable'] = $this->session->userdata('idResponsable');
+        $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['empleado'] = $this->select_model->empleado_activo();
-        $data['action_llena_empleado_sede_secundaria'] = base_url() . "index_admon_sistema/llena_empleado_sede_secundaria";
-        $data['action_anular_secundaria'] = base_url() . "index_admon_sistema/anular_sede_secundaria";
-        $data['action_agregar_secundaria'] = base_url() . "index_admon_sistema/new_sede_secundaria";
-        $data['action_llena_checkbox_secundarias'] = base_url() . "index_admon_sistema/llena_checkbox_secundarias";
+        $data['action_llena_empleado_sede_secundaria'] = base_url() . "sede_secundaria/llena_empleado_sede_secundaria";
+        $data['action_anular_secundaria'] = base_url() . "sede_secundaria/anular";
+        $data['action_agregar_secundaria'] = base_url() . "sede_secundaria/insertar";
+        $data['action_llena_checkbox_secundarias'] = base_url() . "sede_secundaria/llena_checkbox_secundarias";
         $this->parser->parse('sede_secundaria/crear', $data);
         $this->load->view('footer');
     }
 
-    public function new_sede_secundaria() {
+    public function insertar() {
         if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
             //Validamos que haya seleccionado al menos una sede
             $checkbox = $this->input->post('sede_checkbox');
             if ($checkbox != TRUE) {
@@ -58,35 +63,11 @@ class Salon extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
-    public function llena_empleado_sede_secundaria() {
-        if ($this->input->is_ajax_request()) {
-            if ($this->input->post('empleado')) {
-                list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-                $sedes_secundarias = $this->select_model->empleado_sede_secundaria($id_empleado, $dni_empleado);
-                if ($sedes_secundarias == TRUE) {
-                    foreach ($sedes_secundarias as $fila) {
-                        echo '<tr>
-                            <td>' . $fila->nombre . '</td>
-                            <td class="text-center">
-                            <button class="btn btn-danger btn-xs anular_sede" id="' . $fila->sede_secundaria . "-" . $id_empleado . "-" . $dni_empleado . '"><span class="glyphicon glyphicon-remove"></span> Eliminar </button>
-                            </td>
-                         </tr>';
-                    }
-                } else {
-                    echo "";
-                }
-            } else {
-                echo "";
-            }
-        } else {
-            redirect(base_url());
-        }
     }
-    
-    public function anular_sede_secundaria() {
+
+    public function anular() {
         if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
             list($sede_secundaria, $id_empleado, $dni_empleado) = explode("-", $this->input->post('id_empleado_sede'));
             $sede_ppal = $this->input->post('sede_ppal');
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
@@ -113,10 +94,37 @@ class Salon extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
+    public function llena_empleado_sede_secundaria() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            if ($this->input->post('empleado')) {
+                list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
+                $sedes_secundarias = $this->select_model->empleado_sede_secundaria($id_empleado, $dni_empleado);
+                if ($sedes_secundarias == TRUE) {
+                    foreach ($sedes_secundarias as $fila) {
+                        echo '<tr>
+                            <td>' . $fila->nombre . '</td>
+                            <td class="text-center">
+                            <button class="btn btn-danger btn-xs anular_sede" id="' . $fila->sede_secundaria . "-" . $id_empleado . "-" . $dni_empleado . '"><span class="glyphicon glyphicon-remove"></span> Eliminar </button>
+                            </td>
+                         </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     public function llena_checkbox_secundarias() {
         if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $id_responsable = $this->input->post('idResposable');
@@ -139,6 +147,6 @@ class Salon extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
 }

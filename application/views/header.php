@@ -189,7 +189,7 @@
                                     <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>                                   
                                     <li><a href="<?= base_url() ?>empleado/crear">Empleado</a></li>
                                     <li><a href="<?= base_url() ?>sede_secundaria/crear">Sedes Secundarias</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_despachar_placa">Despachar Placas</a></li>
+                                    <li><a href="<?= base_url() ?>sede_secundaria/crear">Despachar Placas</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_recibir_placa">Recibir Placas</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_ausencia_laboral">Ausencia Laboral</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_llamado_atencion">Llamado de Atención</a></li>

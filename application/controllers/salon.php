@@ -11,8 +11,7 @@ class Salon extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_salon";
-        $data['rutaImg'] = $this->session->userdata('rutaImg');
-        $this->parser->parse("header", $data);
+        $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
@@ -60,10 +59,6 @@ class Salon extends CI_Controller {
 
             $error = $this->insert_model->new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
-            $data['rutaImg'] = $this->session->userdata('rutaImg');
-            $data['msnBienvenida'] = $this->session->userdata('msnBienvenida');
-            $data['textoBienvenida'] = $this->session->userdata('textoBienvenida');
-            $data['base_url'] = base_url();
             $this->parser->parse('header', $data);
 
             $data['url_recrear'] = base_url() . "salon/crear";
