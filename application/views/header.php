@@ -552,7 +552,7 @@
                         <ul class="dropdown-menu dropdown-menu-large row">
                             <li class="col-sm-4">
                                 <ul>
-                                    <li><img src="{rutaImg}"></li>
+                                    <li><img src="<?= $_SESSION["rutaImg"] ?>"></li>
                                 </ul>
                             </li>
                             <li class="col-sm-8">

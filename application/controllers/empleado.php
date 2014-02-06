@@ -43,6 +43,7 @@ class Empleado extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);            
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
@@ -98,6 +99,7 @@ class Empleado extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
+            $this->escapar($_POST);
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');
             $nombre1 = ucwords(strtolower($this->input->post('nombre1')));

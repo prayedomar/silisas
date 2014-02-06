@@ -26,6 +26,7 @@ class Salon extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
             $this->form_validation->set_rules('nombre', 'Nombre', 'required|trim|xss_clean|max_length[40]');
             $this->form_validation->set_rules('capacidad', 'Capacidad', 'required|trim|max_length[2]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('sede', 'Sede', 'required|callback_select_default');
@@ -46,6 +47,7 @@ class Salon extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
+            $this->escapar($_POST);
             $nombre = ucwords(strtolower($this->input->post('nombre')));
             $capacidad = $this->input->post('capacidad');
             $sede = $this->input->post('sede');

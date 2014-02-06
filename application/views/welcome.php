@@ -7,8 +7,8 @@
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                        <h1>{msnBienvenida}</h1>
-                        <p>{textoBienvenida}</p>
+                        <h1><?= $_SESSION["msnBienvenida"] ?></h1>
+                        <p><?= $_SESSION["textoBienvenida"] ?></p>
                     </div>
                 </div>
             </div>
