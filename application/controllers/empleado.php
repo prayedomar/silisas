@@ -170,8 +170,6 @@ class Empleado extends CI_Controller {
                     }
                 }
             }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
         } else {
             redirect(base_url());
         }

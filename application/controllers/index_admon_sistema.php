@@ -3,19 +3,6 @@
 if (!defined('BASEPATH'))
     exit('No esta permitido el acceso directo a este controlador. Es necesario pasar antes por el menu principal');
 
-
-//Para atrapar los errores critical y notice de php
-set_error_handler('exceptions_error_handler');
-
-function exceptions_error_handler($severity, $message, $filename, $lineno) {
-    if (error_reporting() == 0) {
-        return;
-    }
-    if (error_reporting() & $severity) {
-        throw new ErrorException($message, 0, $severity, $filename, $lineno);
-    }
-}
-
 class Index_admon_sistema extends CI_Controller {
 
     public function __construct() {
@@ -727,136 +714,6 @@ class Index_admon_sistema extends CI_Controller {
                 echo json_encode($response);
                 return FALSE;
             }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-//Crear: Recibir  Placa
-    function crear_recibir_placa() {
-        $data = $this->navbar();
-        $data['action_validar'] = base_url() . "index_admon_sistema/validar_recibir_placa";
-        $data['action_crear'] = base_url() . "index_admon_sistema/new_recibir_placa";
-        $data['action_llenar_placas'] = base_url() . "index_admon_sistema/llena_despacho_placa";
-        $this->parser->parse('crear_recibir_placa', $data);
-        $this->load->view('footer');
-    }
-
-    function validar_recibir_placa() {
-        if ($this->input->is_ajax_request()) {
-            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-            $placas_checkbox = $this->input->post('placas_checkbox');
-            $error_check_placas = "";
-            if ($placas_checkbox != TRUE) {
-                $error_check_placas = "<p>Seleccione al menos una solicitud.</p>";
-            }
-            if (($this->form_validation->run() == FALSE) || ($error_check_placas != "")) {
-                echo $error_check_placas . form_error('observacion');
-            } else {
-                echo "OK";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-    function new_recibir_placa() {
-        if ($this->input->post('submit')) {
-            $despachos_checkbox = $this->input->post('placas_checkbox');
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
-
-            $data = $this->navbar();
-            $data['url_recrear'] = base_url() . "index_admon_sistema/crear_recibir_placa";
-            $data['msn_recrear'] = "Recibir otra Placa";
-            $bandera_error = 0;
-            foreach ($despachos_checkbox as $fila) {
-                $error = $this->insert_model->recibir_placa($fila, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
-                if (isset($error)) {
-                    $data['trans_error'] = $error;
-                    $this->parser->parse('trans_error', $data);
-                    $bandera_error = 1;
-                } else {
-                    //SI no hubo error, entonces quito el pendiente de de la solicitud despachada.
-                    $this->update_model->despachar_placa_pendiente($fila, 0);
-                }
-            }
-            if ($bandera_error == 0) {
-                $this->parser->parse('trans_success', $data);
-            }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
-        } else {
-            redirect(base_url());
-        }
-    }
-
-//Crear: Ausencia Laboral
-    function crear_ausencia_laboral() {
-        $data = $this->navbar();
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
-
-        $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
-        $data['t_ausencia'] = $this->select_model->t_ausencia();
-
-
-        $data['action_validar'] = base_url() . "index_admon_sistema/validar_ausencia_laboral";
-        $data['action_crear'] = base_url() . "index_admon_sistema/new_ausencia_laboral";
-        $this->parser->parse('crear_ausencia_laboral', $data);
-        $this->load->view('footer');
-    }
-
-    function validar_ausencia_laboral() {
-        if ($this->input->is_ajax_request()) {
-            $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
-            $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicial', 'required|xss_clean|callback_fecha_valida');
-            $this->form_validation->set_rules('fecha_fin', 'Fecha Final', 'required|xss_clean|callback_fecha_valida');
-            $this->form_validation->set_rules('t_ausencia', 't_ausencia', 'required|callback_select_default');
-            $this->form_validation->set_rules('descripcion', 'Descripción', 'required|trim|xss_clean|max_length[255]');
-            $error_entre_fechas = "";
-            if (($this->fecha_valida($this->input->post('fecha_inicio'))) && ($this->fecha_valida($this->input->post('fecha_fin')))) {
-                if (($this->dias_entre_fechas($this->input->post('fecha_inicio'), $this->input->post('fecha_fin'))) < 0) {
-                    $error_entre_fechas = "<p>La fecha final no puede ser menor que la fecha inicial.</p>";
-                }
-            }
-            if (($this->form_validation->run() == FALSE) || ($error_entre_fechas != "")) {
-                echo form_error('empleado') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('t_ausencia') . form_error('observacion');
-            } else {
-                echo "OK";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-    function new_ausencia_laboral() {
-        if ($this->input->post('submit')) {
-            list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-            $fecha_inicio = $this->input->post('fecha_inicio');
-            $fecha_fin = $this->input->post('fecha_fin');
-            $t_ausencia = $this->input->post('t_ausencia');
-            $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
-
-
-            $error = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
-
-            $data = $this->navbar();
-            $data['url_recrear'] = base_url() . "index_admon_sistema/crear_ausencia_laboral";
-            $data['msn_recrear'] = "Crear otra Ausencia Laboral";
-            if (isset($error)) {
-                $data['trans_error'] = $error;
-                $this->parser->parse('trans_error', $data);
-            } else {
-                $this->parser->parse('trans_success', $data);
-            }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
         } else {
             redirect(base_url());
         }
@@ -2410,106 +2267,6 @@ class Index_admon_sistema extends CI_Controller {
         }
     }
 
-//Crear: Llamado de atencion
-    function crear_llamado_atencion() {
-        $data = $this->navbar();
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
-        $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
-        $data['t_sancion'] = $this->select_model->t_sancion();
-
-        $data['action_validar'] = base_url() . "index_admon_sistema/validar_llamado_atencion";
-        $data['action_crear'] = base_url() . "index_admon_sistema/new_llamado_atencion";
-
-        $data['action_llenar_faltas'] = base_url() . "index_admon_sistema/llena_falta_laboral";
-
-        $this->parser->parse('crear_llamado_atencion', $data);
-        $this->load->view('footer');
-    }
-
-    function validar_llamado_atencion() {
-        if ($this->input->is_ajax_request()) {
-            $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
-            $this->form_validation->set_rules('t_falta_laboral', 'Falta Laboral', 'required');
-            $this->form_validation->set_rules('t_sancion', 'Sanción a Imponer', 'required|callback_select_default');
-            $this->form_validation->set_rules('descripcion', 'Descripción', 'required|trim|xss_clean|max_length[255]');
-
-            $error_entre_fechas = "";
-            //Si escogió suspencion laboral, valido los dos campos.
-            if ($this->input->post('t_sancion') == '2') {
-                $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicial de la Suspensión', 'required|xss_clean|callback_fecha_valida');
-                $this->form_validation->set_rules('fecha_fin', 'Fecha Final de la Suspensión', 'required|xss_clean|callback_fecha_valida');
-                if (($this->fecha_valida($this->input->post('fecha_inicio'))) && ($this->fecha_valida($this->input->post('fecha_fin')))) {
-                    if (($this->dias_entre_fechas($this->input->post('fecha_inicio'), $this->input->post('fecha_fin'))) < 0) {
-                        $error_entre_fechas = "<p>La fecha final no puede ser menor que la fecha inicial.</p>";
-                    }
-                }
-            }
-            if (($this->form_validation->run() == FALSE) || ($error_entre_fechas != "")) {
-                echo form_error('empleado') . form_error('t_falta_laboral') . form_error('t_sancion') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('descripcion');
-            } else {
-                echo "OK";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-    function new_llamado_atencion() {
-        if ($this->input->post('submit')) {
-            list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-            $t_falta_laboral = $this->input->post('t_falta_laboral');
-            $t_sancion = $this->input->post('t_sancion');
-            $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
-
-            $id_llamado_atencion = ($this->select_model->nextId_llamado_atencion()->id) + 1;
-
-            $error1 = $this->insert_model->llamado_atencion($id_llamado_atencion, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
-
-            $data = $this->navbar();
-            $data['url_recrear'] = base_url() . "index_admon_sistema/crear_llamado_atencion";
-            $data['msn_recrear'] = "Crear otro llamado de atención";
-            if (isset($error1)) {
-                $data['trans_error'] = $error1;
-                $this->parser->parse('trans_error', $data);
-            } else {
-                //Si se va a realizar una suspension laboral.
-                if ($t_sancion == '2') {
-                    $fecha_inicio = $this->input->post('fecha_inicio');
-                    $fecha_fin = $this->input->post('fecha_fin');
-                    $error2 = $this->insert_model->suspension_laboral($id_empleado, $dni_empleado, $id_llamado_atencion, $fecha_inicio, $fecha_fin, 1);
-                    if (isset($error2)) {
-                        $data['trans_error'] = $error2;
-                        $this->parser->parse('trans_error', $data);
-                        $this->parser->parse('welcome', $data);
-                        $this->load->view('footer');
-                        return;
-                    }
-                } else {
-                    //En el caso en que halla escogido anular el contrato
-                    if ($t_sancion == '3') {
-                        $error3 = $this->update_model->contrato_laboral_estado($id_empleado, $dni_empleado, 2);
-                        if (isset($error3)) {
-                            $data['trans_error'] = $error3;
-                            $this->parser->parse('trans_error', $data);
-                            $this->parser->parse('welcome', $data);
-                            $this->load->view('footer');
-                            return;
-                        }
-                    }
-                }
-                $this->parser->parse('trans_success', $data);
-            }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
-        } else {
-            redirect(base_url());
-        }
-    }
-
     //Editar: Sede Empleado
     function editar_sedes_empleado() {
         $data = $this->navbar();
@@ -3691,25 +3448,6 @@ class Index_admon_sistema extends CI_Controller {
         }
     }
 
-    public function llena_falta_laboral() {
-        if ($this->input->is_ajax_request()) {
-            $faltas = $this->select_model->t_falta_laboral();
-            if (($faltas == TRUE)) {
-                foreach ($faltas as $fila) {
-                    echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="t_falta_laboral"  value="' . $fila->id . '"/></td>
-                            <td>' . $fila->falta . '</td>
-                            <td class="text-center">' . $fila->gravedad . '</td>
-                        </tr>';
-                }
-            } else {
-                echo "";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
     public function llena_cuenta_bancaria() {
         if ($this->input->is_ajax_request()) {
             $cuentas = $this->select_model->cuenta_banco();
@@ -3981,7 +3719,7 @@ class Index_admon_sistema extends CI_Controller {
                 $response = array(
                     'respuesta' => 'OK',
                     'html_ausencias' => '',
-                    'cant_nomina' => $this->diasEntreFechas($fecha_inicio_nomina, $fecha_fin_nomina) + 1,
+                    'cant_nomina' => $this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina) + 1,
                     'cant_ausencias' => 0,
                     'cant_incapacidad' => 0
                 );
@@ -4003,12 +3741,12 @@ class Index_admon_sistema extends CI_Controller {
                     foreach ($ausencias as $fila) {
                         //Calculamos la cantidad de dias de ausencia dentro de la nomina
                         if ((($fila->fecha_inicio >= $fecha_inicio_nomina) and ($fila->fecha_inicio <= $fecha_fin_nomina)) && (($fila->fecha_fin >= $fecha_inicio_nomina) and ($fila->fecha_fin <= $fecha_fin_nomina))) {
-                            $cant_ausencia = $this->diasEntreFechas($fila->fecha_inicio, $fila->fecha_fin) + 1;
+                            $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fila->fecha_fin) + 1;
                         } else {
                             if ((($fila->fecha_inicio >= $fecha_inicio_nomina) and ($fila->fecha_inicio <= $fecha_fin_nomina))) {
-                                $cant_ausencia = $this->diasEntreFechas($fila->fecha_inicio, $fecha_fin_nomina) + 1;
+                                $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fecha_fin_nomina) + 1;
                             } else {
-                                $cant_ausencia = $this->diasEntreFechas($fecha_inicio_nomina, $fila->fecha_fin) + 1;
+                                $cant_ausencia = $this->dias_entre_fechas($fecha_inicio_nomina, $fila->fecha_fin) + 1;
                             }
                         }
                         if ($fila->t_ausencia == 2) {
@@ -4345,7 +4083,7 @@ class Index_admon_sistema extends CI_Controller {
                 $cuota_cancelada = $matriz_prestamo[$i][12];
                 $fecha_hoy = date('Y-m-d');
                 if (($cuota_cancelada == 0) && ($fecha_pago < $fecha_hoy)) {
-                    $dias_mora = $this->diasEntreFechas($fecha_pago, $fecha_hoy);
+                    $dias_mora = $this->dias_entre_fechas($fecha_pago, $fecha_hoy);
                     //Descartamos una mora inferior a 4 dias de gracia.   
                     //Pero si es mayor a 4 la contamos completa sin descartar los 4 dias.
                     if ($dias_mora > 4) {
@@ -4362,118 +4100,6 @@ class Index_admon_sistema extends CI_Controller {
         } else {
             return false;
         }
-    }
-
-    //callback de form_validation
-    function select_default($campo) {
-        if ($campo == "default") {
-            $this->form_validation->set_message('select_default', 'El Campo %s, es obligatorio.');
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    }
-
-    //callback de form_validation, hay que tener en cuenta que si es vacio no se debe mostrar error.
-    function miles_numeric($campo) {
-        if ($campo) {
-            if (is_numeric(str_replace(",", "", $campo))) {
-                return TRUE;
-            } else {
-                $this->form_validation->set_message('miles_numeric', 'El Campo %s, debe ser númerico.');
-                return FALSE;
-            }
-        }
-    }
-
-    //callback de form_validation
-    function valor_positivo($campo) {
-        if ($campo) {
-            if (is_numeric(str_replace(",", "", $campo))) {
-                if ($campo >= 0) {
-                    return TRUE;
-                } else {
-                    $this->form_validation->set_message('valor_positivo', 'El Campo %s, debe ser mayor o igual cero.');
-                    return FALSE;
-                }
-            } else {
-                $this->form_validation->set_message('valor_positivo', 'El Campo %s, debe ser númerico.');
-                return FALSE;
-            }
-        }
-    }
-
-    //callback de form_validation
-    function mayor_cero($campo) {
-        if ($campo) {
-            if (is_numeric(str_replace(",", "", $campo))) {
-                if ($campo > 0) {
-                    return TRUE;
-                } else {
-                    $this->form_validation->set_message('mayor_cero', 'El Campo %s, debe ser mayor a cero.');
-                    return FALSE;
-                }
-            } else {
-                $this->form_validation->set_message('mayor_cero', 'El Campo %s, debe ser númerico.');
-                return FALSE;
-            }
-        }
-    }
-
-    //callback de form_validation
-    function fecha_valida($campo) {
-        if ($campo) {
-            try {
-                //HAcemos try catch porq el explode puede explotar si no le llega 5745-5454-5454
-                list($anyo, $mes, $dia) = explode("-", $campo);
-                if (!checkdate($mes, $dia, $anyo)) {
-                    $this->form_validation->set_message('fecha_valida', 'El campo %s, debe ser una fecha válida: yyyy-mm-dd.');
-                    return FALSE;
-                } else {
-                    return TRUE;
-                }
-            } catch (Exception $e) {
-                $this->form_validation->set_message('fecha_valida', 'El campo %s, debe ser una fecha válida: yyyy-mm-dd.');
-                return FALSE;
-            }
-        }
-    }
-
-    //callback de form_validation
-    function porcentaje($campo) {
-        if ($campo) {
-            if (is_numeric(str_replace(",", "", $campo))) {
-                if (($campo >= 0) && ($campo <= 100)) {
-                    return TRUE;
-                } else {
-                    $this->form_validation->set_message('porcentaje', 'El Campo %s, debe estar entre 0 y 100.');
-                    return FALSE;
-                }
-            } else {
-                $this->form_validation->set_message('porcentaje', 'El Campo %s, debe ser númerico.');
-                return FALSE;
-            }
-        }
-    }
-
-    //Cantidad de dias entre 2 fechas
-    function dias_entre_fechas($fechaStart, $fechaEnd) {
-        list($anyoStart, $mesStart, $diaStart) = explode("-", $fechaStart);
-        list($anyoEnd, $mesEnd, $diaEnd) = explode("-", $fechaEnd);
-        $diasStartJuliano = gregoriantojd($mesStart, $diaStart, $anyoStart);
-        $diasEndJuliano = gregoriantojd($mesEnd, $diaEnd, $anyoEnd);
-
-        return $diasEndJuliano - $diasStartJuliano;
-    }
-
-    function diasEntreFechas($fechaStart, $fechaEnd) {
-        list($anyoStart, $mesStart, $diaStart) = explode("-", $fechaStart);
-        list($anyoEnd, $mesEnd, $diaEnd) = explode("-", $fechaEnd);
-
-        $diasStartJuliano = gregoriantojd($mesStart, $diaStart, $anyoStart);
-        $diasEndJuliano = gregoriantojd($mesEnd, $diaEnd, $anyoEnd);
-
-        return $diasEndJuliano - $diasStartJuliano;
     }
 
 }

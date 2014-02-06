@@ -98,8 +98,6 @@ class Sede extends CI_Controller {
                 $this->insert_model->empleado_x_sede(1, 1, $id_sede);
                 $this->parser->parse('trans_success', $data);
             }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
         } else {
             redirect(base_url());
         }

@@ -86,8 +86,6 @@ class Salario extends CI_Controller {
                 }
                 $this->parser->parse('trans_success', $data);
             }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
         } else {
             redirect(base_url());
         }
@@ -157,5 +155,7 @@ class Salario extends CI_Controller {
         $this->escapar($_GET);
         echo json_encode($this->concepto_base_nominam->listar_por_salario($_GET["idSalario"]));
     }
+    
+    
 
 }
