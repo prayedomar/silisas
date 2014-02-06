@@ -1,6 +1,6 @@
 <?php
 
-class Sede_secundaria extends CI_Controller {
+class Despachar_placa extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -18,7 +18,7 @@ class Sede_secundaria extends CI_Controller {
         $data['action_validar'] = base_url() . "despachar_placa/validar";
         $data['action_crear'] = base_url() . "despachar_placa/insertar";
         $data['action_llenar_placas'] = base_url() . "despachar_placa/llena_solicitud_placa";
-        $this->parser->parse('crear_despachar_placa', $data);
+        $this->parser->parse('despachar_placa/crear', $data);
         $this->load->view('footer');
     }
 
