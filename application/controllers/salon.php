@@ -6,6 +6,7 @@ class Salon extends CI_Controller {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
+        $this->load->model('salonm');
     }
 
     function crear() {
@@ -64,7 +65,7 @@ class Salon extends CI_Controller {
             $data['textoBienvenida'] = $this->session->userdata('textoBienvenida');
             $data['base_url'] = base_url();
             $this->parser->parse('header', $data);
-            
+
             $data['url_recrear'] = base_url() . "salon/crear";
             $data['msn_recrear'] = "Crear otro Salón";
             if (isset($error)) {
@@ -78,9 +79,30 @@ class Salon extends CI_Controller {
         } else {
             redirect(base_url() . 'index_admon_sistema');
         }
-    }    
-    
+    }
+
 //A continuación: Metodos para consultar    
-    
-    
+    public function consultar() {
+        $this->load->model('sedem');
+        $data["tab"] = "consultar_salon";
+        $data['listaSedes'] = $this->sedem->listar_todas_las_sedes();
+        $filasPorPagina = 2;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidadSalones = $this->salonm->cantidad_salones($_GET, $inicio, $filasPorPagina);
+        $cantidadSalones = $cantidadSalones[0]->cantidad;
+        $data['cantidadSalones'] = $cantidadSalones;
+        $data['cantidadPaginas'] = ceil($cantidadSalones / $filasPorPagina);
+        $data["listaSalones"] = $this->salonm->listar_salones($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("salon/consultar");
+        $this->load->view("footer");
+    }
+
 }
