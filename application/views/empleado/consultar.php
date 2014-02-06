@@ -1,5 +1,6 @@
 <div class="contenidoperm">
-        <div class="col-xs-12">
+    <div class="row">
+        <div class="col-xs-12 thumbnail">
             <div class="row">
                 <legend>Consultar salones <span class="help-block pull-right">(<?= $cantidad_empleados ?> empleados encontrados)</span></legend>
                 <div id="divCriterios" class="row">
