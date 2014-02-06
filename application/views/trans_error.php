@@ -3,7 +3,6 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Error durante la transacción</h4>
             </div>
             <div class="modal-body">
@@ -20,7 +19,12 @@
     </div>
 </div>
 <!--Cargar el modal-->
-<script type="text/javascript" id="js">$(document).ready(function() {
-                $("#myModal").modal('show')
-            });
+<script type="text/javascript" id="js">
+    $(function() {
+        $("#myModal").modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        });
+    });
 </script>

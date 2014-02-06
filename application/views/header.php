@@ -37,17 +37,10 @@
                     if (e.keyCode == 27)
                         return false;
                 });
-
-                //para que la navbar se active al pasar el mouse
-//                $('.nav li.dropdown').hover(function() {
-//                    $(this).addClass('open');
-//                }, function() {
-//                    $(this).removeClass('open');
-//                });
                 
                 //Enviar formulario por ajax
                 $('#botonValidar').live('click', function() {
-                    //Mostramos el div de loading y edshabilitamos el teclado
+                    //PAra desactivar el click al lado del modal para cerrarlo
                     $(function() {
                         $('#modal_loading').modal({
                             show: true,
@@ -63,13 +56,11 @@
                         success: function(data)
                         {
                             if (data != "OK") {
-                                //                        $("#validacion_alert").attr('class', 'alert alert-danger');
                                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                                 $("#div_alert").html(data);
                                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
                                 //Para cerrar el modal de loading
                                 $('#modal_loading').modal('hide');
-                                //PAra habilitar la tecla esc
                             } else {
                                 $(window).unbind('beforeunload');
                                 $("#btn_submit").click();
@@ -183,10 +174,10 @@
                                     <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>                                   
                                     <li><a href="<?= base_url() ?>empleado/crear">Empleado</a></li>
                                     <li><a href="<?= base_url() ?>sede_secundaria/crear">Sedes Secundarias</a></li>
-                                    <li><a href="<?= base_url() ?>sede_secundaria/crear">Despachar Placas</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_recibir_placa">Recibir Placas</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_ausencia_laboral">Ausencia Laboral</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_llamado_atencion">Llamado de Atención</a></li>
+                                    <li><a href="<?= base_url() ?>despachar_placa/crear">Despachar Placas</a></li>
+                                    <li><a href="<?= base_url() ?>recibir_placa/crear">Recibir Placas</a></li>
+                                    <li><a href="<?= base_url() ?>ausencia_laboral/crear">Ausencia Laboral</a></li>
+                                    <li><a href="<?= base_url() ?>llamado_atencion/crear">Llamado de Atención</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Clientes</li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_titular">Titular</a></li>

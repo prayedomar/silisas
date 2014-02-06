@@ -4,7 +4,7 @@
             <form role="form" method="post" action="{action_crear}" id="formulario">       
                 <div class="row">
                     <div class="col-xs-6">
-                        <legend>Crear Salario Laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                        <legend>Crear salario laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                         <div class="form-group">
                             <label>Nombre del salario<em class="required_asterisco">*</em></label>
                             <input name="nombre" id="nombre" type="text" class="form-control exit_caution letras_numeros" placeholder="Nombre del Salario" maxlength="40">
