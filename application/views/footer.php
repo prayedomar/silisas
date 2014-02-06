@@ -8,6 +8,8 @@
 </div>
 <?php if (isset($tab) && $tab == "consultar_sede") { ?>
     <script src='<?= base_url() ?>public/js/consultar_sede.js'></script>
+<?php } else if (isset($tab) && $tab == "consultar_salon") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_salon.js'></script>
 <?php } ?>
 </body>
 </html>

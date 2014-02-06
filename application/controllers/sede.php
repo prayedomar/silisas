@@ -171,7 +171,6 @@ class Sede extends CI_Controller {
             $paginaActual = $_GET["page"];
         }
         $data['paginaActiva'] = $paginaActual;
-        $data['cantidadPaginas'] = "5";
         $cantidadSedes = $this->sedem->cantidadSedes($_GET, $inicio, $filasPorPagina);
         $cantidadSedes = $cantidadSedes[0]->cantidad;
         $data['cantidadSedes'] = $cantidadSedes;

@@ -9,6 +9,11 @@ class Sedem extends CI_Model {
         parent::__construct();
     }
 
+    public function listar_todas_las_sedes() {
+        $query = "SELECT * FROM sede";
+        return $this->db->query($query)->result();
+    }
+
     public function cantidadSedes($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT count(*) cantidad
                   FROM sede s
