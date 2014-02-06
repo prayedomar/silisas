@@ -27,7 +27,7 @@ class Login extends CI_Controller {
                 redirect(base_url() . 'index_admon_sede');
                 break;
             case 'admon_sistema':
-                redirect(base_url() . 'index_admon_sistema');
+                redirect(base_url());
                 break;
             case 'analista_cartera':
                 redirect(base_url() . 'index_analista_cartera');

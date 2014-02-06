@@ -39,7 +39,7 @@ class Salon extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -76,7 +76,7 @@ class Salon extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }    
     

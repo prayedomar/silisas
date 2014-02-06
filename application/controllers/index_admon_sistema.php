@@ -98,7 +98,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -151,7 +151,7 @@ class Index_admon_sistema extends CI_Controller {
                 $this->load->view('footer');
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -226,7 +226,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -295,7 +295,7 @@ class Index_admon_sistema extends CI_Controller {
                 $this->load->view('footer');
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -339,7 +339,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -388,7 +388,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -444,7 +444,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -499,7 +499,7 @@ class Index_admon_sistema extends CI_Controller {
                 $this->load->view('footer');
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -555,7 +555,7 @@ class Index_admon_sistema extends CI_Controller {
                 return FALSE;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -584,7 +584,7 @@ class Index_admon_sistema extends CI_Controller {
             echo json_encode($response);
             return FALSE;
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -642,7 +642,7 @@ class Index_admon_sistema extends CI_Controller {
                 return FALSE;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -676,7 +676,7 @@ class Index_admon_sistema extends CI_Controller {
             echo json_encode($response);
             return FALSE;
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -728,7 +728,7 @@ class Index_admon_sistema extends CI_Controller {
                 return FALSE;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -760,7 +760,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -795,7 +795,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -823,7 +823,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -856,7 +856,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -895,7 +895,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -925,7 +925,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -979,7 +979,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1024,7 +1024,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1084,7 +1084,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1134,7 +1134,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1202,7 +1202,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1276,7 +1276,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1357,7 +1357,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1411,7 +1411,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1473,7 +1473,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1517,7 +1517,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1631,7 +1631,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1689,7 +1689,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1746,7 +1746,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1780,7 +1780,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1858,7 +1858,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1901,7 +1901,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -1948,7 +1948,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2035,7 +2035,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2149,7 +2149,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2208,7 +2208,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2280,7 +2280,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2334,7 +2334,7 @@ class Index_admon_sistema extends CI_Controller {
                 redirect(base_url() . 'index_admon_sistema/crear_liquidar_matricula/' . $contrato);
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2367,7 +2367,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2396,7 +2396,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2440,7 +2440,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2473,7 +2473,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2518,7 +2518,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2573,7 +2573,7 @@ class Index_admon_sistema extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2632,7 +2632,7 @@ class Index_admon_sistema extends CI_Controller {
                 return FALSE;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2662,7 +2662,7 @@ class Index_admon_sistema extends CI_Controller {
             echo json_encode($response);
             return FALSE;
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2745,7 +2745,7 @@ class Index_admon_sistema extends CI_Controller {
                 return FALSE;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2789,7 +2789,7 @@ class Index_admon_sistema extends CI_Controller {
                 return FALSE;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2810,7 +2810,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2830,7 +2830,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2851,7 +2851,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2871,7 +2871,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2891,7 +2891,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2926,7 +2926,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2961,7 +2961,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -2988,7 +2988,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3029,7 +3029,7 @@ class Index_admon_sistema extends CI_Controller {
                 return false;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3051,7 +3051,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3073,7 +3073,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3092,7 +3092,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3116,7 +3116,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3144,7 +3144,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3227,7 +3227,7 @@ class Index_admon_sistema extends CI_Controller {
                 return false;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3250,7 +3250,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3275,7 +3275,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3300,7 +3300,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3325,7 +3325,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3348,7 +3348,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3374,7 +3374,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3400,7 +3400,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3426,7 +3426,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3447,7 +3447,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3480,7 +3480,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3500,7 +3500,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3533,7 +3533,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3556,7 +3556,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3579,7 +3579,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3602,7 +3602,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3624,7 +3624,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3646,7 +3646,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3667,7 +3667,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3688,7 +3688,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3703,7 +3703,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3724,7 +3724,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3754,7 +3754,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3773,7 +3773,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3796,7 +3796,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3825,7 +3825,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3852,7 +3852,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3902,7 +3902,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3945,7 +3945,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -3988,7 +3988,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -4034,7 +4034,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -4105,7 +4105,7 @@ class Index_admon_sistema extends CI_Controller {
                 return false;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -4146,7 +4146,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -4215,7 +4215,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -4283,7 +4283,7 @@ class Index_admon_sistema extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -4324,7 +4324,7 @@ class Index_admon_sistema extends CI_Controller {
                 return FALSE;
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 

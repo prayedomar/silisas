@@ -273,99 +273,8 @@
                         </ul>
                     </li>
                     <li class="dropdown dropdown-large">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar / Anular<b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 50px;">
-                            <li class="col-sm-3">
-                                <ul>
-                                    <li class="dropdown-header">Sedes</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_sede">Sede</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_salon">Salon</a></li>
-                                    <li class="divider"></li>                                    
-                                    <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/editar_sedes_empleado">Sedes de Empleado</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
-                                    <li><a href="#">Renovar Contrato Laboral</a></li>                                
-                                    <li><a href="#">Entrega de Placa</a></li>
-                                    <li><a href="#">Contrato Laboral</a></li>
-                                    <li><a href="#">Ausencia Laboral</a></li>
-                                    <li><a href="#">Llamado de Atención</a></li>
-                                    <li><a href="#">Suspensión Laboral</a></li>
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Proveedores</li>
-                                    <li><a href="#">Proveedor</a></li>
-                                </ul>
-                            </li>
-                            <li class="col-sm-3">
-                                <ul>
-                                    <li class="dropdown-header">Transacciones</li>
-                                    <li><a href="#">Adelanto</a></li>
-                                    <li><a href="#">Egreso</a></li>
-                                    <li><a href="#">Factura</a></li>
-                                    <li><a href="#">Ingreso</a></li>
-                                    <li><a href="#">Nomina</a></li>
-                                    <li><a href="#">Nota Credito</a></li>
-                                    <li><a href="#">Pago Proveedor</a></li>
-                                    <li><a href="#">Préstamo</a></li>
-                                    <li><a href="#">Recibo de Caja</a></li>
-                                    <li><a href="#">Retención en la fuente</a></li>
-                                    <li><a href="#">Transferencia Intersede</a></li>
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Bancos y Cajas</li>
-                                    <li><a href="#">Cuenta Banco</a></li>
-                                    <li><a href="#">Caja Efectivo</a></li>
-                                </ul>
-                            </li>
-                            <li class="col-sm-3">
-                                <ul>
-                                    <li class="dropdown-header">Inventario</li>
-                                    <li><a href="#">Articulo Inventario</a></li>
-                                    <li><a href="#">Articulo Insumo</a></li>
-                                    <li><a href="#">Linea Celular</a></li>
-                                    <li><a href="#">Pedido de Insumos</a></li>
-                                    <li class="divider"></li>                                    
-                                    <li class="dropdown-header">Matriculas</li>
-                                    <li><a href="#">Matricula</a></li>
-                                    <li><a href="#">Referido</a></li>
-                                    <li><a href="#">Consolidar Referido</a></li>
-                                    <li><a href="#">Contrato de Matrícula</a></li>
-                                    <li><a href="#">Material de Estudio</a></li>
-                                    <li><a href="#">Entrega de Material</a></li>
-                                    <li><a href="#">Comisión de Escala</a></li>
-                                    <li><a href="#">Comisión de Matrícula</a></li>
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Permisos</li>
-                                    <li><a href="#">Código de Autorización</a></li>                                    
-                                </ul>
-                            </li>
-                            <li class="col-sm-3">
-                                <ul>
-                                    <li class="dropdown-header">Traslados</li>
-                                    <li><a href="#">Contratos Físicos</a></li>
-                                    <li><a href="#">Material de Estudio</a></li>
-                                    <li><a href="#">Articulo de Inventario</a></li>                                   
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Enseñanza</li>
-                                    <li><a href="#">Horario de Clase</a></li>
-                                    <li><a href="#">Reserva de Clase</a></li>
-                                    <li><a href="#">Reporte de Alumno</a></li>
-                                    <li><a href="#">Grados</a></li>
-                                    <li><a href="#">Descargar Certificado</a></li>                                
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Clientes</li>
-                                    <li><a href="#">Titular</a></li>
-                                    <li><a href="#">Alumno</a></li>                                    
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Servicio al cliente</li>
-                                    <li><a href="#">Acuerdo de Pago</a></li>
-                                    <li><a href="#">Registro PQR</a></li>
-                                    <li><a href="#">Respuesta PQR</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>              
-                    <li class="dropdown dropdown-large">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;"> Anular <b class="caret"></b></a>
-                        <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 100px;">
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
@@ -456,7 +365,7 @@
                     </li>
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;"> Consultar <b class="caret"></b></a>
-                        <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 150px;">
+                        <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 100px;">
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>

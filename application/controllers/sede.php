@@ -60,7 +60,7 @@ class Sede extends CI_Controller {
                 echo "OK";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -105,7 +105,7 @@ class Sede extends CI_Controller {
             $this->parser->parse('welcome', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -125,7 +125,7 @@ class Sede extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
@@ -145,7 +145,7 @@ class Sede extends CI_Controller {
                 echo "";
             }
         } else {
-            redirect(base_url() . 'index_admon_sistema');
+            redirect(base_url());
         }
     }
 
