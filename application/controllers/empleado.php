@@ -144,11 +144,8 @@ class Empleado extends CI_Controller {
             $t_usuario = 1; //Empleado
             $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
 
-            $data['rutaImg'] = $this->session->userdata('rutaImg');
-            $data['msnBienvenida'] = $this->session->userdata('msnBienvenida');
-            $data['textoBienvenida'] = $this->session->userdata('textoBienvenida');
-            $data['base_url'] = base_url();
-            $this->parser->parse('header', $data);
+            $data["tab"] = "crear_empleado";
+            $this->load->view("header", $data);
 
             $data['url_recrear'] = base_url() . "empleado/crear";
             $data['msn_recrear'] = "Crear otro Empleado";

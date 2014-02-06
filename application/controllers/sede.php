@@ -85,8 +85,8 @@ class Sede extends CI_Controller {
 
             $error = $this->insert_model->new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
-
-            $this->parser->parse('header', $data);
+            $data["tab"] = "crear_sede";
+            $this->load->view("header", $data);
 
             $data['url_recrear'] = base_url() . "sede/crear";
             $data['msn_recrear'] = "Crear otra Sede";

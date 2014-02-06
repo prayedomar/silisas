@@ -59,7 +59,8 @@ class Salon extends CI_Controller {
 
             $error = $this->insert_model->new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
-            $this->parser->parse('header', $data);
+            $data["tab"] = "crear_salon";
+            $this->load->view("header", $data);
 
             $data['url_recrear'] = base_url() . "salon/crear";
             $data['msn_recrear'] = "Crear otro Salón";

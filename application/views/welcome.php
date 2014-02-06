@@ -1,6 +1,6 @@
-<div class="jumbotron">
+<div class="contenidoperm">
     <div class="row">
-        <div class="col-xs-10  col-xs-offset-1">
+        <div class="col-xs-12 thumbnail">
             <div class="row">
                 <div class="col-xs-3">
                     <img src="{base_url}images/huevo.png" class="img-responsive">

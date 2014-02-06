@@ -58,8 +58,9 @@ class Salario extends CI_Controller {
 
             $error1 = $this->insert_model->new_salario($id_salario, $nombre, $t_salario, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
-            $this->parser->parse('header', $data);       
-            
+            $data["tab"] = "crear_salario";
+            $this->load->view("header", $data);
+
             $data['url_recrear'] = base_url() . "salario/crear";
             $data['msn_recrear'] = "Crear otro Salario";
             if (isset($error1)) {
