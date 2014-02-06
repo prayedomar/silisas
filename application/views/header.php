@@ -182,11 +182,11 @@
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
                                     <li><a href="<?= base_url() ?>sede/crear">Sede</a></li>
-                                    <li><a href="<?= base_url() ?>salon/crear_salon">Salón</a></li>
+                                    <li><a href="<?= base_url() ?>salon/crear">Salón</a></li>
                                     <li class="divider"></li>                                            
                                     <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_salario">Salario Laboral</a></li>                                   
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_empleado">Empleado</a></li>
+                                    <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>                                   
+                                    <li><a href="<?= base_url() ?>empleado/crear">Empleado</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_sede_secundaria">Sedes Secundarias</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_despachar_placa">Despachar Placas</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_recibir_placa">Recibir Placas</a></li>

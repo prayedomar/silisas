@@ -1,6 +1,6 @@
 <?php
 
-class salon extends CI_Controller {
+class Salon extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -77,6 +77,8 @@ class salon extends CI_Controller {
             redirect(base_url() . 'index_admon_sistema');
         }
     }    
+    
+//A continuación: Metodos para consultar    
     
     
 }
