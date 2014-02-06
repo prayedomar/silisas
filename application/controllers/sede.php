@@ -1,32 +1,22 @@
 <?php
 
-if (!defined('BASEPATH'))
-    exit('No esta permitido el acceso directo a este controlador. Es necesario pasar antes por el menu principal');
+class Sede extends CI_Controller {
 
-
-//Para atrapar los errores critical y notice de php
-set_error_handler('exceptions_error_handler');
-
-function exceptions_error_handler($severity, $message, $filename, $lineno) {
-    if (error_reporting() == 0) {
-        return;
-    }
-    if (error_reporting() & $severity) {
-        throw new ErrorException($message, 0, $severity, $filename, $lineno);
-    }
-}
-
-class crear_sede extends CI_Controller {
-
-    public function __construct() {
+    function __construct() {
         parent::__construct();
+        $this->load->model('sedem');
+        $this->load->model('paism');
+        $this->load->model('provinciam');
+        $this->load->model('ciudadm');
         $this->load->model('select_model');
         $this->load->model('insert_model');
-        $this->load->model('update_model');
     }
 
-    function index() {
-        $this->load->view('header');
+//    Metodos para crear
+    function crear() {
+        $data["tab"] = "crear_sede";
+        $data['rutaImg'] = $this->session->userdata('rutaImg');
+        $this->parser->parse("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
@@ -34,29 +24,15 @@ class crear_sede extends CI_Controller {
         $data['provincia'] = $this->select_model->provincia();
         $data['ciudad'] = $this->select_model->ciudad();
         $data['est_sede'] = $this->select_model->est_sede();
-        $data['action_validar'] = base_url() . "crear_sede/validar_sede";
-        $data['action_crear'] = base_url() . "crear_sede/new_sede";
-        $data['action_llena_provincia'] = base_url() . "crear_sede/llena_provincia";
-        $data['action_llena_ciudad'] = base_url() . "crear_sede/llena_ciudad";
-        $this->parser->parse('crear_sede', $data);
+        $data['action_validar'] = base_url() . "sede/validar";
+        $data['action_crear'] = base_url() . "sede/insertar";
+        $data['action_llena_provincia'] = base_url() . "sede/llena_provincia";
+        $data['action_llena_ciudad'] = base_url() . "sede/llena_ciudad";
+        $this->parser->parse('sede/crear', $data);
         $this->load->view('footer');
     }
-    
-    public function navbar() {
-        if ($this->session->userdata('perfil') == FALSE || $this->session->userdata('perfil') != 'admon_sistema') {
-            redirect(base_url() . 'login');
-        }
-        $data['rutaImg'] = $this->session->userdata('rutaImg');
-        $data['msnBienvenida'] = $this->session->userdata('msnBienvenida');
-        $data['base_url'] = base_url();
-        $data['id_responsable'] = $this->session->userdata('idResponsable');
-        $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $this->parser->parse('header', $data);
-        return $data;
-    }
-    
 
-    function validar_sede() {
+    function validar() {
         if ($this->input->is_ajax_request()) {
             $this->form_validation->set_rules('nombre', 'Nombre de la Sede', 'required|trim|xss_clean|max_length[40]');
             $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
@@ -87,7 +63,7 @@ class crear_sede extends CI_Controller {
         }
     }
 
-    function new_sede() {
+    function insertar() {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
@@ -108,8 +84,13 @@ class crear_sede extends CI_Controller {
 
             $error = $this->insert_model->new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
-            $data = $this->navbar();
-            $data['url_recrear'] = base_url() . "crear_sede";
+            $data['rutaImg'] = $this->session->userdata('rutaImg');
+            $data['msnBienvenida'] = $this->session->userdata('msnBienvenida');
+            $data['textoBienvenida'] = $this->session->userdata('textoBienvenida');
+            $data['base_url'] = base_url();
+            $this->parser->parse('header', $data);
+
+            $data['url_recrear'] = base_url() . "sede/crear";
             $data['msn_recrear'] = "Crear otra Sede";
             if (isset($error)) {
                 $data['trans_error'] = $error;
@@ -164,6 +145,50 @@ class crear_sede extends CI_Controller {
         } else {
             redirect(base_url() . 'index_admon_sistema');
         }
+    }
+
+    //Metodos para Consultar
+    function consultar() {
+        $this->load->model('est_sedem');
+        $data["tab"] = "consultar_sede";
+        $data["paises"] = $this->paism->listar_paises();
+        if (!empty($_GET["pais"])) {
+            $data["departamentos"] = $this->provinciam->listarProvinciasPorPais($_GET['pais']);
+        }
+        if (!empty($_GET["departamento"])) {
+            $data["ciudades"] = $this->ciudadm->listarCiudadesPorProvicia($_GET['departamento']);
+        }
+        $data["estados"] = $this->est_sedem->listar_estatus();
+
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $data['cantidadPaginas'] = "5";
+        $cantidadSedes = $this->sedem->cantidadSedes($_GET, $inicio, $filasPorPagina);
+        $cantidadSedes = $cantidadSedes[0]->cantidad;
+        $data['cantidadSedes'] = $cantidadSedes;
+        $data['cantidadPaginas'] = ceil($cantidadSedes / $filasPorPagina);
+        $data["lista_sedes"] = $this->sedem->listar_sedes($_GET, $inicio, $filasPorPagina);
+        $data['rutaImg'] = $this->session->userdata('rutaImg');
+        $this->parser->parse("header", $data);
+        $this->load->view("sede/consultar");
+        $this->load->view("footer");
+    }
+
+    function listar_departamentos() {
+        $this->escapar($_GET);
+        echo json_encode($this->provinciam->listarProvinciasPorPais($_GET['idPais']));
+    }
+
+    function listar_ciudades() {
+        $this->escapar($_GET);
+        echo json_encode($this->ciudadm->listarCiudadesPorProvicia($_GET['idDepartamento']));
     }
 
 }

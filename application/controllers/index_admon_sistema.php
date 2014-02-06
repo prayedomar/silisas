@@ -38,6 +38,7 @@ class Index_admon_sistema extends CI_Controller {
         }
         $data['rutaImg'] = $this->session->userdata('rutaImg');
         $data['msnBienvenida'] = $this->session->userdata('msnBienvenida');
+        $data['textoBienvenida'] = $this->session->userdata('textoBienvenida');
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
@@ -4623,16 +4624,6 @@ class Index_admon_sistema extends CI_Controller {
         }
     }
 
-    //callback de form_validation
-    function select_default($campo) {
-        if ($campo == "default") {
-            $this->form_validation->set_message('select_default', 'El Campo %s, es obligatorio.');
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    }
-
     function matriz_prestamo($prefijo_prestamo, $id_prestamo) {
         $prestamo = $this->select_model->prestamo_prefijo_id($prefijo_prestamo, $id_prestamo);
         if ($prestamo == TRUE) {
@@ -4736,7 +4727,17 @@ class Index_admon_sistema extends CI_Controller {
         }
     }
 
-    //callback de form_validation, hay que tener en cuenta que si es vaio no se debe mostrar error.
+    //callback de form_validation
+    function select_default($campo) {
+        if ($campo == "default") {
+            $this->form_validation->set_message('select_default', 'El Campo %s, es obligatorio.');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    //callback de form_validation, hay que tener en cuenta que si es vacio no se debe mostrar error.
     function miles_numeric($campo) {
         if ($campo) {
             if (is_numeric(str_replace(",", "", $campo))) {

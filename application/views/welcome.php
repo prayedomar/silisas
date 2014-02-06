@@ -8,8 +8,7 @@
                 <div class="col-md-9">
                     <div class="row">
                         <h1>{msnBienvenida}</h1>
-                        <p>Este software ha sido desarrollado con el fin de facilitar sus funciones laborales,<br> mejorando así la  calidad y el crecimiento de toda nuestra compañía.</p>
-                        <p>Siéntase como en casa.</p>
+                        <p>{textoBienvenida}</p>
                     </div>
                 </div>
             </div>

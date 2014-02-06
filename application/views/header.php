@@ -14,7 +14,10 @@
         <link rel="stylesheet" href="<?= base_url() ?>libraries/jqueryUI/jquery-ui.css"/>
         <link rel="stylesheet" href="<?= base_url() ?>libraries/datepicker_bootstrap/datepicker.css"/>
         <link rel="stylesheet" href="<?= base_url() ?>libraries/select_chosen/chosen.css"/>
-
+        <link rel="stylesheet" href="<?= base_url() ?>public/css/global.css"/>
+        <?php if (isset($tab) && $tab == "consultar_sede") { ?>
+            <link href='<?= base_url() ?>public/css/consultar_sede.css' rel='stylesheet'>   
+        <?php } ?>
         <!-- Js -->
         <script src="<?= base_url() ?>libraries/html5shim/html5.js"></script>
         <script src="<?= base_url() ?>libraries/respond/respond.min.js"></script>
@@ -178,7 +181,7 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
-                                    <li><a href="<?= base_url() ?>crear_sede">Sede</a></li>
+                                    <li><a href="<?= base_url() ?>sede/crear">Sede</a></li>
                                     <li><a href="<?= base_url() ?>salon/crear_salon">Salón</a></li>
                                     <li class="divider"></li>                                            
                                     <li class="dropdown-header">Empleados</li>
@@ -457,7 +460,7 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_sede">Sede</a></li>
+                                    <li><a href="<?= base_url() ?>sede/consultar">Sede</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_salon">Salon</a></li>
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Empleados</li>
