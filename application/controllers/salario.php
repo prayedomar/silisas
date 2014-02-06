@@ -7,6 +7,7 @@ class Salario extends CI_Controller {
         $this->load->model('select_model');
         $this->load->model('insert_model');
         $this->load->model('update_model');
+        $this->load->model('salariom');
     }
 
     function crear() {
@@ -62,8 +63,8 @@ class Salario extends CI_Controller {
             $data['msnBienvenida'] = $this->session->userdata('msnBienvenida');
             $data['textoBienvenida'] = $this->session->userdata('textoBienvenida');
             $data['base_url'] = base_url();
-            $this->parser->parse('header', $data);            
-            
+            $this->parser->parse('header', $data);
+
             $data['url_recrear'] = base_url() . "salario/crear";
             $data['msn_recrear'] = "Crear otro Salario";
             if (isset($error1)) {
@@ -132,5 +133,33 @@ class Salario extends CI_Controller {
     }
 
 //A continuación: Metodos para consultar
-    
+    public function consultar() {
+        $this->load->model('t_salariom');
+        $data["tab"] = "consultar_salario";
+        $data['tipos_salarios'] = $this->t_salariom->listar_todos_los_salarios();
+        $filasPorPagina = 3;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_salarios = $this->salariom->cantidad_salarios($_GET, $inicio, $filasPorPagina);
+        $cantidad_salarios = $cantidad_salarios[0]->cantidad;
+        $data['cantidad_salarios'] = $cantidad_salarios;
+        $data['cantidadPaginas'] = ceil($cantidad_salarios / $filasPorPagina);
+        $data["lista_salarios"] = $this->salariom->listar_salarios($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("salario/consultar");
+        $this->load->view("footer");
+    }
+
+    public function detalles() {
+        $this->load->model('concepto_base_nominam');
+        $this->escapar($_GET);
+        echo json_encode($this->concepto_base_nominam->listar_por_salario($_GET["idSalario"]));
+    }
+
 }
