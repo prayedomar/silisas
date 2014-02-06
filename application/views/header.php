@@ -36,20 +36,21 @@
 
         <!--llenar ciudades y departamentos-->
         <script type="text/javascript">
-            //Deshabilitamos la tecla esc en todo el programa, porque con esta pueden cancelar el envio de una peticion post
-            //de cualquier formulario y no tiene ninguna productividad dentro de la plataforma.
-            $(document).keydown(function(e) {
-                if (e.keyCode == 27)
-                    return false;
-            });
-
             $(document).ready(function() {
-                //para que la navbar se active al pasar el mouse
-                $('.nav li.dropdown').hover(function() {
-                    $(this).addClass('open');
-                }, function() {
-                    $(this).removeClass('open');
+                //Deshabilitamos la tecla esc en todo el programa, porque con esta pueden cancelar el envio de una peticion post
+                //de cualquier formulario y no tiene ninguna productividad dentro de la plataforma.
+                $(document).keydown(function(e) {
+                    if (e.keyCode == 27)
+                        return false;
                 });
+
+                //para que la navbar se active al pasar el mouse
+//                $('.nav li.dropdown').hover(function() {
+//                    $(this).addClass('open');
+//                }, function() {
+//                    $(this).removeClass('open');
+//                });
+                
                 //Enviar formulario por ajax
                 $('#botonValidar').live('click', function() {
                     //Mostramos el div de loading y edshabilitamos el teclado
@@ -187,7 +188,7 @@
                                     <li class="dropdown-header">Empleados</li>
                                     <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>                                   
                                     <li><a href="<?= base_url() ?>empleado/crear">Empleado</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_sede_secundaria">Sedes Secundarias</a></li>
+                                    <li><a href="<?= base_url() ?>sede_secundaria/crear">Sedes Secundarias</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_despachar_placa">Despachar Placas</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_recibir_placa">Recibir Placas</a></li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_ausencia_laboral">Ausencia Laboral</a></li>

@@ -16,7 +16,7 @@ class Salon extends CI_Controller {
         $data['action_anular_secundaria'] = base_url() . "index_admon_sistema/anular_sede_secundaria";
         $data['action_agregar_secundaria'] = base_url() . "index_admon_sistema/new_sede_secundaria";
         $data['action_llena_checkbox_secundarias'] = base_url() . "index_admon_sistema/llena_checkbox_secundarias";
-        $this->parser->parse('crear_sede_secundaria', $data);
+        $this->parser->parse('sede_secundaria/crear', $data);
         $this->load->view('footer');
     }
 
