@@ -1,6 +1,6 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-xs-10 col-xs-offset-1 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <div class="row">
                 <legend>Consultar salarios <span class="help-block pull-right">(<?= $cantidad_salarios ?> salarios encontrados)</span></legend>
                 <div id="divCriterios" class="row">

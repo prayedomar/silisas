@@ -168,7 +168,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="<?= base_url() ?>" style="font-size: 40px;">SILI S.A.S</a>
             </div>
-            <div class="navbar-collapse collapse navbar-responsive-collapse">
+            <div class="">
                 <ul class="nav navbar-nav">
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Crear <b class="caret"></b></a>
