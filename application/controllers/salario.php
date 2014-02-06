@@ -100,12 +100,12 @@ class Salario extends CI_Controller {
                 if ($conceptos == TRUE) {
                     foreach ($conceptos as $fila) {
                         echo '<div class="row">
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <label class="margin_label">' . $fila->tipo . '</label>   
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>

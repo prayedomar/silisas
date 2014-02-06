@@ -1,13 +1,13 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 thumbnail">
+        <div class="col-xs-10 col-xs-offset-1 thumbnail">
             <div class="row">
                 <legend>Crear Abono a Préstamo</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
-                                <div class="col-md-4 col-md-offset-4">
+                                <div class="col-xs-4 col-xs-offset-4">
                                     <div class="form-group">
                                         <label>Tipo de Usuario Beneficiario<em class="required_asterisco">*</em></label>
                                         <select name="t_beneficiario" id="t_beneficiario" class="form-control exit_caution">
@@ -71,7 +71,7 @@
                                 </table>
                             </div>  
                             <div class="row">
-                                <div class="col-md-6 col-md-offset-3">
+                                <div class="col-xs-6 col-xs-offset-3">
                                     <div class="form-group">
                                         <label>Valor del Abono<em class="required_asterisco">*</em></label>   
                                         <p class="help-block"><B>> </B>Con un abono superior al abono mínimo, disminuirán cuotas e intereses al final del préstamo.</p>
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Intereses de Mora</label>
                                                 <div class="input-group">
@@ -90,7 +90,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Total a Pagar</label>
                                                 <div class="input-group">
@@ -121,7 +121,7 @@
                                 </table>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-md-offset-3 ">
+                                <div class="col-xs-6 col-xs-offset-3 ">
                                     <div class="form-group">
                                         <label>Valor Ingresado a la Caja de Efectivo</label>                            
                                         <div class="input-group">
@@ -152,7 +152,7 @@
                                 </table>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-md-offset-3 ">
+                                <div class="col-xs-6 col-xs-offset-3 ">
                                     <div class="form-group">
                                         <label>Valor Consignado a la Cuenta Bancaria</label>                            
                                         <div class="input-group">

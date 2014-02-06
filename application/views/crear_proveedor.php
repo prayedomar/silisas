@@ -1,11 +1,11 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <div class="row">
                 <legend>Crear Proveedor</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <form role="form" method="post" action="{action_crear}" id="formulario">
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-group">
                                 <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                 <select name="dni" id="dni" class="form-control exit_caution">
@@ -16,13 +16,13 @@
                                 </select>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Número de Identificación<em class="required_asterisco">*</em></label>
                                         <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
                                     </div>
                                 </div>
-                                <div class="col-md-6"  id="div_dv" style="display:none;">
+                                <div class="col-xs-6"  id="div_dv" style="display:none;">
                                     <div class="form-group">
                                         <label>Dígito de Verificación</label>
                                         <input name="d_v" id="d_v" class="form-control exit_caution soloclick" size="1" maxlength="1" type="text" value="0" readonly="readonly">
@@ -43,7 +43,7 @@
                                 </select>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Departamento</label>
                                         <select name="provincia" id="provincia" class="form-control exit_caution" disabled>
@@ -51,7 +51,7 @@
                                         </select>                                
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Ciudad</label>
                                         <select name="ciudad" id="ciudad" class="form-control exit_caution" disabled>
@@ -63,7 +63,7 @@
                             <div id="validacion_alert">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-group">
                                 <label>Tipo de Domicilio</label>
                                 <select name="t_domicilio" id="t_domicilio" class="form-control exit_caution">

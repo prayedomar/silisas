@@ -6,6 +6,7 @@ class Empleado extends CI_Controller {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
+        $this->load->model('empleadom');
     }
 
     function crear() {
@@ -42,7 +43,7 @@ class Empleado extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-            $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
@@ -143,8 +144,12 @@ class Empleado extends CI_Controller {
             $t_usuario = 1; //Empleado
             $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
 
-            $this->parser->parse('header', $data);        
-            
+            $data['rutaImg'] = $this->session->userdata('rutaImg');
+            $data['msnBienvenida'] = $this->session->userdata('msnBienvenida');
+            $data['textoBienvenida'] = $this->session->userdata('textoBienvenida');
+            $data['base_url'] = base_url();
+            $this->parser->parse('header', $data);
+
             $data['url_recrear'] = base_url() . "empleado/crear";
             $data['msn_recrear'] = "Crear otro Empleado";
             //No se pudo crear el usuario
@@ -281,4 +286,25 @@ class Empleado extends CI_Controller {
     }
 
 //A continuación: Metodos para consultar  
+    public function consultar() {
+        $data["tab"] = "consultar_empleado";
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_empleados = $this->empleadom->cantidad_empleados($_GET, $inicio, $filasPorPagina);
+        $cantidad_empleados = $cantidad_empleados[0]->cantidad;
+        $data['cantidad_empleados'] = $cantidad_empleados;
+        $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
+        $data["lista_empleados"] = $this->empleadom->listar_empleados($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("empleado/consultar");
+        $this->load->view("footer");
+    }
+
 }

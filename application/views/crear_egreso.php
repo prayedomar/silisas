@@ -1,13 +1,13 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <div class="row">
                 <legend>Crear Egreso</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
+                    <div class="col-xs-10 col-xs-offset-1">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
-                                <div class="col-md-8 col-md-offset-2">
+                                <div class="col-xs-8 col-xs-offset-2">
                                     <div class="form-group">
                                         <label>Tipo de Egreso<em class="required_asterisco">*</em></label>
                                         <select name="t_egreso" id="t_egreso" class="form-control exit_caution">
@@ -36,13 +36,13 @@
                                         </select>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-7">
+                                        <div class="col-xs-7">
                                             <div class="form-group">
                                                 <label>Número de Id. del Beneficiario<em class="required_asterisco">*</em></label>
                                                 <input name="id_beneficiario" id="id_beneficiario" type="text" class="form-control exit_caution numerico" placeholder="Número de Id. del Beneficiario" maxlength="13">
                                             </div>
                                         </div>
-                                        <div class="col-md-5"  id="div_dv" style="display:none;">
+                                        <div class="col-xs-5"  id="div_dv" style="display:none;">
                                             <div class="form-group">
                                                 <label>Dígito de Verificación</label>
                                                 <input name="d_v" id="d_v" class="form-control exit_caution soloclick" size="1" maxlength="1" type="text" value="0" readonly="readonly">

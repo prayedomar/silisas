@@ -1,14 +1,14 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 thumbnail">
+        <div class="col-xs-10 col-xs-offset-1 thumbnail">
             <div class="row">
                 <legend>Consultar salarios <span class="help-block pull-right">(<?= $cantidad_salarios ?> salarios encontrados)</span></legend>
                 <div id="divCriterios" class="row">
-                    <div class="col-md-2 col-md-offset-2">
+                    <div class="col-xs-2 col-xs-offset-2">
                         <label> Nombre</label>
                         <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-2">
                         <label>Tipo de salario</label>
                         <select id="tipo_salario" class="form-control">
                             <option value="">Seleccionar...</option>
@@ -17,7 +17,7 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-2">
                         <label>Vigente </label>
                         <select id="vigente" class="form-control">
                             <option value="">Seleccionar...</option>
@@ -25,18 +25,18 @@
                             <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == 0 ? "selected" : "" ?>>No vigente</option>
                         </select>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-xs-1">
                         <br>
                         <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-xs-1">
                         <br>
                         <a class='btn btn-primary' href="<?= base_url() ?>salario/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                     </div>
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <div id="paginacion" class=" pull-right"
                              data-nombre="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>"
                              data-tipo_salario="<?= isset($_GET["tipo_salario"]) ? $_GET["tipo_salario"] : "" ?>"
@@ -93,12 +93,12 @@
             </div>
             <div id="bodyModalDetalles" class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-group">
                                 <label class="margin_label">Bonifición Salarial por día</label>   
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>

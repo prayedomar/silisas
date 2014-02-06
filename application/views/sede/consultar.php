@@ -1,14 +1,14 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 thumbnail">
+        <div class="col-xs-10 col-xs-offset-1 thumbnail">
             <div class="row">
                 <legend>Consultar sedes <span class="help-block pull-right">(<?= $cantidadSedes ?> sedes encontradas)</span></legend>
                 <div id="divCriterios" class="row">
-                    <div class="col-md-2">
+                    <div class="col-xs-2">
                         <label> Nombre</label>
                         <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-2">
                         <label>Pais</label>
                         <select id="pais" class="form-control">
                             <option value="">Seleccionar...</option>
@@ -17,7 +17,7 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-2">
                         <label>Departamento </label>
                         <select id="departamento" class="form-control" <?= empty($_GET["departamento"]) && empty($_GET["pais"]) ? "disabled" : "" ?>>
                             <?php if (!empty($_GET["departamento"]) || !empty($_GET["pais"])) { ?>
@@ -32,7 +32,7 @@
                             ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-2">
                         <label>Ciudad </label>
                         <select id="ciudad" class="form-control" <?= empty($_GET["ciudad"]) && empty($_GET["departamento"]) ? "disabled" : "" ?>>
                             <?php if (!empty($_GET["ciudad"]) || !empty($_GET["departamento"])) { ?>
@@ -47,7 +47,7 @@
                             ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-xs-2">
                         <label>Estado </label>
                         <select id="estado" class="form-control">
                             <option value="">Seleccionar...</option>
@@ -56,18 +56,18 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-xs-1">
                         <br>
                         <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-xs-1">
                         <br>
                         <a class='btn btn-primary' href="<?= base_url() ?>sede/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                     </div>
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <div id="paginacion" class=" pull-right">
                             <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">

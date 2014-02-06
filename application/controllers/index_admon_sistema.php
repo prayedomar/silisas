@@ -2903,12 +2903,12 @@ class Index_admon_sistema extends CI_Controller {
                 if ($conceptos == TRUE) {
                     foreach ($conceptos as $fila) {
                         echo '<div class="row">
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <label class="margin_label">' . $fila->tipo . '</label>   
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
@@ -4162,26 +4162,26 @@ class Index_admon_sistema extends CI_Controller {
                         echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_pdte_' . $i . '">
                                 <div class="row">
                                     <input type="hidden" name="t_concepto_nomina[]" id="t_concepto_nomina" value="' . $fila->t_concepto_nomina . '">
-                                    <div class="col-md-2 mermar_padding_div text-center">
+                                    <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Tipo de Concepto</label>
                                             <input name="nombre_concepto[]" id="nombre_concepto" type="text" class="form-control text-center" readonly value="' . $fila->tipo_concepto . '">
                                         </div>                            
                                     </div>     
                                     <input type="hidden" name="debito_credito[]" id="debito_credito" value="1">
-                                    <div class="col-md-3 mermar_padding_div text-center">
+                                    <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label class="required">Nombre Escala</label>
                                             <input name="escala[]" id="escala" type="text" class="form-control text-center" readonly value="' . $fila->escala . '">
                                         </div>                            
                                     </div>                                    
-                                    <div class="col-md-2 mermar_padding_div text-center">
+                                    <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label class="required">Detalle</label>
                                             <input name="detalle[]" id="detalle" type="text" class="form-control text-center" readonly value="' . $fila->detalle . '">
                                         </div>                            
                                     </div>
-                                    <div class="col-md-2 mermar_padding_div text-center">
+                                    <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label class="required">Fecha</label>
                                             <input name="fecha_concepto[]" id="fecha_concepto" type="text" class="form-control text-center" readonly value="' . date("Y-m-d", strtotime($fila->fecha_trans)) . '">
@@ -4189,7 +4189,7 @@ class Index_admon_sistema extends CI_Controller {
                                     </div>                                    
                                     <input type="hidden" name="cantidad[]" id="cantidad" value="' . number_format($fila->cantidad, 2, '.', ',') . '">
                                     <input type="hidden" name="valor_unitario[]" id="valor_unitario" value="' . number_format($fila->valor_unitario, 2, '.', ',') . '">                                    
-                                    <div class="col-md-2 mermar_padding_div text-center">
+                                    <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Devengado</label>                            
                                             <div class="input-group">
@@ -4198,7 +4198,7 @@ class Index_admon_sistema extends CI_Controller {
                                             </div>
                                         </div>                          
                                     </div>
-                                    <div class="col-md-1 padding_remove">
+                                    <div class="col-xs-1 padding_remove">
                                         <label class="label_btn_remove">. </label>                                
                                         <div class="form-group sin_margin_bottom text-center">
                                             <button class="btn btn-default drop_concepto_pdte" id="' . $i . '" type="button"><span class="glyphicon glyphicon-remove"></span></button>  
@@ -4227,7 +4227,7 @@ class Index_admon_sistema extends CI_Controller {
                 $t_concepto = $this->select_model->t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado);
                 echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_new_' . $i . '">
                                 <div class="row">
-                                    <div class="col-md-3 mermar_padding_div text-center">
+                                    <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
                                             <select name="t_concepto_nomina[]" id="t_concepto_nomina" class="form-control exit_caution">
@@ -4241,19 +4241,19 @@ class Index_admon_sistema extends CI_Controller {
                                         </div>
                                     </div>
                                     <input type="hidden" name="debito_credito[]" id="debito_credito">                                    
-                                    <div class="col-md-3 mermar_padding_div text-center">
+                                    <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label class="required">Detalle Adicional</label>
                                             <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
                                         </div>
                                     </div>
-                                    <div class="col-md-1 mermar_padding_div text-center">
+                                    <div class="col-xs-1 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Cantidad<em class="required_asterisco">*</em></label>
                                             <input name="cantidad[]" id="cantidad" type="text" class="form-control exit_caution numerico input_center" placeholder="Cantidad" maxlength="3" disabled>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 mermar_padding_div text-center">
+                                    <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Valor Unitario<em class="required_asterisco">*</em></label>
                                             <div class="input-group">
@@ -4262,7 +4262,7 @@ class Index_admon_sistema extends CI_Controller {
                                             </div>
                                         </div>  
                                     </div>
-                                    <div class="col-md-2 mermar_padding_div text-center">
+                                    <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <div id="label_total_concepto"><label>Total Concepto</label></div>
                                             <div class="input-group">
@@ -4271,7 +4271,7 @@ class Index_admon_sistema extends CI_Controller {
                                             </div>
                                         </div>  
                                     </div>                                    
-                                    <div class="col-md-1  padding_remove">
+                                    <div class="col-xs-1  padding_remove">
                                         <label class="label_btn_remove">. </label>                                
                                         <div class="form-group sin_margin_bottom text-center">
                                             <button class="btn btn-default drop_concepto_new" id="' . $i . '" type="button"><span class="glyphicon glyphicon-remove"></span></button>  

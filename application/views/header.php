@@ -27,12 +27,6 @@
         <script src="<?= base_url() ?>libraries/datepicker_bootstrap/bootstrap-datepicker.js"></script>
         <script src="<?= base_url() ?>libraries/select_chosen/chosen.jquery.js"></script>
 
-        <!--Style-->
-        <style>
-            body {
-                padding: 10px 10px 10px 10px;
-            }
-        </style>
 
         <!--llenar ciudades y departamentos-->
         <script type="text/javascript">

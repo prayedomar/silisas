@@ -1,11 +1,11 @@
 <div class="contenidoperm">
     <div class="row">
-        <div class="col-md-12 thumbnail">
+        <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
                     <legend>Crear Nómina Laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
-                        <div class="col-md-6 col-md-offset-3">
+                        <div class="col-xs-6 col-xs-offset-3">
                             <div class="form-group">
                                 <label>Empleado<em class="required_asterisco">*</em></label>
                                 <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos que pertenecen a su sede principal.</p>
@@ -26,7 +26,7 @@
                                 </select>
                             </div>                            
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Fecha Inicial<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
@@ -35,7 +35,7 @@
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Fecha Final<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
@@ -56,7 +56,7 @@
                     <div class="row separar_div">
                         <legend>Información de Apoyo</legend>
                         <div class="row">
-                            <div class="col-md-10 col-md-offset-1">
+                            <div class="col-xs-10 col-xs-offset-1">
                                 <div id="div_contrato_laboral">
                                 </div>
                                 <div id="div_ultimas_nominas">
@@ -83,17 +83,17 @@
                             <label>Conceptos Nuevos</label>
                         </div>
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-xs-2">
                                 <button class="btn btn-default" type="button" id="agregar_concepto"><span class="glyphicon glyphicon-plus"></span> Agregar Concepto</button>  
                             </div>
-                            <div class="col-md-6 col-md-offset-4">
+                            <div class="col-xs-6 col-xs-offset-4">
                                 <div class="row">
-                                    <div class="col-md-5  col-md-offset-1">
+                                    <div class="col-xs-5  col-xs-offset-1">
                                         <p><h4>Total Devengado</h4></p>
                                         <p><h4>Total Deducido</h4></p>
                                         <p><h3>Total COP</h3></p>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-xs-6">
                                         <div id="div_total_devengado"><h4>$ 0.00</h4></div>
                                         <div id="div_total_deducido"><h4>$ 0.00</h4></div>
                                         <div id="div_total_nomina"><h3>$ 0.00</h3></div>
