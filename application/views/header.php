@@ -371,7 +371,7 @@
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
                                     <li><a href="<?= base_url() ?>sede/consultar">Sede</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_salon">Salon</a></li>
+                                    <li><a href="<?= base_url() ?>salon/consultar">Salon</a></li>
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Empleados</li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/editar_sedes_empleado">Sedes de Empleado</a></li>

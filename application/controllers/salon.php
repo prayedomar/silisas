@@ -86,7 +86,7 @@ class Salon extends CI_Controller {
         $this->load->model('sedem');
         $data["tab"] = "consultar_salon";
         $data['listaSedes'] = $this->sedem->listar_todas_las_sedes();
-        $filasPorPagina = 2;
+        $filasPorPagina = 20;
         if (empty($_GET["page"])) {
             $inicio = 0;
             $paginaActual = 1;
