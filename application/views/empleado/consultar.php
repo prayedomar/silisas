@@ -29,15 +29,22 @@
                         <label>Primer apellido</label>
                         <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
                     </div>
-
+              <div class="col-xs-1">
+                        <br>
+                        <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                    <div class="col-xs-1">
+                        <br>
+                        <a class='btn btn-primary' href="<?= base_url() ?>empleado/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
+                    </div>
                 </div>
                 <br>
-               
+
                 <div class="row">
-                     <div class="col-xs-2">
-                    <label>Segundo apellido</label>
-                    <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
-                </div>
+                    <div class="col-xs-2">
+                        <label>Segundo apellido</label>
+                        <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
+                    </div>
                     <div class="col-xs-2">
                         <label>Estado</label>
                         <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
@@ -54,14 +61,7 @@
                         <label>Cargo</label>
                         <input type='text' id="nombre" class='form-control letras_numeros' placeholder="Nombre" value="<?= isset($_GET["nombre"]) ? $_GET["nombre"] : "" ?>">
                     </div>
-                    <div class="col-xs-1">
-                        <br>
-                        <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
-                    </div>
-                    <div class="col-xs-1">
-                        <br>
-                        <a class='btn btn-primary' href="<?= base_url() ?>empleado/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
-                    </div>
+
                 </div>
                 <hr>
                 <div class="row">
@@ -69,12 +69,13 @@
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
+                                    <th>Tipo documento</th>
                                     <th>Nombre</th>
-                                    <th>Capacidad</th>
-                                    <th>Sede</th>
-                                    <th>Vigente</th>
-                                    <th>Observación</th>
-                                    <th>Fecha de creación</th>
+                                    <th>Fecha de nacimiento</th>
+                                    <th>Domicilio</th>
+                                    <th>Teléfonos</th>
+                                    <th>Email</th>
+                                      <th>Sede</th>
                                 </tr>
                             </thead>
                             <tbody>
