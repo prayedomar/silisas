@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail"> 
             <div class="row">
-                <legend>Modificar: Sedes de un Empleado</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Modificar sedes de un empleado</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="col-xs-6 col-xs-offset-3">
                     <div class="form-group separar_div">
                         <label>Empleado<em class="required_asterisco">*</em></label>

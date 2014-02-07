@@ -264,12 +264,12 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
-                                    <li><a href="<?= base_url() ?>index/crear_sede">Sede</a></li>
-                                    <li><a href="<?= base_url() ?>index/crear_salon">Salon</a></li>
+                                    <li><a href="#">Sede</a></li>
+                                    <li><a href="#">Salon</a></li>
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>index/editar_sedes_empleado">Sedes de Empleado</a></li>
-                                    <li><a href="<?= base_url() ?>index/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
+                                    <li><a href="<?= base_url() ?>sedes_empleado/editar">Sedes de Empleado</a></li>
+                                    <li><a href="<?= base_url() ?>cargo_jefe_rrpp/editar">Cargo y Jefe de RRPP</a></li>
                                     <li><a href="#">Renovar Contrato Laboral</a></li>                                
                                     <li><a href="#">Entrega de Placa</a></li>
                                     <li><a href="#">Contrato Laboral</a></li>

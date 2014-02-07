@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Modificar Cargo y Jefe de Empleados de RRPP</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Modificar cargo y jefe de empleados de RRPP</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <div class="col-xs-6 col-xs-offset-3">
                         <div class="form-group separar_div">
