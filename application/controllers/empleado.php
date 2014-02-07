@@ -320,4 +320,34 @@ class Empleado extends CI_Controller {
         echo json_encode($this->t_cargom->listar_todas_los_cargos_por_depto($_GET['idDepto']));
     }
 
+    function ausencias() {
+        $this->load->model('t_dnim');
+        $this->load->model('est_empleadom');
+        $this->load->model('sedem');
+        $this->load->model('t_ausenciam');
+        $data["tab"] = "ausencias_empleado";
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_ausencias'] = $this->t_ausenciam->listar_tiopos_de_ausencia();
+
+
+
+        $filasPorPagina = 1;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_empleados = $this->empleadom->cantidad_empleados_ausencias($_GET, $inicio, $filasPorPagina);
+        $cantidad_empleados = $cantidad_empleados[0]->cantidad;
+        $data['cantidad_empleados'] = $cantidad_empleados;
+        $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
+        $data["lista_empleados"] = $this->empleadom->listar_empleados_ausencias($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("empleado/ausencias");
+        $this->load->view("footer");
+    }
+
 }
