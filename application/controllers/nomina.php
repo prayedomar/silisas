@@ -642,6 +642,28 @@ class Nomina extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }   
+    
+    public function llena_periodicidad() {
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post('depto')) {
+                list($id_beneficiario, $dni_beneficiario) = explode("-", $this->input->post('empleado'));
+                $depto = $this->input->post('depto');
+                $salarios = $this->select_model->salario_t_salario_x_t_depto($depto);
+                if ($salarios == TRUE) {
+                    foreach ($salarios as $fila) {
+                        echo '<option value="' . $fila->id . '">' . $fila->nombre . '</option>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+    
 
 }
