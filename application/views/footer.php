@@ -13,9 +13,11 @@
 <?php } else if (isset($tab) && $tab == "consultar_salario") { ?>
     <script src='<?= base_url() ?>public/js/consultar_salario.js'></script>
 <?php } else if (isset($tab) && $tab == "consultar_empleado") { ?>
-    <script src='<?= base_url() ?>public/js/consultar_empleado.js'></script>
+    <script src='<?= base_url() ?>public/js/empleado/consultar_empleado.js'></script>
 <?php } else if (isset($tab) && $tab == "ausencias_empleado") { ?>
-    <script src='<?= base_url() ?>public/js/ausencias_empleado.js'></script>
+    <script src='<?= base_url() ?>public/js/empleado/ausencias_empleado.js'></script>
+<?php } else if (isset($tab) && $tab == "llamados_atencion") { ?>
+    <script src='<?= base_url() ?>public/js/empleado/llamados_atencion.js'></script>
 <?php } ?>
 </body>
 </html>

@@ -331,7 +331,7 @@ class Empleado extends CI_Controller {
 
 
 
-        $filasPorPagina = 1;
+        $filasPorPagina = 20;
         if (empty($_GET["page"])) {
             $inicio = 0;
             $paginaActual = 1;
@@ -347,6 +347,34 @@ class Empleado extends CI_Controller {
         $data["lista_empleados"] = $this->empleadom->listar_empleados_ausencias($_GET, $inicio, $filasPorPagina);
         $this->load->view("header", $data);
         $this->load->view("empleado/ausencias");
+        $this->load->view("footer");
+    }
+
+    function llamados_atencion() {
+        $this->load->model('t_dnim');
+        $this->load->model('t_sancionm');
+        $data["tab"] = "llamados_atencion";
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_sanciones'] = $this->t_sancionm->listar_tiopos_de_sancion();
+
+
+
+        $filasPorPagina = 1;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_empleados = $this->empleadom->cantidad_empleados_llamados_atencion($_GET, $inicio, $filasPorPagina);
+        $cantidad_empleados = $cantidad_empleados[0]->cantidad;
+        $data['cantidad_empleados'] = $cantidad_empleados;
+        $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
+        $data["lista_empleados"] = $this->empleadom->listar_empleados_llamados_atencion($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("empleado/llamados_atencion");
         $this->load->view("footer");
     }
 
