@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Crear Caja de Efectivo (Punto de Venta)</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Crear caja de efectivo (Punto de venta)</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <div class="col-xs-6 col-xs-offset-3 ">
                         <form role="form" method="post" action="{action_crear}" id="formulario">

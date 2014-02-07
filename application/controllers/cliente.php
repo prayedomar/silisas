@@ -1,6 +1,6 @@
 <?php
 
-class Cliente_prestatario extends CI_Controller {
+class Cliente extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -9,7 +9,7 @@ class Cliente_prestatario extends CI_Controller {
     }
 
     function crear() {
-        $data["tab"] = "crear_cliente_prestatario";
+        $data["tab"] = "crear_cliente";
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -19,11 +19,11 @@ class Cliente_prestatario extends CI_Controller {
         $data['provincia'] = $this->select_model->provincia();
         $data['ciudad'] = $this->select_model->ciudad();
         $data['t_domicilio'] = $this->select_model->t_domicilio();
-        $data['action_validar'] = base_url() . "cliente_prestatario/validar";
-        $data['action_crear'] = base_url() . "cliente_prestatario/insertar";
-        $data['action_llena_provincia'] = base_url() . "cliente_prestatario/llena_provincia";
-        $data['action_llena_ciudad'] = base_url() . "cliente_prestatario/llena_ciudad";
-        $this->parser->parse('cliente_prestatario/crear', $data);
+        $data['action_validar'] = base_url() . "cliente/validar";
+        $data['action_crear'] = base_url() . "cliente/insertar";
+        $data['action_llena_provincia'] = base_url() . "cliente/llena_provincia";
+        $data['action_llena_ciudad'] = base_url() . "cliente/llena_ciudad";
+        $this->parser->parse('cliente/crear', $data);
         $this->load->view('footer');
     }
 
@@ -97,9 +97,9 @@ class Cliente_prestatario extends CI_Controller {
             $vigente = 1;
             $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
 
-            $data["tab"] = "crear_cliente_prestatario";
+            $data["tab"] = "crear_cliente";
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "cliente_prestatario/crear";
+            $data['url_recrear'] = base_url() . "cliente/crear";
             $data['msn_recrear'] = "Crear otro Cliente";
             //No se pudo crear el usuario
             if (isset($error1)) {

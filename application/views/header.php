@@ -182,29 +182,29 @@
                                     <li class="dropdown-header">Clientes</li>
                                     <li><a href="<?= base_url() ?>titular/crear">Titular</a></li>
                                     <li><a href="<?= base_url() ?>alumno/crear">Alumno</a></li>
-                                    <li><a href="<?= base_url() ?>cliente_prestatario/crear">Cliente Prestatario</a></li>
+                                    <li><a href="<?= base_url() ?>cliente/crear">Cliente Prestatario</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_proveedor">Proveedor</a></li>                                
+                                    <li><a href="<?= base_url() ?>proveedor/crear">Proveedor</a></li>                                
                                 </ul>
                             </li>
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Cajas y Bancos</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_caja">Caja (Punto de Venta)</a></li>                                
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_cuenta">Cuenta Bancaria</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_asignar_cuenta_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_asignar_cuenta_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
+                                    <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de Venta)</a></li>                                
+                                    <li><a href="<?= base_url() ?>cuenta/crear">Cuenta Bancaria</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_asignar_cuenta_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_asignar_cuenta_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_adelanto">Adelanto</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_prestamo">Préstamo</a></li> 
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_abono_adelanto">Abono a Adelanto</a></li>                                
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_abono_prestamo">Abono a Préstamo</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_ingreso">Ingreso</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_egreso">Egreso</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_adelanto">Adelanto</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_prestamo">Préstamo</a></li> 
+                                    <li><a href="<?= base_url() ?>index/crear_abono_adelanto">Abono a Adelanto</a></li>                                
+                                    <li><a href="<?= base_url() ?>index/crear_abono_prestamo">Abono a Préstamo</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_ingreso">Ingreso</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_egreso">Egreso</a></li>
                                     <li><a href="#">Factura</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_nomina">Nómina Laboral</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_nomina">Nómina Laboral</a></li>
                                     <li><a href="#">Nota Credito</a></li>
                                     <li><a href="#">Pago Proveedor</a></li>
                                     <li><a href="#">Cuentas por Pagar</a></li>
@@ -222,9 +222,9 @@
                                     <li><a href="#">Pedido de Insumos</a></li>
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Matrículas</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_contrato_fisico">Contratos Físicos</a></li>                                
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_matricula">Matrícula</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_liquidar_matricula/new">Liquidar Matrícula</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_contrato_fisico">Contratos Físicos</a></li>                                
+                                    <li><a href="<?= base_url() ?>index/crear_matricula">Matrícula</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_liquidar_matricula/new">Liquidar Matrícula</a></li>
                                     <li><a href="#">Referido</a></li>
                                     <li><a href="#">Consolidar Referido</a></li>
                                     <li><a href="#">Material de Estudio</a></li>
@@ -239,7 +239,7 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Traslados</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_traslado_contrato">Contratos Físicos</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_traslado_contrato">Contratos Físicos</a></li>
                                     <li><a href="#">Material de Estudio</a></li>
                                     <li><a href="#">Articulo de Inventario</a></li>                                   
                                     <li class="divider"></li>
@@ -264,12 +264,12 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_sede">Sede</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_salon">Salon</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_sede">Sede</a></li>
+                                    <li><a href="<?= base_url() ?>index/crear_salon">Salon</a></li>
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/editar_sedes_empleado">Sedes de Empleado</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
+                                    <li><a href="<?= base_url() ?>index/editar_sedes_empleado">Sedes de Empleado</a></li>
+                                    <li><a href="<?= base_url() ?>index/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
                                     <li><a href="#">Renovar Contrato Laboral</a></li>                                
                                     <li><a href="#">Entrega de Placa</a></li>
                                     <li><a href="#">Contrato Laboral</a></li>
@@ -359,8 +359,8 @@
                                     <li><a href="<?= base_url() ?>salon/consultar">Salon</a></li>
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/editar_sedes_empleado">Sedes de Empleado</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
+                                    <li><a href="<?= base_url() ?>index/editar_sedes_empleado">Sedes de Empleado</a></li>
+                                    <li><a href="<?= base_url() ?>index/editar_cargo_jefe">Cargo y Jefe de RRPP</a></li>
                                     <li><a href="#">Renovar Contrato Laboral</a></li>                                
                                     <li><a href="#">Entrega de Placa</a></li>
                                     <li><a href="#">Contrato Laboral</a></li>
