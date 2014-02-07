@@ -17,7 +17,6 @@ class Empleadom extends CI_Model {
                   JOIN provincia pro ON e.provincia=pro.id
                   JOIN ciudad ciu ON e.ciudad=ciu.id
                   JOIN t_domicilio tdom ON e.t_domicilio=tdom.id
-                  JOIN t_cuenta tc ON e.cuenta=tc.id
                   JOIN est_empleado estem ON e.estado=estem.id
                   JOIN t_depto tdepto ON e.depto=tdepto.id
                   JOIN t_cargo tcargo ON e.cargo=tcargo.id
@@ -39,7 +38,7 @@ class Empleadom extends CI_Model {
 
     public function listar_empleados($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT e.*,td.*,s.nombre sede,pa.nombre pais,pro.nombre provincia,ciu.nombre ciudad,
-                  tdom.tipo tipo_domicilio,tc.tipo cuenta,estem.estado estado_empleado,tdepto.tipo depto,
+                  tdom.tipo tipo_domicilio,estem.estado estado_empleado,tdepto.tipo depto,
                   tcargo.cargo_masculino,tcargo.cargo_femenino,sl.nombre nombre_salario,
                   e2.nombre1 nombre1_jefe,e2.nombre2 nombre2_jefe,e2.apellido1 apellido1_jefe,e2.apellido2 apellido2_jefe
                   FROM empleado e
@@ -49,7 +48,6 @@ class Empleadom extends CI_Model {
                   JOIN provincia pro ON e.provincia=pro.id
                   JOIN ciudad ciu ON e.ciudad=ciu.id
                   JOIN t_domicilio tdom ON e.t_domicilio=tdom.id
-                  JOIN t_cuenta tc ON e.cuenta=tc.id
                   JOIN est_empleado estem ON e.estado=estem.id
                   JOIN t_depto tdepto ON e.depto=tdepto.id
                   JOIN t_cargo tcargo ON e.cargo=tcargo.id
