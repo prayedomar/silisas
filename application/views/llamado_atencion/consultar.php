@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-xs-1">
                             <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>empleado/llamados_atencion"> <span class="glyphicon glyphicon-refresh"></span></a>
+                            <a class='btn btn-primary' href="<?= base_url() ?>llamado_atencion/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                         </div>
                     </div>
                     <br>

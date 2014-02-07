@@ -7,6 +7,7 @@ class Llamado_atencion extends CI_Controller {
         $this->load->model('select_model');
         $this->load->model('insert_model');
         $this->load->model('update_model');
+        $this->load->model('llamado_atencionm');
     }
 
     function crear() {
@@ -106,7 +107,7 @@ class Llamado_atencion extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_falta_laboral() {
         if ($this->input->is_ajax_request()) {
             $faltas = $this->select_model->t_falta_laboral();
@@ -124,8 +125,33 @@ class Llamado_atencion extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }
 
     //Metodos para Consultar    
-    
+    function consultar() {
+        $this->load->model('t_dnim');
+        $this->load->model('t_sancionm');
+        $data["tab"] = "llamado_atencion";
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_sanciones'] = $this->t_sancionm->listar_tiopos_de_sancion();
+
+        $filasPorPagina = 1;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_empleados = $this->llamado_atencionm->cantidad_llamados_atencion($_GET, $inicio, $filasPorPagina);
+        $cantidad_empleados = $cantidad_empleados[0]->cantidad;
+        $data['cantidad_empleados'] = $cantidad_empleados;
+        $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
+        $data["lista_empleados"] = $this->llamado_atencionm->listar_llamados_atencion($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("llamado_atencion/consultar");
+        $this->load->view("footer");
+    }
+
 }
