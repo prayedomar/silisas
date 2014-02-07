@@ -106,5 +106,175 @@ class Cuenta extends CI_Controller {
             redirect(base_url());
         }
     }    
+    
+    function asignar_empleado() {
+        $data["tab"] = "crear_asignar_cuenta_empeado";
+        $this->load->view("header", $data);
+        $data['base_url'] = base_url();
+        $data['id_responsable'] = $this->session->userdata('idResponsable');
+        $data['dni_responsable'] = $this->session->userdata('dniResponsable');
+        $data['cuenta'] = $this->select_model->cuenta_banco();
+        $data['action_agregar_empleado_cuenta'] = base_url() . "cuenta/insertar_asignar_empleado";
+        $data['action_anular_empleado_cuenta'] = base_url() . "cuenta/anular_asignar_empleado";        
+
+        $data['action_llena_cuenta_bancaria'] = base_url() . "cuenta/llena_cuenta_bancaria";
+        $data['action_llena_checkbox_empleados_cuenta'] = base_url() . "cuenta/llena_checkbox_empleados_cuenta";
+
+        $data['action_llena_empleados_cuenta'] = base_url() . "cuenta/llena_empleados_cuenta_banco";
+
+        $this->parser->parse('cuenta/asignar_empleado', $data);
+        $this->load->view('footer');
+    }
+
+    public function insertar_asignar_empleado() {
+        if ($this->input->is_ajax_request()) {
+            //Validamos que haya seleccionado al menos una sede
+            $checkbox = $this->input->post('empleados_checkbox');
+            if ($checkbox != TRUE) {
+                $errors = array(
+                    'mensaje' => '<p>Seleccione al menos un empleado.</p>',
+                    'respuesta' => 'error'
+                );
+                echo json_encode($errors);
+                return FALSE;
+            } else {
+                $cuenta = $this->input->post('cuenta');
+                $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                $id_responsable = $this->input->post('id_responsable');
+                $dni_responsable = $this->input->post('dni_responsable');
+
+                foreach ($checkbox as $fila) {
+                    list($id_encargado, $dni_encargado) = explode("-", $fila);
+                    $sede = $this->select_model->empleado($id_encargado, $dni_encargado)->sede_ppal;
+                    $error = $this->insert_model->cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, 1);
+                    $this->insert_model->asignar_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $fecha_trans, $id_responsable, $dni_responsable);
+                    if (isset($error)) {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p>' . $error . '</p>'
+                        );
+                        echo json_encode($response);
+                        return FALSE;
+                    }
+                }
+                $response = array(
+                    'respuesta' => 'OK'
+                );
+                echo json_encode($response);
+                return FALSE;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function anular_asignar_empleado() {
+        if ($this->input->is_ajax_request()) {
+            list($id_encargado, $dni_encargado, $cuenta) = explode("-", $this->input->post('empleado_cuenta'));
+            $sede = $this->select_model->empleado($id_encargado, $dni_encargado)->sede_ppal;
+            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            $id_responsable = $this->input->post('id_responsable');
+            $dni_responsable = $this->input->post('dni_responsable');
+
+            $error = $this->update_model->cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, 0);
+
+            if (isset($error)) {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>' . $error . '</p>'
+                );
+            } else {
+                //Para la historica no atrapo el error, si hubo error no me importa, con tal que se haya hecho la transaccion verdadera
+                $this->insert_model->anular_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $fecha_trans, $id_responsable, $dni_responsable);
+                $response = array(
+                    'respuesta' => 'OK'
+                );
+            }
+
+            $response = array(
+                'respuesta' => 'OK'
+            );
+
+            echo json_encode($response);
+            return FALSE;
+        } else {
+            redirect(base_url());
+        }
+    }
+    
+    public function llena_cuenta_bancaria() {
+        if ($this->input->is_ajax_request()) {
+            $cuentas = $this->select_model->cuenta_banco();
+            if (($cuentas == TRUE)) {
+                foreach ($cuentas as $fila) {
+                    echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="cuenta" id="cuenta" value="' . $fila->id . '"/></td>
+                            <td>' . $fila->id . '</td>
+                            <td class="text-center">' . $fila->t_cuenta . '</td>
+                            <td>' . $fila->banco . '</td>
+                            <td>' . $fila->nombre_cuenta . '</td>    
+                            <td>' . $fila->observacion . '</td>   
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
+                        </tr>';
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }    
+    
+    public function llena_checkbox_empleados_cuenta() {
+        if ($this->input->is_ajax_request()) {
+            if (($this->input->post('cuenta')) && ($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
+                $cuenta = $this->input->post('cuenta');
+                $id_responsable = $this->input->post('idResposable');
+                $dni_responsable = $this->input->post('dniResposable');
+                $empleados = $this->select_model->empleado_faltante_cuenta_bancaria_responsable($cuenta, $id_responsable, $dni_responsable);
+                if ($empleados == TRUE) {
+                    foreach ($empleados as $fila) {
+                        echo '<div class="form-group">
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="empleados_checkbox[]" class="input_modal_3" value="' . $fila->id . "-" . $fila->dni . '"/><h4 class="h_negrita">' . $fila->nombre1 . " " . $fila->nombre2 . " " . $fila->apellido1 . " " . $fila->apellido2 . '</h4></label>
+                            </div>
+                        </div>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }    
+    
+    public function llena_empleados_cuenta_banco() {
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post('cuenta')) {
+                $cuenta = $this->input->post('cuenta');
+                $empleados = $this->select_model->empleados_cuenta_bancaria($cuenta);
+                if ($empleados == TRUE) {
+                    foreach ($empleados as $fila) {
+                        echo '<tr>
+                            <td>' . $fila->nombre1 . " " . $fila->nombre2 . " " . $fila->apellido1 . " " . $fila->apellido2 . '</td>
+                            <td class="text-center">
+                            <button class="btn btn-danger btn-xs anular_empleado_cuenta" id="' . $fila->id . "-" . $fila->dni . "-" . $cuenta . '"><span class="glyphicon glyphicon-remove"></span> Desautorizar </button>
+                            </td>
+                         </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }    
+    
 
 }
