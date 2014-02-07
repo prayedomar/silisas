@@ -10,7 +10,6 @@ class Insert_model extends CI_Model {
     }
 
     public function new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
-
         $data = array(
             'id' => $id_sede,
             'nombre' => $nombre,
@@ -122,7 +121,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $matricula, $velocidad_ini, $comprension_ini, $t_curso, $estado, $grados, $cant_clases, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $matricula, $velocidad_ini, $comprension_ini, $t_curso, $estado, $grados, $cant_clases, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -149,6 +148,7 @@ class Insert_model extends CI_Model {
             'estado' => $estado,
             'grados' => $grados,
             'cant_clases' => $cant_clases,
+            'sede_ppal' => $sede_ppal,
             'observacion' => $observacion,
             'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,

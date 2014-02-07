@@ -26,7 +26,7 @@ class MAtricula extends CI_Controller {
         $data['action_validar'] = base_url() . "matricula/validar";
         $data['action_crear'] = base_url() . "matricula/insertar";
 
-        $this->parser->parse('crear_matricula', $data);
+        $this->parser->parse('matricula/crear', $data);
         $this->load->view('footer');
     }
 
