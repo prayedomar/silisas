@@ -351,29 +351,27 @@
                     </li>
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Consultar <b class="caret"></b></a>
-                        <ul class="dropdown-menu dropdown-menu-large row">
+                        <ul class="dropdown-menu dropdown-menu-large row"  style="margin-left: 100px;">
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
-                                    <li><a href="<?= base_url() ?>sede/consultar">Sede</a></li>
-                                    <li><a href="<?= base_url() ?>salon/consultar">Salón</a></li>
+                                    <li><a href="<?= base_url() ?>sede/consultar">Sedes</a></li>
+                                    <li><a href="<?= base_url() ?>salon/consultar">Salones</a></li>
                                     <li class="divider"></li>                                            
                                     <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>salario/consultar">Salario Laboral</a></li>                                   
-                                    <li><a href="<?= base_url() ?>empleado/consultar">Empleado</a></li>
+                                    <li><a href="<?= base_url() ?>salario/consultar">Salarios Laborales</a></li>                                   
+                                    <li><a href="<?= base_url() ?>empleado/consultar">Empleados</a></li>
                                     <li><a href="<?= base_url() ?>sede_secundaria/crear">Sedes Secundarias</a></li>
-                                    <li><a href="#">Despachar Placas</a></li>
-                                    <li><a href="#">Recibir Placas</a></li>
-                                    <li><a href="#">Ausencia Laboral</a></li>
-                                    <li><a href="#">Llamado de Atención</a></li>
+                                    <li><a href="<?= base_url() ?>ausencia_laboral/consultar">Ausencias Laborales</a></li>
+                                    <li><a href="<?= base_url() ?>llamado_atencion/consultar">Llamados de Atención</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Clientes</li>
-                                    <li><a href="#">Titular</a></li>
-                                    <li><a href="#">Alumno</a></li>
-                                    <li><a href="#">Cliente Prestatario</a></li>
+                                    <li><a href="<?= base_url() ?>titular/consultar">Titulares</a></li>
+                                    <li><a href="#">Alumnos</a></li>
+                                    <li><a href="#">Clientes Prestatarios</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
-                                    <li><a href="#">Proveedor</a></li>                                
+                                    <li><a href="#">Proveedores</a></li>                                
                                 </ul>
                             </li>
                             <li class="col-sm-3">
