@@ -25,20 +25,11 @@ $(function() {
         if ($("#segundo_apellido").val() != "") {
             url += "segundo_apellido=" + $("#segundo_apellido").val() + "&";
         }
-        if ($("#estado").val() != "") {
-            url += "estado=" + $("#estado").val() + "&";
-        }
-        if ($("#sede").val() != "") {
-            url += "sede=" + $("#sede").val() + "&";
-        }
-        if ($("#depto").val() != "") {
-            url += "depto=" + $("#depto").val() + "&";
-        }
-        if ($("#cargo").val() != null && $("#cargo").val() != "") {
-            url += "cargo=" + $("#cargo").val() + "&";
-        }
         if ($("#fecha_nacimiento").val() != "") {
             url += "fecha_nacimiento=" + $("#fecha_nacimiento").val() + "&";
+        }
+        if ($("#vigente").val() != null && $("#cargo").val() != "") {
+            url += "vigente=" + $("#vigente").val() + "&";
         }
 
         url = url.substr(0, url.length - 1);
@@ -119,21 +110,13 @@ $(function() {
         if ($("#paginacion").data("segundoapellido") != "") {
             url += "segundo_apellido=" + $("#paginacion").data("segundoapellido") + "&";
         }
-        if ($("#paginacion").data("estado") != "") {
-            url += "estado=" + $("#paginacion").data("estado") + "&";
-        }
-        if ($("#paginacion").data("sede") != "") {
-            url += "sede=" + $("#paginacion").data("sede") + "&";
-        }
-        if ($("#paginacion").data("depto") != "") {
-            url += "depto=" + $("#paginacion").data("depto") + "&";
-        }
-        if ($("#paginacion").data("cargo") != "") {
-            url += "cargo=" + $("#paginacion").data("cargo") + "&";
-        }
         if ($("#paginacion").data("fechanacimiento") != "") {
             url += "fecha_nacimiento=" + $("#paginacion").data("fechanacimiento") + "&";
         }
+       if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0" ) {
+            url += "vigente=" + $("#paginacion").data("vigente") + "&";
+        }
+
         url = url.substr(0, url.length - 1);
         window.location.href = url;
 

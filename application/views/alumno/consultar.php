@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Consultar salones <span class="help-block pull-right">(<?= $cantidad_empleados ?> empleados encontrados)</span></legend>
+                <legend>Consultar titulares <span class="help-block pull-right">(<?= $cantidad_empleados ?> titulares encontrados)</span></legend>
                 <div id="divCriterios">
                     <div  class="row">
                         <div class="col-xs-2">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-xs-1">
                             <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>empleado/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
+                            <a class='btn btn-primary' href="<?= base_url() ?>titular/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                         </div>
                     </div>
                     <br>
@@ -47,49 +47,19 @@
                             <input type='text' id="segundo_apellido" class='form-control letras_numeros' placeholder="Segundo apellido" value="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>">
                         </div>
                         <div class="col-xs-2">
-                            <label>Estado</label>
-                            <select id="estado" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <?php foreach ($estados_empleados as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["estado"]) && $_GET["estado"] == $row->id ? "selected" : "" ?>><?= $row->estado ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-xs-2">
-                            <label>Sede principal</label>
-                            <select id="sede" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <?php foreach ($lista_sedes as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["sede"]) && $_GET["sede"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-xs-2">
-                            <label>Depto. empresarial</label>
-                            <select id="depto" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <?php foreach ($lista_dptos as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["depto"]) && $_GET["depto"] == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-xs-2">
-                            <label>Cargo</label>
-                            <select id="cargo" class="form-control" <?= empty($_GET["depto"]) ? "disabled" : "" ?>>
-                                <?php if (!empty($_GET["depto"])) { ?>
-                                    <option value="">Seleccionar...</option>
-                                    <?php foreach ($lista_cargos as $row) { ?>
-                                        <option value="<?= $row->id ?>" <?= isset($_GET["cargo"]) && $_GET["cargo"] == $row->id ? "selected" : "" ?>><?= $row->cargo_masculino ?></option>
-                                    <?php } ?>
-                                <?php } ?>
-                            </select>
-                        </div>
-                          <div class="col-xs-2">
                             <label>Fecha nacimiento</label>
                             <div class="input-group">
                                 <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Vigente</label>
+                            <select id="vigente" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "0" ? "selected" : "" ?>>No</option>
+                                <option value="1" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "1" ? "selected" : "" ?>>Si</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -100,39 +70,28 @@
                             <thead>
                                 <tr>
                                     <th>Tipo documento</th>
+                                    <th>Num. documento</th>
                                     <th>Nombre</th>
                                     <th>Fecha de nacimiento</th>
                                     <th>Domicilio</th>
                                     <th>Teléfonos</th>
                                     <th>Email</th>
-                                    <th>Sede</th>
-                                    <th>Detalles</th>
+                                    <th>Vigente</th>
+                                    <th>Observacion</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
                                 <?php foreach ($lista_empleados as $row) { ?>
                                     <tr>
                                         <td><?= $row->tipo ?></td>
+                                        <td><?= $row->documento ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                         <td><?= $row->fecha_nacimiento ?></td>
-                                        <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . "/" . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
+                                        <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . " - " . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
-                                        <td><?= $row->sede ?></td>
-                                        <td><button class="btn btn-primary btn-sm" 
-                                                    data-cuenta="<?= $row->cuenta ?>" 
-                                                    data-estadoempleado="<?= $row->estado_empleado ?>" 
-                                                    data-depto="<?= $row->depto ?>"
-                                                    data-genero="<?= $row->genero ?>"
-                                                    data-cargomasculino="<?= $row->cargo_masculino ?>"
-                                                    data-cargofemenino="<?= $row->cargo_femenino ?>"
-                                                    data-salario="<?= $row->nombre_salario ?>"
-                                                    data-nombre1jefe="<?= $row->nombre1_jefe ?>"
-                                                    data-nombre2jefe="<?= $row->nombre2_jefe ?>"
-                                                    data-apellido1jefe="<?= $row->apellido1_jefe ?>"
-                                                    data-apellido2jefe="<?= $row->apellido2_jefe ?>"
-                                                    data-observacion="<?= $row->observacion ?>"
-                                                    >Ver detalles</button></td>
+                                        <td><?= $row->vigente == "1" ? "Si" : "No" ?></td>
+                                        <td><?= $row->observacion ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -148,14 +107,11 @@
                              data-segundonombre="<?= isset($_GET["segundo_nombre"]) ? $_GET["segundo_nombre"] : "" ?>"
                              data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
                              data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
-                             data-estado="<?= isset($_GET["estado"]) ? $_GET["estado"] : "" ?>"
-                             data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
-                             data-depto="<?= isset($_GET["depto"]) ? $_GET["depto"] : "" ?>"
-                             data-cargo="<?= isset($_GET["cargo"]) ? $_GET["cargo"] : "" ?>"
-                               data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                             data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
+                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>">
 
 
-                            <ul class="pagination">
+                             <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">
                                     <a data-page="1">1</a></li>
                                 <?php for ($i = 2; $i <= $cantidad_paginas; $i++) { ?>

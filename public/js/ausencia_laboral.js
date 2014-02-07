@@ -88,7 +88,7 @@ $(function() {
         if ($("#paginacion").data("tipoausencia") != "") {
             url += "tipo_ausencia=" + $("#paginacion").data("tipoausencia") + "&";
         }
-        if ($("#paginacion").data("vigente") != "") {
+       if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0" ) {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";
         }
 

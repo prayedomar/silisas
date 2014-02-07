@@ -70,7 +70,7 @@ $(function() {
         if ($("#paginacion").data("tipo_salario") != "") {
             url += "tipo_salario=" + $("#paginacion").data("tipo_salario") + "&";
         }
-        if ($("#paginacion").data("vigente") != "") {
+       if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0" ) {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";
         }
 

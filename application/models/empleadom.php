@@ -33,6 +33,7 @@ class Empleadom extends CI_Model {
         $query.=(!empty($criterios['sede'])) ? "AND e.sede_ppal = '{$criterios['sede']}'" : "";
         $query.=(!empty($criterios['depto'])) ? "AND e.depto = '{$criterios['depto']}'" : "";
         $query.=(!empty($criterios['cargo'])) ? "AND e.cargo = '{$criterios['cargo']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND e.fecha_nacimiento = '{$criterios['fecha_nacimiento']}'" : "";
         return $this->db->query($query)->result();
     }
 
@@ -64,6 +65,7 @@ class Empleadom extends CI_Model {
         $query.=(!empty($criterios['sede'])) ? "AND e.sede_ppal = '{$criterios['sede']}'" : "";
         $query.=(!empty($criterios['depto'])) ? "AND e.depto = '{$criterios['depto']}'" : "";
         $query.=(!empty($criterios['cargo'])) ? "AND e.cargo = '{$criterios['cargo']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND e.fecha_nacimiento = '{$criterios['fecha_nacimiento']}'" : "";
         $query.=" order by e.apellido1,e.apellido2 LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }

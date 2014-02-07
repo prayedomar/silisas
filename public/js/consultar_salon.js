@@ -47,7 +47,7 @@ $(function() {
         if ($("#paginacion").data("sede") != "") {
             url += "sede=" + $("#paginacion").data("sede") + "&";
         }
-        if ($("#paginacion").data("vigente") != "") {
+       if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0" ) {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";
         }
 
