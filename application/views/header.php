@@ -199,8 +199,8 @@
                                     <li class="dropdown-header">Transacciones</li>
                                     <li><a href="<?= base_url() ?>adelanto/crear">Adelanto</a></li>
                                     <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
-                                    <li><a href="<?= base_url() ?>index/crear_abono_adelanto">Abono a Adelanto</a></li>                                
-                                    <li><a href="<?= base_url() ?>index/crear_abono_prestamo">Abono a Préstamo</a></li>
+                                    <li><a href="<?= base_url() ?>abono_adelanto/crear">Abono a Adelanto</a></li>                                
+                                    <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono a Préstamo</a></li>
                                     <li><a href="<?= base_url() ?>index/crear_ingreso">Ingreso</a></li>
                                     <li><a href="<?= base_url() ?>index/crear_egreso">Egreso</a></li>
                                     <li><a href="#">Factura</a></li>

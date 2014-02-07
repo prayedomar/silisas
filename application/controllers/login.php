@@ -21,7 +21,7 @@ class Login extends CI_Controller {
         switch ($this->session->userdata('perfil')) {
             case '':
                 //Este case se ejecuta en el caso en que no exista una variable de session llamada perfil.
-                $this->parser->parse('login_view', $data);
+                $this->parser->parse('login', $data);
                 break;
             case 'admon_sede':
                 redirect(base_url() . 'index');
@@ -69,7 +69,7 @@ class Login extends CI_Controller {
                 redirect(base_url() . 'index');
                 break;
             default:
-                $this->parser->parse('login_view', $data);
+                $this->parser->parse('login', $data);
                 break;
         }
     }
