@@ -18,11 +18,8 @@
                             </div>
                             <div class="form-group">
                                 <label>Periodicidad<em class="required_asterisco">*</em></label>
-                                <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado" class="form-control exit_caution" disabled>
+                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" disabled>
                                     <option value="default">Seleccione primero Empleado</option>
-                                    {empleado}
-                                    <option value="{id}-{dni}">{nombre1} {nombre2} {apellido1} {apellido2}</option>
-                                    {/empleado}
                                 </select>
                             </div>                            
                             <div class="row">
@@ -226,6 +223,20 @@
         $('#total_nomina').change();
         $("#div_total_nomina").html("<h3>$ " + $('#total_nomina').val() + "</h3>");
     }
+    
+    //Habilita el campo periodicidad
+    $("form").delegate("#empleado", "change", function() {
+        empleado = $(this).val();
+        $.post('{action_llena_provincia}', {
+            pais: pais
+        }, function(data) {
+            $("#provincia").removeAttr("disabled");
+            $("#provincia").html(data);
+            $("#provincia").prepend('<option value="default" selected>Seleccione Departamento</option>');
+            //Con esto activamos automaticamente el evento click como si lo hicieramos nosotros.
+            $("#provincia").change();
+        });
+    });
 
     //Llenamos la informacion de apoyo
     $("form").delegate("#consultar_empleado", "click", function() {
