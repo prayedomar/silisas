@@ -25,16 +25,10 @@ $(function() {
         if ($("#segundo_apellido").val() != "") {
             url += "segundo_apellido=" + $("#segundo_apellido").val() + "&";
         }
-        if ($("#desde").val() != "") {
-            url += "desde=" + $("#desde").val() + "&";
+        if ($("#fecha_nacimiento").val() != "") {
+            url += "fecha_nacimiento=" + $("#fecha_nacimiento").val() + "&";
         }
-        if ($("#hasta").val() != "") {
-            url += "hasta=" + $("#hasta").val() + "&";
-        }
-        if ($("#tipo_ausencia").val() != "") {
-            url += "tipo_ausencia=" + $("#tipo_ausencia").val() + "&";
-        }
-        if ($("#vigente").val() != "") {
+        if ($("#vigente").val() != null && $("#cargo").val() != "") {
             url += "vigente=" + $("#vigente").val() + "&";
         }
 
@@ -48,7 +42,44 @@ $(function() {
             $("#searchBtn").trigger("click");
         }
     });
+    $("#depto").change(function() {
+        if ($(this).val() == "") {
+            $("#cargo").html("").prop("disabled", true);
+        } else {
+            $.ajax({
+                url: "listar_cargos",
+                data: {
+                    idDepto: $(this).val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    if (data != "[]") {
+                        data = JSON.parse(data);
+                        var str = "<option value=''>Seleccionar...</option>";
+                        $.each(data, function(k, l) {
+                            str += "<option value='" + l.id + "'>" + l.cargo_masculino + "</option>";
+                        });
+                        $("#cargo").html(str).prop("disabled", false)
+                    }
+                }
+            });
+        }
+    });
 
+    $("#bodyTabla button").click(function() {
+        $("#divCueta").html($(this).data("cuenta"));
+        $("#divEstado").html($(this).data("estadoempleado"));
+        $("#divDepto").html($(this).data("depto"));
+        if ($(this).data("genero") == "M") {
+            $("#divCargo").html($(this).data("cargomasculino"));
+        } else {
+            $("#divCargo").html($(this).data("cargofemenino"));
+        }
+        $("#divSalario").html($(this).data("salario"));
+        $("#divJefe").html($(this).data("nombre1jefe") + " " + $(this).data("nombre2jefe") + " " + $(this).data("apellido1jefe") + " " + $(this).data("apellido2jefe"));
+        $("#divObservacion").html($(this).data("observacion"));
+        $("#modalDetalles").modal("show");
+    });
     $("#paginacion li.noActive a").click(function() {
         $("#coverDisplay").css({
             "opacity": "1",
@@ -79,14 +110,8 @@ $(function() {
         if ($("#paginacion").data("segundoapellido") != "") {
             url += "segundo_apellido=" + $("#paginacion").data("segundoapellido") + "&";
         }
-        if ($("#paginacion").data("desde") != "") {
-            url += "desde=" + $("#paginacion").data("desde") + "&";
-        }
-        if ($("#paginacion").data("hasta") != "") {
-            url += "hasta=" + $("#paginacion").data("hasta") + "&";
-        }
-        if ($("#paginacion").data("tipoausencia") != "") {
-            url += "tipo_ausencia=" + $("#paginacion").data("tipoausencia") + "&";
+        if ($("#paginacion").data("fechanacimiento") != "") {
+            url += "fecha_nacimiento=" + $("#paginacion").data("fechanacimiento") + "&";
         }
        if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0" ) {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";

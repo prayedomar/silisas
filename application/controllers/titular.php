@@ -6,6 +6,7 @@ class Titular extends CI_Controller {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
+        $this->load->model('titularm');
     }
 
     function crear() {
@@ -160,6 +161,39 @@ class Titular extends CI_Controller {
         } else {
             redirect(base_url());
         }
+    }
+
+    public function consultar() {
+        $this->load->model('t_dnim');
+        $this->load->model('est_empleadom');
+        $this->load->model('sedem');
+        $this->load->model('t_deptom');
+        $data["tab"] = "consultar_titular";
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_dptos'] = $this->t_deptom->listar_todas_los_deptos();
+        if (!empty($_GET["depto"])) {
+            $this->load->model('t_cargom');
+            $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
+        }
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_empleados = $this->titularm->cantidad_titulares($_GET, $inicio, $filasPorPagina);
+        $cantidad_empleados = $cantidad_empleados[0]->cantidad;
+        $data['cantidad_empleados'] = $cantidad_empleados;
+        $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
+        $data["lista_empleados"] = $this->titularm->listar_titulares($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("titular/consultar");
+        $this->load->view("footer");
     }
 
 }

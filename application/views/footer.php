@@ -18,6 +18,8 @@
     <script src='<?= base_url() ?>public/js/ausencia_laboral.js'></script>
 <?php } else if (isset($tab) && $tab == "llamado_atencion") { ?>
     <script src='<?= base_url() ?>public/js/llamado_atencion.js'></script>
+<?php } else if (isset($tab) && $tab == "consultar_titular") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_titular.js'></script>
 <?php } ?>
 </body>
 </html>
