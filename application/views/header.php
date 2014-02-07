@@ -197,8 +197,8 @@
                                     <li><a href="<?= base_url() ?>cuenta/asignar_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
-                                    <li><a href="<?= base_url() ?>index/crear_adelanto">Adelanto</a></li>
-                                    <li><a href="<?= base_url() ?>index/crear_prestamo">Préstamo</a></li> 
+                                    <li><a href="<?= base_url() ?>adelanto/crear">Adelanto</a></li>
+                                    <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                                     <li><a href="<?= base_url() ?>index/crear_abono_adelanto">Abono a Adelanto</a></li>                                
                                     <li><a href="<?= base_url() ?>index/crear_abono_prestamo">Abono a Préstamo</a></li>
                                     <li><a href="<?= base_url() ?>index/crear_ingreso">Ingreso</a></li>

@@ -2,30 +2,61 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Crear Adelanto de Nomina</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Crear préstamo</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <div class="col-xs-10 col-xs-offset-1">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
                                 <div class="col-xs-6 col-xs-offset-3 ">
                                     <div class="form-group">
+                                        <label>Tipo de Usuario Beneficiario<em class="required_asterisco">*</em></label>
+                                        <select name="t_beneficiario" id="t_beneficiario" class="form-control exit_caution">
+                                            <option value="default">Seleccione T.U.B</option>
+                                            {t_beneficiario}
+                                            <option value="{id}">{tipo}</option>
+                                            {/t_beneficiario}
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="div_empleado" style="display:none;">
                                         <label>Empleado Beneficiario<em class="required_asterisco">*</em></label>
                                         <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos que pertenecen a cualquiera de sus sedes encargadas.</p>                                        
-                                        <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado Beneficiario" class="chosen-select form-control exit_caution">
-                                            <option value="default"></option>
+                                        <select name="empleado" id="empleado" class="form-control exit_caution">
+                                            <option value="default">Seleccione Empleado Beneficiario</option>
                                             {empleado}
                                             <option value="{id}-{dni}">{nombre1} {nombre2} {apellido1} {apellido2}</option>
                                             {/empleado}
                                         </select>
                                     </div>
+                                    <div class="form-group"  id="div_cliente" style="display:none;">
+                                        <label>Cliente Beneficiario<em class="required_asterisco">*</em></label>
+                                        <select name="cliente" id="cliente" class="form-control exit_caution">
+                                        </select>
+                                    </div>
                                     <div class="form-group">
-                                        <label>Valor del Adelanto<em class="required_asterisco">*</em></label>  
-                                        <p class="help-block"><B>> </B>Recuerde que los adelantos de nomina no pueden superar la capacidad de pago del empleado (En base a su salario, las prestaciones sociales, etc.)</p>                                        
+                                        <label>Valor del Préstamo<em class="required_asterisco">*</em></label>                                        
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
                                             <input type="text" name="total" id="total" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Tasa de Interés Corriente<em class="required_asterisco">*</em></label>                                        
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <input type="text" name="tasa_interes" id="tasa_interes" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Cantidad de Cuotas (Mensuales)<em class="required_asterisco">*</em></label>
+                                        <input name="cant_cuotas" id="cant_cuotas" type="text" class="form-control exit_caution numerico" placeholder="Cantidad de Cuotas" maxlength="3">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha Desembolso Dinero<em class="required_asterisco">*</em></label>
+                                        <div class="input-group">
+                                            <input name="fecha_desembolso" id="fecha_desembolso" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" value={fecha_actual}>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        </div> 
+                                    </div>                                    
                                 </div>
                             </div>
                             <hr>
@@ -82,8 +113,7 @@
                             </div>
                             <hr>
                             <div class="form-group">
-                                <label>Observación<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Motivo, Quién lo Autorizó, Forma de Pago, etc.</p>
+                                <label>Observación</label>
                                 <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
                             </div>
                             <div class="form-group separar_submit">
@@ -92,7 +122,7 @@
                                 <input type="hidden" name="dni_responsable" value={dni_responsable} />
                                 <center>
                                     <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->                                    
-                                    <button id="botonValidar" class="btn btn-success">Crear Adelanto de Nomina</button>                                 
+                                    <button id="botonValidar" class="btn btn-success">Crear Préstamo</button>                                 
                                     <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                     <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                                 </center>
@@ -107,6 +137,34 @@
     </div>
 </div>
 <script type="text/javascript">
+    //Cargamos los clientes, ya que con parser es un problema si la consulta es vacia
+    $.post('{action_llena_clientes}', {},
+            function(data) {
+                $("#cliente").html(data);
+                $("#cliente").prepend('<option value="default" selected>Seleccione Cliente Beneficiario</option>');
+            });
+
+
+    //Mostramos los divs de empleado y cliente dependiendo de t_beneficiario
+    $(".form-group").delegate("#t_beneficiario", "change", function() {
+        t_beneficiario = $('#t_beneficiario').val();
+        if (t_beneficiario == '1') {
+            $("#div_empleado").css("display", "block");
+            $("#div_cliente").css("display", "none");
+        } else {
+            if (t_beneficiario == '4') {
+                $("#div_empleado").css("display", "none");
+                $("#div_cliente").css("display", "block");
+            } else {
+                $("#div_empleado").css("display", "none");
+                $("#div_cliente").css("display", "none");
+            }
+        }
+        //Reseteamos los clientes
+        $('#empleado').find('option:first').attr('selected', 'selected').parent('select');
+        $('#cliente').find('option:first').attr('selected', 'selected').parent('select');
+    });
+
     $.post('{action_llena_cuenta_responsable}', {
         idResposable: '{id_responsable}',
         dniResposable: '{dni_responsable}'
@@ -152,6 +210,5 @@
         $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
         $('#valor_retirado').change();
     });
-
 
 </script>
