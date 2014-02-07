@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-xs-1">
                             <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>empleado/ausencias"> <span class="glyphicon glyphicon-refresh"></span></a>
+                            <a class='btn btn-primary' href="<?= base_url() ?>ausencia_laboral/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                         </div>
                     </div>
                     <br>

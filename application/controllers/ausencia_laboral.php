@@ -79,7 +79,37 @@ class Ausencia_laboral extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     //Metodos para Consultar    
+    function consultar() {
+         $this->load->model('ausencia_laboralm');
+        $this->load->model('t_dnim');
+        $this->load->model('est_empleadom');
+        $this->load->model('sedem');
+        $this->load->model('t_ausenciam');
+        $data["tab"] = "ausencia_laboral";
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_ausencias'] = $this->t_ausenciam->listar_tiopos_de_ausencia();
+
+
+
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_empleados = $this->ausencia_laboralm->cantidad_ausencias($_GET, $inicio, $filasPorPagina);
+        $cantidad_empleados = $cantidad_empleados[0]->cantidad;
+        $data['cantidad_empleados'] = $cantidad_empleados;
+        $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
+        $data["lista_empleados"] = $this->ausencia_laboralm->listar_ausencias($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("ausencia_laboral/consultar");
+        $this->load->view("footer");
+    }
 
 }

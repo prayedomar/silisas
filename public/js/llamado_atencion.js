@@ -6,7 +6,7 @@ $(function() {
             "width": "100%",
             "height": "100%"
         });
-        var url = "llamados_atencion?";
+        var url = "consultar?";
         if ($("#tipo_documento").val() != "") {
             url += "tipo_documento=" + $("#tipo_documento").val() + "&";
         }
@@ -51,9 +51,9 @@ $(function() {
         });
 
         if ($(this).data("page") == 1) {
-            url = "llamados_atencion?";
+            url = "consultar?";
         } else {
-            var url = "llamados_atencion?page=" + $(this).data("page") + "&";
+            var url = "consultar?page=" + $(this).data("page") + "&";
         }
         if ($("#paginacion").data("tipodocumento") != "") {
             url += "tipo_documento=" + $("#paginacion").data("tipodocumento") + "&";
