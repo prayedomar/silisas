@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Crear Traslado de Contratos Físicos de Matrícula (Transacción Masiva)</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Crear traslado de contratos físicos de matrícula (Transacción masiva)</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <form role="form" method="post" action="{action_crear}" id="formulario">
                         <div class="col-xs-8 col-xs-offset-2">

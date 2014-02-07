@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Crear Liquidación de Comisiones para una Matrícula</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Crear liquidación de comisiones de matrícula</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <div class="row">
                         <div class="col-xs-8 col-xs-offset-2 text-center">

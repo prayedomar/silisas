@@ -223,8 +223,8 @@
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Matrículas</li>
                                     <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li>                                
-                                    <li><a href="<?= base_url() ?>index/crear_matricula">Matrícula</a></li>
-                                    <li><a href="<?= base_url() ?>index/crear_liquidar_matricula/new">Liquidar Matrícula</a></li>
+                                    <li><a href="<?= base_url() ?>matricula/crear">Matrícula</a></li>
+                                    <li><a href="<?= base_url() ?>liquidar_comisiones/crear/new">Liquidar Matrícula</a></li>
                                     <li><a href="#">Referido</a></li>
                                     <li><a href="#">Consolidar Referido</a></li>
                                     <li><a href="#">Material de Estudio</a></li>
@@ -239,7 +239,7 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Traslados</li>
-                                    <li><a href="<?= base_url() ?>index/crear_traslado_contrato">Contratos Físicos</a></li>
+                                    <li><a href="<?= base_url() ?>traslado_contrato_matricula/crear">Contratos Físicos</a></li>
                                     <li><a href="#">Material de Estudio</a></li>
                                     <li><a href="#">Articulo de Inventario</a></li>                                   
                                     <li class="divider"></li>
