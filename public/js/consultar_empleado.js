@@ -37,6 +37,9 @@ $(function() {
         if ($("#cargo").val() != null && $("#cargo").val() != "") {
             url += "cargo=" + $("#cargo").val() + "&";
         }
+        if ($("#fecha_nacimiento").val() != "") {
+            url += "fecha_nacimiento=" + $("#fecha_nacimiento").val() + "&";
+        }
 
         url = url.substr(0, url.length - 1);
         window.location.href = url;
@@ -128,7 +131,9 @@ $(function() {
         if ($("#paginacion").data("cargo") != "") {
             url += "cargo=" + $("#paginacion").data("cargo") + "&";
         }
-
+        if ($("#paginacion").data("fechanacimiento") != "") {
+            url += "fecha_nacimiento=" + $("#paginacion").data("fechanacimiento") + "&";
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
 
