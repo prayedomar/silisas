@@ -107,6 +107,7 @@ class Cuenta extends CI_Controller {
         }
     }    
     
+    //Asignar Cuenta a sedes    
     function asignar_empleado() {
         $data["tab"] = "crear_asignar_cuenta_empeado";
         $this->load->view("header", $data);
@@ -275,6 +276,145 @@ class Cuenta extends CI_Controller {
             redirect(base_url());
         }
     }    
+    
+    //Asignar Cuenta a sedes
+    function asignar_sede() {
+        $data["tab"] = "crear_asignar_cuenta_sede";
+        $this->load->view("header", $data);
+        $data['base_url'] = base_url();
+        $data['id_responsable'] = $this->session->userdata('idResponsable');
+        $data['dni_responsable'] = $this->session->userdata('dniResponsable');
+        $data['cuenta'] = $this->select_model->cuenta_banco();
+        $data['action_agregar_sede_cuenta'] = base_url() . "cuenta/insertar_asignar_sede";
+        $data['action_anular_sede_cuenta'] = base_url() . "cuenta/anular_asignar_sede";        
+        $data['action_llena_cuenta_bancaria'] = base_url() . "cuenta/llena_cuenta_bancaria";
+        $data['action_llena_sedes_cuenta'] = base_url() . "cuenta/llena_sedes_cuenta_banco";
+        $data['action_llena_checkbox_sedes_cuenta'] = base_url() . "cuenta/llena_checkbox_sedes_cuenta";
+
+        $this->parser->parse('cuenta/asignar_sede', $data);
+        $this->load->view('footer');
+    }
+
+    public function insertar_asignar_sede() {
+        if ($this->input->is_ajax_request()) {
+            //Validamos que haya seleccionado al menos una sede
+            $checkbox = $this->input->post('sede_checkbox');
+            if ($checkbox != TRUE) {
+                $errors = array(
+                    'mensaje' => '<p>Seleccione al menos una sede.</p>',
+                    'respuesta' => 'error'
+                );
+                echo json_encode($errors);
+                return FALSE;
+            } else {
+                $cuenta = $this->input->post('cuenta');
+                $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                $id_responsable = $this->input->post('id_responsable');
+                $dni_responsable = $this->input->post('dni_responsable');
+
+                foreach ($checkbox as $fila) {
+                    $error = $this->insert_model->cuenta_x_sede($cuenta, $fila, 1);
+                    $this->insert_model->asignar_cuenta_x_sede($cuenta, $fila, $fecha_trans, $id_responsable, $dni_responsable);
+                    if (isset($error)) {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p>' . $error . '</p>'
+                        );
+                        echo json_encode($response);
+                        return FALSE;
+                    }
+                }
+                $response = array(
+                    'respuesta' => 'OK'
+                );
+                echo json_encode($response);
+                return FALSE;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function anular_asignar_sede() {
+        if ($this->input->is_ajax_request()) {
+            list($sede, $cuenta) = explode("-", $this->input->post('sede_cuenta'));
+            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            $id_responsable = $this->input->post('id_responsable');
+            $dni_responsable = $this->input->post('dni_responsable');
+
+            $error = $this->update_model->cuenta_x_sede($cuenta, $sede, 0);
+            $error = $this->update_model->cuenta_x_sede_x_empleado_todos($cuenta, $sede, 0);
+
+            if (isset($error)) {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>' . $error . '</p>'
+                );
+            } else {
+                //Para la historica no atrapo el error, si hubo error no me importa, con tal que se haya hecho la transaccion verdadera
+                $this->insert_model->anular_cuenta_x_sede($cuenta, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                $response = array(
+                    'respuesta' => 'OK'
+                );
+            }
+            echo json_encode($response);
+            return FALSE;
+        } else {
+            redirect(base_url());
+        }
+    } 
+    
+    public function llena_sedes_cuenta_banco() {
+        if ($this->input->is_ajax_request()) {
+            if ($this->input->post('cuenta')) {
+                $cuenta = $this->input->post('cuenta');
+                $sedes = $this->select_model->sedes_cuenta_bancaria($cuenta);
+                if ($sedes == TRUE) {
+                    foreach ($sedes as $fila) {
+                        echo '<tr>
+                            <td>' . $fila->nombre . '</td>
+                            <td class="text-center">
+                            <button class="btn btn-danger btn-xs anular_sede_cuenta" id="' . $fila->id . "-" . $cuenta . '"><span class="glyphicon glyphicon-remove"></span> Desautorizar </button>
+                            </td>
+                         </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    } 
+    
+    public function llena_checkbox_sedes_cuenta() {
+        if ($this->input->is_ajax_request()) {
+            if (($this->input->post('cuenta')) && ($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
+                $cuenta = $this->input->post('cuenta');
+                $id_responsable = $this->input->post('idResposable');
+                $dni_responsable = $this->input->post('dniResposable');
+                $sedes = $this->select_model->sede_faltante_cuenta_bancaria_responsable($cuenta, $id_responsable, $dni_responsable);
+                if ($sedes == TRUE) {
+                    foreach ($sedes as $fila) {
+                        echo '<div class="form-group">
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="sede_checkbox[]" class="input_modal_3" value="' . $fila->id . '"/><h4 class="h_negrita">' . $fila->nombre . '</h4></label>
+                            </div>
+                        </div>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+    
     
 
 }

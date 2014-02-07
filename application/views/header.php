@@ -193,7 +193,7 @@
                                     <li class="dropdown-header">Cajas y Bancos</li>
                                     <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de Venta)</a></li>                                
                                     <li><a href="<?= base_url() ?>cuenta/crear">Cuenta Bancaria</a></li>
-                                    <li><a href="<?= base_url() ?>index/crear_asignar_cuenta_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
+                                    <li><a href="<?= base_url() ?>cuenta/asignar_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
                                     <li><a href="<?= base_url() ?>cuenta/asignar_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
