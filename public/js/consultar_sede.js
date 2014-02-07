@@ -58,7 +58,6 @@ $(function() {
         }
     });
     $("#departamento").change(function() {
-        console.log("asd");
         if ($(this).val() == "") {
             $("#ciudad").html("").prop("disabled", true);
         } else {

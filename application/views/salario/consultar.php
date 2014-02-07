@@ -92,22 +92,6 @@
                 <h3 class="modal-title" id="myModalLabel">Detalles</h3>
             </div>
             <div id="bodyModalDetalles" class="modal-body">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="margin_label">Bonifición Salarial por día</label>   
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <input type="hidden" value="20">
-                                    <input type="text" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>

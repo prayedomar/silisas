@@ -284,8 +284,20 @@ class Empleado extends CI_Controller {
 
 //A continuación: Metodos para consultar  
     public function consultar() {
+        $this->load->model('t_dnim');
+        $this->load->model('est_empleadom');
+        $this->load->model('sedem');
+        $this->load->model('t_deptom');
         $data["tab"] = "consultar_empleado";
-        $filasPorPagina = 20;
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_dptos'] = $this->t_deptom->listar_todas_los_deptos();
+        if (!empty($_GET["depto"])) {
+            $this->load->model('t_cargom');
+            $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
+        }
+        $filasPorPagina = 2;
         if (empty($_GET["page"])) {
             $inicio = 0;
             $paginaActual = 1;
@@ -302,6 +314,12 @@ class Empleado extends CI_Controller {
         $this->load->view("header", $data);
         $this->load->view("empleado/consultar");
         $this->load->view("footer");
+    }
+
+    function listar_cargos() {
+        $this->load->model('t_cargom');
+        $this->escapar($_GET);
+        echo json_encode($this->t_cargom->listar_todas_los_cargos_por_depto($_GET['idDepto']));
     }
 
 }

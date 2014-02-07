@@ -10,7 +10,7 @@ class Sedem extends CI_Model {
     }
 
     public function listar_todas_las_sedes() {
-        $query = "SELECT * FROM sede";
+        $query = "SELECT * FROM sede order by nombre";
         return $this->db->query($query)->result();
     }
 
