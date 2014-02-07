@@ -2,59 +2,59 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Crear Egreso</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Crear ingreso</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
                     <div class="col-xs-10 col-xs-offset-1">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
                                 <div class="col-xs-8 col-xs-offset-2">
                                     <div class="form-group">
-                                        <label>Tipo de Egreso<em class="required_asterisco">*</em></label>
-                                        <select name="t_egreso" id="t_egreso" class="form-control exit_caution">
-                                            <option value="default">Seleccione Tipo de Egreso</option>
-                                            {t_egreso}
+                                        <label>Tipo de Ingreso<em class="required_asterisco">*</em></label>
+                                        <select name="t_ingreso" id="t_ingreso" class="form-control exit_caution">
+                                            <option value="default">Seleccione Tipo de Ingreso</option>
+                                            {t_ingreso}
                                             <option value="{id}">{tipo}</option>
-                                            {/t_egreso}
+                                            {/t_ingreso}
                                         </select>
                                     </div>                                    
                                     <div class="form-group">
-                                        <label>Tipo de Usuario Beneficiario<em class="required_asterisco">*</em></label>
-                                        <select name="t_beneficiario" id="t_beneficiario" class="form-control exit_caution">
-                                            <option value="default">Seleccione Tipo de Usuario Beneficiario</option>
-                                            {t_beneficiario}
+                                        <label>Tipo de Usuario Depositante<em class="required_asterisco">*</em></label>
+                                        <select name="t_depositante" id="t_depositante" class="form-control exit_caution">
+                                            <option value="default">Seleccione Tipo de Usuario Depositante</option>
+                                            {t_depositante}
                                             <option value="{id}">{tipo}</option>
-                                            {/t_beneficiario}
+                                            {/t_depositante}
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Tipo de Id. del Beneficiario<em class="required_asterisco">*</em></label>
-                                        <select name="dni_beneficiario" id="dni_beneficiario" class="form-control exit_caution">
-                                            <option value="default">Seleccione Tipo de Id. del Beneficiario </option>
+                                        <label>Tipo Id. del Depositante<em class="required_asterisco">*</em></label>
+                                        <select name="dni_depositante" id="dni_depositante" class="form-control exit_caution">
+                                            <option value="default">Seleccione Tipo de Id. del Depositante</option>
                                             {dni}
                                             <option value="{id}">{tipo}</option>
                                             {/dni}
                                         </select>
                                     </div>
                                     <div class="row">
-                                        <div class="col-xs-7">
+                                        <div class="col-xs-8">
                                             <div class="form-group">
-                                                <label>Número de Id. del Beneficiario<em class="required_asterisco">*</em></label>
-                                                <input name="id_beneficiario" id="id_beneficiario" type="text" class="form-control exit_caution numerico" placeholder="Número de Id. del Beneficiario" maxlength="13">
+                                                <label>Número de Id. del Depositante<em class="required_asterisco">*</em></label>
+                                                <input name="id_depositante" id="id_depositante" type="text" class="form-control exit_caution numerico" placeholder="Número de Id. del Dpositante" maxlength="13">
                                             </div>
                                         </div>
-                                        <div class="col-xs-5"  id="div_dv" style="display:none;">
+                                        <div class="col-xs-4"  id="div_dv" style="display:none;">
                                             <div class="form-group">
                                                 <label>Dígito de Verificación</label>
                                                 <input name="d_v" id="d_v" class="form-control exit_caution soloclick" size="1" maxlength="1" type="text" value="0" readonly="readonly">
                                             </div>    
                                         </div>
                                     </div>
-                                    <div class="form-group" id="div_nombre_beneficiario" style="display:none;">
-                                        <label>Nombre del Beneficiario<em class="required_asterisco">*</em></label>
-                                        <input name="nombre_beneficiario" id="nombre_beneficiario" type="text" class="form-control exit_caution letras_numeros" placeholder="Nombre del Beneficiario" maxlength="100">
+                                    <div class="form-group" id="div_nombre_depositante" style="display:none;">
+                                        <label>Nombre del Depositante<em class="required_asterisco">*</em></label>
+                                        <input name="nombre_depositante" id="nombre_depositante" type="text" class="form-control exit_caution letras_numeros" placeholder="Nombre del Depositante" maxlength="100">
                                     </div>                                    
                                     <div class="form-group">
-                                        <label>Valor del Egreso<em class="required_asterisco">*</em></label>                                        
+                                        <label>Valor del Ingreso<em class="required_asterisco">*</em></label>                                        
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
                                             <input type="text" name="total" id="total" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12">
@@ -64,8 +64,8 @@
                             </div>
                             <hr>
                             <div class="overflow_tabla">
-                                <label>Caja de Efectivo Origen (Punto de Venta)</label>
-                                <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
+                                <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                                <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -80,17 +80,21 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="form-group">
-                                <label>Valor retirado de la Caja de Efectivo</label>                            
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <input type="text" name="efectivo_retirado" id="efectivo_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                            <div class="row">
+                                <div class="col-xs-6 col-xs-offset-3 ">
+                                    <div class="form-group">
+                                        <label>Valor Ingresado a la Caja de Efectivo</label>                            
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" name="efectivo_ingresado" id="efectivo_ingresado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>                            
+                            </div>                         
                             <hr>                            
                             <div class="overflow_tabla">
-                                <label>Cuenta Bancaria Origen</label>
-                                <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
+                                <label>Cuenta Bancaria Destino</label>
+                                <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla consignado dinero en ella con el dinero recibido (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -107,11 +111,15 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="form-group">
-                                <label>Valor retirado de la Cuenta Bancaria</label>                            
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <input type="text" name="valor_retirado" id="valor_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                            <div class="row">
+                                <div class="col-xs-6 col-xs-offset-3 ">
+                                    <div class="form-group">
+                                        <label>Valor Consignado a la Cuenta Bancaria</label>                            
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" name="valor_consignado" id="valor_consignado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -126,7 +134,7 @@
                                 <input type="hidden" name="dni_responsable" value={dni_responsable} />
                                 <center>
                                     <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->                                    
-                                    <button id="botonValidar" class="btn btn-success">Crear Egreso</button>                                 
+                                    <button id="botonValidar" class="btn btn-success">Crear Ingreso</button>                                 
                                     <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                     <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                                 </center>
@@ -141,7 +149,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(".form-group").delegate("#id_beneficiario", "blur", function() {
+    $(".form-group").delegate("#id_depositante", "blur", function() {
         var vpri, x, y, z, i, nit1, dv1;
         nit1 = $(this).val();
         if (isNaN(nit1))
@@ -187,8 +195,8 @@
     });
 
     //Cargar div de d.v segun t_sancion
-    $(".form-group").delegate("#dni_beneficiario", "change", function() {
-        dni = $('#dni_beneficiario').val();
+    $(".form-group").delegate("#dni_depositante", "change", function() {
+        dni = $('#dni_depositante').val();
         if (dni == '6') {
             $("#div_dv").css("display", "block");
         } else {
@@ -196,10 +204,10 @@
         }
     });
 
-    //Mostramos el obligatorio de descripcion si en t_egreso selecciona "otro" o "transaccion intersede de difereente pais"
-    $(".form-group").delegate("#t_egreso", "change", function() {
-        t_egreso = $('#t_egreso').val();
-        if ((t_egreso == '8')||(t_egreso == '9')) {
+    //Mostramos el obligatorio de descripcion si en t_ingreso selecciona "otro" o "transaccion intersede de difereente pais"
+    $(".form-group").delegate("#t_ingreso", "change", function() {
+        t_ingreso = $('#t_ingreso').val();
+        if ((t_ingreso == '4')||(t_ingreso == '5')) {
             $("#label_descripcion_required").css("display", "block");
             $("#label_descripcion").css("display", "none");
         } else {
@@ -208,16 +216,17 @@
         }
     });
 
-    //Mostramos el div de nombre de beneficiario si es otros
-    $(".form-group").delegate("#t_beneficiario", "change", function() {
-        t_beneficiario = $('#t_beneficiario').val();
-        if (t_beneficiario == '6') {
-            $("#div_nombre_beneficiario").css("display", "block");
+    //Mostramos el div de nombre de depositante si es otros
+    $(".form-group").delegate("#t_depositante", "change", function() {
+        t_depositante = $('#t_depositante').val();
+        if (t_depositante == '6') {
+            $("#div_nombre_depositante").css("display", "block");
         } else {
-            $("#div_nombre_beneficiario").css("display", "none");
+            $("#div_nombre_depositante").css("display", "none");
         }
     });
 
+    //Llena cuentas del responsable
     $.post('{action_llena_cuenta_responsable}', {
         idResposable: '{id_responsable}',
         dniResposable: '{dni_responsable}'
@@ -228,19 +237,20 @@
     //Habilita las cajas y las cuentas
     $("table").delegate("#cuenta", "change", function() {
         var total = new Number($('#total').val().split(",").join(""));
-        var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-        $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
-        $('#valor_retirado').change();
-        $("#valor_retirado").removeAttr("readonly");
+        var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
+        $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
+        $('#valor_consignado').change();
+        $("#valor_consignado").removeAttr("readonly");
     });
 
-    $(".form-group").delegate("#valor_retirado", "blur", function() {
+    $(".form-group").delegate("#valor_consignado", "blur", function() {
         var total = new Number($('#total').val().split(",").join(""));
-        var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-        $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
-        $('#efectivo_retirado').change();
+        var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
+        $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
+        $('#efectivo_ingresado').change();
     });
 
+    //Llena cajas del responsable
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',
         dniResposable: '{dni_responsable}'
@@ -251,17 +261,17 @@
     //Cargar div de valor retirado cuenta bancaria
     $("table").delegate("#caja", "change", function() {
         var total = new Number($('#total').val().split(",").join(""));
-        var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-        $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
-        $('#efectivo_retirado').change();
-        $("#efectivo_retirado").removeAttr("readonly");
+        var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
+        $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
+        $('#efectivo_ingresado').change();
+        $("#efectivo_ingresado").removeAttr("readonly");
     });
 
-    $(".form-group").delegate("#efectivo_retirado", "blur", function() {
+    $(".form-group").delegate("#efectivo_ingresado", "blur", function() {
         var total = new Number($('#total').val().split(",").join(""));
-        var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-        $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
-        $('#valor_retirado').change();
+        var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
+        $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
+        $('#valor_consignado').change();
     });
 
 </script>

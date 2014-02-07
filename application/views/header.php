@@ -201,10 +201,10 @@
                                     <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                                     <li><a href="<?= base_url() ?>abono_adelanto/crear">Abono a Adelanto</a></li>                                
                                     <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono a Préstamo</a></li>
-                                    <li><a href="<?= base_url() ?>index/crear_ingreso">Ingreso</a></li>
-                                    <li><a href="<?= base_url() ?>index/crear_egreso">Egreso</a></li>
+                                    <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
+                                    <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                                     <li><a href="#">Factura</a></li>
-                                    <li><a href="<?= base_url() ?>index/crear_nomina">Nómina Laboral</a></li>
+                                    <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
                                     <li><a href="#">Nota Credito</a></li>
                                     <li><a href="#">Pago Proveedor</a></li>
                                     <li><a href="#">Cuentas por Pagar</a></li>
@@ -222,7 +222,7 @@
                                     <li><a href="#">Pedido de Insumos</a></li>
                                     <li class="divider"></li>                                    
                                     <li class="dropdown-header">Matrículas</li>
-                                    <li><a href="<?= base_url() ?>index/crear_contrato_fisico">Contratos Físicos</a></li>                                
+                                    <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li>                                
                                     <li><a href="<?= base_url() ?>index/crear_matricula">Matrícula</a></li>
                                     <li><a href="<?= base_url() ?>index/crear_liquidar_matricula/new">Liquidar Matrícula</a></li>
                                     <li><a href="#">Referido</a></li>
