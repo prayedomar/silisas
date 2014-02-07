@@ -148,5 +148,7 @@ class Sede_secundaria extends CI_Controller {
             redirect(base_url());
         }
     }
+    
+    //Metodos para Consultar    
 
 }

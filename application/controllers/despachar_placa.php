@@ -52,7 +52,7 @@ class Despachar_placa extends CI_Controller {
 
             $data["tab"] = "crear_despachar_placa";
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "index_admon_sistema/crear_despachar_placa";
+            $data['url_recrear'] = base_url() . "despachar_placa/crear";
             $data['msn_recrear'] = "Despachar otra Placa";
             $bandera_error = 0;
             foreach ($placas_checkbox as $fila) {
@@ -69,8 +69,6 @@ class Despachar_placa extends CI_Controller {
             if ($bandera_error == 0) {
                 $this->parser->parse('trans_success', $data);
             }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
         } else {
             redirect(base_url());
         }
@@ -97,5 +95,7 @@ class Despachar_placa extends CI_Controller {
             redirect(base_url());
         }
     }
+    
+    //Metodos para Consultar    
 
 }

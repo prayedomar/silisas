@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <div class="row">
                 <div class="col-xs-3">
-                    <img src="{base_url}images/huevo.png" class="img-responsive">
+                    <img src="<?= base_url() ?>images/huevo.png" class="img-responsive">
                 </div>
                 <div class="col-xs-9">
                     <div class="row">

@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">          
                 <div class="row separar_div">
-                    <legend>Crear Empleado</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p>               
+                    <legend>Crear empleado</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p>               
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="row">

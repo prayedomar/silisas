@@ -70,8 +70,6 @@ class Salon extends CI_Controller {
             } else {
                 $this->parser->parse('trans_success', $data);
             }
-            $this->parser->parse('welcome', $data);
-            $this->load->view('footer');
         } else {
             redirect(base_url());
         }

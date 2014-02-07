@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Crear Salón</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p>  
+                <legend>Crear salón</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p>  
                 <div class="row">
                     <form role="form" method="post" action="{action_crear}" id="formulario">
                         <div class="col-xs-6">                          
