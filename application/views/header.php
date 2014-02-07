@@ -180,9 +180,9 @@
                                     <li><a href="<?= base_url() ?>llamado_atencion/crear">Llamado de Atención</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Clientes</li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_titular">Titular</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_alumno">Alumno</a></li>
-                                    <li><a href="<?= base_url() ?>index_admon_sistema/crear_cliente">Cliente Prestatario</a></li>
+                                    <li><a href="<?= base_url() ?>titular/crear">Titular</a></li>
+                                    <li><a href="<?= base_url() ?>alumno/crear">Alumno</a></li>
+                                    <li><a href="<?= base_url() ?>cliente_prestatario/crear">Cliente Prestatario</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
                                     <li><a href="<?= base_url() ?>index_admon_sistema/crear_proveedor">Proveedor</a></li>                                

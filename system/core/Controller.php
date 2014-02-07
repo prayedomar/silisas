@@ -77,7 +77,8 @@ class CI_Controller {
     function valor_positivo($campo) {
         if ($campo) {
             if (is_numeric(str_replace(",", "", $campo))) {
-                if ($campo >= 0) {
+                $valor = (str_replace(",", "", $campo));
+                if ($valor >= 0) {
                     return TRUE;
                 } else {
                     $this->form_validation->set_message('valor_positivo', 'El Campo %s, debe ser mayor o igual cero.');
@@ -94,7 +95,8 @@ class CI_Controller {
     function mayor_cero($campo) {
         if ($campo) {
             if (is_numeric(str_replace(",", "", $campo))) {
-                if ($campo > 0) {
+                $valor = (str_replace(",", "", $campo));
+                if ($valor > 0) {
                     return TRUE;
                 } else {
                     $this->form_validation->set_message('mayor_cero', 'El Campo %s, debe ser mayor a cero.');
@@ -130,7 +132,8 @@ class CI_Controller {
     function porcentaje($campo) {
         if ($campo) {
             if (is_numeric(str_replace(",", "", $campo))) {
-                if (($campo >= 0) && ($campo <= 100)) {
+                $valor = (str_replace(",", "", $campo));
+                if (($valor >= 0) && ($valor <= 100)) {
                     return TRUE;
                 } else {
                     $this->form_validation->set_message('porcentaje', 'El Campo %s, debe estar entre 0 y 100.');

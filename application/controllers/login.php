@@ -24,49 +24,49 @@ class Login extends CI_Controller {
                 $this->parser->parse('login_view', $data);
                 break;
             case 'admon_sede':
-                redirect(base_url() . 'index_admon_sede');
+                redirect(base_url() . 'index');
                 break;
             case 'admon_sistema':
-                redirect(base_url() . 'index_admon_sistema');
+                redirect(base_url() . 'index');
                 break;
             case 'analista_cartera':
-                redirect(base_url() . 'index_analista_cartera');
+                redirect(base_url() . 'index');
                 break;
             case 'aux_admon':
-                redirect(base_url() . 'index_aux_admon');
+                redirect(base_url() . 'index');
                 break;
             case 'contador':
-                redirect(base_url() . 'index_contador');
+                redirect(base_url() . 'index');
                 break;
             case 'directivo':
-                redirect(base_url() . 'index_directivo');
+                redirect(base_url() . 'index');
                 break;
             case 'docente':
-                redirect(base_url() . 'index_docente');
+                redirect(base_url() . 'index');
                 break;
             case 'empleado_admon':
-                redirect(base_url() . 'index_empleado_admon');
+                redirect(base_url() . 'index');
                 break;
             case 'empleado_rrpp':
-                redirect(base_url() . 'index_empleado_rrpp');
+                redirect(base_url() . 'index');
                 break;
             case 'jefe_cartera':
-                redirect(base_url() . 'index_jefe_cartera');
+                redirect(base_url() . 'index');
                 break;
             case 'jefe_enseñanza':
-                redirect(base_url() . 'index_jefe_ensenanza');
+                redirect(base_url() . 'index');
                 break;
             case 'secretaria':
-                redirect(base_url() . 'index_secretaria');
+                redirect(base_url() . 'index');
                 break;
             case 'titular':
-                redirect(base_url() . 'index_titular');
+                redirect(base_url() . 'index');
                 break;
             case 'alumno':
-                redirect(base_url() . 'index_alumno');
+                redirect(base_url() . 'index');
                 break;
             case 'cliente':
-                redirect(base_url() . 'index_cliente');
+                redirect(base_url() . 'index');
                 break;
             default:
                 $this->parser->parse('login_view', $data);
