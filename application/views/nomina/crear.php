@@ -167,7 +167,6 @@
                             <!--calculamos la cantidad de dias de la nomina y la cantidad de dias laborados (dias_nomina - ausencias)-->
                             <input type="text" name="dias_nomina" id="dias_nomina"/>
                             <input type="text" name="dias_laborados" id="dias_laborados"/>
-                            <input type="text" name="dias_incapacidad" id="dias_incapacidad"/>
                             <!--Aqui almacenamos el total devengado de la nomina-->
                             <input type="hidden" name="total_devengado" class="miles decimal2" id="total_devengado"/>
                             <input type="hidden" name="total_deducido" class="miles decimal2" id="total_deducido"/>
@@ -244,118 +243,140 @@
         var fechaInicio = $('#fecha_inicio').val();
         var fechaFin = $('#fecha_fin').val();
         if ((empleado != "default") && (periodicidad != "default") && (fechaInicio != "") && (fechaFin != "")) {
-            if ((Date.parse(fechaInicio) <= Date.parse(fechaFin))) {
-                //Bloqueamos los 3 primeros campos
-                $('#empleado').attr('disabled', 'disabled');
-                $('#fecha_inicio').attr('disabled', 'disabled');
-                $('#fecha_fin').attr('disabled', 'disabled');
-                $('#consultar_empleado').attr('disabled', 'disabled');
+            
+            if ((periodicidad != "default")) {
+                if ((Date.parse(fechaInicio) <= Date.parse(fechaFin))) {
+                    //Bloqueamos los 3 primeros campos
+                    $('#empleado').attr('disabled', 'disabled');
+                    $('#periodicidad').attr('disabled', 'disabled');
+                    $('#fecha_inicio').attr('disabled', 'disabled');
+                    $('#fecha_fin').attr('disabled', 'disabled');
+                    $('#consultar_empleado').attr('disabled', 'disabled');
 
-                //Llenamos El contrato laboral
-                $.post('{action_llena_info_contrato_laboral}', {
-                    empleado: empleado
-                }, function(data) {
-                    //Mostramos el div de info ayuda
-                    $("#div_info_apoyo").css("display", "block");
-                    if (data == "") {
-                        $("#div_contrato_laboral").html('<label>Contrato Laboral</label><div class="alert alert-info separar_div" id="div_info_contrato_laboral"></div>');
-                        $("#div_info_contrato_laboral").html("<p>No se encontró un Contrato Laboral para el empleado, por lo tanto, No es posible realizar la nómina.</p>");
-                    } else {
-                        $("#div_contrato_laboral").html(data);
-                        $("#div_contrato_laboral").prepend('<label>Contrato Laboral</label>');
-                        $("#div_nomina").css("display", "block");
+                    //Llenamos El contrato laboral
+                    $.post('{action_llena_info_contrato_laboral}', {
+                        empleado: empleado
+                    }, function(data) {
+                        //Mostramos el div de info ayuda
+                        $("#div_info_apoyo").css("display", "block");
+                        if (data == "") {
+                            $("#div_contrato_laboral").html('<label>Contrato Laboral</label><div class="alert alert-info separar_div" id="div_info_contrato_laboral"></div>');
+                            $("#div_info_contrato_laboral").html("<p>No se encontró un Contrato Laboral para el empleado, por lo tanto, No es posible realizar la nómina.</p>");
+                        } else {
+                            $("#div_contrato_laboral").html(data);
+                            $("#div_contrato_laboral").prepend('<label>Contrato Laboral</label>');
+                            $("#div_nomina").css("display", "block");
 
-                        //Llenamos la ultima nomina
-                        $.post('{action_llena_info_ultimas_nominas}', {
-                            empleado: empleado
-                        }, function(data) {
-                            if (data == "") {
-                                $("#div_ultimas_nominas").html('<label>Últimas Nóminas</label><div class="alert alert-info separar_div" id="div_info_ultimas_nominas"></div>');
-                                $("#div_info_ultimas_nominas").html("<p>No se encontraron Nóminas para el empleado.</p>");
-                            } else {
-                                $("#div_ultimas_nominas").html(data);
-                                $("#div_ultimas_nominas").prepend('<label>Últimas Nóminas</label>');
-                            }
-                        });
-                        //Llenamos los adelantos vigentes
-                        $.post('{action_llena_info_adelantos}', {
-                            empleado: empleado
-                        }, function(data) {
-                            if (data == "") {
-                                $("#div_adelantos").html('<label>Adelantos Vigentes</label><div class="alert alert-info separar_div" id="div_info_adelantos"></div>');
-                                $("#div_info_adelantos").html("<p>No se encontraron Adelantos vigentes para el empleado.</p>");
-                            } else {
-                                $("#div_adelantos").html(data);
-                                $("#div_adelantos").prepend('<label>Adelantos Vigentes</label>');
-                            }
-                        });
-                        //Llenamos los Prestamos vigentes
-                        $.post('{action_llena_info_prestamos}', {
-                            empleado: empleado
-                        }, function(data) {
-                            if (data == "") {
-                                $("#div_prestamos").html('<label>Préstamos Vigentes</label><div class="alert alert-info separar_div" id="div_info_prestamos"></div>');
-                                $("#div_info_prestamos").html("<p>No se encontraron Prestamos vigentes para el empleado.</p>");
-                            } else {
-                                $("#div_prestamos").html(data);
-                                $("#div_prestamos").prepend('<label>Préstamos Vigentes</label>');
-                            }
-                        });
-                        //Llenamos las Ausencias Laborales vigentes dentro del periodo de la nomina
-                        $.post('{action_llena_info_ausencias}', {
-                            empleado: empleado,
-                            fechaInicio: fechaInicio,
-                            fechaFin: fechaFin
-                        }, function(data) {
-                            var obj = JSON.parse(data);
-                            if (obj.respuesta == "OK")
-                            {
-                                var dias_nomina = new Number(obj.cant_nomina);
-                                var cant_ausencias = new Number(obj.cant_ausencias);
-                                $('#dias_nomina').attr('value', dias_nomina);
-                                $('#dias_laborados').attr('value', (dias_nomina - cant_ausencias));
-                                $('#dias_incapacidad').attr('value', obj.cant_incapacidad);
-                                if (obj.html_ausencias == "") {
-                                    $("#div_ausencias").html('<label>Ausencias Laborales</label><div class="alert alert-info separar_div" id="div_info_ausencias"></div>');
-                                    $("#div_info_ausencias").html("<p>No se encontraron Ausencias Laborales vigentes para el empleado, en el rango de fechas de la Nómina.</p>");
+                            //Llenamos la ultima nomina
+                            $.post('{action_llena_info_ultimas_nominas}', {
+                                empleado: empleado
+                            }, function(data) {
+                                if (data == "") {
+                                    $("#div_ultimas_nominas").html('<label>Últimas Nóminas</label><div class="alert alert-info separar_div" id="div_info_ultimas_nominas"></div>');
+                                    $("#div_info_ultimas_nominas").html("<p>No se encontraron Nóminas para el empleado.</p>");
                                 } else {
-                                    $("#div_ausencias").html(obj.html_ausencias);
-                                    $("#div_ausencias").prepend('<label>Ausencias Laborales</label>');
+                                    $("#div_ultimas_nominas").html(data);
+                                    $("#div_ultimas_nominas").prepend('<label>Últimas Nóminas</label>');
                                 }
-                            }
-                        });
-                        //Llenamos los pagos de serguridad social
-                        $.post('{action_llena_info_seguridad_social}', {
-                            empleado: empleado
-                        }, function(data) {
-                            if (data == "") {
-                                $("#div_seguridad_social").html('<label>Últimos pagos de Seguridad Social (RRPP y Prestación de Servicios)</label><div class="alert alert-info separar_div" id="div_info_seguridad_social"></div>');
-                                $("#div_info_seguridad_social").html("<p>No se encontraron Pagos de Seguridad Social para el empleado.</p>");
-                            } else {
-                                $("#div_seguridad_social").html(data);
-                                $("#div_seguridad_social").prepend('<label>Últimos pagos de Seguridad Social (RRPP y Prestación de Servicios)</label>');
-                            }
-                        });
-                        //Llenamos los conceptos pendientes de RRPP
-                        $.post('{action_llena_concepto_pdtes_rrpp}', {
-                            empleado: empleado
-                        }, function(data) {
-                            if (data == "") {
-                                $("#conceptos_pendientes").html(data);
-                                $("#conceptos_pendientes").removeAttr('class');
-                            } else {
-                                $("#conceptos_pendientes").html(data);
-                                $('#conceptos_pendientes').attr('class', 'separar_div');
-                            }
-                            calcular_total();
-                        });
-                        //Agregamos el primer concepto nuevo
-                        $('#agregar_concepto').click();
-                    }
-                });
+                            });
+                            //Llenamos los adelantos vigentes
+                            $.post('{action_llena_info_adelantos}', {
+                                empleado: empleado
+                            }, function(data) {
+                                if (data == "") {
+                                    $("#div_adelantos").html('<label>Adelantos Vigentes</label><div class="alert alert-info separar_div" id="div_info_adelantos"></div>');
+                                    $("#div_info_adelantos").html("<p>No se encontraron Adelantos vigentes para el empleado.</p>");
+                                } else {
+                                    $("#div_adelantos").html(data);
+                                    $("#div_adelantos").prepend('<label>Adelantos Vigentes</label>');
+                                }
+                            });
+                            //Llenamos los Prestamos vigentes
+                            $.post('{action_llena_info_prestamos}', {
+                                empleado: empleado
+                            }, function(data) {
+                                if (data == "") {
+                                    $("#div_prestamos").html('<label>Préstamos Vigentes</label><div class="alert alert-info separar_div" id="div_info_prestamos"></div>');
+                                    $("#div_info_prestamos").html("<p>No se encontraron Prestamos vigentes para el empleado.</p>");
+                                } else {
+                                    $("#div_prestamos").html(data);
+                                    $("#div_prestamos").prepend('<label>Préstamos Vigentes</label>');
+                                }
+                            });
+                            //Llenamos las Ausencias Laborales vigentes dentro del periodo de la nomina
+                            $.post('{action_llena_info_ausencias}', {
+                                empleado: empleado,
+                                fechaInicio: fechaInicio,
+                                fechaFin: fechaFin
+                            }, function(data) {
+                                var obj = JSON.parse(data);
+                                if (obj.respuesta == "OK")
+                                {
+                                    if ($("#periodicidad").val() == '1') {
+                                        var dias_nomina = new Number(obj.cant_nomina);
+                                    } else {
+                                        if ($("#periodicidad").val() == '2') {
+                                            var dias_nomina = new Number(7);
+                                        } else {
+                                            if ($("#periodicidad").val() == '3') {
+                                                var dias_nomina = new Number(15);
+                                            } else {
+                                                if ($("#periodicidad").val() == '4') {
+                                                    var dias_nomina = new Number(30);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    var cant_ausencias = new Number(obj.cant_ausencias);
+                                    $('#dias_nomina').attr('value', dias_nomina);
+                                    $('#dias_laborados').attr('value', (dias_nomina - cant_ausencias));
+                                    $('#dias_incapacidad').attr('value', obj.cant_incapacidad);
+                                    if (obj.html_ausencias == "") {
+                                        $("#div_ausencias").html('<label>Ausencias Laborales</label><div class="alert alert-info separar_div" id="div_info_ausencias"></div>');
+                                        $("#div_info_ausencias").html("<p>No se encontraron Ausencias Laborales vigentes para el empleado, en el rango de fechas de la Nómina.</p>");
+                                    } else {
+                                        $("#div_ausencias").html(obj.html_ausencias);
+                                        $("#div_ausencias").prepend('<label>Ausencias Laborales</label>');
+                                    }
+                                }
+                            });
+                            //Llenamos los pagos de serguridad social
+                            $.post('{action_llena_info_seguridad_social}', {
+                                empleado: empleado
+                            }, function(data) {
+                                if (data == "") {
+                                    $("#div_seguridad_social").html('<label>Últimos pagos de Seguridad Social (RRPP y Prestación de Servicios)</label><div class="alert alert-info separar_div" id="div_info_seguridad_social"></div>');
+                                    $("#div_info_seguridad_social").html("<p>No se encontraron Pagos de Seguridad Social para el empleado.</p>");
+                                } else {
+                                    $("#div_seguridad_social").html(data);
+                                    $("#div_seguridad_social").prepend('<label>Últimos pagos de Seguridad Social (RRPP y Prestación de Servicios)</label>');
+                                }
+                            });
+                            //Llenamos los conceptos pendientes de RRPP
+                            $.post('{action_llena_concepto_pdtes_rrpp}', {
+                                empleado: empleado
+                            }, function(data) {
+                                if (data == "") {
+                                    $("#conceptos_pendientes").html(data);
+                                    $("#conceptos_pendientes").removeAttr('class');
+                                } else {
+                                    $("#conceptos_pendientes").html(data);
+                                    $('#conceptos_pendientes').attr('class', 'separar_div');
+                                }
+                                calcular_total();
+                            });
+                            //Agregamos el primer concepto nuevo
+                            $('#agregar_concepto').click();
+                        }
+                    });
+                } else {
+                    $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+                    $("#div_warning").html("<p><strong>La fecha final no puede ser menor que la fecha inicial.</strong></p>");
+                    $("#div_warning").delay(5000).fadeOut(1000);
+                }
             } else {
                 $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-                $("#div_warning").html("<p><strong>La fecha final no puede ser menor que la fecha inicial.</strong></p>");
+                $("#div_warning").html("<p><strong>La fecha inicial y final, deben conincidir con el tipo de periodicidad escogido para la nómina.</strong></p>");
                 $("#div_warning").delay(5000).fadeOut(1000);
             }
         } else {

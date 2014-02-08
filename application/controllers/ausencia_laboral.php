@@ -42,7 +42,7 @@ class Ausencia_laboral extends CI_Controller {
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($error_entre_fechas != "")) {
-                echo form_error('empleado') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('t_ausencia') . form_error('observacion');
+                echo form_error('empleado') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('t_ausencia') . form_error('descripcion');
             } else {
                 echo "OK";
             }
