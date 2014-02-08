@@ -135,7 +135,7 @@ class Llamado_atencion extends CI_Controller {
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_sanciones'] = $this->t_sancionm->listar_tiopos_de_sancion();
 
-        $filasPorPagina = 1;
+        $filasPorPagina = 20;
         if (empty($_GET["page"])) {
             $inicio = 0;
             $paginaActual = 1;

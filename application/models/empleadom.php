@@ -38,7 +38,7 @@ class Empleadom extends CI_Model {
     }
 
     public function listar_empleados($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT e.*,td.*,s.nombre sede,pa.nombre pais,pro.nombre provincia,ciu.nombre ciudad,
+        $query = "SELECT e.*,e.id documento,td.*,s.nombre sede,pa.nombre pais,pro.nombre provincia,ciu.nombre ciudad,
                   tdom.tipo tipo_domicilio,estem.estado estado_empleado,tdepto.tipo depto,
                   tcargo.cargo_masculino,tcargo.cargo_femenino,sl.nombre nombre_salario,
                   e2.nombre1 nombre1_jefe,e2.nombre2 nombre2_jefe,e2.apellido1 apellido1_jefe,e2.apellido2 apellido2_jefe

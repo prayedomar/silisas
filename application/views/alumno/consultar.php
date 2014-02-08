@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Consultar titulares <span class="help-block pull-right">(<?= $cantidad_empleados ?> titulares encontrados)</span></legend>
+                <legend>Consultar alumnos <span class="help-block pull-right">(<?= $cantidad_empleados ?> alumnos encontrados)</span></legend>
                 <div id="divCriterios">
                     <div  class="row">
                         <div class="col-xs-2">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-xs-1">
                             <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>titular/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
+                            <a class='btn btn-primary' href="<?= base_url() ?>alumno/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                         </div>
                     </div>
                     <br>
@@ -54,11 +54,34 @@
                             </div> 
                         </div>
                         <div class="col-xs-2">
-                            <label>Vigente</label>
-                            <select id="vigente" class="form-control">
+                            <label>Matrícula</label>
+                            <input type='text' id="matricula" class='form-control letras_numeros' placeholder="Matrícula" value="<?= isset($_GET["matricula"]) ? $_GET["matricula"] : "" ?>">
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Curso</label>
+                            <select id="curso" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "0" ? "selected" : "" ?>>No</option>
-                                <option value="1" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "1" ? "selected" : "" ?>>Si</option>
+                                <?php foreach ($tipos_cursos as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["curso"]) && $_GET["curso"] == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Estado</label>
+                            <select id="estado" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($estados_alumnos as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["estado"]) && $_GET["estado"] == $row->id ? "selected" : "" ?>><?= $row->estado ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Sede ppal</label>
+                            <select id="sede_ppal" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($lista_sedes as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["sede_ppal"]) && $_GET["sede_ppal"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -69,29 +92,35 @@
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
-                                    <th>Tipo documento</th>
-                                    <th>Num. documento</th>
+                                    <th>Identificación</th>
                                     <th>Nombre</th>
                                     <th>Fecha de nacimiento</th>
                                     <th>Domicilio</th>
                                     <th>Teléfonos</th>
                                     <th>Email</th>
-                                    <th>Vigente</th>
-                                    <th>Observacion</th>
+                                    <th>Sede ppal</th>
+                                    <th>Detalles</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
-                                <?php foreach ($lista_empleados as $row) { ?>
+                                <?php foreach ($lista_alumnos as $row) { ?>
                                     <tr>
-                                        <td><?= $row->tipo ?></td>
-                                        <td><?= $row->documento ?></td>
+                                        <td><?= $row->abreviacion . $row->documento ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
-                                        <td><?= $row->fecha_nacimiento ?></td>
+                                        <td><?= $row->fecha_nacimiento ?></td>     
                                         <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . " - " . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
-                                        <td><?= $row->celular . " - " . $row->telefono ?></td>
+                                        <td><?= $row->celular . " - " . $row->telefono ?></td>  
                                         <td><?= $row->email ?></td>
-                                        <td><?= $row->vigente == "1" ? "Si" : "No" ?></td>
-                                        <td><?= $row->observacion ?></td>
+                                        <td><?= $row->sede ?></td>
+                                        <td><button class="btn btn-primary btn-sm" 
+                                                    data-matricula="<?= $row->matricula ?>" 
+                                                    data-velocidadini="<?= $row->velocidad_ini ?>" 
+                                                    data-comprensionini="<?= $row->comprension_ini ?>"
+                                                    data-curso="<?= $row->nombre_curso ?>"
+                                                    data-estado="<?= $row->estado_alumno ?>"
+                                                    data-fechagrados="<?= $row->fecha_grados ?>"
+                                                    data-observacion="<?= $row->observacion ?>"
+                                                    >Ver detalles</button></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -108,10 +137,13 @@
                              data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
                              data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
                              data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
-                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>">
+                             data-matricula="<?= isset($_GET["matricula"]) ? $_GET["matricula"] : "" ?>"
+                             data-curso="<?= isset($_GET["curso"]) ? $_GET["curso"] : "" ?>"
+                             data-estado="<?= isset($_GET["estado"]) ? $_GET["estado"] : "" ?>"
+                             data-sedeppal="<?= isset($_GET["sede_ppal"]) ? $_GET["sede_ppal"] : "" ?>">
 
 
-                             <ul class="pagination">
+                            <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">
                                     <a data-page="1">1</a></li>
                                 <?php for ($i = 2; $i <= $cantidad_paginas; $i++) { ?>
@@ -137,16 +169,54 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Cuenta de nomina:</div>   
+                            <div class="text-right">Matrícula:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divCueta"></div></b>
+                            <b><div id="divMatricula"></div></b>
                         </div>
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Velocidad inicial:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divVelocidadInicial"></div></b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Comprensión inicial:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divComprensionInicial"></div></b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Curso:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divCurso"></div></b>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
@@ -163,50 +233,12 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Departamneto empresarial:</div>   
+                            <div class="text-right">Fecha grados:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divDepto"></div></b>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Cargo:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divCargo"></div></b>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Salario:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divSalario"></div></b>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Jefe:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divJefe"></div></b>
+                            <b><div id="divFechaGrados"></div></b>
                         </div>
                     </div>
                 </div>

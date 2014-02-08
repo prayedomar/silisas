@@ -99,7 +99,7 @@
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
-                                    <th>Tipo documento</th>
+                                    <th>Identificación</th>
                                     <th>Nombre</th>
                                     <th>Fecha de nacimiento</th>
                                     <th>Domicilio</th>
@@ -112,7 +112,7 @@
                             <tbody id="bodyTabla">
                                 <?php foreach ($lista_empleados as $row) { ?>
                                     <tr>
-                                        <td><?= $row->tipo ?></td>
+                                        <td><?= $row->abreviacion."".$row->documento ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                         <td><?= $row->fecha_nacimiento ?></td>
                                         <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . "/" . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
