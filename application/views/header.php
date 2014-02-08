@@ -367,7 +367,7 @@
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Clientes</li>
                                     <li><a href="<?= base_url() ?>titular/consultar">Titulares</a></li>
-                                    <li><a href="#">Alumnos</a></li>
+                                    <li><a href="<?= base_url() ?>alumno/consultar">Alumnos</a></li>
                                     <li><a href="#">Clientes Prestatarios</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
