@@ -6,6 +6,7 @@ class Cliente extends CI_Controller {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
+        $this->load->model('clientem');
     }
 
     function crear() {
@@ -161,6 +162,39 @@ class Cliente extends CI_Controller {
         } else {
             redirect(base_url());
         }
+    }
+
+    public function consultar() {
+        $this->load->model('t_dnim');
+        $this->load->model('est_alumnom');
+        $this->load->model('sedem');
+        $this->load->model('t_cursom');
+        $data["tab"] = "consultar_clientes";
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
+        $data['estados_alumnos'] = $this->est_alumnom->listar_todas_los_estados_de_alumno();
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        if (!empty($_GET["depto"])) {
+            $this->load->model('t_cargom');
+            $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
+        }
+        $filasPorPagina = 1;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad_empleados = $this->clientem->cantidad_clientes($_GET, $inicio, $filasPorPagina);
+        $cantidad_empleados = $cantidad_empleados[0]->cantidad;
+        $data['cantidad_empleados'] = $cantidad_empleados;
+        $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
+        $data["lista_alumnos"] = $this->clientem->listar_clientes($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("cliente/consultar");
+        $this->load->view("footer");
     }
 
 }
