@@ -646,7 +646,7 @@ class Nomina extends CI_Controller {
     
     public function llena_periodicidad() {
         if ($this->input->is_ajax_request()) {
-            if ($this->input->post('depto')) {
+            if ($this->input->post('empleado')) {
                 list($id_beneficiario, $dni_beneficiario) = explode("-", $this->input->post('empleado'));
                 $depto = $this->input->post('depto');
                 $salarios = $this->select_model->salario_t_salario_x_t_depto($depto);

@@ -228,7 +228,7 @@
     $("form").delegate("#empleado", "change", function() {
         empleado = $(this).val();
         $.post('{action_llena_provincia}', {
-            pais: pais
+            empleado: empleado
         }, function(data) {
             $("#provincia").removeAttr("disabled");
             $("#provincia").html(data);
