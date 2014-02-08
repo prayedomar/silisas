@@ -62,8 +62,7 @@
                                 <tr>
                                     <th>Sede</th>
                                     <th>Caja</th>
-                                    <th>Tip. doc. encargado</th>
-                                    <th>Num. doc. encargado</th>
+                                    <th>Encargado</th>
                                     <th>Vigente</th>
                                     <th>Observación</th>
                                     <th>Fecha creación</th>
@@ -75,12 +74,11 @@
                                     <tr>
                                         <td><?= $row->sede ?></td>
                                         <td><?= $row->caja ?></td>
-                                        <td><?= $row->tipo_documento ?></td>
-                                        <td><?= $row->id_encargado ?></td>
+                                        <td><?= $row->nombre1_encg . " " . $row->nombre2_encg . " " . $row->apellido1_encg . " " . $row->apellido2_encg ?></td>
                                         <td><?= $row->vigente == 1 ? "Vigente" : "No vigente" ?></td>
                                         <td><?= $row->observacion ?></td>
                                         <td><?= $row->fecha_trans ?></td>
-                                        <td><?= $row->nombre1_resp." ".$row->nombre2_resp." ".$row->apellido1_resp." ".$row->apellido2_resp ?></td>
+                                        <td><?= $row->nombre1_resp . " " . $row->nombre2_resp . " " . $row->apellido1_resp . " " . $row->apellido2_resp ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>

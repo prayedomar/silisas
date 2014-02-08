@@ -28,6 +28,8 @@
     <script src='<?= base_url() ?>public/js/consultar_proveedor.js'></script>
 <?php } else if (isset($tab) && $tab == "consultar_caja") { ?>
     <script src='<?= base_url() ?>public/js/consultar_caja.js'></script>
+<?php } else if (isset($tab) && $tab == "consultar_cuenta") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_cuenta.js'></script>
 <?php } ?>
 </body>
 </html>

@@ -15,7 +15,7 @@ class Cajam extends CI_Model {
                   JOIN sede s ON c.sede=s.id
                   JOIN t_caja tc ON c.t_caja=tc.id
                   JOIN t_dni td ON c.dni_encargado=td.id
-                  JOIN empleado e ON c.dni_encargado=e.dni AND c.id_encargado=e.id
+                  JOIN empleado e ON c.dni_responsable=e.dni AND c.id_responsable=e.id
                   WHERE true ";
         $query.=(!empty($criterios['sede'])) ? "AND c.sede = '{$criterios['sede']}'" : "";
         $query.=(!empty($criterios['caja'])) ? "AND c.t_caja = '{$criterios['caja']}'" : "";
@@ -27,12 +27,14 @@ class Cajam extends CI_Model {
 
     public function listar_cajas($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT c.*,s.nombre sede,td.tipo tipo_documento,tc.tipo caja,
-            e.nombre1 nombre1_resp,e.nombre2 nombre2_resp,e.apellido1 apellido1_resp,e.apellido2 apellido2_resp
+                  e.nombre1 nombre1_resp,e.nombre2 nombre2_resp,e.apellido1 apellido1_resp,e.apellido2 apellido2_resp,
+                  e2.nombre1 nombre1_encg,e2.nombre2 nombre2_encg,e2.apellido1 apellido1_encg,e2.apellido2 apellido2_encg
                   FROM caja c
                   JOIN sede s ON c.sede=s.id
                   JOIN t_caja tc ON c.t_caja=tc.id
                   JOIN t_dni td ON c.dni_encargado=td.id
-                  JOIN empleado e ON c.dni_encargado=e.dni AND c.id_encargado=e.id
+                  JOIN empleado e ON c.dni_responsable=e.dni AND c.id_responsable=e.id
+                  JOIN empleado e2 ON c.dni_encargado=e2.dni AND c.id_encargado=e2.id
                   WHERE true ";
         $query.=(!empty($criterios['sede'])) ? "AND c.sede = '{$criterios['sede']}'" : "";
         $query.=(!empty($criterios['caja'])) ? "AND c.t_caja = '{$criterios['caja']}'" : "";

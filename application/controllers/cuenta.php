@@ -6,6 +6,7 @@ class Cuenta extends CI_Controller {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
+        $this->load->model('cuentam');
     }
 
     function crear() {
@@ -86,7 +87,7 @@ class Cuenta extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_banco_pais() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
@@ -105,8 +106,8 @@ class Cuenta extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     //Asignar Cuenta a sedes    
     function asignar_empleado() {
         $data["tab"] = "crear_asignar_cuenta_empeado";
@@ -116,7 +117,7 @@ class Cuenta extends CI_Controller {
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['cuenta'] = $this->select_model->cuenta_banco();
         $data['action_agregar_empleado_cuenta'] = base_url() . "cuenta/insertar_asignar_empleado";
-        $data['action_anular_empleado_cuenta'] = base_url() . "cuenta/anular_asignar_empleado";        
+        $data['action_anular_empleado_cuenta'] = base_url() . "cuenta/anular_asignar_empleado";
 
         $data['action_llena_cuenta_bancaria'] = base_url() . "cuenta/llena_cuenta_bancaria";
         $data['action_llena_checkbox_empleados_cuenta'] = base_url() . "cuenta/llena_checkbox_empleados_cuenta";
@@ -202,7 +203,7 @@ class Cuenta extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_cuenta_bancaria() {
         if ($this->input->is_ajax_request()) {
             $cuentas = $this->select_model->cuenta_banco();
@@ -224,8 +225,8 @@ class Cuenta extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_checkbox_empleados_cuenta() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('cuenta')) && ($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
@@ -250,8 +251,8 @@ class Cuenta extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_empleados_cuenta_banco() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('cuenta')) {
@@ -275,8 +276,8 @@ class Cuenta extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     //Asignar Cuenta a sedes
     function asignar_sede() {
         $data["tab"] = "crear_asignar_cuenta_sede";
@@ -286,7 +287,7 @@ class Cuenta extends CI_Controller {
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['cuenta'] = $this->select_model->cuenta_banco();
         $data['action_agregar_sede_cuenta'] = base_url() . "cuenta/insertar_asignar_sede";
-        $data['action_anular_sede_cuenta'] = base_url() . "cuenta/anular_asignar_sede";        
+        $data['action_anular_sede_cuenta'] = base_url() . "cuenta/anular_asignar_sede";
         $data['action_llena_cuenta_bancaria'] = base_url() . "cuenta/llena_cuenta_bancaria";
         $data['action_llena_sedes_cuenta'] = base_url() . "cuenta/llena_sedes_cuenta_banco";
         $data['action_llena_checkbox_sedes_cuenta'] = base_url() . "cuenta/llena_checkbox_sedes_cuenta";
@@ -362,8 +363,8 @@ class Cuenta extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    } 
-    
+    }
+
     public function llena_sedes_cuenta_banco() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('cuenta')) {
@@ -387,8 +388,8 @@ class Cuenta extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    } 
-    
+    }
+
     public function llena_checkbox_sedes_cuenta() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('cuenta')) && ($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
@@ -414,7 +415,30 @@ class Cuenta extends CI_Controller {
             redirect(base_url());
         }
     }
-    
-    
+    public function consultar() {
+        $this->load->model('t_cuentam');
+        $this->load->model('bancom');
+        $data["tab"] = "consultar_cuenta";
+        $data['tipos_cuentas'] = $this->t_cuentam->listar_todas_los_tipos_cuentas();
+        $data['lista_bancos'] = $this->bancom->listar_bancos();
+
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad = $this->cuentam->cantidad_cuentas($_GET, $inicio, $filasPorPagina);
+        $cantidad = $cantidad[0]->cantidad;
+        $data['cantidad'] = $cantidad;
+        $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);
+        $data["lista"] = $this->cuentam->listar_cuentas($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("cuenta/consultar");
+        $this->load->view("footer");
+    }
 
 }
