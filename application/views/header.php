@@ -371,7 +371,7 @@
                                     <li><a href="<?= base_url() ?>cliente/consultar">Clientes Prestatarios</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
-                                    <li><a href="#">Proveedores</a></li>                                
+                                    <li><a href="<?= base_url() ?>proveedor/consultar">Proveedores</a></li>                                
                                 </ul>
                             </li>
                             <li class="col-sm-3">
