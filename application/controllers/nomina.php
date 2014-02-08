@@ -31,6 +31,7 @@ class Nomina extends CI_Controller {
         $data['action_llena_concepto_pdtes_rrpp'] = base_url() . "nomina/llena_concepto_pdtes_rrpp";
         $data['action_llena_agregar_concepto'] = base_url() . "nomina/llena_agregar_concepto";
         $data['action_llena_info_t_concepto'] = base_url() . "nomina/llena_info_t_concepto";
+        $data['action_llena_periodicidad_nomina'] = base_url() . "nomina/llena_periodicidad_nomina";
 
         $data['action_llena_cuenta_responsable'] = base_url() . "nomina/llena_cuenta_responsable";
         $data['action_llena_caja_responsable'] = base_url() . "nomina/llena_caja_responsable";
@@ -644,15 +645,14 @@ class Nomina extends CI_Controller {
         }
     }   
     
-    public function llena_periodicidad() {
+    public function llena_periodicidad_nomina() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('empleado')) {
-                list($id_beneficiario, $dni_beneficiario) = explode("-", $this->input->post('empleado'));
-                $depto = $this->input->post('depto');
-                $salarios = $this->select_model->salario_t_salario_x_t_depto($depto);
-                if ($salarios == TRUE) {
-                    foreach ($salarios as $fila) {
-                        echo '<option value="' . $fila->id . '">' . $fila->nombre . '</option>';
+                list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
+                $periodicidades = $this->select_model->periodicidad_nomina($id_empleado, $dni_empleado);
+                if ($periodicidades == TRUE) {
+                    foreach ($periodicidades as $fila) {
+                        echo '<option value="' . $fila->id . '">' . $fila->tipo . '</option>';
                     }
                 } else {
                     echo "";

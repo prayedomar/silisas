@@ -42,6 +42,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="validacion_inicial">
+                            </div>                            
                             <div class="row text-center separar_submit">
                                 <button type="button" class="btn btn-default" id="consultar_empleado"><span class="glyphicon glyphicon-search"></span> Consultar </button>
                                 <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Empleado </a>
@@ -198,7 +200,6 @@
         var cantidad = 0;
         var valor_unitario = 0;
         $(".renglon_concepto_pdte").each(function() {
-//            alert(new Number($(this).find("#cantidad").val()) + " - " + new Number($(this).find("#valor_unitario").val().split(",").join("")));
             cantidad = new Number($(this).find("#cantidad").val());
             valor_unitario = new Number($(this).find("#valor_unitario").val().split(",").join(""));
             debito_credito = new Number($(this).find("#debito_credito").val());
@@ -223,27 +224,26 @@
         $('#total_nomina').change();
         $("#div_total_nomina").html("<h3>$ " + $('#total_nomina').val() + "</h3>");
     }
-    
+
     //Habilita el campo periodicidad
     $("form").delegate("#empleado", "change", function() {
         empleado = $(this).val();
-        $.post('{action_llena_provincia}', {
+        $.post('{action_llena_periodicidad_nomina}', {
             empleado: empleado
         }, function(data) {
-            $("#provincia").removeAttr("disabled");
-            $("#provincia").html(data);
-            $("#provincia").prepend('<option value="default" selected>Seleccione Departamento</option>');
-            //Con esto activamos automaticamente el evento click como si lo hicieramos nosotros.
-            $("#provincia").change();
+            $("#periodicidad").removeAttr("disabled");
+            $("#periodicidad").html(data);
+            $("#periodicidad").prepend('<option value="default" selected>Seleccione Periodicidad</option>');
         });
     });
 
     //Llenamos la informacion de apoyo
     $("form").delegate("#consultar_empleado", "click", function() {
         var empleado = $('#empleado').val();
+        var periodicidad = $('#periodicidad').val();
         var fechaInicio = $('#fecha_inicio').val();
         var fechaFin = $('#fecha_fin').val();
-        if ((empleado != "default") && (fechaInicio != "") && (fechaFin != "")) {
+        if ((empleado != "default") && (periodicidad != "default") && (fechaInicio != "") && (fechaFin != "")) {
             if ((Date.parse(fechaInicio) <= Date.parse(fechaFin))) {
                 //Bloqueamos los 3 primeros campos
                 $('#empleado').attr('disabled', 'disabled');
@@ -354,10 +354,14 @@
                     }
                 });
             } else {
-                alert("La fecha final no puede ser menor que la fecha inicial.");
+                $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+                $("#div_warning").html("<p><strong>La fecha final no puede ser menor que la fecha inicial.</strong></p>");
+                $("#div_warning").delay(5000).fadeOut(1000);
             }
         } else {
-            alert("Ingrese primero: Empleado, fecha inicial y fecha final de la nómina");
+            $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+            $("#div_warning").html("<p><strong>Antes de consultar, ingrese primero empleado, periodicidad, fecha inicial y fecha final.</strong></p>");
+            $("#div_warning").delay(8000).fadeOut(1000);
         }
     });
 

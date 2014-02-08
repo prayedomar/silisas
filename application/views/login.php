@@ -68,9 +68,9 @@
                         {/dni}      
                     </select>
                     <label>Identificación de usuario</label>   
-                    <input name="id" id="id" type="text" maxlength="13" required>
+                    <input name="id" id="id" type="text" maxlength="13" placeholder="Identificación de usuario" required>
                     <label>Contraseña</label>  
-                    <input name="password" id="password" type="password" maxlength="30" required>
+                    <input name="password" id="password" type="password" maxlength="30" placeholder="Contraseña" required>
                     <input type="hidden" name="token" value={token} />
                     <input type="hidden" id="action_validar" value={action_validar} />
                 </fieldset>
