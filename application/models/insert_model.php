@@ -90,7 +90,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function cliente($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function cliente($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -110,6 +110,7 @@ class Insert_model extends CI_Model {
             'telefono' => $telefono,
             'celular' => $celular,
             'email' => $email,
+            'sede_ppal' => $sede_ppal,
             'observacion' => $observacion,
             'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
