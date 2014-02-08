@@ -1,17 +1,5 @@
 <?php
 
-//Para atrapar los errores critical y notice de php
-set_error_handler('exceptions_error_handler');
-
-function exceptions_error_handler($severity, $message, $filename, $lineno) {
-    if (error_reporting() == 0) {
-        return;
-    }
-    if (error_reporting() & $severity) {
-        throw new ErrorException($message, 0, $severity, $filename, $lineno);
-    }
-}
-
 class Prueba extends CI_Controller {
 
     function __construct() {
@@ -249,7 +237,8 @@ class Prueba extends CI_Controller {
 ////        $this->db->update('matricula', $data);
 //        echo "ok";
 
-        phpinfo();
+        echo date("d",strtotime("2013-02-3"));
+        
     }
 
     function prueba_ajax() {

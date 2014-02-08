@@ -243,7 +243,17 @@
         var fechaInicio = $('#fecha_inicio').val();
         var fechaFin = $('#fecha_fin').val();
         if ((empleado != "default") && (periodicidad != "default") && (fechaInicio != "") && (fechaFin != "")) {
-            
+            $.post('{action_llena_info_prestamos}', {
+                empleado: empleado
+            }, function(data) {
+                if (data == "") {
+                    $("#div_prestamos").html('<label>Préstamos Vigentes</label><div class="alert alert-info separar_div" id="div_info_prestamos"></div>');
+                    $("#div_info_prestamos").html("<p>No se encontraron Prestamos vigentes para el empleado.</p>");
+                } else {
+                    $("#div_prestamos").html(data);
+                    $("#div_prestamos").prepend('<label>Préstamos Vigentes</label>');
+                }
+            });
             if ((periodicidad != "default")) {
                 if ((Date.parse(fechaInicio) <= Date.parse(fechaFin))) {
                     //Bloqueamos los 3 primeros campos
