@@ -98,7 +98,7 @@
                                         <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . " - " . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>  
                                         <td><?= $row->email ?></td>
-                                        <td></td>
+                                        <td><?= ($row->cantidad_prestamos>0)? "Con {$row->cantidad_prestamos} préstamo(s)":"Sin prestamos"?></td>
                                         <td><?= $row->sede ?></td>
                                     </tr>
                                 <?php } ?>

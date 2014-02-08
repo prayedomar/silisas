@@ -178,7 +178,7 @@ class Cliente extends CI_Controller {
             $this->load->model('t_cargom');
             $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
         }
-        $filasPorPagina = 20;
+        $filasPorPagina = 1;
         if (empty($_GET["page"])) {
             $inicio = 0;
             $paginaActual = 1;
