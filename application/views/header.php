@@ -377,7 +377,7 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Cajas y Bancos</li>
-                                    <li><a href="#">Caja (Punto de Venta)</a></li>                                
+                                    <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de Venta)</a></li>                                
                                     <li><a href="#">Cuenta Bancaria</a></li>
                                     <li><a href="#">Autorizar Cuenta Bancaria a Sedes</a></li>
                                     <li><a href="#">Autorizar Cuenta Bancaria a Empleado</a></li>

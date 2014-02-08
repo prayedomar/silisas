@@ -26,6 +26,8 @@
     <script src='<?= base_url() ?>public/js/consultar_clientes.js'></script>
 <?php } else if (isset($tab) && $tab == "consultar_proveedor") { ?>
     <script src='<?= base_url() ?>public/js/consultar_proveedor.js'></script>
+<?php } else if (isset($tab) && $tab == "consultar_caja") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_caja.js'></script>
 <?php } ?>
 </body>
 </html>

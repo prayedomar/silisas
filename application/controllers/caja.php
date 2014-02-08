@@ -6,6 +6,7 @@ class Caja extends CI_Controller {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
+        $this->load->model('cajam');
     }
 
     function crear() {
@@ -71,7 +72,7 @@ class Caja extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_t_caja_sede() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('sede')) && ($this->input->post('sede') != '{id}') && ($this->input->post('sede') != 'default')) {
@@ -90,8 +91,8 @@ class Caja extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_encargado_sede() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('sede')) && ($this->input->post('sede') != '{id}') && ($this->input->post('sede') != 'default')) {
@@ -110,6 +111,36 @@ class Caja extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }
+
+    public function consultar() {
+        $this->load->model('t_dnim');
+        $this->load->model('sedem');
+        $this->load->model('t_cajam');
+
+
+        $data["tab"] = "consultar_caja";
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_cajas'] = $this->t_cajam->listar_tipos_de_caja();
+
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad = $this->cajam->cantidad_cajas($_GET, $inicio, $filasPorPagina);
+        $cantidad = $cantidad[0]->cantidad;
+        $data['cantidad'] = $cantidad;
+        $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);
+        $data["lista"] = $this->cajam->listar_cajas($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("caja/consultar");
+        $this->load->view("footer");
+    }
 
 }
