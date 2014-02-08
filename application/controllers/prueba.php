@@ -237,7 +237,33 @@ class Prueba extends CI_Controller {
 ////        $this->db->update('matricula', $data);
 //        echo "ok";
 //        echo date("d",strtotime("2013-02-3"));
-        echo date("d", (mktime(0, 0, 0, date("m", strtotime("2014-02-17")) + 1, 1, date("Y", strtotime("2012-02-3"))) - 1));
+
+        $periodicidad = '2';
+        $fecha_inicio = "2013-02-16";
+        $fecha_fin = "2013-02-28";
+        if ($periodicidad == '1') {
+            echo "OK";
+        } else {
+            if ($periodicidad == '2') {
+                if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
+                    if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
+                        echo "OK";
+                    } else {
+                        echo "error";
+                    }
+                } else {
+                    echo "error";
+                }
+            } else {
+                if ($periodicidad == '3') {
+                    
+                } else {
+                    if ($periodicidad == '4') {
+                        
+                    }
+                }
+            }
+        }
     }
 
     function prueba_ajax() {

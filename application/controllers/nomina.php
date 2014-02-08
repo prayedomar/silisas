@@ -672,27 +672,43 @@ class Nomina extends CI_Controller {
                 $periodicidad = $this->input->post('periodicidad');
                 $fecha_inicio = $this->input->post('fechaInicio');
                 $fecha_fin = $this->input->post('fechaFin');
-                if ($periodicidad == '1') {
-                    echo "OK";
-                } else {
-                    if ($periodicidad == '2') {
-                        if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime("2014-02-17")) + 1, 1, date("Y", strtotime("2012-02-3"))) - 1)))))) {
+                if (($this->fecha_valida($fecha_inicio)) && ($this->fecha_valida($fecha_fin))) {
+                    if (($fecha_fin) <= ($fecha_inicio)) {
+                        if ($periodicidad == '1') {
                             echo "OK";
                         } else {
-                            echo "error";
-                        }
-                    } else {
-                        if ($periodicidad == '3') {
-                            
-                        } else {
-                            if ($periodicidad == '4') {
-                                
+                            if ($periodicidad == '2') {
+                                if (($this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina)) <= 7) {
+                                    echo "OK";
+                                } else {
+                                    echo "error";
+                                }
+                            } else {
+                                if ($periodicidad == '3') {
+                                    if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
+                                        if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
+                                            echo "OK";
+                                        } else {
+                                            echo "error";
+                                        }
+                                    } else {
+                                        echo "error";
+                                    }
+                                } else {
+                                    if ($periodicidad == '4') {
+                                        
+                                    }
+                                }
                             }
                         }
+                    } else {
+                        echo "<p>La fecha final no puede ser menor que la fecha inicial.</p>";
                     }
+                } else {
+                    echo "<p>Los campos de fecha, deben tener un formato valido: yyyy-mm-dd.</p>";
                 }
             } else {
-                echo "error";
+                echo "<p>Error en los campos de entrada.</p>";
             }
         } else {
             redirect(base_url());
