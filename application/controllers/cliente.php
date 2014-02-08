@@ -92,6 +92,9 @@ class Cliente extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion
+            $id_responsable = $this->input->post('id_responsable');
+            $dni_responsable = $this->input->post('dni_responsable');
+            $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;            
 
             $perfil = 'cliente';
             $vigente = 1;
@@ -106,7 +109,7 @@ class Cliente extends CI_Controller {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error2 = $this->insert_model->cliente($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error2 = $this->insert_model->cliente($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
                     $data['trans_error'] = $error2;
