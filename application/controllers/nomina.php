@@ -649,7 +649,6 @@ class Nomina extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-                $depto = $this->input->post('depto');
                 $periodicidades = $this->select_model->periodicidad_nomina($id_empleado, $dni_empleado);
                 if ($periodicidades == TRUE) {
                     foreach ($periodicidades as $fila) {

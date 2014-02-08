@@ -1008,7 +1008,7 @@ class Select_model extends CI_Model {
     }
 
     public function periodicidad_nomina($id_empleado, $dni_empleado) {
-        $SqlInfo = "select * from t_periodicidad_nomina where (id IN(select t_periodicidad_nomina from t_periodicidad_x_t_salario where (t_salario=(select t_salario from salario where (id=(select salario from empleado where ((id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))))))))";
+        $SqlInfo = "select * from t_periodicidad_nomina where (id IN(select t_periodicidad_nomina from t_periodicidad_x_t_salario where (t_salario=(select t_salario from salario where (id=(select salario from empleado where ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . "))))))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
