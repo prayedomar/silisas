@@ -190,7 +190,7 @@ class Cliente extends CI_Controller {
         $data['cantidad_paginas'] = ceil($cantidad_empleados / $filasPorPagina);
         $data["lista_alumnos"] = $this->clientem->listar_clientes($_GET, $inicio, $filasPorPagina);
         $this->load->view("header", $data);
-        $this->load->view("alumno/consultar");
+        $this->load->view("cliente/consultar");
         $this->load->view("footer");
     }
 

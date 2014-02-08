@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-xs-1">
                             <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>alumno/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
+                            <a class='btn btn-primary' href="<?= base_url() ?>cliente/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                         </div>
                     </div>
                     <br>
@@ -53,26 +53,13 @@
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
-                        <div class="col-xs-2">
-                            <label>Matrícula</label>
-                            <input type='text' id="matricula" class='form-control letras_numeros' placeholder="Matrícula" value="<?= isset($_GET["matricula"]) ? $_GET["matricula"] : "" ?>">
-                        </div>
-                        <div class="col-xs-2">
-                            <label>Curso</label>
-                            <select id="curso" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <?php foreach ($tipos_cursos as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["curso"]) && $_GET["curso"] == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
+
                         <div class="col-xs-2">
                             <label>Estado</label>
                             <select id="estado" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <?php foreach ($estados_alumnos as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["estado"]) && $_GET["estado"] == $row->id ? "selected" : "" ?>><?= $row->estado ?></option>
-                                <?php } ?>
+                                <option value="c" <?= isset($_GET["estado"]) && $_GET["estado"] == "c" ? "selected" : "" ?>>Con préstamos</option>
+                                <option value="s" <?= isset($_GET["estado"]) && $_GET["estado"] == "s" ? "selected" : "" ?>>Sin préstamos</option>
                             </select>
                         </div>
                         <div class="col-xs-2">
@@ -98,8 +85,8 @@
                                     <th>Domicilio</th>
                                     <th>Teléfonos</th>
                                     <th>Email</th>
+                                    <th>Estado</th>
                                     <th>Sede ppal</th>
-                                    <th>Detalles</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
@@ -111,16 +98,8 @@
                                         <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . " - " . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>  
                                         <td><?= $row->email ?></td>
+                                        <td></td>
                                         <td><?= $row->sede ?></td>
-                                        <td><button class="btn btn-primary btn-sm" 
-                                                    data-matricula="<?= $row->matricula ?>" 
-                                                    data-velocidadini="<?= $row->velocidad_ini ?>" 
-                                                    data-comprensionini="<?= $row->comprension_ini ?>"
-                                                    data-curso="<?= $row->nombre_curso ?>"
-                                                    data-estado="<?= $row->estado_alumno ?>"
-                                                    data-fechagrados="<?= $row->fecha_grados ?>"
-                                                    data-observacion="<?= $row->observacion ?>"
-                                                    >Ver detalles</button></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -137,8 +116,6 @@
                              data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
                              data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
                              data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
-                             data-matricula="<?= isset($_GET["matricula"]) ? $_GET["matricula"] : "" ?>"
-                             data-curso="<?= isset($_GET["curso"]) ? $_GET["curso"] : "" ?>"
                              data-estado="<?= isset($_GET["estado"]) ? $_GET["estado"] : "" ?>"
                              data-sedeppal="<?= isset($_GET["sede_ppal"]) ? $_GET["sede_ppal"] : "" ?>">
 

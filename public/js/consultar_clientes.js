@@ -28,12 +28,6 @@ $(function() {
         if ($("#fecha_nacimiento").val() != "") {
             url += "fecha_nacimiento=" + $("#fecha_nacimiento").val() + "&";
         }
-        if ($("#matricula").val() != "") {
-            url += "matricula=" + $("#matricula").val() + "&";
-        }
-        if ($("#curso").val() != "") {
-            url += "curso=" + $("#curso").val() + "&";
-        }
         if ($("#estado").val() != "") {
             url += "estado=" + $("#estado").val() + "&";
         }
@@ -52,21 +46,6 @@ $(function() {
         }
     });
 
-    $("#bodyTabla button").click(function() {
-        $("#divMatricula").html($(this).data("matricula"));
-        $("#divVelocidadInicial").html($(this).data("velocidadini") + " p.p.m");
-        $("#divComprensionInicial").html($(this).data("comprensionini") + " %");
-        $("#divCurso").html($(this).data("curso"));
-        $("#divEstado").html($(this).data("estado"));
-
-        if ($(this).data("fechagrados") == "") {
-            $("#divFechaGrados").html("Pendiente");
-        } else {
-            $("#divFechaGrados").html($(this).data("fechagrados"));
-        }
-        $("#divObservacion").html($(this).data("observacion"));
-        $("#modalDetalles").modal("show");
-    });
     $("#paginacion li.noActive a").click(function() {
         $("#coverDisplay").css({
             "opacity": "1",
@@ -99,12 +78,6 @@ $(function() {
         }
         if ($("#paginacion").data("fechanacimiento") != "") {
             url += "fechana_cimiento=" + $("#paginacion").data("fechanacimiento") + "&";
-        }
-        if ($("#paginacion").data("matricula") != "") {
-            url += "matricula=" + $("#paginacion").data("matricula") + "&";
-        }
-        if ($("#paginacion").data("curso") != "") {
-            url += "curso=" + $("#paginacion").data("curso") + "&";
         }
         if ($("#paginacion").data("estado") != "") {
             url += "estado=" + $("#paginacion").data("estado") + "&";

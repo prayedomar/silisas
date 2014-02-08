@@ -22,6 +22,8 @@
     <script src='<?= base_url() ?>public/js/consultar_titular.js'></script>
 <?php } else if (isset($tab) && $tab == "consultar_alumno") { ?>
     <script src='<?= base_url() ?>public/js/consultar_alumno.js'></script>
+<?php } else if (isset($tab) && $tab == "consultar_clientes") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_clientes.js'></script>
 <?php } ?>
 </body>
 </html>
