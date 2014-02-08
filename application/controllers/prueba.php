@@ -236,9 +236,8 @@ class Prueba extends CI_Controller {
 //        $this->db->update('matricula');
 ////        $this->db->update('matricula', $data);
 //        echo "ok";
-
-        echo date("d",strtotime("2013-02-3"));
-        
+//        echo date("d",strtotime("2013-02-3"));
+        echo date("d", (mktime(0, 0, 0, date("m", strtotime("2014-02-17")) + 1, 1, date("Y", strtotime("2012-02-3"))) - 1));
     }
 
     function prueba_ajax() {

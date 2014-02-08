@@ -676,7 +676,7 @@ class Nomina extends CI_Controller {
                     echo "OK";
                 } else {
                     if ($periodicidad == '2') {
-                        if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15'))||(((date("d", strtotime($fecha_inicio))) == '16') && date("d",(mktime(0,0,0,$elMes+1,1,$elAnio)-1)))) {
+                        if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime("2014-02-17")) + 1, 1, date("Y", strtotime("2012-02-3"))) - 1)))))) {
                             echo "OK";
                         } else {
                             echo "error";
