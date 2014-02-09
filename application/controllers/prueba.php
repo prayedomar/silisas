@@ -1,17 +1,5 @@
 <?php
 
-//Para atrapar los errores critical y notice de php
-set_error_handler('exceptions_error_handler');
-
-function exceptions_error_handler($severity, $message, $filename, $lineno) {
-    if (error_reporting() == 0) {
-        return;
-    }
-    if (error_reporting() & $severity) {
-        throw new ErrorException($message, 0, $severity, $filename, $lineno);
-    }
-}
-
 class Prueba extends CI_Controller {
 
     function __construct() {
@@ -248,8 +236,34 @@ class Prueba extends CI_Controller {
 //        $this->db->update('matricula');
 ////        $this->db->update('matricula', $data);
 //        echo "ok";
+//        echo date("d",strtotime("2013-02-3"));
 
-        phpinfo();
+        $periodicidad = '2';
+        $fecha_inicio = "2013-02-16";
+        $fecha_fin = "2013-02-28";
+        if ($periodicidad == '1') {
+            echo "OK";
+        } else {
+            if ($periodicidad == '2') {
+                if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
+                    if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
+                        echo "OK";
+                    } else {
+                        echo "error";
+                    }
+                } else {
+                    echo "error";
+                }
+            } else {
+                if ($periodicidad == '3') {
+                    
+                } else {
+                    if ($periodicidad == '4') {
+                        
+                    }
+                }
+            }
+        }
     }
 
     function prueba_ajax() {

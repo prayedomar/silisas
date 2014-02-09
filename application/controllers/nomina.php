@@ -32,6 +32,7 @@ class Nomina extends CI_Controller {
         $data['action_llena_agregar_concepto'] = base_url() . "nomina/llena_agregar_concepto";
         $data['action_llena_info_t_concepto'] = base_url() . "nomina/llena_info_t_concepto";
         $data['action_llena_periodicidad_nomina'] = base_url() . "nomina/llena_periodicidad_nomina";
+        $data['action_validar_fechas_periodicidad'] = base_url() . "nomina/validar_fechas_periodicidad";
 
         $data['action_llena_cuenta_responsable'] = base_url() . "nomina/llena_cuenta_responsable";
         $data['action_llena_caja_responsable'] = base_url() . "nomina/llena_caja_responsable";
@@ -116,7 +117,7 @@ class Nomina extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_info_contrato_laboral() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('empleado')) {
@@ -165,8 +166,8 @@ class Nomina extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_info_ultimas_nominas() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('empleado')) {
@@ -587,8 +588,8 @@ class Nomina extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }  
-    
+    }
+
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
@@ -643,8 +644,8 @@ class Nomina extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }   
-    
+    }
+
     public function llena_periodicidad_nomina() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('empleado')) {
@@ -664,6 +665,54 @@ class Nomina extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
+    public function validar_fechas_periodicidad() {
+        if ($this->input->is_ajax_request()) {
+            if (($this->input->post('periodicidad')) && ($this->input->post('fechaInicio')) && ($this->input->post('fechaFin'))) {
+                $periodicidad = $this->input->post('periodicidad');
+                $fecha_inicio = $this->input->post('fechaInicio');
+                $fecha_fin = $this->input->post('fechaFin');
+                if (($this->fecha_valida($fecha_inicio)) && ($this->fecha_valida($fecha_fin))) {
+                    if (($fecha_fin) <= ($fecha_inicio)) {
+                        if ($periodicidad == '1') {
+                            echo "OK";
+                        } else {
+                            if ($periodicidad == '2') {
+                                if (($this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina)) <= 7) {
+                                    echo "OK";
+                                } else {
+                                    echo "error";
+                                }
+                            } else {
+                                if ($periodicidad == '3') {
+                                    if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
+                                        if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
+                                            echo "OK";
+                                        } else {
+                                            echo "error";
+                                        }
+                                    } else {
+                                        echo "error";
+                                    }
+                                } else {
+                                    if ($periodicidad == '4') {
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        echo "<p>La fecha final no puede ser menor que la fecha inicial.</p>";
+                    }
+                } else {
+                    echo "<p>Los campos de fecha, deben tener un formato valido: yyyy-mm-dd.</p>";
+                }
+            } else {
+                echo "<p>Error en los campos de entrada.</p>";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
 
 }
