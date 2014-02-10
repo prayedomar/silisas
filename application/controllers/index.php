@@ -13,6 +13,10 @@ class Index extends CI_Controller {
     }
 
     public function index() {
+        //Esta funcion es para cuando se deslogueen y den atras no se devuelva a un controlador
+        if ($this->session->userdata('perfil') == FALSE) {
+            redirect(base_url() . 'login');
+        }
         $data["tab"] = "index";
         $this->load->view("header", $data);
         $this->load->view('welcome');

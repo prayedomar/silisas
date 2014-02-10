@@ -211,6 +211,7 @@
                                     <li><a href="#">Recibo de Caja</a></li>
                                     <li><a href="#">Retención en la fuente</a></li>
                                     <li><a href="#">Transferencia Intersede</a></li>
+                                    <li><a href="#">Informe de Datacredito</a></li>
                                 </ul>
                             </li>
                             <li class="col-sm-3">
@@ -383,20 +384,7 @@
                                     <li><a href="#">Autorizar Cuenta Bancaria a Empleado</a></li>
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
-                                    <li><a href="#">Adelanto</a></li>
-                                    <li><a href="#">Préstamo</a></li> 
-                                    <li><a href="#">Abono a Adelanto</a></li>                                
-                                    <li><a href="#">Abono a Préstamo</a></li>
-                                    <li><a href="#">Ingreso</a></li>
-                                    <li><a href="#">Egreso</a></li>
-                                    <li><a href="#">Factura</a></li>
-                                    <li><a href="#">Nómina Laboral</a></li>
-                                    <li><a href="#">Nota Credito</a></li>
-                                    <li><a href="#">Pago Proveedor</a></li>
-                                    <li><a href="#">Cuentas por Pagar</a></li>
-                                    <li><a href="#">Recibo de Caja</a></li>
-                                    <li><a href="#">Retención en la fuente</a></li>
-                                    <li><a href="#">Transferencia Intersede</a></li>
+                                    <li><a href="<?= base_url() ?>transacciones/consultar">Transacciones</a></li>
                                 </ul>
                             </li>
                             <li class="col-sm-3">

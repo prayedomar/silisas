@@ -906,6 +906,34 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function nomina($prefijo, $id, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
+            'id_empleado' => $id_empleado,
+            'dni_empleado' => $dni_empleado,
+            't_periodicidad' => $t_periodicidad,
+            'fecha_inicio' => $fecha_inicio,
+            'fecha_fin' => $fecha_fin,
+            'total' => $total,
+            'cuenta_origen' => $cuenta_origen,
+            'valor_retirado' => $valor_retirado,
+            'sede_caja_origen' => $sede_caja_origen,
+            't_caja_origen' => $t_caja_origen,
+            'efectivo_retirado' => $efectivo_retirado,
+            'sede' => $sede,
+            'vigente' => $vigente,
+            'observacion' => $observacion,
+            'fecha_trans' => $fecha_trans,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->insert('nomina', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function cambio_ejecutivo_matricula($matricula, $id_ejecutivo_old, $dni_ejecutivo_old, $id_ejecutivo_new, $dni_ejecutivo_new, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(

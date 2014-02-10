@@ -29,6 +29,7 @@ class Nomina extends CI_Controller {
         $data['action_llena_info_ausencias'] = base_url() . "nomina/llena_info_ausencias";
         $data['action_llena_info_seguridad_social'] = base_url() . "nomina/llena_info_seguridad_social";
         $data['action_llena_concepto_pdtes_rrpp'] = base_url() . "nomina/llena_concepto_pdtes_rrpp";
+        $data['action_llena_concepto_cotidiano'] = base_url() . "nomina/llena_concepto_cotidiano";
         $data['action_llena_agregar_concepto'] = base_url() . "nomina/llena_agregar_concepto";
         $data['action_llena_info_t_concepto'] = base_url() . "nomina/llena_info_t_concepto";
         $data['action_llena_periodicidad_nomina'] = base_url() . "nomina/llena_periodicidad_nomina";
@@ -43,14 +44,16 @@ class Nomina extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
-            //coloca maxlength en 15, para incluir los puntos de miles 888.777.666.273
-            $this->form_validation->set_rules('total', 'Valor del Adelanto', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('periodicidad', 'Periodicidad', 'required|callback_select_default');
+            $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('fecha_fin', 'Fecha Fin', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('total_nomina', 'Total Nómina', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             $error_valores = "";
-            if ($this->input->post('total')) {
-                $total = round(str_replace(",", "", $this->input->post('total')), 2);
+            if ($this->input->post('total_nomina')) {
+                $total = round(str_replace(",", "", $this->input->post('total_nomina')), 2);
                 if (!$this->input->post('valor_retirado')) {
                     $valor_retirado = 0;
                 } else {
@@ -62,11 +65,11 @@ class Nomina extends CI_Controller {
                     $efectivo_retirado = round(str_replace(",", "", $this->input->post('efectivo_retirado')), 2);
                 }
                 if (round(($valor_retirado + $efectivo_retirado), 2) != $total) {
-                    $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
+                    $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $total . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('empleado') . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
+                echo form_error('empleado') . form_error('periodicidad') . form_error('fecha_inicio') . form_error('fecha_fin') . form_error('total_nomina') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -78,7 +81,10 @@ class Nomina extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-            $total = round(str_replace(",", "", $this->input->post('total')), 2);
+            $t_periodicidad = $this->input->post('periodicidad');
+            $fecha_inicio = $this->input->post('fecha_inicio');
+            $fecha_fin = $this->input->post('fecha_fin');
+            $total = round(str_replace(",", "", $this->input->post('total_nomina')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
                 $cuenta_origen = $this->input->post('cuenta');
                 $valor_retirado = round(str_replace(",", "", $this->input->post('valor_retirado')), 2);
@@ -94,14 +100,16 @@ class Nomina extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
+            $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+            $prefijo_nomina = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
 
-
-            $error = $this->insert_model->adelanto($id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
             $data["tab"] = "crear_nomina";
             $this->load->view("header", $data);
@@ -189,7 +197,7 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($nominas as $fila) {
                         echo '<tr>
-                                <td class="text-center">' . $fila->prefijo . "-" . $fila->id . '</td>                            
+                                <td class="text-center">' . $fila->prefijo . " " . $fila->id . '</td>                            
                                 <td class="text-center">' . $fila->fecha_inicio . '</td>
                                 <td class="text-center">' . $fila->fecha_fin . '</td>  
                                 <td class="text-center">' . $fila->nombre_sede . '</td>                                
@@ -232,7 +240,7 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($adelantos as $fila) {
                         echo '<tr>
-                                <td class="text-center">' . $fila->prefijo_adelanto . "-" . $fila->id_adelanto . '</td>       
+                                <td class="text-center">' . $fila->prefijo_adelanto . " " . $fila->id_adelanto . '</td>       
                                 <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                                
                                 <td class="text-center">' . $fila->sede . '</td>
                                 <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>  
@@ -277,7 +285,7 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($prestamos as $fila) {
                         echo '<tr>
-                                <td class="text-center">' . $fila->prefijo_prestamo . "-" . $fila->id_prestamo . '</td>   
+                                <td class="text-center">' . $fila->prefijo_prestamo . " " . $fila->id_prestamo . '</td>   
                                 <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                                
                                 <td class="text-center">' . $fila->sede . '</td>
                                 <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>
@@ -312,7 +320,7 @@ class Nomina extends CI_Controller {
                     'html_ausencias' => '',
                     'cant_nomina' => $this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina) + 1,
                     'cant_ausencias' => 0,
-                    'cant_incapacidad' => 0
+                    'cant_no_remunerada' => 0
                 );
                 if (($ausencias == TRUE)) {
                     $response['html_ausencias'] = '<p class="help-block"><B>> </B>Sólo aparecerán las ausencias ocurridas entre el rango de fechas de la Nómina.</p>
@@ -331,17 +339,28 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($ausencias as $fila) {
                         //Calculamos la cantidad de dias de ausencia dentro de la nomina
-                        if ((($fila->fecha_inicio >= $fecha_inicio_nomina) and ($fila->fecha_inicio <= $fecha_fin_nomina)) && (($fila->fecha_fin >= $fecha_inicio_nomina) and ($fila->fecha_fin <= $fecha_fin_nomina))) {
+                        //Primer caso: en que toda la ausencia este dentro del rango de la nomina
+                        if (($fila->fecha_inicio >= $fecha_inicio_nomina) && ($fila->fecha_inicio <= $fecha_fin_nomina) && ($fila->fecha_fin >= $fecha_inicio_nomina) && ($fila->fecha_fin <= $fecha_fin_nomina)) {
                             $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fila->fecha_fin) + 1;
                         } else {
-                            if ((($fila->fecha_inicio >= $fecha_inicio_nomina) and ($fila->fecha_inicio <= $fecha_fin_nomina))) {
-                                $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fecha_fin_nomina) + 1;
+                            //Segundo caso: toda la nomina esta dentro del rango de la ausencia
+                            if (($fecha_inicio_nomina >= $fila->fecha_inicio) && ($fecha_inicio_nomina <= $fila->fecha_fin) && ($fecha_fin_nomina >= $fila->fecha_inicio) && ($fecha_fin_nomina <= $fila->fecha_fin)) {
+                                $cant_ausencia = $this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina) + 1;
                             } else {
-                                $cant_ausencia = $this->dias_entre_fechas($fecha_inicio_nomina, $fila->fecha_fin) + 1;
+                                //Tercer caso: que la nomina se salga por el lado derecho de la ausencia (diagrama de interseccion de conjuntos).
+                                if ($fecha_inicio_nomina >= $fila->fecha_inicio) {
+                                    $cant_ausencia = $this->dias_entre_fechas($fecha_inicio_nomina, $fila->fecha_fin) + 1;
+                                } else {
+                                    //Ultimo caso: que la nomina se salga por el lado izquierdo de la ausencia (diagrama de interseccion de conjuntos).
+                                    $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fecha_fin_nomina) + 1;
+                                }
                             }
                         }
-                        if ($fila->t_ausencia == 2) {
-                            $response['cant_incapacidad'] += $cant_ausencia;
+                        if ($fila->salarial == 1) {
+                            $remunerada = "Remunerada";
+                        } else {
+                            $response['cant_no_remunerada'] += $cant_ausencia;
+                            $remunerada = "No remunerada";
                         }
                         $response['cant_ausencias'] += $cant_ausencia;
                         $response['html_ausencias'] .= '<tr>
@@ -349,7 +368,7 @@ class Nomina extends CI_Controller {
                                 <td class="text-center">' . $fila->fecha_fin . '</td>                                 
                                 <td class="text-center">' . $cant_ausencia . '</td>                                
                                 <td class="text-center">' . $fila->tipo . '</td>
-                                <td class="text-center">' . $fila->salarial . '</td>                                                              
+                                <td class="text-center">' . $remunerada . '</td>                                                              
                                 <td>' . $fila->descripcion . '</td>
                             </tr>';
                     }
@@ -421,7 +440,7 @@ class Nomina extends CI_Controller {
                     echo '<label>Conceptos Pendientes de RRPP</label>';
                     $i = 1;
                     foreach ($conceptos as $fila) {
-                        echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_pdte_' . $i . '">
+                        echo '<div class="div_input_group renglon_concepto renglon_pdte" id="div_concepto_pdte_' . $i . '">
                                 <div class="row">
                                     <input type="hidden" name="t_concepto_nomina[]" id="t_concepto_nomina" value="' . $fila->t_concepto_nomina . '">
                                     <div class="col-xs-2 mermar_padding_div text-center">
@@ -481,13 +500,99 @@ class Nomina extends CI_Controller {
         }
     }
 
+    public function llena_concepto_cotidiano() {
+        if ($this->input->is_ajax_request()) {
+            if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
+                list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
+                $i = $this->input->post('idUltimoConcepto');
+                $t_concepto = $this->select_model->t_concepto_nomina_cotidiano_empleado($id_empleado, $dni_empleado);
+                if (($t_concepto == TRUE)) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'html_concepto' => '',
+                        'ultimo_concepto' => $i,
+                    );
+                    foreach ($t_concepto as $fila) {
+                        $i ++;
+                        $response['ultimo_concepto'] = $i;
+                        $response['html_concepto'] .= '<div class="div_input_group renglon_concepto renglon_cotidiano" id="div_concepto_new_' . $i . '">
+                                <div class="row">
+                                    <div class="col-xs-3 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
+                                            <select name="t_concepto_nomina[]" id="t_concepto_nomina" class="form-control exit_caution">
+                                                <option value="' . $fila->id . '">' . $fila->tipo . '</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="debito_credito[]" id="debito_credito">                                    
+                                    <div class="col-xs-3 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <div id="label_detalle"><label class="required">Detalles adicionales</label></div>
+                                            <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <label>Cantidad<em class="required_asterisco">*</em></label>
+                                            <input name="cantidad[]" id="cantidad" type="text" class="form-control exit_caution numerico input_center" placeholder="Cantidad" maxlength="3" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <label>Valor Unitario<em class="required_asterisco">*</em></label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" name="valor_unitario[]" id="valor_unitario" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" disabled>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                    <div class="col-xs-2 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <div id="label_total_concepto"><label>Total Concepto</label></div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" name="total_concepto[]" id="total_concepto" class="form-control decimal decimal2 miles text-center" placeholder="0.00" maxlength="12" readonly>
+                                            </div>
+                                        </div>  
+                                    </div>                                    
+                                    <div class="col-xs-1  padding_remove">
+                                        <label class="label_btn_remove">. </label>                                
+                                        <div class="form-group sin_margin_bottom text-center">
+                                            <button class="btn btn-default drop_concepto_new" id="' . $i . '" type="button"><span class="glyphicon glyphicon-remove"></span></button>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+                    }
+                    echo json_encode($response);
+                    return FALSE;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error'
+                    );
+                    echo json_encode($response);
+                    return FALSE;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error'
+                );
+                echo json_encode($response);
+                return FALSE;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     public function llena_agregar_concepto() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $i = $this->input->post('idUltimoConcepto') + 1;
                 $t_concepto = $this->select_model->t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado);
-                echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_new_' . $i . '">
+                echo '<div class="div_input_group renglon_concepto renglon_nuevo" id="div_concepto_new_' . $i . '">
                                 <div class="row">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
@@ -505,7 +610,7 @@ class Nomina extends CI_Controller {
                                     <input type="hidden" name="debito_credito[]" id="debito_credito">                                    
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
-                                            <label class="required">Detalle Adicional</label>
+                                            <div id="label_detalle"><label class="required">Detalles adicionales</label></div>
                                             <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
                                         </div>
                                     </div>
@@ -567,7 +672,10 @@ class Nomina extends CI_Controller {
                         'respuesta' => 'OK',
                         'valor_unitario' => $concepto_base,
                         'debito_credito' => $t_concepto->debito_credito,
-                        't_cantidad_dias' => $t_concepto->t_cantidad_dias
+                        't_cantidad_dias' => $t_concepto->t_cantidad_dias,
+                        'placeholder_detalle' => $t_concepto->placeholder,
+                        'detalle_requerido' => $t_concepto->detalle_requerido
+                        
                     );
                     echo json_encode($response);
                     return FALSE;
@@ -619,33 +727,6 @@ class Nomina extends CI_Controller {
         }
     }
 
-    public function llena_caja_responsable() {
-        if ($this->input->is_ajax_request()) {
-            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
-                $id_responsable = $this->input->post('idResposable');
-                $dni_responsable = $this->input->post('dniResposable');
-                $cuentas = $this->select_model->caja_responsable($id_responsable, $dni_responsable);
-                if (($cuentas == TRUE)) {
-                    foreach ($cuentas as $fila) {
-                        echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="caja" id="caja" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
-                            <td class="text-center">' . $fila->name_sede . '</td>
-                            <td>' . $fila->name_t_caja . '</td>  
-                            <td>' . $fila->observacion . '</td>   
-                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
-                        </tr>';
-                    }
-                } else {
-                    echo "";
-                }
-            } else {
-                echo "";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
     public function llena_periodicidad_nomina() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('empleado')) {
@@ -678,10 +759,10 @@ class Nomina extends CI_Controller {
                             echo "OK";
                         } else {
                             if ($periodicidad == '2') {
-                                if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) <= 6) {
+                                if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) == 6) {
                                     echo "OK";
                                 } else {
-                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong><p>El rango entre ambas fechas, no puede superar 7 días.</p></p>";
+                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong><p>El rango entre ambas fechas, debe ser de 7 días.</p></p>";
                                 }
                             } else {
                                 if ($periodicidad == '3') {
@@ -719,6 +800,33 @@ class Nomina extends CI_Controller {
                 }
             } else {
                 echo "<p>Error en los campos de entrada.</p>";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function llena_caja_responsable() {
+        if ($this->input->is_ajax_request()) {
+            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
+                $id_responsable = $this->input->post('idResposable');
+                $dni_responsable = $this->input->post('dniResposable');
+                $cuentas = $this->select_model->caja_responsable($id_responsable, $dni_responsable);
+                if (($cuentas == TRUE)) {
+                    foreach ($cuentas as $fila) {
+                        echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="caja" id="caja" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
+                            <td class="text-center">' . $fila->name_sede . '</td>
+                            <td>' . $fila->name_t_caja . '</td>  
+                            <td>' . $fila->observacion . '</td>   
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
+                        </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
             }
         } else {
             redirect(base_url());

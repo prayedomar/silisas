@@ -527,7 +527,7 @@ class Select_model extends CI_Model {
 
     //Cuando vamos a pasar fechas desde php a mysql, hay que hacerlo concatenando '', ya que de lo contratio quedaria en la consulta la fecha sin comillas y daria error: between 2014-02-03 en vez de between '2014-02-03'
     public function ausencia_entre_fechas($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin) {
-        $SqlInfo = "SELECT a.*, t.tipo, CASE salarial WHEN '0' THEN 'No Remunerada' ELSE 'Remunerada' END AS salarial FROM `ausencia_laboral` AS a, `t_ausencia` AS t WHERE (((a.fecha_inicio between '" . $fecha_inicio . "' AND '" . $fecha_fin . "') OR (a.fecha_fin between '" . $fecha_inicio . "' AND '" . $fecha_fin . "')) AND (a.vigente=1) AND (a.id_empleado=" . $id_empleado . ") AND (a.dni_empleado=" . $dni_empleado . ") AND (a.t_ausencia=t.id))";
+        $SqlInfo = "SELECT a.*, t.tipo, t.salarial FROM `ausencia_laboral` AS a, `t_ausencia` AS t WHERE (((a.fecha_inicio between '" . $fecha_inicio . "' AND '" . $fecha_fin . "') OR (a.fecha_fin between '" . $fecha_inicio . "' AND '" . $fecha_fin . "') OR ('" . $fecha_inicio . "' between a.fecha_inicio AND a.fecha_fin)) AND (a.vigente=1) AND (a.id_empleado=" . $id_empleado . ") AND (a.dni_empleado=" . $dni_empleado . ") AND (a.t_ausencia=t.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -710,7 +710,15 @@ class Select_model extends CI_Model {
     }
 
     public function t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (t_salario IN(SELECT t_salario FROM t_salario_x_t_depto WHERE (t_depto=(SELECT depto FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))))";
+        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }
+
+    public function t_concepto_nomina_cotidiano_empleado($id_empleado, $dni_empleado) {
+        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (cotidiano=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -781,7 +789,7 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function nextId_abono_prestamo($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
@@ -789,7 +797,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     public function nextId_adelanto($prefijo) {
         $this->db->select_max('id');
@@ -822,6 +830,15 @@ class Select_model extends CI_Model {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
         $query = $this->db->get('egreso');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
+    public function nextId_nomina($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('nomina');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
