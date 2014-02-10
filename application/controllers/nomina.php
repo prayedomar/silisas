@@ -331,13 +331,21 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($ausencias as $fila) {
                         //Calculamos la cantidad de dias de ausencia dentro de la nomina
-                        if ((($fila->fecha_inicio >= $fecha_inicio_nomina) and ($fila->fecha_inicio <= $fecha_fin_nomina)) && (($fila->fecha_fin >= $fecha_inicio_nomina) and ($fila->fecha_fin <= $fecha_fin_nomina))) {
+                        //Primer caso: en que toda la ausencia este dentro del rango de la nomina
+                        if (($fila->fecha_inicio >= $fecha_inicio_nomina) && ($fila->fecha_inicio <= $fecha_fin_nomina) && ($fila->fecha_fin >= $fecha_inicio_nomina) && ($fila->fecha_fin <= $fecha_fin_nomina)) {
                             $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fila->fecha_fin) + 1;
                         } else {
-                            if ((($fila->fecha_inicio >= $fecha_inicio_nomina) and ($fila->fecha_inicio <= $fecha_fin_nomina))) {
-                                $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fecha_fin_nomina) + 1;
+                            //Segundo caso: toda la nomina esta dentro del rango de la ausencia
+                            if (($fecha_inicio_nomina >= $fila->fecha_inicio) && ($fecha_inicio_nomina <= $fila->fecha_fin) && ($fecha_fin_nomina >= $fila->fecha_inicio) && ($fecha_fin_nomina <= $fila->fecha_fin)) {
+                                $cant_ausencia = $this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina) + 1;
                             } else {
-                                $cant_ausencia = $this->dias_entre_fechas($fecha_inicio_nomina, $fila->fecha_fin) + 1;
+                                //Tercer caso: que la nomina se salga por el lado derecho de la ausencia (diagrama de interseccion de conjuntos).
+                                if ($fecha_inicio_nomina >= $fila->fecha_inicio) {
+                                    $cant_ausencia = $this->dias_entre_fechas($fecha_inicio_nomina, $fila->fecha_fin) + 1;
+                                } else {
+                                    //Ultimo caso: que la nomina se salga por el lado izquierdo de la ausencia (diagrama de interseccion de conjuntos).
+                                    $cant_ausencia = $this->dias_entre_fechas($fila->fecha_inicio, $fecha_fin_nomina) + 1;
+                                }
                             }
                         }
                         if ($fila->t_ausencia == 2) {
