@@ -375,10 +375,12 @@
                                 empleado: empleado,
                                 idUltimoConcepto: idUltimoConcepto
                             }, function(data) {
-                                if (data != "") {
-                                    $("#conceptos_nuevos").append(data);
+                                var obj = JSON.parse(data);
+                                if (obj.respuesta == "OK")
+                                {
+                                    $("#conceptos_nuevos").append(obj.html_concepto);
                                     //Aumentamos el contador de nuevos conceptos.
-                                    var aumentarId = (new Number($('#contador_new_concepto').val()) + 1);
+                                    var aumentarId = (new Number(obj.ultimo_concepto) + 1);
                                     $('#contador_new_concepto').attr('value', aumentarId);
                                 }
                             });
