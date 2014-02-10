@@ -81,7 +81,7 @@ class Nomina extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-            $fecha_fin = $this->input->post('periodicidad');
+            $t_periodicidad = $this->input->post('periodicidad');
             $fecha_inicio = $this->input->post('fecha_inicio');
             $fecha_fin = $this->input->post('fecha_fin');
             $total = round(str_replace(",", "", $this->input->post('total_nomina')), 2);
@@ -100,6 +100,7 @@ class Nomina extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
+            $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
             $id_responsable = $this->input->post('id_responsable');
@@ -108,7 +109,7 @@ class Nomina extends CI_Controller {
             $prefijo_nomina = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
 
-            $error = $this->insert_model->adelanto($id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
             $data["tab"] = "crear_nomina";
             $this->load->view("header", $data);
