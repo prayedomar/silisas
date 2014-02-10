@@ -371,7 +371,7 @@
                             });
                             //Agregamos los conceptos cotidianos dependiendo del t_salario
                             var idUltimoConcepto = $('#contador_new_concepto').val();
-                            $.post('{action_llena_agregar_concepto}', {
+                            $.post('{action_llena_concepto_cotidiano}', {
                                 empleado: empleado,
                                 idUltimoConcepto: idUltimoConcepto
                             }, function(data) {
@@ -379,13 +379,14 @@
                                 if (obj.respuesta == "OK")
                                 {
                                     $("#conceptos_nuevos").append(obj.html_concepto);
+                                    //Damos click a los select de t_concepto
+                                    $(".renglon_cotidiano").each(function() {
+                                        $(this).find("#t_concepto_nomina").change();
+                                    });
                                     //Aumentamos el contador de nuevos conceptos.
-                                    var aumentarId = (new Number(obj.ultimo_concepto) + 1);
-                                    $('#contador_new_concepto').attr('value', aumentarId);
+                                    $('#contador_new_concepto').attr('value', obj.ultimo_concepto);
                                 }
                             });
-                            //Agregamos el primer concepto nuevo
-                            $('#agregar_concepto').click();
                         }
                     });
                 } else {
@@ -526,6 +527,8 @@
         $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
         $('#efectivo_retirado').change();
     });
+
+
 
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',

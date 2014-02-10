@@ -313,7 +313,7 @@ class Nomina extends CI_Controller {
                     'html_ausencias' => '',
                     'cant_nomina' => $this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina) + 1,
                     'cant_ausencias' => 0,
-                    'cant_incapacidad' => 0
+                    'cant_no_remunerada' => 0
                 );
                 if (($ausencias == TRUE)) {
                     $response['html_ausencias'] = '<p class="help-block"><B>> </B>Sólo aparecerán las ausencias ocurridas entre el rango de fechas de la Nómina.</p>
@@ -497,17 +497,15 @@ class Nomina extends CI_Controller {
                 $i = $this->input->post('idUltimoConcepto');
                 $t_concepto = $this->select_model->t_concepto_nomina_cotidiano_empleado($id_empleado, $dni_empleado);
                 if (($t_concepto == TRUE)) {
-
                     $response = array(
                         'respuesta' => 'OK',
                         'html_concepto' => '',
                         'ultimo_concepto' => $i,
                     );
-
                     foreach ($t_concepto as $fila) {
                         $i ++;
                         $response['ultimo_concepto'] = $i;
-                        $response['html_concepto'] .= '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_new_' . $i . '">
+                        $response['html_concepto'] .= '<div class="div_input_group renglon_concepto_pdte renglon_cotidiano" id="div_concepto_new_' . $i . '">
                                 <div class="row">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
