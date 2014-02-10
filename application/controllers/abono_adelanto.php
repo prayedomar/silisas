@@ -99,8 +99,10 @@ class Abono_adelanto extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+            $prefijo_abono = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_abono = ($this->select_model->nextId_abono_adelanto($prefijo_abono)->id) + 1;
 
-            $error = $this->insert_model->abono_adelanto($prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->abono_adelanto($prefijo_abono, $id_abono, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
             $data["tab"] = "crear_abono_adelanto";
             $this->load->view("header", $data);

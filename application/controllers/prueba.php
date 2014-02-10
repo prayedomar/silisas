@@ -238,31 +238,53 @@ class Prueba extends CI_Controller {
 //        echo "ok";
 //        echo date("d",strtotime("2013-02-3"));
 
-        $periodicidad = '2';
-        $fecha_inicio = "2013-02-16";
-        $fecha_fin = "2013-02-28";
-        if ($periodicidad == '1') {
-            echo "OK";
-        } else {
-            if ($periodicidad == '2') {
-                if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
-                    if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
-                        echo "OK";
-                    } else {
-                        echo "error";
-                    }
+        $periodicidad = '4';
+        $fecha_inicio = "2013-02-01";
+        $fecha_fin = "2013-03-31";
+        if (($this->fecha_valida($fecha_inicio)) && ($this->fecha_valida($fecha_fin))) {
+            if (($fecha_inicio) <= ($fecha_fin)) {
+                if ($periodicidad == '1') {
+                    echo "OK";
                 } else {
-                    echo "error";
+                    if ($periodicidad == '2') {
+                        if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) <= 6) {
+                            echo "OK";
+                        } else {
+                            echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong> El rango entre ambas fechas, no puede superar 7 días.</p>";
+                        }
+                    } else {
+                        if ($periodicidad == '3') {
+                            if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
+                                if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
+                                    echo "OK";
+                                } else {
+                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal</strong> La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p>";
+                                }
+                            } else {
+                                echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal</strong> La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p>";
+                            }
+                        } else {
+                            if ($periodicidad == '4') {
+                                if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
+                                    if (((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1))))) {
+                                        echo "OK";
+                                    } else {
+                                        echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual</strong> La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p>";
+                                    }
+                                } else {
+                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual</strong> La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p>";
+                                }
+                            } else {
+                                echo "<p>Periodicidad Desconocida.</p>";
+                            }
+                        }
+                    }
                 }
             } else {
-                if ($periodicidad == '3') {
-                    
-                } else {
-                    if ($periodicidad == '4') {
-                        
-                    }
-                }
+                echo "<p>La fecha final no puede ser menor que la fecha inicial.</p>";
             }
+        } else {
+            echo "<p>Los campos de fecha, deben tener un formato valido: yyyy-mm-dd.</p>";
         }
     }
 

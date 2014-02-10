@@ -712,8 +712,10 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function abono_adelanto($prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function abono_adelanto($prefijo, $id, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
             'prefijo_adelanto' => $prefijo_adelanto,
             'id_adelanto' => $id_adelanto,
             'total' => $total,
@@ -735,8 +737,10 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function abono_prestamo($prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function abono_prestamo($prefijo, $id, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,            
             'prefijo_prestamo' => $prefijo_prestamo,
             'id_prestamo' => $id_prestamo,
             'subtotal' => $subtotal,

@@ -781,11 +781,29 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function nextId_abono_prestamo($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('abono_prestamo');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function nextId_adelanto($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
         $query = $this->db->get('adelanto');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
+    public function nextId_abono_adelanto($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('abono_adelanto');
         if ($query->num_rows() == 1) {
             return $query->row();
         }

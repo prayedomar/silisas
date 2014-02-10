@@ -673,15 +673,15 @@ class Nomina extends CI_Controller {
                 $fecha_inicio = $this->input->post('fechaInicio');
                 $fecha_fin = $this->input->post('fechaFin');
                 if (($this->fecha_valida($fecha_inicio)) && ($this->fecha_valida($fecha_fin))) {
-                    if (($fecha_fin) <= ($fecha_inicio)) {
+                    if (($fecha_inicio) <= ($fecha_fin)) {
                         if ($periodicidad == '1') {
                             echo "OK";
                         } else {
                             if ($periodicidad == '2') {
-                                if (($this->dias_entre_fechas($fecha_inicio_nomina, $fecha_fin_nomina)) <= 7) {
+                                if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) <= 6) {
                                     echo "OK";
                                 } else {
-                                    echo "error";
+                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong> El rango entre ambas fechas, no puede superar 7 días.</p>";
                                 }
                             } else {
                                 if ($periodicidad == '3') {
@@ -689,14 +689,24 @@ class Nomina extends CI_Controller {
                                         if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
                                             echo "OK";
                                         } else {
-                                            echo "error";
+                                            echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal</strong> La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p>";
                                         }
                                     } else {
-                                        echo "error";
+                                        echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal</strong> La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p>";
                                     }
                                 } else {
                                     if ($periodicidad == '4') {
-                                        
+                                        if ((date("m", strtotime($fecha_inicio)) == (date("m", strtotime($fecha_fin))))) {
+                                            if (((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1))))) {
+                                                echo "OK";
+                                            } else {
+                                                echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual</strong> La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p>";
+                                            }
+                                        } else {
+                                            echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual</strong> La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p>";
+                                        }
+                                    } else {
+                                        echo "<p>Periodicidad Desconocida.</p>";
                                     }
                                 }
                             }

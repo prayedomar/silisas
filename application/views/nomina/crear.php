@@ -243,7 +243,8 @@
         var fechaInicio = $('#fecha_inicio').val();
         var fechaFin = $('#fecha_fin').val();
         if ((empleado != "default") && (periodicidad != "default") && (fechaInicio != "") && (fechaFin != "")) {
-            $.post('{action_llena_info_prestamos}', {
+            //Validamos las fecha que coincidan con la periodicidad
+            $.post('{action_validar_fechas_periodicidad}', {
                 empleado: empleado
             }, function(data) {
                 if (data == "") {
