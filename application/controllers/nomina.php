@@ -489,26 +489,32 @@ class Nomina extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_concepto_cotidiano() {
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-                $i = $this->input->post('idUltimoConcepto') + 1;
-                $t_concepto = $this->select_model->t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado);
-                echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_new_' . $i . '">
+                $i = $this->input->post('idUltimoConcepto');
+                $t_concepto = $this->select_model->t_concepto_nomina_cotidiano_empleado($id_empleado, $dni_empleado);
+                if (($t_concepto == TRUE)) {
+
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'html_concepto' => '',
+                        'ultimo_concepto' => $i,
+                    );
+
+                    foreach ($t_concepto as $fila) {
+                        $i ++;
+                        $response['ultimo_concepto'] = $i;
+                        $response['html_concepto'] .= '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_new_' . $i . '">
                                 <div class="row">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
                                             <select name="t_concepto_nomina[]" id="t_concepto_nomina" class="form-control exit_caution">
-                                                <option value="default">T. de Concepto Nómina</option>';
-                if (($t_concepto == TRUE)) {
-                    foreach ($t_concepto as $fila) {
-                        echo '                  <option value="' . $fila->id . '">' . $fila->tipo . '</option>';
-                    }
-                }
-                echo '                       </select>
+                                                <option value="' . $fila->id . '">' . $fila->tipo . '</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <input type="hidden" name="debito_credito[]" id="debito_credito">                                    
@@ -550,13 +556,27 @@ class Nomina extends CI_Controller {
                                     </div>
                                 </div>
                             </div>';
+                    }
+                    echo json_encode($response);
+                    return FALSE;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error'
+                    );
+                    echo json_encode($response);
+                    return FALSE;
+                }
             } else {
-                echo "";
+                $response = array(
+                    'respuesta' => 'error'
+                );
+                echo json_encode($response);
+                return FALSE;
             }
         } else {
             redirect(base_url());
         }
-    }    
+    }
 
     public function llena_agregar_concepto() {
         if ($this->input->is_ajax_request()) {
@@ -773,7 +793,7 @@ class Nomina extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
