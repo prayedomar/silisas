@@ -453,6 +453,7 @@
             var obj = JSON.parse(data);
             if (obj.respuesta == "OK")
             {
+                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);
                 if (new Number(obj.valor_unitario) == '0') {
                     $("#" + idDivConcepto).find("#valor_unitario").attr('value', 0);
                     $("#" + idDivConcepto).find("#valor_unitario").removeAttr('disabled');

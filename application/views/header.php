@@ -211,6 +211,7 @@
                                     <li><a href="#">Recibo de Caja</a></li>
                                     <li><a href="#">Retención en la fuente</a></li>
                                     <li><a href="#">Transferencia Intersede</a></li>
+                                    <li><a href="#">Informe de Datacredito</a></li>
                                 </ul>
                             </li>
                             <li class="col-sm-3">

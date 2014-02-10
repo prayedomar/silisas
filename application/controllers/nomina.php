@@ -672,7 +672,8 @@ class Nomina extends CI_Controller {
                         'respuesta' => 'OK',
                         'valor_unitario' => $concepto_base,
                         'debito_credito' => $t_concepto->debito_credito,
-                        't_cantidad_dias' => $t_concepto->t_cantidad_dias
+                        't_cantidad_dias' => $t_concepto->t_cantidad_dias,
+                        'placeholder_detalle' => $t_concepto->placeholder
                     );
                     echo json_encode($response);
                     return FALSE;
