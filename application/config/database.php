@@ -48,9 +48,9 @@
 $active_group = 'default'; //por si hago otro grupo de conexion con otra clave
 $active_record = TRUE; //si no la voy a usar, digo false
 
-$db['default']['hostname'] = 'http://guiame.medellin.unal.edu.co/';
+$db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'M8A311';
+$db['default']['password'] = '';
 $db['default']['database'] = 'silisas';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
