@@ -528,7 +528,7 @@ class Nomina extends CI_Controller {
                                     <input type="hidden" name="debito_credito[]" id="debito_credito">                                    
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
-                                            <label class="required">Detalle Adicional</label>
+                                            <div id="label_detalle"><label class="required">Detalles adicionales</label></div>
                                             <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
                                         </div>
                                     </div>
@@ -610,7 +610,7 @@ class Nomina extends CI_Controller {
                                     <input type="hidden" name="debito_credito[]" id="debito_credito">                                    
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
-                                            <label class="required">Detalle Adicional</label>
+                                            <div id="label_detalle"><label class="required">Detalles adicionales</label></div>
                                             <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
                                         </div>
                                     </div>
@@ -673,7 +673,9 @@ class Nomina extends CI_Controller {
                         'valor_unitario' => $concepto_base,
                         'debito_credito' => $t_concepto->debito_credito,
                         't_cantidad_dias' => $t_concepto->t_cantidad_dias,
-                        'placeholder_detalle' => $t_concepto->placeholder
+                        'placeholder_detalle' => $t_concepto->placeholder,
+                        'detalle_requerido' => $t_concepto->detalle_requerido
+                        
                     );
                     echo json_encode($response);
                     return FALSE;

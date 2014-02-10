@@ -453,7 +453,14 @@
             var obj = JSON.parse(data);
             if (obj.respuesta == "OK")
             {
-                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);
+                if (obj.detalle_requerido == '1') {
+                    $("#" + idDivConcepto).find("#label_detalle").html('<label>Detalles adicionales<em class="required_asterisco">*</em></label>');
+                } else {
+                    if (obj.detalle_requerido == '0') {
+                        $("#" + idDivConcepto).find("#label_detalle").html('<label>Detalles adicionales</label>');
+                    }
+                } 
+                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);                
                 if (new Number(obj.valor_unitario) == '0') {
                     $("#" + idDivConcepto).find("#valor_unitario").attr('value', 0);
                     $("#" + idDivConcepto).find("#valor_unitario").removeAttr('disabled');
