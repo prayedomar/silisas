@@ -44,13 +44,16 @@ class Nomina extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
-            $this->form_validation->set_rules('total_nomina', 'Total Nómina', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('periodicidad', 'Periodicidad', 'required|callback_select_default');
+            $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('fecha_fin', 'Fecha Fin', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('total_nomina', 'Total Nómina', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             $error_valores = "";
-            if ($this->input->post('total')) {
-                $total = round(str_replace(",", "", $this->input->post('total')), 2);
+            if ($this->input->post('total_nomina')) {
+                $total = round(str_replace(",", "", $this->input->post('total_nomina')), 2);
                 if (!$this->input->post('valor_retirado')) {
                     $valor_retirado = 0;
                 } else {
@@ -62,11 +65,11 @@ class Nomina extends CI_Controller {
                     $efectivo_retirado = round(str_replace(",", "", $this->input->post('efectivo_retirado')), 2);
                 }
                 if (round(($valor_retirado + $efectivo_retirado), 2) != $total) {
-                    $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
+                    $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $total . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('empleado') . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
+                echo form_error('empleado') . form_error('periodicidad') . form_error('fecha_inicio') . form_error('fecha_fin') . form_error('total_nomina') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }

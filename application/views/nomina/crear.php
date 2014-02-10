@@ -174,7 +174,7 @@
                             <input type="hidden" name="contador_new_concepto" class="miles decimal2" id="contador_new_concepto"/>
                             <center>
                                 <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                                <button id="botonValidar" class="btn btn-success">Crear Adelanto de Nomina</button>  
+                                <button id="btn_validar" class="btn btn-success">Crear Adelanto de Nomina</button>  
                                 <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                 <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                             </center>
@@ -483,13 +483,8 @@
                             $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
                         } else {
                             if (obj.t_cantidad_dias == '4') {
-                                $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_incapacidad').val());
-                                $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
-                            } else {
-                                if ((obj.t_cantidad_dias == '5') || (obj.t_cantidad_dias == '6')) {
-                                    $("#" + idDivConcepto).find("#cantidad").attr('value', 0);
-                                    $("#" + idDivConcepto).find("#cantidad").removeAttr('disabled');
-                                }
+                                $("#" + idDivConcepto).find("#cantidad").attr('value', 0);
+                                $("#" + idDivConcepto).find("#cantidad").removeAttr('disabled');
                             }
                         }
                     }
@@ -549,6 +544,44 @@
         $('#valor_retirado').change();
     }
     );
+
+
+//Validamos el formulario antes de enviarlo por submit
+    //Enviar formulario por ajax
+    $('#btn_validar').live('click', function() {
+        $('#empleado').removeAttr('disabled');
+        $('#periodicidad').removeAttr('disabled');
+        $('#fecha_inicio').removeAttr('disabled');
+        $('#fecha_fin').removeAttr('disabled');
+        $.ajax({
+            type: "POST",
+            url: $("#action_validar").attr("value"),
+            cache: false,
+            data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+            success: function(data)
+            {
+                if (data != "OK") {
+                    $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                    $("#div_alert").html(data);
+                    $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                    $('#empleado').attr('disabled', 'disabled');
+                    $('#periodicidad').attr('disabled', 'disabled');
+                    $('#fecha_inicio').attr('disabled', 'disabled');
+                    $('#fecha_fin').attr('disabled', 'disabled');
+                } else {
+                    $(window).unbind('beforeunload');
+                    $("#btn_submit").click();
+                }
+            },
+            error: function(data) {
+                $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+
+            }
+        });
+        return false; // Evitar ejecutar el submit del formulario
+    });
 
 
 </script>
