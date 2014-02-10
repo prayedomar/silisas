@@ -102,20 +102,26 @@ $(function() {
             var url = "consultar?page=" + $(this).data("page") + "&";
         }
 
-        if ($("#nombre").val() != "") {
-            url += "nombre=" + $("#nombre").val() + "&";
+        if ($("#paginacion").data("desde") != "") {
+            url += "desde=" + $("#paginacion").data("desde") + "&";
         }
-        if ($("#pais").val() != "") {
-            url += "pais=" + $("#pais").val() + "&";
+        if ($("#paginacion").data("hasta") != "") {
+            url += "hasta=" + $("#paginacion").data("hasta") + "&";
         }
-        if ($("#departamento").val() != null && $("#departamento").val() != "") {
-            url += "departamento=" + $("#departamento").val() + "&";
+        if ($("#paginacion").data("sede") != "") {
+            url += "sede=" + $("#paginacion").data("sede") + "&";
         }
-        if ($("#ciudad").val() != null && $("#ciudad").val() != "") {
-            url += "ciudad=" + $("#ciudad").val() + "&";
+        if ($("#paginacion").data("sede") != "") {
+            url += "sede=" + $("#paginacion").data("sede") + "&";
         }
-        if ($("#estado").val() != "") {
-            url += "estado=" + $("#estado").val() + "&";
+        if ($("#paginacion").data("caja") != "") {
+            url += "caja=" + $("#paginacion").data("caja") + "&";
+        }
+        if ($("#paginacion").data("tipodocumento") != "") {
+            url += "tipo_documento=" + $("#paginacion").data("tipodocumento") + "&";
+        }
+        if ($("#paginacion").data("documento") != "") {
+            url += "documento=" + $("#paginacion").data("documento") + "&";
         }
         url = url.substr(0, url.length - 1);
         window.location.href = url;

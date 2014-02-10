@@ -74,6 +74,10 @@
                             <label>Doc. responsable</label>
                             <input type='text' id="documento" class='form-control letras_numeros' placeholder="Documento" value="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>">
                         </div>
+<!--                        <div class="col-xs-2">
+                            <label>Total</label>
+                           <label><?= $total ?></label>
+                        </div>-->
                     </div>
                 </div>
                 <hr>
@@ -96,7 +100,7 @@
                             </thead>
                             <tbody id="bodyTabla">
                                 <?php foreach ($lista as $row) { ?>
-                                    <tr>
+                                    <tr class="<?php if($row->nombre_tabla=="Adelanto"||$row->nombre_tabla=="Prestamo"||$row->nombre_tabla=="Egreso"||$row->nombre_tabla=="Nomina"||$row->nombre_tabla=="Nota credito") echo "danger"; ?>">
                                         <td><?= $row->fecha_trans ?></td>
                                         <td><?= $row->sede ?></td>
                                         <td><?= $row->prefijo . " " . $row->id ?></td>
@@ -104,7 +108,7 @@
                                         <td><?= $row->caja ?></td>
                                         <td><?= $row->efectivo ?></td>
                                         <td><?= $row->consignado ?></td>
-                                         <td><?= $row->vigente == 1 ? "Vigente" : "No vigente" ?></td>
+                                         <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
                                         <td><?= $row->observacion ?></td>
                                     </tr>
                                 <?php } ?>
@@ -115,17 +119,14 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div id="paginacion" class=" pull-right"
+                             data-desde="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>"
+                             data-hasta="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>"
+                             data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
+                             data-id="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>"
+                             data-caja="<?= isset($_GET["caja"]) ? $_GET["caja"] : "" ?>"
+                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>"
                              data-tipodocumento="<?= isset($_GET["tipo_documento"]) ? $_GET["tipo_documento"] : "" ?>"
-                             data-numerodocumento="<?= isset($_GET["numero_documento"]) ? $_GET["numero_documento"] : "" ?>"
-                             data-primernombre="<?= isset($_GET["primer_nombre"]) ? $_GET["primer_nombre"] : "" ?>"
-                             data-segundonombre="<?= isset($_GET["segundo_nombre"]) ? $_GET["segundo_nombre"] : "" ?>"
-                             data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
-                             data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
-                             data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
-                             data-matricula="<?= isset($_GET["matricula"]) ? $_GET["matricula"] : "" ?>"
-                             data-curso="<?= isset($_GET["curso"]) ? $_GET["curso"] : "" ?>"
-                             data-estado="<?= isset($_GET["estado"]) ? $_GET["estado"] : "" ?>"
-                             data-sedeppal="<?= isset($_GET["sede_ppal"]) ? $_GET["sede_ppal"] : "" ?>">
+                             data-documento="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>">
 
 
                             <ul class="pagination">
