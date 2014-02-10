@@ -166,7 +166,7 @@
                             <input type="hidden" name="dni_responsable" value={dni_responsable} />
                             <!--calculamos la cantidad de dias de la nomina y la cantidad de dias laborados (dias_nomina - ausencias)-->
                             <input type="text" name="dias_nomina" id="dias_nomina"/>
-                            <input type="text" name="dias_laborados" id="dias_laborados"/>
+                            <input type="text" name="dias_remunerados" id="dias_remunerados"/>
                             <!--Aqui almacenamos el total devengado de la nomina-->
                             <input type="hidden" name="total_devengado" class="miles decimal2" id="total_devengado"/>
                             <input type="hidden" name="total_deducido" class="miles decimal2" id="total_deducido"/>
@@ -198,7 +198,7 @@
         var total_deducido = 0;
         var cantidad = 0;
         var valor_unitario = 0;
-        $(".renglon_concepto_pdte").each(function() {
+        $(".renglon_concepto").each(function() {
             cantidad = new Number($(this).find("#cantidad").val());
             valor_unitario = new Number($(this).find("#valor_unitario").val().split(",").join(""));
             debito_credito = new Number($(this).find("#debito_credito").val());
@@ -331,10 +331,9 @@
                                             }
                                         }
                                     }
-                                    var cant_ausencias = new Number(obj.cant_ausencias);
+                                    var dias_no_remunerados = new Number(obj.cant_no_remunerada);
                                     $('#dias_nomina').attr('value', dias_nomina);
-                                    $('#dias_laborados').attr('value', (dias_nomina - cant_ausencias));
-                                    $('#dias_incapacidad').attr('value', obj.cant_incapacidad);
+                                    $('#dias_remunerados').attr('value', (dias_nomina - dias_no_remunerados));
                                     if (obj.html_ausencias == "") {
                                         $("#div_ausencias").html('<label>Ausencias Laborales</label><div class="alert alert-info separar_div" id="div_info_ausencias"></div>');
                                         $("#div_info_ausencias").html("<p>No se encontraron Ausencias Laborales vigentes para el empleado, en el rango de fechas de la Nómina.</p>");
@@ -481,7 +480,7 @@
                         $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
                     } else {
                         if (obj.t_cantidad_dias == '3') {
-                            $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_laborados').val());
+                            $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_remunerados').val());
                             $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
                         } else {
                             if (obj.t_cantidad_dias == '4') {

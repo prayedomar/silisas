@@ -190,7 +190,7 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($nominas as $fila) {
                         echo '<tr>
-                                <td class="text-center">' . $fila->prefijo . "-" . $fila->id . '</td>                            
+                                <td class="text-center">' . $fila->prefijo . " " . $fila->id . '</td>                            
                                 <td class="text-center">' . $fila->fecha_inicio . '</td>
                                 <td class="text-center">' . $fila->fecha_fin . '</td>  
                                 <td class="text-center">' . $fila->nombre_sede . '</td>                                
@@ -233,7 +233,7 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($adelantos as $fila) {
                         echo '<tr>
-                                <td class="text-center">' . $fila->prefijo_adelanto . "-" . $fila->id_adelanto . '</td>       
+                                <td class="text-center">' . $fila->prefijo_adelanto . " " . $fila->id_adelanto . '</td>       
                                 <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                                
                                 <td class="text-center">' . $fila->sede . '</td>
                                 <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>  
@@ -278,7 +278,7 @@ class Nomina extends CI_Controller {
                                         <tbody>';
                     foreach ($prestamos as $fila) {
                         echo '<tr>
-                                <td class="text-center">' . $fila->prefijo_prestamo . "-" . $fila->id_prestamo . '</td>   
+                                <td class="text-center">' . $fila->prefijo_prestamo . " " . $fila->id_prestamo . '</td>   
                                 <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                                
                                 <td class="text-center">' . $fila->sede . '</td>
                                 <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>
@@ -349,8 +349,11 @@ class Nomina extends CI_Controller {
                                 }
                             }
                         }
-                        if ($fila->t_ausencia == 2) {
-                            $response['cant_incapacidad'] += $cant_ausencia;
+                        if ($fila->salarial == 1) {
+                            $remunerada = "Remunerada";
+                        } else {
+                            $response['cant_no_remunerada'] += $cant_ausencia;
+                            $remunerada = "No remunerada";
                         }
                         $response['cant_ausencias'] += $cant_ausencia;
                         $response['html_ausencias'] .= '<tr>
@@ -358,7 +361,7 @@ class Nomina extends CI_Controller {
                                 <td class="text-center">' . $fila->fecha_fin . '</td>                                 
                                 <td class="text-center">' . $cant_ausencia . '</td>                                
                                 <td class="text-center">' . $fila->tipo . '</td>
-                                <td class="text-center">' . $fila->salarial . '</td>                                                              
+                                <td class="text-center">' . $remunerada . '</td>                                                              
                                 <td>' . $fila->descripcion . '</td>
                             </tr>';
                     }
@@ -430,7 +433,7 @@ class Nomina extends CI_Controller {
                     echo '<label>Conceptos Pendientes de RRPP</label>';
                     $i = 1;
                     foreach ($conceptos as $fila) {
-                        echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_pdte_' . $i . '">
+                        echo '<div class="div_input_group renglon_concepto renglon_pdte" id="div_concepto_pdte_' . $i . '">
                                 <div class="row">
                                     <input type="hidden" name="t_concepto_nomina[]" id="t_concepto_nomina" value="' . $fila->t_concepto_nomina . '">
                                     <div class="col-xs-2 mermar_padding_div text-center">
@@ -505,7 +508,7 @@ class Nomina extends CI_Controller {
                     foreach ($t_concepto as $fila) {
                         $i ++;
                         $response['ultimo_concepto'] = $i;
-                        $response['html_concepto'] .= '<div class="div_input_group renglon_concepto_pdte renglon_cotidiano" id="div_concepto_new_' . $i . '">
+                        $response['html_concepto'] .= '<div class="div_input_group renglon_concepto renglon_cotidiano" id="div_concepto_new_' . $i . '">
                                 <div class="row">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
@@ -582,7 +585,7 @@ class Nomina extends CI_Controller {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $i = $this->input->post('idUltimoConcepto') + 1;
                 $t_concepto = $this->select_model->t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado);
-                echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_new_' . $i . '">
+                echo '<div class="div_input_group renglon_concepto renglon_nuevo" id="div_concepto_new_' . $i . '">
                                 <div class="row">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
