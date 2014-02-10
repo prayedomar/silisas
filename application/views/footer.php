@@ -47,6 +47,8 @@
     <script src='<?= base_url() ?>public/js/consultar_caja.js'></script>
 <?php } else if (isset($tab) && $tab == "consultar_cuenta") { ?>
     <script src='<?= base_url() ?>public/js/consultar_cuenta.js'></script>
+<?php } else if (isset($tab) && $tab == "transacciones") { ?>
+    <script src='<?= base_url() ?>public/js/transacciones.js'></script>
 <?php } ?>
 </body>
 </html>
