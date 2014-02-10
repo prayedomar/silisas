@@ -44,8 +44,7 @@ class Nomina extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
-            //coloca maxlength en 15, para incluir los puntos de miles 888.777.666.273
-            $this->form_validation->set_rules('total', 'Valor del Adelanto', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('total_nomina', 'Total Nómina', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');

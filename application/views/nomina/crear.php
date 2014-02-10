@@ -90,7 +90,7 @@
                                     <div class="col-xs-5  col-xs-offset-1">
                                         <p><h4>Total Devengado</h4></p>
                                         <p><h4>Total Deducido</h4></p>
-                                        <p><h3>Total COP</h3></p>
+                                        <p><h3>Total Nómina</h3></p>
                                     </div>
                                     <div class="col-xs-6">
                                         <div id="div_total_devengado"><h4>$ 0.00</h4></div>
@@ -157,7 +157,6 @@
                         <hr>
                         <div class="form-group">
                             <label>Observación</label>
-                            <p class="help-block"><B>> </B>Motivo, Quién lo Autorizó, Forma de Pago, etc.</p>
                             <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
                         </div>
                         <div class="form-group separar_submit">
@@ -165,8 +164,8 @@
                             <input type="hidden" name="id_responsable" value={id_responsable} />
                             <input type="hidden" name="dni_responsable" value={dni_responsable} />
                             <!--calculamos la cantidad de dias de la nomina y la cantidad de dias laborados (dias_nomina - ausencias)-->
-                            <input type="text" name="dias_nomina" id="dias_nomina"/>
-                            <input type="text" name="dias_remunerados" id="dias_remunerados"/>
+                            <input type="hidden" name="dias_nomina" id="dias_nomina"/>
+                            <input type="hidden" name="dias_remunerados" id="dias_remunerados"/>
                             <!--Aqui almacenamos el total devengado de la nomina-->
                             <input type="hidden" name="total_devengado" class="miles decimal2" id="total_devengado"/>
                             <input type="hidden" name="total_deducido" class="miles decimal2" id="total_deducido"/>
@@ -513,7 +512,7 @@
 
     //Habilita las cajas y las cuentas
     $("table").delegate("#cuenta", "change", function() {
-        var total = new Number($('#total').val().split(",").join(""));
+        var total = new Number($('#total_nomina').val().split(",").join(""));
         var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
         $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
         $('#valor_retirado').change();
@@ -521,13 +520,11 @@
     });
 
     $(".form-group").delegate("#valor_retirado", "blur", function() {
-        var total = new Number($('#total').val().split(",").join(""));
+        var total = new Number($('#total_nomina').val().split(",").join(""));
         var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
         $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
         $('#efectivo_retirado').change();
     });
-
-
 
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',
@@ -538,7 +535,7 @@
 
     //Cargar div de valor retirado cuenta bancaria
     $("table").delegate("#caja", "change", function() {
-        var total = new Number($('#total').val().split(",").join(""));
+        var total = new Number($('#total_nomina').val().split(",").join(""));
         var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
         $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
         $('#efectivo_retirado').change();
@@ -546,7 +543,7 @@
     });
 
     $(".form-group").delegate("#efectivo_retirado", "blur", function() {
-        var total = new Number($('#total').val().split(",").join(""));
+        var total = new Number($('#total_nomina').val().split(",").join(""));
         var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
         $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
         $('#valor_retirado').change();
