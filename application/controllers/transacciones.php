@@ -28,10 +28,12 @@ class Transacciones extends CI_Controller {
         }
         $data['paginaActiva'] = $paginaActual;
         $cantidad = $this->transaccionesm->cantidad_transacciones($_GET, $inicio, $filasPorPagina);
-        $cantidad = $cantidad[0]->cantidad;
+        $cantidad = sizeof($cantidad);
         $data['cantidad'] = $cantidad;
+        $data['total'] = $this->transaccionesm->total_transacciones($_GET, $inicio, $filasPorPagina);
+        $data['total']=$data['total'][0]->total;
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
-        $data["listar_cajas"]=$this->t_cajam->listar_tipos_de_caja();
+        $data["listar_cajas"] = $this->t_cajam->listar_tipos_de_caja();
         $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);
         $data["lista"] = $this->transaccionesm->listar_transacciones($_GET, $inicio, $filasPorPagina);
         $this->load->view("header", $data);
