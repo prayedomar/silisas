@@ -686,10 +686,10 @@ class Nomina extends CI_Controller {
                             echo "OK";
                         } else {
                             if ($periodicidad == '2') {
-                                if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) <= 6) {
+                                if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) == 6) {
                                     echo "OK";
                                 } else {
-                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong><p>El rango entre ambas fechas, no puede superar 7 días.</p></p>";
+                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong><p>El rango entre ambas fechas, debe ser de 7 días.</p></p>";
                                 }
                             } else {
                                 if ($periodicidad == '3') {
