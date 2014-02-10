@@ -681,7 +681,7 @@ class Nomina extends CI_Controller {
                                 if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) <= 6) {
                                     echo "OK";
                                 } else {
-                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong> El rango entre ambas fechas, no puede superar 7 días.</p>";
+                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong><p>El rango entre ambas fechas, no puede superar 7 días.</p></p>";
                                 }
                             } else {
                                 if ($periodicidad == '3') {
@@ -689,10 +689,10 @@ class Nomina extends CI_Controller {
                                         if ((((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin))) == '15')) || (((date("d", strtotime($fecha_inicio))) == '16') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1)))))) {
                                             echo "OK";
                                         } else {
-                                            echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal</strong> La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p>";
+                                            echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal.</strong><p>La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p></p>";
                                         }
                                     } else {
-                                        echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal</strong> La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p>";
+                                        echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Quincenal.</strong><p>La primer quincena del mes, será del 1 al 15 día del mes y la segunda quincena del mes, será del: 16 al último día del mes.</p></p>";
                                     }
                                 } else {
                                     if ($periodicidad == '4') {
@@ -700,10 +700,10 @@ class Nomina extends CI_Controller {
                                             if (((date("d", strtotime($fecha_inicio))) == '01') && ((date("d", strtotime($fecha_fin)) == date("d", (mktime(0, 0, 0, date("m", strtotime($fecha_fin)) + 1, 1, date("Y", strtotime($fecha_fin))) - 1))))) {
                                                 echo "OK";
                                             } else {
-                                                echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual</strong> La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p>";
+                                                echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual.</strong><p>La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p></p>";
                                             }
                                         } else {
-                                            echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual</strong> La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p>";
+                                            echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Mensual.</strong><p>La fecha inicial será el primer día del mes y la fecha final el útimo día del mes.</p></p>";
                                         }
                                     } else {
                                         echo "<p>Periodicidad Desconocida.</p>";
