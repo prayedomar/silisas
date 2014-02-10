@@ -81,7 +81,10 @@ class Nomina extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-            $total = round(str_replace(",", "", $this->input->post('total')), 2);
+            $fecha_fin = $this->input->post('periodicidad');
+            $fecha_inicio = $this->input->post('fecha_inicio');
+            $fecha_fin = $this->input->post('fecha_fin');
+            $total = round(str_replace(",", "", $this->input->post('total_nomina')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
                 $cuenta_origen = $this->input->post('cuenta');
                 $valor_retirado = round(str_replace(",", "", $this->input->post('valor_retirado')), 2);
@@ -102,7 +105,8 @@ class Nomina extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-
+            $prefijo_nomina = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
 
             $error = $this->insert_model->adelanto($id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
