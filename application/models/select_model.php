@@ -716,6 +716,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function t_concepto_nomina_cotidiano_empleado($id_empleado, $dni_empleado) {
+        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (cotidiano=1) AND (t_salario IN(SELECT t_salario FROM t_salario_x_t_depto WHERE (t_depto=(SELECT depto FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function concepto_nomina_pdte_rrpp($id_empleado, $dni_empleado) {
         $SqlInfo = "SELECT c.*, t_c.tipo as tipo_concepto, t_ca.cargo_masculino as escala FROM concepto_nomina as c, t_concepto_nomina as t_c, t_cargo as t_ca WHERE ((c.id_empleado=" . $id_empleado . ") AND (c.dni_empleado=" . $dni_empleado . ") AND (c.estado=2) AND ((c.t_concepto_nomina=28) OR (c.t_concepto_nomina=29)) AND (c.t_concepto_nomina=t_c.id) AND (c.escala_matricula=t_ca.id))";

@@ -29,6 +29,7 @@ class Nomina extends CI_Controller {
         $data['action_llena_info_ausencias'] = base_url() . "nomina/llena_info_ausencias";
         $data['action_llena_info_seguridad_social'] = base_url() . "nomina/llena_info_seguridad_social";
         $data['action_llena_concepto_pdtes_rrpp'] = base_url() . "nomina/llena_concepto_pdtes_rrpp";
+        $data['action_llena_concepto_cotidiano'] = base_url() . "nomina/llena_concepto_cotidiano";
         $data['action_llena_agregar_concepto'] = base_url() . "nomina/llena_agregar_concepto";
         $data['action_llena_info_t_concepto'] = base_url() . "nomina/llena_info_t_concepto";
         $data['action_llena_periodicidad_nomina'] = base_url() . "nomina/llena_periodicidad_nomina";
@@ -488,6 +489,74 @@ class Nomina extends CI_Controller {
             redirect(base_url());
         }
     }
+    
+    public function llena_concepto_cotidiano() {
+        if ($this->input->is_ajax_request()) {
+            if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
+                list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
+                $i = $this->input->post('idUltimoConcepto') + 1;
+                $t_concepto = $this->select_model->t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado);
+                echo '<div class="div_input_group renglon_concepto_pdte" id="div_concepto_new_' . $i . '">
+                                <div class="row">
+                                    <div class="col-xs-3 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
+                                            <select name="t_concepto_nomina[]" id="t_concepto_nomina" class="form-control exit_caution">
+                                                <option value="default">T. de Concepto Nómina</option>';
+                if (($t_concepto == TRUE)) {
+                    foreach ($t_concepto as $fila) {
+                        echo '                  <option value="' . $fila->id . '">' . $fila->tipo . '</option>';
+                    }
+                }
+                echo '                       </select>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="debito_credito[]" id="debito_credito">                                    
+                                    <div class="col-xs-3 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <label class="required">Detalle Adicional</label>
+                                            <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <label>Cantidad<em class="required_asterisco">*</em></label>
+                                            <input name="cantidad[]" id="cantidad" type="text" class="form-control exit_caution numerico input_center" placeholder="Cantidad" maxlength="3" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <label>Valor Unitario<em class="required_asterisco">*</em></label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" name="valor_unitario[]" id="valor_unitario" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" disabled>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                    <div class="col-xs-2 mermar_padding_div text-center">
+                                        <div class="form-group sin_margin_bottom">
+                                            <div id="label_total_concepto"><label>Total Concepto</label></div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" name="total_concepto[]" id="total_concepto" class="form-control decimal decimal2 miles text-center" placeholder="0.00" maxlength="12" readonly>
+                                            </div>
+                                        </div>  
+                                    </div>                                    
+                                    <div class="col-xs-1  padding_remove">
+                                        <label class="label_btn_remove">. </label>                                
+                                        <div class="form-group sin_margin_bottom text-center">
+                                            <button class="btn btn-default drop_concepto_new" id="' . $i . '" type="button"><span class="glyphicon glyphicon-remove"></span></button>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }    
 
     public function llena_agregar_concepto() {
         if ($this->input->is_ajax_request()) {
@@ -627,33 +696,6 @@ class Nomina extends CI_Controller {
         }
     }
 
-    public function llena_caja_responsable() {
-        if ($this->input->is_ajax_request()) {
-            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
-                $id_responsable = $this->input->post('idResposable');
-                $dni_responsable = $this->input->post('dniResposable');
-                $cuentas = $this->select_model->caja_responsable($id_responsable, $dni_responsable);
-                if (($cuentas == TRUE)) {
-                    foreach ($cuentas as $fila) {
-                        echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="caja" id="caja" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
-                            <td class="text-center">' . $fila->name_sede . '</td>
-                            <td>' . $fila->name_t_caja . '</td>  
-                            <td>' . $fila->observacion . '</td>   
-                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
-                        </tr>';
-                    }
-                } else {
-                    echo "";
-                }
-            } else {
-                echo "";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
     public function llena_periodicidad_nomina() {
         if ($this->input->is_ajax_request()) {
             if ($this->input->post('empleado')) {
@@ -727,6 +769,33 @@ class Nomina extends CI_Controller {
                 }
             } else {
                 echo "<p>Error en los campos de entrada.</p>";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }    
+
+    public function llena_caja_responsable() {
+        if ($this->input->is_ajax_request()) {
+            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
+                $id_responsable = $this->input->post('idResposable');
+                $dni_responsable = $this->input->post('dniResposable');
+                $cuentas = $this->select_model->caja_responsable($id_responsable, $dni_responsable);
+                if (($cuentas == TRUE)) {
+                    foreach ($cuentas as $fila) {
+                        echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="caja" id="caja" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
+                            <td class="text-center">' . $fila->name_sede . '</td>
+                            <td>' . $fila->name_t_caja . '</td>  
+                            <td>' . $fila->observacion . '</td>   
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
+                        </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
             }
         } else {
             redirect(base_url());

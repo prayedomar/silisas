@@ -369,6 +369,19 @@
                                 }
                                 calcular_total();
                             });
+                            //Agregamos los conceptos cotidianos dependiendo del t_salario
+                            var idUltimoConcepto = $('#contador_new_concepto').val();
+                            $.post('{action_llena_agregar_concepto}', {
+                                empleado: empleado,
+                                idUltimoConcepto: idUltimoConcepto
+                            }, function(data) {
+                                if (data != "") {
+                                    $("#conceptos_nuevos").append(data);
+                                    //Aumentamos el contador de nuevos conceptos.
+                                    var aumentarId = (new Number($('#contador_new_concepto').val()) + 1);
+                                    $('#contador_new_concepto').attr('value', aumentarId);
+                                }
+                            });
                             //Agregamos el primer concepto nuevo
                             $('#agregar_concepto').click();
                         }
