@@ -39,8 +39,8 @@ class Contrato_matricula extends CI_Controller {
                     $error_valores = "<p>El campo Contrato Inicial, debe ser menor o igual al campo Contrato Final</p>";
                 } else {
                     //Maxímo una insercion de 10.000 contratos.
-                    if (($contrato_final - $contrato_inicial) >= 10000) {
-                        $error_valores = "<p>La inserción masiva, es de máximo 10.000 Contratos (Ejemplo: 20000->29999).</p>";
+                    if (($contrato_final - $contrato_inicial) >= 1000) {
+                        $error_valores = "<p>La inserción masiva, es de máximo 1.000 Contratos (Ejemplo: 10000->10999).</p>";
                     } else {
                         $bandera_contrato = 0;
                         $error_valores = "<p>Los siguientes contratos, ya existen en la base de datos: ";
