@@ -109,12 +109,61 @@ class Nomina extends CI_Controller {
             $prefijo_nomina = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
 
-            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
-
             $data["tab"] = "crear_nomina";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "nomina/crear";
             $data['msn_recrear'] = "Crear otra Nómina";
+
+            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+
+            if (isset($error)) {
+                $data['trans_error'] = $error;
+                $this->parser->parse('trans_error', $data);
+            } else {
+                //traemos los campos de los conceptos
+                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                $cargos_escalas = $this->input->post('cargos_escalas');
+                $escalas = $this->input->post('escalas');
+                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                //Si hay escalas las pagamos.
+                if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
+                    $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
+                    $i = 0;
+                    foreach ($escalas as $fila) {
+                        if ($fila != "nula") {
+                            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
+                            list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
+                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                            if ($valor_unitario != TRUE) {
+                                $valor_unitario = 0.00;
+                            }
+                            $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                            if (isset($error2)) {
+                                $data['trans_error'] = $error2;
+                                $this->parser->parse('trans_error', $data);
+                                return;
+                            }
+                        }
+                        $i++;
+                    }
+                }
+                //ACtualizamos el estado de la matricula a liquidada.
+                $error2 = $this->update_model->matricula_liquidacion_escalas($id_matricula, 1);
+                if (isset($error2)) {
+                    $data['trans_error'] = $error2;
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $this->parser->parse('trans_success', $data);
+                }
+            }
+
+
+
+
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
@@ -444,7 +493,8 @@ class Nomina extends CI_Controller {
                         //ttpp_nuevo: si es 2 es porq es concepto nuevo y ahi que crearlo 
                         echo '<div class="div_input_group renglon_concepto renglon_pdte" id="div_concepto_pdte_' . $i . '">
                                 <div class="row">
-                                    <input type="hidden" name="rrpp_nuevo[]" id="cantidad" value="1">
+                                    <input type="hidden" name="id_concepto[]" id="id_concepto" value="' . $fila->id . '">
+                                    <input type="hidden" name="rrpp_nuevo[]" id="rrpp_nuevo" value="1">
                                     <input type="hidden" name="t_concepto_nomina[]" id="t_concepto_nomina" value="' . $fila->t_concepto_nomina . '">
                                     <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
@@ -518,9 +568,12 @@ class Nomina extends CI_Controller {
                     foreach ($t_concepto as $fila) {
                         $i ++;
                         $response['ultimo_concepto'] = $i;
+                        //rrpp_nuevo: si es 1 es porq es concepto de rrpp y no se inserta si no que se actualiza a ok,
+                        //ttpp_nuevo: si es 2 es porq es concepto nuevo y ahi que crearlo                         
                         $response['html_concepto'] .= '<div class="div_input_group renglon_concepto renglon_cotidiano" id="div_concepto_new_' . $i . '">
                                 <div class="row">
-                                <input type="hidden" name="rrpp_nuevo[]" id="cantidad" value="2">
+                                <input type="hidden" name="id_concepto[]" id="id_concepto" value="NULL">                                
+                                <input type="hidden" name="rrpp_nuevo[]" id="rrpp_nuevo" value="2">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
@@ -679,7 +732,6 @@ class Nomina extends CI_Controller {
                         't_cantidad_dias' => $t_concepto->t_cantidad_dias,
                         'placeholder_detalle' => $t_concepto->placeholder,
                         'detalle_requerido' => $t_concepto->detalle_requerido
-                        
                     );
                     echo json_encode($response);
                     return FALSE;
