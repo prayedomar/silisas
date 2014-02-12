@@ -557,10 +557,6 @@
 //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
-        $('#empleado').removeAttr('readonly');
-        $('#periodicidad').removeAttr('readonly');
-        $('#fecha_inicio').removeAttr('readonly');
-        $('#fecha_fin').removeAttr('readonly');
         $.ajax({
             type: "POST",
             url: $("#action_validar").attr("value"),
@@ -572,10 +568,6 @@
                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                     $("#div_alert").html(data);
                     $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-                    $('#empleado').attr('readonly', 'readonly');
-                    $('#periodicidad').attr('readonly', 'readonly');
-                    $('#fecha_inicio').attr('readonly', 'readonly');
-                    $('#fecha_fin').attr('readonly', 'readonly');
                 } else {
                     $(window).unbind('beforeunload');
                     $("#btn_submit").click();

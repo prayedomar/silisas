@@ -208,6 +208,17 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }  
+    
+    public function concepto_nomina_estado($id, $new_estado) {
+        $data = array(
+            'estado' => $new_estado
+        );
+        $this->db->where('id', $id);
+        $this->db->update('concepto_nomina', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }     
 
 }

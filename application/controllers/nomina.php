@@ -68,8 +68,30 @@ class Nomina extends CI_Controller {
                     $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $total . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
                 }
             }
-            if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('empleado') . form_error('periodicidad') . form_error('fecha_inicio') . form_error('fecha_fin') . form_error('total_nomina') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
+            //Validamos los conceptos de nomina
+            $error_conceptos = "";
+            if (($this->input->post('t_concepto_nomina')) && ($this->input->post('detalle')) && ($this->input->post('cantidad')) && ($this->input->post('valor_unitario'))) {
+                $t_concepto_nomina = $this->input->post('t_concepto_nomina');
+                $detalle = $this->input->post('detalle');
+                $cantidad = $this->input->post('cantidad');
+                $valor_unitario = $this->input->post('valor_unitario');
+                $i = 0;
+                foreach ($t_concepto_nomina as $fila) {
+                    if ($fila == "default") {
+                        $error_conceptos .= "<p>El campo Tipo Concepto, es obligatorio.</p>";
+                    }
+                    if (($cantidad[$i] <= '0')||($cantidad[$i] == '')) {
+                        $error_conceptos .= "<p>El campo Cantidad, debe ser mayor a cero.</p>";
+                    }
+                    if (($valor_unitario[$i] <= '0')||($valor_unitario[$i] == '')) {
+                        $error_conceptos .= "<p>El campo Valor Unitario, debe ser mayor a cero.</p>";
+                    }
+                    $i++;
+                }
+            }
+
+            if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_conceptos != "")) {
+                echo form_error('empleado') . form_error('periodicidad') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_conceptos . form_error('total_nomina') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -122,46 +144,43 @@ class Nomina extends CI_Controller {
             } else {
                 //traemos los campos de los conceptos
                 $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $id_concepto = $this->input->post('id_concepto');                
+                $id_concepto = $this->input->post('id_concepto');
                 $t_concepto_nomina = $this->input->post('t_concepto_nomina');
                 $detalle = $this->input->post('detalle');
                 $cantidad = $this->input->post('cantidad');
                 $valor_unitario = $this->input->post('valor_unitario');
-                //Si hay escalas las pagamos.
-                    echo "Fuera del if<br>";
-                    echo var_dump($rrpp_nuevo) + "<br>";
-                    echo var_dump($id_concepto) + "<br>";
-                    echo var_dump($t_concepto_nomina) + "<br>";
-                    echo var_dump($detalle) + "<br>";
-                    echo var_dump($cantidad) + "<br>";
-                    echo var_dump($valor_unitario) + "<br>";                
                 if (($rrpp_nuevo == TRUE) && ($id_concepto == TRUE) && ($t_concepto_nomina == TRUE) && ($detalle == TRUE) && ($cantidad == TRUE) && ($valor_unitario == TRUE)) {
-                    echo "Dentro del if<br>";
-                    echo var_dump($rrpp_nuevo) + "<br>";
-                    echo var_dump($id_concepto) + "<br>";
-                    echo var_dump($t_concepto_nomina) + "<br>";
-                    echo var_dump($detalle) + "<br>";
-                    echo var_dump($cantidad) + "<br>";
-                    echo var_dump($valor_unitario) + "<br>";
-//                    $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
-//                    $i = 0;
-//                    foreach ($rrpp_nuevo as $fila) {
-//                        if ($fila != "nula") {
-//                            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
-//                            list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
-//                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
-//                            if ($valor_unitario != TRUE) {
-//                                $valor_unitario = 0.00;
-//                            }
-//                            $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $fecha_trans, $id_responsable, $dni_responsable);
-//                            if (isset($error2)) {
-//                                $data['trans_error'] = $error2;
-//                                $this->parser->parse('trans_error', $data);
-//                                return;
-//                            }
-//                        }
-//                        $i++;
-//                    }
+                    $i = 0;
+                    foreach ($rrpp_nuevo as $fila) {
+                        //En el caso que sean conceptos pendiente de nomina por ser actualizados a OK
+                        if ($fila == '1') {
+                            //ACtualizamos los conceptos de rrpp a 1: OK
+                            $error1 = $this->update_model->concepto_nomina_estado($id_concepto[$i], 1);
+                            if (isset($error1)) {
+                                $data['trans_error'] = $error1;
+                                $this->parser->parse('trans_error', $data);
+                                return;
+                            }
+                            //en el caso en que hayan que crear los conceptos
+                        } else {
+                            $t_concepto_temp = $t_concepto_nomina[$i];
+                            $detalle_temp = strtolower($detalle[$i]);
+                            $cantidad_temp = $cantidad[$i];
+                            $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
+                            $error2 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                            if (isset($error2)) {
+                                $data['trans_error'] = $error2;
+                                $this->parser->parse('trans_error', $data);
+                                return;
+                            }
+                        }
+                        $i++;
+                    }
+                    $this->parser->parse('trans_success', $data);
+                } else {
+                    $data['trans_error'] = "<p>No llegaron correctamente los conceptos al servidor. Comuníquele este error a soporte de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                    return;
                 }
             }
         } else {
@@ -814,7 +833,7 @@ class Nomina extends CI_Controller {
                                 if (($this->dias_entre_fechas($fecha_inicio, $fecha_fin)) == 6) {
                                     echo "OK";
                                 } else {
-                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong><p>El rango entre ambas fechas, debe ser de 7 días.</p></p>";
+                                    echo "<p>Las fechas deben coincidir con la periodicidad escogida: <strong>Semanal.</strong><p>La fecha inicial y final, debe ser de lunes a domingo.</p></p>";
                                 }
                             } else {
                                 if ($periodicidad == '3') {

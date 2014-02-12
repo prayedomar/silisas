@@ -108,6 +108,7 @@ class Liquidar_comisiones extends CI_Controller {
                     $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
                     $i = 0;
                     foreach ($escalas as $fila) {
+                        //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
                         if ($fila != "nula") {
                             list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
                             list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
