@@ -74,10 +74,10 @@
                             <label>Doc. responsable</label>
                             <input type='text' id="documento" class='form-control letras_numeros' placeholder="Documento" value="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>">
                         </div>
-<!--                        <div class="col-xs-2">
-                            <label>Total</label>
-                           <label><?= $total ?></label>
-                        </div>-->
+                        <!--                        <div class="col-xs-2">
+                                                    <label>Total</label>
+                                                   <label><?= $total ?></label>
+                                                </div>-->
                     </div>
                 </div>
                 <hr>
@@ -92,26 +92,32 @@
                                     <th>T. transacción</th>
                                     <th>Caja</th>
                                     <th>Efectivo en caja</th>
+                                    <th>Cuenta</th>
                                     <th>Valor en cuenta</th>
                                     <th>Vigente</th>
                                     <th>Observacion</th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
                                 <?php foreach ($lista as $row) { ?>
-                                    <tr class="<?php if($row->nombre_tabla=="Adelanto"||$row->nombre_tabla=="Prestamo"||$row->nombre_tabla=="Egreso"||$row->nombre_tabla=="Nomina"||$row->nombre_tabla=="Nota credito") echo "danger"; ?>">
+                                    <tr class="<?php if ($row->nombre_tabla == "Adelanto" || $row->nombre_tabla == "Prestamo" || $row->nombre_tabla == "Egreso" || $row->nombre_tabla == "Nomina" || $row->nombre_tabla == "Nota credito")
+                                    echo "danger";
+                                else
+                                    echo "success";
+                                ?>">
                                         <td><?= $row->fecha_trans ?></td>
                                         <td><?= $row->sede ?></td>
                                         <td><?= $row->prefijo . " " . $row->id ?></td>
                                         <td><?= $row->nombre_tabla ?></td>
                                         <td><?= $row->caja ?></td>
                                         <td><?= $row->efectivo ?></td>
+                                        <td><?= $row->num_cuenta ?></td>
                                         <td><?= $row->consignado ?></td>
-                                         <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
+                                        <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
                                         <td><?= $row->observacion ?></td>
                                     </tr>
-                                <?php } ?>
+<?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -135,7 +141,7 @@
                                 <?php for ($i = 2; $i <= $cantidad_paginas; $i++) { ?>
                                     <li class="<?= $paginaActiva == $i ? "active" : "noActive" ?>">
                                         <a data-page="<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                                <?php } ?>
+<?php } ?>
                             </ul>
                         </div>
                     </div>
