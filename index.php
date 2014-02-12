@@ -1,5 +1,8 @@
 <?php
-
+/*
+include("mantenimiento.html");
+exit();
+*/
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

@@ -13,21 +13,21 @@
                 <td> <a href='http://sili.com.co/' target='_blank' style='color:#e7cba3;font-weight:bold;text-decoration:none'>SILI S.A.S</a></td>
                 <td align='right'><a href='https://www.facebook.com/sililtda' target='_blank' style='color:white;'>Siguenos en Facebook</a></td>
             </tr>
-            <tr> 
-                <td colspan='2' align='center' style='padding:0; background-color: rgb(0, 112, 123); color:#e7cba3; font-size:26px;'>
-                    <img src="<?= base_url() ?>public/images/header.jpg" width="700">
+            <tr style="background: white;"> 
+                <td colspan='2' align='center' style='padding:0; background-color:white; color:#e7cba3; font-size:26px;width:80px;'>
+                    <img src="<?= base_url() ?>public/images/header.jpg" width="700" width="90">
 
                 </td>
             </tr>
             <tr> 
                 <td colspan='2' align='' style='padding: 20px; background-color:white; color:#222;'>
                     <hr style="margin:0 0 20px 0; border: 0; border-top: 1px solid #eee; border-bottom: 1px solid #fff;"/>
-                    <?= $$contenido ?> 
+                    <?= $contenido ?> 
                     <hr style="margin:20px 0 5px 0; border: 0; border-top: 1px solid #eee; border-bottom: 1px solid #fff;"/>
                 </td>
             </tr>
             <tr> 
-                <td colspan="2" align="center" style='padding-top:20px; padding-bottom:20px; color:#E6E6E6;'>Para cualquier opinión, inquietud o anomalía, comuniquese a nuestra sede principal:<br>
+                <td colspan="2" align="center" style='padding-top:20px; padding-bottom:20px; color:#E6E6E6;'>Cualquier opinión, inquietud o anomalía, comuniquese a nuestra sede principal:<br>
                         Medellín Calle 47D # 77A-67 Velódromo - TELEFONOS: PBX 411 4107 / 412 6800      
                         <br/>
                         <br/>
@@ -50,4 +50,6 @@
             <br/>
     </body>
 </html>
+  <br/>
+    <br/>
 
