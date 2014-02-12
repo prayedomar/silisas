@@ -203,7 +203,7 @@
                                     <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono a Préstamo</a></li>
                                     <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
                                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
-                                    <li><a href="#">Factura</a></li>
+                                    <li><a href="<?= base_url() ?>factura/crear">Factura</a></li>
                                     <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
                                     <li><a href="#">Nota Credito</a></li>
                                     <li><a href="#">Pago Proveedor</a></li>
