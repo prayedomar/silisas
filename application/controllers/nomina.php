@@ -122,18 +122,16 @@ class Nomina extends CI_Controller {
             } else {
                 //traemos los campos de los conceptos
                 $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $cargos_escalas = $this->input->post('cargos_escalas');
-                $escalas = $this->input->post('escalas');
-                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                $id_concepto = $this->input->post('id_concepto');                
+                $t_concepto_nomina = $this->input->post('t_concepto_nomina');
+                $detalle = $this->input->post('detalle');
+                $cantidad = $this->input->post('cantidad');
+                $valor_unitario = $this->input->post('valor_unitario');
                 //Si hay escalas las pagamos.
-                if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
+                if (($rrpp_nuevo == TRUE) && ($escalas == TRUE) && ($escalas == TRUE) && ($escalas == TRUE) && ($escalas == TRUE) && ($escalas == TRUE)) {
                     $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
                     $i = 0;
-                    foreach ($escalas as $fila) {
+                    foreach ($rrpp_nuevo as $fila) {
                         if ($fila != "nula") {
                             list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
                             list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
@@ -151,24 +149,6 @@ class Nomina extends CI_Controller {
                         $i++;
                     }
                 }
-                //ACtualizamos el estado de la matricula a liquidada.
-                $error2 = $this->update_model->matricula_liquidacion_escalas($id_matricula, 1);
-                if (isset($error2)) {
-                    $data['trans_error'] = $error2;
-                    $this->parser->parse('trans_error', $data);
-                } else {
-                    $this->parser->parse('trans_success', $data);
-                }
-            }
-
-
-
-
-            if (isset($error)) {
-                $data['trans_error'] = $error;
-                $this->parser->parse('trans_error', $data);
-            } else {
-                $this->parser->parse('trans_success', $data);
             }
         } else {
             redirect(base_url());
@@ -493,8 +473,8 @@ class Nomina extends CI_Controller {
                         //ttpp_nuevo: si es 2 es porq es concepto nuevo y ahi que crearlo 
                         echo '<div class="div_input_group renglon_concepto renglon_pdte" id="div_concepto_pdte_' . $i . '">
                                 <div class="row">
+                                    <input type="hidden" name="rrpp_nuevo[]" id="rrpp_nuevo" value="1">                                
                                     <input type="hidden" name="id_concepto[]" id="id_concepto" value="' . $fila->id . '">
-                                    <input type="hidden" name="rrpp_nuevo[]" id="rrpp_nuevo" value="1">
                                     <input type="hidden" name="t_concepto_nomina[]" id="t_concepto_nomina" value="' . $fila->t_concepto_nomina . '">
                                     <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
@@ -572,8 +552,8 @@ class Nomina extends CI_Controller {
                         //ttpp_nuevo: si es 2 es porq es concepto nuevo y ahi que crearlo                         
                         $response['html_concepto'] .= '<div class="div_input_group renglon_concepto renglon_cotidiano" id="div_concepto_new_' . $i . '">
                                 <div class="row">
+                                <input type="hidden" name="rrpp_nuevo[]" id="rrpp_nuevo" value="2">                                
                                 <input type="hidden" name="id_concepto[]" id="id_concepto" value="NULL">                                
-                                <input type="hidden" name="rrpp_nuevo[]" id="rrpp_nuevo" value="2">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
