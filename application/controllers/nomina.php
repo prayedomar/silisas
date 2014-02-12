@@ -128,26 +128,40 @@ class Nomina extends CI_Controller {
                 $cantidad = $this->input->post('cantidad');
                 $valor_unitario = $this->input->post('valor_unitario');
                 //Si hay escalas las pagamos.
-                if (($rrpp_nuevo == TRUE) && ($escalas == TRUE) && ($escalas == TRUE) && ($escalas == TRUE) && ($escalas == TRUE) && ($escalas == TRUE)) {
-                    $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
-                    $i = 0;
-                    foreach ($rrpp_nuevo as $fila) {
-                        if ($fila != "nula") {
-                            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
-                            list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
-                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
-                            if ($valor_unitario != TRUE) {
-                                $valor_unitario = 0.00;
-                            }
-                            $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $fecha_trans, $id_responsable, $dni_responsable);
-                            if (isset($error2)) {
-                                $data['trans_error'] = $error2;
-                                $this->parser->parse('trans_error', $data);
-                                return;
-                            }
-                        }
-                        $i++;
-                    }
+                    echo "Fuera del if<br>";
+                    echo var_dump($rrpp_nuevo) + "<br>";
+                    echo var_dump($id_concepto) + "<br>";
+                    echo var_dump($t_concepto_nomina) + "<br>";
+                    echo var_dump($detalle) + "<br>";
+                    echo var_dump($cantidad) + "<br>";
+                    echo var_dump($valor_unitario) + "<br>";                
+                if (($rrpp_nuevo == TRUE) && ($id_concepto == TRUE) && ($t_concepto_nomina == TRUE) && ($detalle == TRUE) && ($cantidad == TRUE) && ($valor_unitario == TRUE)) {
+                    echo "Dentro del if<br>";
+                    echo var_dump($rrpp_nuevo) + "<br>";
+                    echo var_dump($id_concepto) + "<br>";
+                    echo var_dump($t_concepto_nomina) + "<br>";
+                    echo var_dump($detalle) + "<br>";
+                    echo var_dump($cantidad) + "<br>";
+                    echo var_dump($valor_unitario) + "<br>";
+//                    $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
+//                    $i = 0;
+//                    foreach ($rrpp_nuevo as $fila) {
+//                        if ($fila != "nula") {
+//                            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
+//                            list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
+//                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+//                            if ($valor_unitario != TRUE) {
+//                                $valor_unitario = 0.00;
+//                            }
+//                            $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+//                            if (isset($error2)) {
+//                                $data['trans_error'] = $error2;
+//                                $this->parser->parse('trans_error', $data);
+//                                return;
+//                            }
+//                        }
+//                        $i++;
+//                    }
                 }
             }
         } else {
@@ -566,13 +580,13 @@ class Nomina extends CI_Controller {
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <div id="label_detalle"><label class="required">Detalles adicionales</label></div>
-                                            <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
+                                            <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" readonly>
                                         </div>
                                     </div>
                                     <div class="col-xs-1 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Cantidad<em class="required_asterisco">*</em></label>
-                                            <input name="cantidad[]" id="cantidad" type="text" class="form-control exit_caution numerico input_center" placeholder="Cantidad" maxlength="3" disabled>
+                                            <input name="cantidad[]" id="cantidad" type="text" class="form-control exit_caution numerico input_center" placeholder="Cantidad" maxlength="3" readonly>
                                         </div>
                                     </div>
                                     <div class="col-xs-2 mermar_padding_div text-center">
@@ -580,7 +594,7 @@ class Nomina extends CI_Controller {
                                             <label>Valor Unitario<em class="required_asterisco">*</em></label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" name="valor_unitario[]" id="valor_unitario" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" disabled>
+                                                <input type="text" name="valor_unitario[]" id="valor_unitario" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly>
                                             </div>
                                         </div>  
                                     </div>
@@ -631,6 +645,8 @@ class Nomina extends CI_Controller {
                 $t_concepto = $this->select_model->t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado);
                 echo '<div class="div_input_group renglon_concepto renglon_nuevo" id="div_concepto_new_' . $i . '">
                                 <div class="row">
+                                <input type="hidden" name="rrpp_nuevo[]" id="rrpp_nuevo" value="2">                                
+                                <input type="hidden" name="id_concepto[]" id="id_concepto" value="NULL">                                 
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
@@ -648,13 +664,13 @@ class Nomina extends CI_Controller {
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <div id="label_detalle"><label class="required">Detalles adicionales</label></div>
-                                            <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" disabled>
+                                            <input name="detalle[]" id="detalle" type="text" class="form-control exit_caution letras_numeros" placeholder="Detalle Adicional" maxlength="50" readonly>
                                         </div>
                                     </div>
                                     <div class="col-xs-1 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Cantidad<em class="required_asterisco">*</em></label>
-                                            <input name="cantidad[]" id="cantidad" type="text" class="form-control exit_caution numerico input_center" placeholder="Cantidad" maxlength="3" disabled>
+                                            <input name="cantidad[]" id="cantidad" type="text" class="form-control exit_caution numerico input_center" placeholder="Cantidad" maxlength="3" readonly>
                                         </div>
                                     </div>
                                     <div class="col-xs-2 mermar_padding_div text-center">
@@ -662,7 +678,7 @@ class Nomina extends CI_Controller {
                                             <label>Valor Unitario<em class="required_asterisco">*</em></label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" name="valor_unitario[]" id="valor_unitario" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" disabled>
+                                                <input type="text" name="valor_unitario[]" id="valor_unitario" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly>
                                             </div>
                                         </div>  
                                     </div>

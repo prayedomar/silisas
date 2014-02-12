@@ -18,7 +18,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Periodicidad<em class="required_asterisco">*</em></label>
-                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" disabled>
+                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" readonly>
                                     <option value="default">Seleccione primero Empleado</option>
                                 </select>
                             </div>                            
@@ -229,7 +229,7 @@
         $.post('{action_llena_periodicidad_nomina}', {
             empleado: empleado
         }, function(data) {
-            $("#periodicidad").removeAttr("disabled");
+            $("#periodicidad").removeAttr("readonly");
             $("#periodicidad").html(data);
             $("#periodicidad").prepend('<option value="default" selected>Seleccione Periodicidad</option>');
         });
@@ -250,11 +250,11 @@
             }, function(data) {
                 if (data == "OK") {
                     //Bloqueamos los 3 primeros campos
-                    $('#empleado').attr('disabled', 'disabled');
-                    $('#periodicidad').attr('disabled', 'disabled');
-                    $('#fecha_inicio').attr('disabled', 'disabled');
-                    $('#fecha_fin').attr('disabled', 'disabled');
-                    $('#consultar_empleado').attr('disabled', 'disabled');
+                    $('#empleado').attr('readonly', 'readonly');
+                    $('#periodicidad').attr('readonly', 'readonly');
+                    $('#fecha_inicio').attr('readonly', 'readonly');
+                    $('#fecha_fin').attr('readonly', 'readonly');
+                    $('#consultar_empleado').attr('readonly', 'readonly');
 
                     //Llenamos El contrato laboral
                     $.post('{action_llena_info_contrato_laboral}', {
@@ -463,9 +463,9 @@
                 $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);                
                 if (new Number(obj.valor_unitario) == '0') {
                     $("#" + idDivConcepto).find("#valor_unitario").attr('value', 0);
-                    $("#" + idDivConcepto).find("#valor_unitario").removeAttr('disabled');
+                    $("#" + idDivConcepto).find("#valor_unitario").removeAttr('readonly');
                 } else {
-                    $("#" + idDivConcepto).find("#valor_unitario").attr('disabled', 'disabled');
+                    $("#" + idDivConcepto).find("#valor_unitario").attr('readonly', 'readonly');
                     $("#" + idDivConcepto).find("#valor_unitario").attr('value', obj.valor_unitario);
                     $("#" + idDivConcepto).find("#valor_unitario").change();
                 }
@@ -480,24 +480,24 @@
                 }
                 if (obj.t_cantidad_dias == '1') {
                     $("#" + idDivConcepto).find("#cantidad").attr('value', 1);
-                    $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
+                    $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
                 } else {
                     if (obj.t_cantidad_dias == '2') {
                         $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_nomina').val());
-                        $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
+                        $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
                     } else {
                         if (obj.t_cantidad_dias == '3') {
                             $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_remunerados').val());
-                            $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
+                            $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
                         } else {
                             if (obj.t_cantidad_dias == '4') {
                                 $("#" + idDivConcepto).find("#cantidad").attr('value', 0);
-                                $("#" + idDivConcepto).find("#cantidad").removeAttr('disabled');
+                                $("#" + idDivConcepto).find("#cantidad").removeAttr('readonly');
                             }
                         }
                     }
                 }
-                $("#" + idDivConcepto).find("#detalle").removeAttr('disabled');
+                $("#" + idDivConcepto).find("#detalle").removeAttr('readonly');
                 calcular_total();
             }
         });
@@ -557,10 +557,10 @@
 //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
-        $('#empleado').removeAttr('disabled');
-        $('#periodicidad').removeAttr('disabled');
-        $('#fecha_inicio').removeAttr('disabled');
-        $('#fecha_fin').removeAttr('disabled');
+        $('#empleado').removeAttr('readonly');
+        $('#periodicidad').removeAttr('readonly');
+        $('#fecha_inicio').removeAttr('readonly');
+        $('#fecha_fin').removeAttr('readonly');
         $.ajax({
             type: "POST",
             url: $("#action_validar").attr("value"),
@@ -572,10 +572,10 @@
                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                     $("#div_alert").html(data);
                     $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-                    $('#empleado').attr('disabled', 'disabled');
-                    $('#periodicidad').attr('disabled', 'disabled');
-                    $('#fecha_inicio').attr('disabled', 'disabled');
-                    $('#fecha_fin').attr('disabled', 'disabled');
+                    $('#empleado').attr('readonly', 'readonly');
+                    $('#periodicidad').attr('readonly', 'readonly');
+                    $('#fecha_inicio').attr('readonly', 'readonly');
+                    $('#fecha_fin').attr('readonly', 'readonly');
                 } else {
                     $(window).unbind('beforeunload');
                     $("#btn_submit").click();
