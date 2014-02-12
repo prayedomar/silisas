@@ -440,8 +440,11 @@ class Nomina extends CI_Controller {
                     echo '<label>Conceptos Pendientes de RRPP</label>';
                     $i = 1;
                     foreach ($conceptos as $fila) {
+                        //rrpp_nuevo: si es 1 es porq es concepto de rrpp y no se inserta si no que se actualiza a ok,
+                        //ttpp_nuevo: si es 2 es porq es concepto nuevo y ahi que crearlo 
                         echo '<div class="div_input_group renglon_concepto renglon_pdte" id="div_concepto_pdte_' . $i . '">
                                 <div class="row">
+                                    <input type="hidden" name="rrpp_nuevo[]" id="cantidad" value="1">
                                     <input type="hidden" name="t_concepto_nomina[]" id="t_concepto_nomina" value="' . $fila->t_concepto_nomina . '">
                                     <div class="col-xs-2 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
@@ -517,6 +520,7 @@ class Nomina extends CI_Controller {
                         $response['ultimo_concepto'] = $i;
                         $response['html_concepto'] .= '<div class="div_input_group renglon_concepto renglon_cotidiano" id="div_concepto_new_' . $i . '">
                                 <div class="row">
+                                <input type="hidden" name="rrpp_nuevo[]" id="cantidad" value="2">
                                     <div class="col-xs-3 mermar_padding_div text-center">
                                         <div class="form-group sin_margin_bottom">
                                             <label>Tipo de Concepto<em class="required_asterisco">*</em></label>
