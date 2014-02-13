@@ -11,7 +11,7 @@ class Prueba extends CI_Controller {
 
     function index() {
 //        $data['base_url'] = base_url();
-//        $this->parser->parse('iconos', $data);
+        $this->load->view('testV');
 //        echo ($this->select_model->nextId_salario()->id) + 1;
 //        $SqlInfo = 'select * from empleado_x_sede AS a, sede AS b where (a.sede_secundaria = b.id) AND (a.dni_empleado=' . 1 . ')AND (a.id_empleado=' . 1 . ')AND (a.vigente=1)';
 //        $query = $this->db->query($SqlInfo);
@@ -238,16 +238,6 @@ class Prueba extends CI_Controller {
 //        echo "ok";
 //        echo date("d",strtotime("2013-02-3"));
 
-                $id_empleado = 98667633;
-                $dni_empleado = 1;
-                $fecha_inicio_nomina = '2014-02-03';
-                $fecha_fin_nomina = '2014-02-09';
-                $ausencias = $this->select_model->ausencia_entre_fechas($id_empleado, $dni_empleado, $fecha_inicio_nomina, $fecha_fin_nomina);   
-                var_dump($ausencias);
-        
-        
-        
-        
         
     }
 

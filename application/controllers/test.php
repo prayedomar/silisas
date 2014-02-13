@@ -7,9 +7,8 @@ class Test extends CI_Controller {
     }
 
     function index() {
-        $this->sendEmail("asdas", "silisascolombia@gmail.com", "prayedomar@hotmail.com", "Hola");
-        $this->sendEmail("asdas", "silisascolombia@gmail.com", "luismec90@gmail.com", "Hola");
-        $this->sendEmail("asdas", "silisascolombia@gmail.com", "silisascolombia@gmail.com", "Hola");
+        $this->sendEmail("asdas", "silisascolombia@gmail.com", "prayedomar@hotmail.com", "Prueba del sistema");
+        $this->sendEmail("asdas", "silisascolombia@gmail.com", "silisascolombia@gmail.com", "Prueba del sistema");
     }
 
     function sendEmail($contenido, $from, $to, $asunto) {
