@@ -2,7 +2,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml'>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>$nombreHotel</title>
+        <title></title>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
     </head>
     <body style='margin: 0; padding: 0; background-color:#ececec'>
@@ -36,7 +36,7 @@
             </tr>
         </table> 
         <br>
-            <table align='center' width='700' cellspacing='0' cellpadding='20' border='0' style='font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 15px;line-height:1.428571429; color:#333; border-radius:6px 6px 6px 6px; background-color:whitesmoke; border:1px solid #CFCFCF;'>
+            <table align='center' width='700' cellspacing='0' cellpadding='20' border='0' style='margin-bottom:30px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 15px;line-height:1.428571429; color:#333; border-radius:6px 6px 6px 6px; background-color:whitesmoke; border:1px solid #CFCFCF;'>
                 <tr>
                     <td style="color:#777; text-align: justify;">
                         El contenido de este documento y/o sus anexos son para uso exclusivo de su destinatario intencional y puede contener Información legalmente protegida por ser privilegiada o confidencial. Si usted no es el destinatario intencional de este documento por favor Infórmenos de inmediato y elimine el documento y sus anexos. Igualmente cualquier retención, revisión no autorizada, distribución, divulgación, reenvío, copia, impresión, reproducción, o uso indebido de este documento y/o sus anexos, está estrictamente prohibida y sancionada legalmente. Agradecemos su atención.
