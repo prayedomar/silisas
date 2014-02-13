@@ -7,21 +7,8 @@ class Test extends CI_Controller {
     }
 
     function index() {
-        $this->sendEmail("asdas", "silisascolombia@gmail.com", "prayedomar@hotmail.com", "Prueba del sistema");
-        $this->sendEmail("asdas", "silisascolombia@gmail.com", "silisascolombia@gmail.com", "Prueba del sistema");
-    }
-
-    function sendEmail($contenido, $from, $to, $asunto) {
-        ob_start();
-        include('application/views/testV.php');
-        $message = ob_get_clean();
-        echo $message;
-        $asunto = utf8_decode($asunto);
-        $headers = "From: $from \r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
-        mail($to, $asunto, utf8_decode($message), $headers);
+        $this->sendEmail("tal cosa <b>tal otra en negrita</b>", "silisascolombia@gmail.com", "prayedomar@hotmail.com", "Prueba del sistema");
+        $this->sendEmail("tal cosa <b>tal otra en negrita</b>", "silisascolombia@gmail.com", "silisascolombia@gmail.com", "Prueba del sistema");
     }
 
 }

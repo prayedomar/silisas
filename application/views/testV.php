@@ -8,15 +8,15 @@
     <body style='margin: 0; padding: 0; background-color:#ececec'>
         <br/>
         <br/>
-        <table align='center' width='600' cellspacing='0' cellpadding='8' border='0' style='font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 16px;line-height:1.428571429; color:white; border-radius:6px 6px 6px 6px; background-color:#1990D5; border:1px solid #0272bc;'>
+        <table align='center' width='700' cellspacing='0' cellpadding='8' border='0' style='font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 16px;line-height:1.428571429; color:white; border-radius:6px 6px 6px 6px; background-color:#1990D5; border:1px solid #0272bc;'>
             <tr style='color:#e7cba3;'> 
                 <td> <a href='http://sili.com.co/' target='_blank' style='color:white;font-size: 17px;text-decoration:none'>SILI S.A.S</a></td>
                 <td align='right'><a href='https://www.facebook.com/sililtda' target='_blank' style='color:white;'>Siguenos en Facebook</a></td>
             </tr>
             <tr style="background: white;"> 
-                <td colspan='2' align='center' style='padding:0; background-color:white; color:#e7cba3; font-size:26px;width:80px;'>
+                <td colspan='2' align='center' style='padding:0; background-color:white;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:22px;color:#0272bc;width:80px;'>
                     <img src="<?= base_url() ?>public/images/header.jpg" width="700" width="90">
-
+                    <b>Notificación Web</b>
                 </td>
             </tr>
             <tr> 
@@ -27,7 +27,7 @@
                 </td>
             </tr>
             <tr> 
-                <td colspan="2" align="center" style='padding-top:20px; padding-bottom:20px;color:white;text-decoration:none;'>Cualquier opinión, inquietud o anomalía, comuníquela a nuestra sede principal:<br/>
+                <td colspan="2" align="center" style='padding-top:20px; padding-bottom:20px;color:white;text-decoration:none;'>Cualquier observación, inquietud o anomalía, le agrecemos que la comunique de inmediato a nuestra sede principal:<br/>
                     Medellín Calle 47D # 77A-67 Velódromo - Telefonos 4114107 / 4126800<br/>
                     <br/>
                     Copyright © 2014 SILI S.A.S, All rights reserved.
@@ -35,7 +35,7 @@
             </tr>
         </table> 
         <br/>
-        <table align='center' width='700' cellspacing='0' cellpadding='20' border='0' style='margin-bottom:30px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 15px;line-height:1.428571429; color:#333; border-radius:6px 6px 6px 6px; background-color:whitesmoke; border:1px solid #CFCFCF;'>
+        <table align='center' width='700' cellspacing='0' cellpadding='20' border='0' style='margin-bottom:30px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 15px;line-height:1.428571429; color:#333; border-radius:6px 6px 6px 6px; background-color:whitesmoke; border:1px solid #CFCFCF;margin-bottom:10px;'>
             <tr>
                 <td style="color:#777; text-align: justify;">
                     El contenido de este documento y/o sus anexos son para uso exclusivo de su destinatario intencional y puede contener Información legalmente protegida por ser privilegiada o confidencial. Si usted no es el destinatario intencional de este documento por favor Infórmenos de inmediato y elimine el documento y sus anexos. Igualmente cualquier retención, revisión no autorizada, distribución, divulgación, reenvío, copia, impresión, reproducción, o uso indebido de este documento y/o sus anexos, está estrictamente prohibida y sancionada legalmente. Agradecemos su atención.
@@ -44,10 +44,8 @@
                 </td>
             </tr>
         </table>
-        <br/>
-        <br/>
+        <br/>        
+        <hr style="margin:20px 0; border: 0; border-top: 1px solid #eee; border-bottom: 1px solid #fff;"/>
     </body>
 </html>
-<br/>
-<br/>
 
