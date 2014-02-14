@@ -11,9 +11,11 @@ class Transacciones extends CI_Controller {
         $this->load->model('t_dnim');
         $this->load->model('t_cajam');
         $this->load->model('sedem');
+        $this->load->model('t_transm');
         $data["tab"] = "transacciones";
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_trans'] = $this->t_transm->listar_tipos_de_transacciones();
         if (!empty($_GET["depto"])) {
             $this->load->model('t_cargom');
             $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
@@ -30,8 +32,7 @@ class Transacciones extends CI_Controller {
         $cantidad = $this->transaccionesm->cantidad_transacciones($_GET, $inicio, $filasPorPagina);
         $cantidad = sizeof($cantidad);
         $data['cantidad'] = $cantidad;
-        $data['total'] = $this->transaccionesm->total_transacciones($_GET, $inicio, $filasPorPagina);
-        $data['total']=$data['total'][0]->total;
+        $data['totales'] = $this->transaccionesm->total_transacciones($_GET, $inicio, $filasPorPagina);
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $data["listar_cajas"] = $this->t_cajam->listar_tipos_de_caja();
         $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);

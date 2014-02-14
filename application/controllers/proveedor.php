@@ -165,7 +165,7 @@ class Proveedor extends CI_Controller {
         if (!empty($_GET["departamento"])) {
             $data["ciudades"] = $this->ciudadm->listarCiudadesPorProvicia($_GET['departamento']);
         }
-        $filasPorPagina = 1;
+        $filasPorPagina = 20;
         if (empty($_GET["page"])) {
             $inicio = 0;
             $paginaActual = 1;

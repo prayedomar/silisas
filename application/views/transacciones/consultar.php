@@ -74,10 +74,32 @@
                             <label>Doc. responsable</label>
                             <input type='text' id="documento" class='form-control letras_numeros' placeholder="Documento" value="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>">
                         </div>
+                        <div class="col-xs-2">
+                            <label>Tipo de transacción</label>
+                            <select id="tipo_trans" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($lista_trans as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>><?= $row->nombre_tabla ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
                         <!--                        <div class="col-xs-2">
                                                     <label>Total</label>
-                                                   <label><?= $total ?></label>
+                                                   <label></label>
                                                 </div>-->
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-2  col-xs-offset-4">
+                        <p></p><h4>Total efectivo</h4><p></p>
+                        <p></p><h4>Total bancos</h4><p></p>
+                        <p></p><h3>Total COP</h3><p></p>
+                    </div>
+                    <div class="col-xs-5">
+                        <div id="div_total_devengado"><h4><?= "$" . number_format($totales[0]->efectivo_caja, 2, '.', ',') ?></h4></div>
+                        <div id="div_total_devengado"><h4><?= "$" . number_format($totales[0]->valor_cuenta, 2, '.', ',') ?></h4></div>
+                        <div id="div_total_devengado"><h3><?= "$" . number_format($totales[0]->efectivo_caja + $totales[0]->valor_cuenta, 2, '.', ',') ?></h3></div>
                     </div>
                 </div>
                 <hr>
@@ -86,38 +108,40 @@
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
-                                    <th>Fecha creacion</th>
-                                    <th>Sede</th>
+                                    <th>Fecha</th>
+                                    <th>Tipo de transacción</th>
                                     <th>Id</th>
-                                    <th>T. transacción</th>
+                                    <th>Total</th>
                                     <th>Caja</th>
-                                    <th>Efectivo en caja</th>
+                                    <th>Efectivo de caja</th>
                                     <th>Cuenta</th>
-                                    <th>Valor en cuenta</th>
+                                    <th>Valor de cuenta</th>
                                     <th>Vigente</th>
-                                    <th>Observacion</th>
-
+                                    <th>Sede</th>
+                                    <th>Responsable</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
                                 <?php foreach ($lista as $row) { ?>
-                                    <tr class="<?php if ($row->nombre_tabla == "Adelanto" || $row->nombre_tabla == "Prestamo" || $row->nombre_tabla == "Egreso" || $row->nombre_tabla == "Nomina" || $row->nombre_tabla == "Nota credito")
-                                    echo "danger";
-                                else
-                                    echo "success";
-                                ?>">
+                                    <tr class="<?php
+                                    if ($row->credito_debito == "0")
+                                        echo "danger";
+                                    else
+                                        echo "success";
+                                    ?>">
                                         <td><?= $row->fecha_trans ?></td>
-                                        <td><?= $row->sede ?></td>
+                                        <td><?= $row->tipo_trans ?></td>
                                         <td><?= $row->prefijo . " " . $row->id ?></td>
-                                        <td><?= $row->nombre_tabla ?></td>
-                                        <td><?= $row->caja ?></td>
-                                        <td><?= $row->efectivo ?></td>
-                                        <td><?= $row->num_cuenta ?></td>
-                                        <td><?= $row->consignado ?></td>
+                                        <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
+                                        <td><?= ($row->caja != "") ? $row->caja : "--" ?></td>
+                                        <td><?= ($row->efectivo_caja != "") ? "$" . number_format($row->efectivo_caja, 2, '.', ',') : "--" ?></td>
+                                        <td><?= ($row->cuenta != "") ? $row->cuenta : "--" ?></td>
+                                        <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
                                         <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
-                                        <td><?= $row->observacion ?></td>
+                                        <td><?= $row->sede ?></td>
+                                        <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                     </tr>
-<?php } ?>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -132,7 +156,8 @@
                              data-caja="<?= isset($_GET["caja"]) ? $_GET["caja"] : "" ?>"
                              data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>"
                              data-tipodocumento="<?= isset($_GET["tipo_documento"]) ? $_GET["tipo_documento"] : "" ?>"
-                             data-documento="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>">
+                             data-documento="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>"
+                             data-tipotrans="<?= isset($_GET["tipo_trans"]) ? $_GET["tipo_trans"] : "" ?>">
 
 
                             <ul class="pagination">
@@ -141,7 +166,7 @@
                                 <?php for ($i = 2; $i <= $cantidad_paginas; $i++) { ?>
                                     <li class="<?= $paginaActiva == $i ? "active" : "noActive" ?>">
                                         <a data-page="<?php echo $i; ?>"><?php echo $i; ?></a></li>
-<?php } ?>
+                                <?php } ?>
                             </ul>
                         </div>
                     </div>

@@ -10,99 +10,60 @@ class Transaccionesm extends CI_Model {
     }
 
     public function total_transacciones($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT ((select COALESCE(SUM(ad.total),0) FROM abono_adelanto ad) +
-    (select COALESCE(SUM(ap.subtotal+ap.int_mora),0) FROM abono_prestamo ap)+
-    (select COALESCE(SUM(ing.total),0) FROM ingreso ing)+
-       (select COALESCE(SUM(f.total),0) FROM factura f)+
-       (select COALESCE(SUM(rc.total),0) FROM recibo_caja rc)+
-    (select COALESCE(SUM(rf.total),0) FROM retefuente rf)-
-    (select COALESCE(SUM(nc.total),0) FROM nota_credito nc)-
-    (select COALESCE(SUM(ad.total),0) FROM adelanto ad)-
-     (select COALESCE(SUM(pre.total),0) FROM prestamo pre)-
-     (select COALESCE(SUM(egr.total),0) FROM egreso egr)-
-     (select COALESCE(SUM(n.total),0) FROM nomina n)-
-     (select COALESCE(SUM(pp.total),0) FROM pago_proveedor pp)) total";
+        $query = "SELECT COALESCE(SUM(mt.total), 0) total,COALESCE(SUM(mt.efectivo_caja), 0) efectivo_caja,COALESCE(SUM(mt.valor_cuenta), 0) valor_cuenta  ";
+        $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
+        $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
+        $query.="JOIN sede s ON mt.sede=s.id ";
+        $query.="JOIN empleado e ON mt.dni_responsable=e.dni AND mt.id_responsable=e.id ";
+        $query.="where true ";
+        $query.=(!empty($criterios['desde'])) ? "AND mt.fecha_trans >='{$criterios['desde']} 00:00:00' " : "";
+        $query.=(!empty($criterios['hasta'])) ? "AND mt.fecha_trans <= '{$criterios['hasta']} 23:59:59' " : "";
+        $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
+        $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
+        $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
+        $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
+        $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
+        $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
+        $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
         return $this->db->query($query)->result();
     }
 
     public function cantidad_transacciones($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT *  FROM (SELECT ab.total,ab.fecha_trans,s.nombre sede,s.id id_sede,ab.prefijo,ab.id,ab.observacion,tc.tipo caja,tc.id id_caja,'Abono adelanto' nombre_tabla,ab.efectivo_ingresado efectivo,ab.valor_consignado consignado,ab.vigente,ab.dni_responsable,ab.id_responsable,ab.cuenta_destino num_cuenta FROM abono_adelanto ab LEFT JOIN sede s ON ab.sede=s.id LEFT JOIN t_caja tc ON ab.t_caja_destino=tc.id 
-                  UNION
-                  SELECT (ap.subtotal+ap.int_mora) total,ap.fecha_trans,s.nombre sede,s.id id_sede,ap.prefijo,ap.id,ap.observacion,tc.tipo caja,tc.id id_caja,'Abono prestamo' nombre_tabla,ap.efectivo_ingresado efectivo,ap.valor_consignado consignado,ap.vigente,ap.dni_responsable,ap.id_responsable,ap.cuenta_destino num_cuenta FROM abono_prestamo ap LEFT JOIN sede s ON ap.sede=s.id LEFT JOIN t_caja tc ON ap.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ing.total,ing.fecha_trans,s.nombre sede,s.id id_sede,ing.prefijo,ing.id,ing.descripcion,tc.tipo caja,tc.id id_caja,'Ingreso' nombre_tabla,ing.efectivo_ingresado efectivo,ing.valor_consignado consignado,ing.vigente,ing.dni_responsable,ing.id_responsable,ing.cuenta_destino num_cuenta FROM ingreso ing LEFT JOIN sede s ON ing.sede=s.id LEFT JOIN t_caja tc ON ing.t_caja_destino=tc.id 
-                  UNION
-                  SELECT f.total,f.fecha_trans,s.nombre sede,s.id id_sede,f.prefijo,f.id,f.observacion,tc.tipo caja,tc.id id_caja,'Factura' nombre_tabla,f.efectivo_ingresado efectivo,f.valor_consignado consignado,f.vigente,f.dni_responsable,f.id_responsable,f.cuenta_destino num_cuenta FROM factura f LEFT JOIN sede s ON f.sede=s.id LEFT JOIN t_caja tc ON f.t_caja_destino=tc.id 
-                  UNION
-                  SELECT nc.total,nc.fecha_trans,s.nombre sede,s.id id_sede,nc.prefijo,nc.id,nc.observacion,tc.tipo caja,tc.id id_caja,'Nota credito' nombre_tabla,nc.efectivo_retirado efectivo ,nc.valor_retirado consignado,nc.vigente,nc.dni_responsable,nc.id_responsable,nc.cuenta_origen num_cuenta FROM nota_credito nc LEFT JOIN sede s ON nc.sede=s.id LEFT JOIN t_caja tc ON nc.t_caja_origen=tc.id 
-                  UNION
-                  SELECT rf.total,rf.fecha_trans,s.nombre sede,s.id id_sede,rf.prefijo,rf.id,rf.observacion,tc.tipo caja,tc.id id_caja,'Rete. fuente' nombre_tabla,rf.efectivo_ingresado efectivo,rf.valor_consignado consignado,rf.vigente,rf.dni_responsable,rf.id_responsable,rf.cuenta_destino num_cuenta FROM retefuente rf LEFT JOIN sede s ON rf.sede=s.id LEFT JOIN t_caja tc ON rf.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ad.total,ad.fecha_trans,s.nombre sede,s.id id_sede,ad.prefijo,ad.id,ad.observacion,tc.tipo caja,tc.id id_caja,'Adelanto' nombre_tabla,ad.efectivo_retirado efectivo,ad.valor_retirado consignado,ad.estado vigente,ad.dni_responsable,ad.id_responsable,ad.cuenta_origen num_cuenta FROM adelanto ad LEFT JOIN sede s ON ad.sede=s.id LEFT JOIN t_caja tc ON ad.t_caja_origen=tc.id 
-                  UNION
-                  SELECT pre.total,pre.fecha_trans,s.nombre sede,s.id id_sede,pre.prefijo,pre.id,pre.observacion,tc.tipo caja,tc.id id_caja,'Prestamo' nombre_tabla,pre.efectivo_retirado efectivo,pre.valor_retirado consignado,pre.estado vigente,pre.dni_responsable,pre.id_responsable,pre.cuenta_origen num_cuenta FROM prestamo pre LEFT JOIN sede s ON pre.sede=s.id LEFT JOIN t_caja tc ON pre.t_caja_origen=tc.id 
-                  UNION
-                  SELECT egr.total,egr.fecha_trans,s.nombre sede,s.id id_sede,egr.prefijo,egr.id,egr.descripcion,tc.tipo caja,tc.id id_caja,'Egreso' nombre_tabla,egr.efectivo_retirado efectivo,egr.valor_retirado consignado,egr.vigente,egr.dni_responsable,egr.id_responsable,egr.cuenta_origen num_cuenta FROM egreso egr LEFT JOIN sede s ON egr.sede=s.id LEFT JOIN t_caja tc ON egr.t_caja_origen=tc.id 
-                  UNION
-                  SELECT n.total,n.fecha_trans,s.nombre sede,s.id id_sede,n.prefijo,n.id,n.observacion,tc.tipo caja,tc.id id_caja,'Nomina' nombre_tabla,n.efectivo_retirado efectivo,n.valor_retirado consignado,n.vigente,n.dni_responsable,n.id_responsable,n.cuenta_origen num_cuenta FROM nomina n LEFT JOIN sede s ON n.sede=s.id LEFT JOIN t_caja tc ON n.t_caja_origen=tc.id 
-                  UNION
-                  SELECT pp.total,pp.fecha_trans,s.nombre sede,s.id id_sede,pp.prefijo,pp.id,pp.observacion,tc.tipo caja,tc.id id_caja,'Pago proveedor' nombre_tabla,pp.efectivo_retirado efectivo,pp.valor_retirado consignado,pp.vigente,pp.dni_responsable,pp.id_responsable,pp.cuenta_origen num_cuenta FROM pago_proveedor pp LEFT JOIN sede s ON pp.sede=s.id LEFT JOIN t_caja tc ON pp.t_caja_origen=tc.id 
-                  UNION
-                  SELECT rc.total,rc.fecha_trans,s.nombre sede,s.id id_sede,rc.prefijo,rc.id,rc.observacion,tc.tipo caja,tc.id id_caja,'Recibo caja' nombre_tabla,rc.efectivo_ingresado efectivo,rc.valor_consignado consignado,rc.vigente,rc.dni_responsable,rc.id_responsable,rc.cuenta_destino num_cuenta FROM recibo_caja rc LEFT JOIN sede s ON rc.sede=s.id LEFT JOIN t_caja tc ON rc.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ti.total,ti.fecha_trans,s.nombre sede,s.id id_sede,ti.prefijo,ti.id,ti.observacion,tc.tipo caja,tc.id id_caja,'Transferencia intersede' nombre_tabla,ti.efectivo_ingresado efectivo,ti.valor_consignado consignado,ti.est_traslado,ti.dni_responsable,ti.id_responsable,ti.cuenta_destino num_cuenta FROM  transferencia_intersede ti LEFT JOIN sede s ON ti.sede_caja_destino=s.id LEFT JOIN t_caja tc ON ti.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ti.total,ti.fecha_trans,s.nombre sede,s.id id_sede,ti.prefijo,ti.id,ti.observacion,tc.tipo caja,tc.id id_caja,'Transferencia intersede' nombre_tabla,ti.efectivo_retirado efectivo,ti.valor_retirado consignado,ti.est_traslado,ti.dni_responsable,ti.id_responsable,ti.cuenta_origen num_cuenta FROM  transferencia_intersede ti LEFT JOIN sede s ON ti.sede_caja_origen=s.id LEFT JOIN t_caja tc ON ti.t_caja_origen=tc.id) u WHERE true ";
-
-        $query.=(!empty($criterios['desde'])) ? "AND u.fecha_trans >='{$criterios['desde']} 00:00:00' " : "";
-        $query.=(!empty($criterios['hasta'])) ? "AND u.fecha_trans <= '{$criterios['hasta']} 23:59:59' " : "";
-        $query.=(isset($criterios['sede'])) ? "AND u.id_sede= '{$criterios['sede']}' " : "";
-        $query.=(isset($criterios['id'])) ? "AND u.id= '{$criterios['id']}' " : "";
-        $query.=(isset($criterios['caja'])) ? "AND u.id_caja= '{$criterios['caja']}' " : "";
-        $query.=(isset($criterios['tipo_documento'])) ? "AND u.dni_responsable= '{$criterios['tipo_documento']}' " : "";
-        $query.=(isset($criterios['documento'])) ? "AND u.id_responsable= '{$criterios['documento']}' " : "";
-        $query.=(!isset($criterios['vigente'])) ? "AND u.vigente= '1' OR u.vigente='2' " : "AND u.vigente<>'1' AND u.vigente<>'2' ";
+        $query = "SELECT count(*) cantidad ";
+        $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
+        $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
+        $query.="JOIN sede s ON mt.sede=s.id ";
+        $query.="JOIN empleado e ON mt.dni_responsable=e.dni AND mt.id_responsable=e.id ";
+        $query.="where true ";
+        $query.=(!empty($criterios['desde'])) ? "AND mt.fecha_trans >='{$criterios['desde']} 00:00:00' " : "";
+        $query.=(!empty($criterios['hasta'])) ? "AND mt.fecha_trans <= '{$criterios['hasta']} 23:59:59' " : "";
+        $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
+        $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
+        $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
+        $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
+        $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
+        $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
+        $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
         return $this->db->query($query)->result();
     }
 
     public function listar_transacciones($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT *  FROM (SELECT ab.total,ab.fecha_trans,s.nombre sede,s.id id_sede,ab.prefijo,ab.id,ab.observacion,tc.tipo caja,tc.id id_caja,'Abono adelanto' nombre_tabla,ab.efectivo_ingresado efectivo,ab.valor_consignado consignado,ab.vigente,ab.dni_responsable,ab.id_responsable,ab.cuenta_destino num_cuenta FROM abono_adelanto ab LEFT JOIN sede s ON ab.sede=s.id LEFT JOIN t_caja tc ON ab.t_caja_destino=tc.id 
-                  UNION
-                  SELECT (ap.subtotal+ap.int_mora) total,ap.fecha_trans,s.nombre sede,s.id id_sede,ap.prefijo,ap.id,ap.observacion,tc.tipo caja,tc.id id_caja,'Abono prestamo' nombre_tabla,ap.efectivo_ingresado efectivo,ap.valor_consignado consignado,ap.vigente,ap.dni_responsable,ap.id_responsable,ap.cuenta_destino num_cuenta FROM abono_prestamo ap LEFT JOIN sede s ON ap.sede=s.id LEFT JOIN t_caja tc ON ap.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ing.total,ing.fecha_trans,s.nombre sede,s.id id_sede,ing.prefijo,ing.id,ing.descripcion,tc.tipo caja,tc.id id_caja,'Ingreso' nombre_tabla,ing.efectivo_ingresado efectivo,ing.valor_consignado consignado,ing.vigente,ing.dni_responsable,ing.id_responsable,ing.cuenta_destino num_cuenta FROM ingreso ing LEFT JOIN sede s ON ing.sede=s.id LEFT JOIN t_caja tc ON ing.t_caja_destino=tc.id 
-                  UNION
-                  SELECT f.total,f.fecha_trans,s.nombre sede,s.id id_sede,f.prefijo,f.id,f.observacion,tc.tipo caja,tc.id id_caja,'Factura' nombre_tabla,f.efectivo_ingresado efectivo,f.valor_consignado consignado,f.vigente,f.dni_responsable,f.id_responsable,f.cuenta_destino num_cuenta FROM factura f LEFT JOIN sede s ON f.sede=s.id LEFT JOIN t_caja tc ON f.t_caja_destino=tc.id 
-                  UNION
-                  SELECT nc.total,nc.fecha_trans,s.nombre sede,s.id id_sede,nc.prefijo,nc.id,nc.observacion,tc.tipo caja,tc.id id_caja,'Nota credito' nombre_tabla,nc.efectivo_retirado efectivo ,nc.valor_retirado consignado,nc.vigente,nc.dni_responsable,nc.id_responsable,nc.cuenta_origen num_cuenta FROM nota_credito nc LEFT JOIN sede s ON nc.sede=s.id LEFT JOIN t_caja tc ON nc.t_caja_origen=tc.id 
-                  UNION
-                  SELECT rf.total,rf.fecha_trans,s.nombre sede,s.id id_sede,rf.prefijo,rf.id,rf.observacion,tc.tipo caja,tc.id id_caja,'Rete. fuente' nombre_tabla,rf.efectivo_ingresado efectivo,rf.valor_consignado consignado,rf.vigente,rf.dni_responsable,rf.id_responsable,rf.cuenta_destino num_cuenta FROM retefuente rf LEFT JOIN sede s ON rf.sede=s.id LEFT JOIN t_caja tc ON rf.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ad.total,ad.fecha_trans,s.nombre sede,s.id id_sede,ad.prefijo,ad.id,ad.observacion,tc.tipo caja,tc.id id_caja,'Adelanto' nombre_tabla,ad.efectivo_retirado efectivo,ad.valor_retirado consignado,ad.estado vigente,ad.dni_responsable,ad.id_responsable,ad.cuenta_origen num_cuenta FROM adelanto ad LEFT JOIN sede s ON ad.sede=s.id LEFT JOIN t_caja tc ON ad.t_caja_origen=tc.id 
-                  UNION
-                  SELECT pre.total,pre.fecha_trans,s.nombre sede,s.id id_sede,pre.prefijo,pre.id,pre.observacion,tc.tipo caja,tc.id id_caja,'Prestamo' nombre_tabla,pre.efectivo_retirado efectivo,pre.valor_retirado consignado,pre.estado vigente,pre.dni_responsable,pre.id_responsable,pre.cuenta_origen num_cuenta FROM prestamo pre LEFT JOIN sede s ON pre.sede=s.id LEFT JOIN t_caja tc ON pre.t_caja_origen=tc.id 
-                  UNION
-                  SELECT egr.total,egr.fecha_trans,s.nombre sede,s.id id_sede,egr.prefijo,egr.id,egr.descripcion,tc.tipo caja,tc.id id_caja,'Egreso' nombre_tabla,egr.efectivo_retirado efectivo,egr.valor_retirado consignado,egr.vigente,egr.dni_responsable,egr.id_responsable,egr.cuenta_origen num_cuenta FROM egreso egr LEFT JOIN sede s ON egr.sede=s.id LEFT JOIN t_caja tc ON egr.t_caja_origen=tc.id 
-                  UNION
-                  SELECT n.total,n.fecha_trans,s.nombre sede,s.id id_sede,n.prefijo,n.id,n.observacion,tc.tipo caja,tc.id id_caja,'Nomina' nombre_tabla,n.efectivo_retirado efectivo,n.valor_retirado consignado,n.vigente,n.dni_responsable,n.id_responsable,n.cuenta_origen num_cuenta FROM nomina n LEFT JOIN sede s ON n.sede=s.id LEFT JOIN t_caja tc ON n.t_caja_origen=tc.id 
-                  UNION
-                  SELECT pp.total,pp.fecha_trans,s.nombre sede,s.id id_sede,pp.prefijo,pp.id,pp.observacion,tc.tipo caja,tc.id id_caja,'Pago proveedor' nombre_tabla,pp.efectivo_retirado efectivo,pp.valor_retirado consignado,pp.vigente,pp.dni_responsable,pp.id_responsable,pp.cuenta_origen num_cuenta FROM pago_proveedor pp LEFT JOIN sede s ON pp.sede=s.id LEFT JOIN t_caja tc ON pp.t_caja_origen=tc.id 
-                  UNION
-                  SELECT rc.total,rc.fecha_trans,s.nombre sede,s.id id_sede,rc.prefijo,rc.id,rc.observacion,tc.tipo caja,tc.id id_caja,'Recibo caja' nombre_tabla,rc.efectivo_ingresado efectivo,rc.valor_consignado consignado,rc.vigente,rc.dni_responsable,rc.id_responsable,rc.cuenta_destino num_cuenta FROM recibo_caja rc LEFT JOIN sede s ON rc.sede=s.id LEFT JOIN t_caja tc ON rc.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ti.total,ti.fecha_trans,s.nombre sede,s.id id_sede,ti.prefijo,ti.id,ti.observacion,tc.tipo caja,tc.id id_caja,'Transferencia intersede' nombre_tabla,ti.efectivo_ingresado efectivo,ti.valor_consignado consignado,ti.est_traslado,ti.dni_responsable,ti.id_responsable,ti.cuenta_destino num_cuenta FROM  transferencia_intersede ti LEFT JOIN sede s ON ti.sede_caja_destino=s.id LEFT JOIN t_caja tc ON ti.t_caja_destino=tc.id 
-                  UNION
-                  SELECT ti.total,ti.fecha_trans,s.nombre sede,s.id id_sede,ti.prefijo,ti.id,ti.observacion,tc.tipo caja,tc.id id_caja,'Transferencia intersede' nombre_tabla,ti.efectivo_retirado efectivo,ti.valor_retirado consignado,ti.est_traslado,ti.dni_responsable,ti.id_responsable,ti.cuenta_origen num_cuenta FROM  transferencia_intersede ti LEFT JOIN sede s ON ti.sede_caja_origen=s.id LEFT JOIN t_caja tc ON ti.t_caja_origen=tc.id) u WHERE true ";
-
-        $query.=(!empty($criterios['desde'])) ? "AND u.fecha_trans >='{$criterios['desde']} 00:00:00' " : "";
-        $query.=(!empty($criterios['hasta'])) ? "AND u.fecha_trans <= '{$criterios['hasta']} 23:59:59' " : "";
-        $query.=(isset($criterios['sede'])) ? "AND u.id_sede= '{$criterios['sede']}' " : "";
-        $query.=(isset($criterios['id'])) ? "AND u.id= '{$criterios['id']}' " : "";
-        $query.=(isset($criterios['caja'])) ? "AND u.id_caja= '{$criterios['caja']}' " : "";
-        $query.=(isset($criterios['tipo_documento'])) ? "AND u.dni_responsable= '{$criterios['tipo_documento']}' " : "";
-        $query.=(isset($criterios['documento'])) ? "AND u.id_responsable= '{$criterios['documento']}' " : "";
-        $query.=(!isset($criterios['vigente'])) ? "AND u.vigente= '1' OR u.vigente='2' " : "AND u.vigente<>'1' AND u.vigente<>'2' ";
-        $query.=" ORDER BY u.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
+        $query = "SELECT mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
+        $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
+        $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
+        $query.="JOIN sede s ON mt.sede=s.id ";
+        $query.="JOIN empleado e ON mt.dni_responsable=e.dni AND mt.id_responsable=e.id ";
+        $query.="where true ";
+        $query.=(!empty($criterios['desde'])) ? "AND mt.fecha_trans >='{$criterios['desde']} 00:00:00' " : "";
+        $query.=(!empty($criterios['hasta'])) ? "AND mt.fecha_trans <= '{$criterios['hasta']} 23:59:59' " : "";
+        $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
+        $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
+        $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
+        $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
+        $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
+        $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
+        $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
+        $query.=" ORDER BY mt.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }
 

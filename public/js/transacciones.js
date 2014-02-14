@@ -31,6 +31,9 @@ $(function() {
         if ($("#documento").val() != "") {
             url += "documento=" + $("#documento").val() + "&";
         }
+          if ($("#tipo_trans").val() != "") {
+            url += "tipo_trans=" + $("#tipo_trans").val() + "&";
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
     });
@@ -122,6 +125,9 @@ $(function() {
         }
         if ($("#paginacion").data("documento") != "") {
             url += "documento=" + $("#paginacion").data("documento") + "&";
+        }
+        if ($("#paginacion").data("tipotrans") != "") {
+            url += "tipo_trans=" + $("#paginacion").data("tipotrans") + "&";
         }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
