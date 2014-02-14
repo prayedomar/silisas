@@ -53,14 +53,14 @@
             </div>
             <div class="div_inputs">
                 <fieldset id="inputs">
-                    <label>Tipo de Usuario</label>
+                    <label>Tipo de usuario</label>
                     <select name="t_usuario" class="select">
                         <option value="default">Seleccione T.U</option>
                         {t_usuario}
                         <option value={id}>{tipo}</option>
                         {/t_usuario}      
                     </select>                     
-                    <label>Tipo de Identificación</label>
+                    <label>Tipo de identificación</label>
                     <select name="dni" class="select">
                         <option value="default">Seleccione T.I</option>
                         {dni}

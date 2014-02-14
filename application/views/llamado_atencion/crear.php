@@ -67,7 +67,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>   
+                            <p class="text-center"><B>Nota: </B>Automaticamente se creará la ausencia laboral para el empleado en las fechas especificadas.</p> 
+                        </div>                      
                         <div id="div_anular_contrato" class="text-center" style="display:none;">
                             <p><B>Nota: </B>Automaticamente se anulará el contrato laboral del empleado.</p>                            
                         </div>

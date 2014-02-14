@@ -115,6 +115,48 @@ class Titular extends CI_Controller {
                     $data['trans_error'] = $error2;
                     $this->parser->parse('trans_error', $data);
                 } else {
+                    //Enviamos Correo de Bienvenida
+                        $t_dni = $this->select_model->t_dni_id($dni)->tipo;
+                        if($genero == 'M'){
+                            $prefijo = "Sr.";
+                            $asunto = "Bienvenido a la familia SILI S.A.S";                            
+                        }else{
+                            $prefijo = "Sra.";
+                            $asunto = "Bienvenida a la familia SILI S.A.S";                                                        
+                        }
+                        $email = "prayedomar@hotmail.com";
+                        $mensaje = '<p>' . $prefijo . ' ' . $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2 . '</p>'
+                                . '<p>Reciba la más cordial bienvenida.</p>'
+                                . '<p>A partir de este momento, usted hace parte del privilegiado grupo de titulares, que conforma nuestra empresa SILI S.A.S.<br/>'
+                                . '<br/>Para ingresar a nuestro sistema y disfrutar de todas las herramientas que hemos diseñado para facilitar la interacción con nuestra compañía, ingrese a traves de nuestra pagina web: <a href="http://www.sili.com.co" target="_blank">www.sili.com.co</a> y seleccione la opción "Acceder".</p>'
+                                . '<ul type="disc">'
+                                    . '<li><p>Sus datos para ingresar al sistema son:</p>'
+                                        . '<center>'
+                                        . '<table>'
+                                            . '<tr>'
+                                                . '<td style="width:230px;"><b>Tipo de usuario: </b></td>'
+                                                . '<td>Titular</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Tipo de identificación: </b></td>'
+                                                . '<td>' . $t_dni . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Identificación de usuario: </b></td>'
+                                                . '<td>' . $id . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Contraseña: </b></td>'
+                                                . '<td>' . $id . '</td>'
+                                            . '</tr>'
+                                        . '</table>'
+                                        . '</center>'
+                                        . '<br/><p>Para garantizar la seguridad de su cuenta, una vez que ingrese por primera vez, modifique su contraseña a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
+                                    . '</li>'
+                                . '</ul>'
+                                . '<center><br/>¡Gracias por elegirnos y darnos la oportunidad de servirle!</center>';
+                        $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);               
+                    //Cargamos mensaje de Ok
                     $this->parser->parse('trans_success', $data);
                 }
             }

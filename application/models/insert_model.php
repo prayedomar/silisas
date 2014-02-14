@@ -572,21 +572,6 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function suspension_laboral($id_empleado, $dni_empleado, $llamado_atencion, $fecha_inicio, $fecha_fin, $vigente) {
-        $data = array(
-            'id_empleado' => $id_empleado,
-            'dni_empleado' => $dni_empleado,
-            'llamado_atencion' => $llamado_atencion,
-            'fecha_inicio' => $fecha_inicio,
-            'fecha_fin' => $fecha_fin,
-            'vigente' => $vigente
-        );
-        $this->db->insert('suspension_laboral', $data);
-        if ($error = $this->db->_error_message()) {
-            return $error;
-        }
-    }
-
     public function contrato_laboral($id_empleado, $dni_empleado, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,

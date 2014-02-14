@@ -258,6 +258,14 @@ class Select_model extends CI_Model {
         }
     }
 
+    public function t_dni_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_dni');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
     public function t_dni_empleado() {
         $this->db->where('visible_empleado', 1);
         $query = $this->db->get('t_dni');
@@ -354,11 +362,27 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function t_sancion_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_sancion');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function t_contrato_laboral() {
         $query = $this->db->get('t_contrato_laboral');
         if ($query->num_rows() > 0) {
             return $query->result();
+        }
+    }
+
+    public function t_contrato_laboral_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_contrato_laboral');
+        if ($query->num_rows() == 1) {
+            return $query->row();
         }
     }
 
@@ -518,10 +542,18 @@ class Select_model extends CI_Model {
     }
 
     public function t_ausencia() {
-        $SqlInfo = "SELECT id, tipo, CASE salarial WHEN '0' THEN 'No Remunerada' ELSE 'Remunerada' END AS salarial FROM t_ausencia";
+        $SqlInfo = "SELECT id, tipo, CASE salarial WHEN '0' THEN 'No Remunerada' ELSE 'Remunerada' END AS salarial FROM t_ausencia where visible=1";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
+        }
+    }
+
+    public function t_ausencia_id($id) {
+        $SqlInfo = "SELECT id, tipo, CASE salarial WHEN '0' THEN 'No Remunerada' ELSE 'Remunerada' END AS salarial FROM t_ausencia where id=" . $id;
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
         }
     }
 
@@ -684,11 +716,27 @@ class Select_model extends CI_Model {
         }
     }
 
+    public function t_salario_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_salario');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
     public function t_falta_laboral() {
         $SqlInfo = "SELECT id, falta, CASE gravedad WHEN '0' THEN 'Leve' ELSE 'Grave' END AS gravedad FROM t_falta_laboral";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
+        }
+    }
+
+    public function t_falta_laboral_id($id) {
+        $SqlInfo = "SELECT id, falta, CASE gravedad WHEN '0' THEN 'Leve' ELSE 'Grave' END AS gravedad FROM t_falta_laboral where id=" . $id;
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
         }
     }
 

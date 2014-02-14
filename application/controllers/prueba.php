@@ -11,7 +11,9 @@ class Prueba extends CI_Controller {
 
     function index() {
 //        $data['base_url'] = base_url();
-        $this->load->view('testV');
+//        $this->load->view('testV');
+        $tipo_sancion = $this->select_model->t_sancion_id(2);
+        var_dump($tipo_sancion);
 //        echo ($this->select_model->nextId_salario()->id) + 1;
 //        $SqlInfo = 'select * from empleado_x_sede AS a, sede AS b where (a.sede_secundaria = b.id) AND (a.dni_empleado=' . 1 . ')AND (a.id_empleado=' . 1 . ')AND (a.vigente=1)';
 //        $query = $this->db->query($SqlInfo);
@@ -237,8 +239,6 @@ class Prueba extends CI_Controller {
 ////        $this->db->update('matricula', $data);
 //        echo "ok";
 //        echo date("d",strtotime("2013-02-3"));
-
-        
     }
 
     function prueba_ajax() {

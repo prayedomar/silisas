@@ -73,6 +73,42 @@ class Ausencia_laboral extends CI_Controller {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
+            //Enviamos Correo de notificación
+                $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
+                $tipo_ausencia = $this->select_model->t_ausencia_id($t_ausencia);
+                if($empleado->genero == 'M'){
+                    $prefijo = "Sr.";
+                }else{
+                    $prefijo = "Sra.";
+                }
+                $asunto = "Notificación de ausencia laboral";
+                $email = $empleado->email;
+                $mensaje = '<p>' . $prefijo . ' ' . $empleado->nombre1 . ' ' . $empleado->nombre2 . ' ' . $empleado->apellido1 . ' ' . $empleado->apellido2 . '</p>'
+                        . '<p>Le notificamos que en el sistema, fue ingresada una ausencia laboral a su nombre.<br/>'
+                        . '<center>'
+                            . '<table>'
+                                . '<tr>'
+                                    . '<td style="width:170px;"><b>Fecha inicial: </b></td>'
+                                    . '<td>' . $fecha_inicio . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                    . '<td><b>Fecha final: </b></td>'
+                                    . '<td>' . $fecha_fin . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                    . '<td><b>Tipo de ausencia: </b></td>'
+                                    . '<td>' . $tipo_ausencia->tipo . ' (' . $tipo_ausencia->salarial . ')</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                    . '<td><b>Descipción: </b></td>'
+                                    . '<td>' . $descripcion . '</td>'
+                                . '</tr>'
+                            . '</table>'
+                        . '</center>'
+                        . '<br/><p>Para garantizar la seguridad de su cuenta, recuerde modificar periódicamente su contraseña de ingreso al sistema, a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
+                        . '<center><br/>¡Gracias por estar con nosostros!</center>';
+                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);               
+                //Cargamos mensaje de Ok                 
                 $this->parser->parse('trans_success', $data);
             }
         } else {

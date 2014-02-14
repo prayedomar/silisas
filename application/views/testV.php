@@ -27,7 +27,7 @@
                 </td>
             </tr>
             <tr> 
-                <td colspan="2" align="center" style='padding-top:20px; padding-bottom:20px;color:white;text-decoration:none;'>Cualquier observación, inquietud o anomalía, le agrecemos que la comunique de inmediato a nuestra sede principal:<br/>
+                <td colspan="2" align="center" style='padding-top:20px; padding-bottom:20px;color:white;text-decoration:none;'>Cualquier observación, inquietud o anomalía, le agrecemos la comunique de inmediato a nuestra sede principal:<br/>
                     Medellín Calle 47D # 77A-67 Velódromo - Telefonos 4114107 / 4126800<br/>
                     <br/>
                     Copyright © 2014 SILI S.A.S, All rights reserved.

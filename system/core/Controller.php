@@ -31,16 +31,22 @@ class CI_Controller {
         foreach (is_loaded() as $var => $class) {
             $this->$var = & load_class($class);
         }
-
         $this->load = & load_class('Loader', 'core');
-
         $this->load->initialize();
-
         log_message('debug', "Controller Class Initialized");
+        $this->isLogin();
     }
 
     public static function &get_instance() {
         return self::$instance;
+    }
+
+    function isLogin() {
+        //No se puede utilizar esta funcion así porq login tambien hereda de este controlador y se quedará redirigiendo
+        //Habria que colocar la condicion que funcion en caso que no sea tab=login.
+//        if ($this->session->userdata('perfil') == FALSE) {
+//            redirect(base_url() . 'login');
+//        }
     }
 
     static function escapar(&$data) {
@@ -50,9 +56,9 @@ class CI_Controller {
             }
         }
     }
-    
+
     //Para enviar email
-    function sendEmail($contenido, $from, $to, $asunto) {
+    function sendEmail($from, $to, $asunto, $contenido) {
         ob_start();
         include('application/views/testV.php');
         $message = ob_get_clean();
@@ -61,9 +67,8 @@ class CI_Controller {
         $headers = "From: $from \r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
         mail($to, $asunto, utf8_decode($message), $headers);
-    }    
+    }
 
 //callback de form_validation
     function select_default($campo) {

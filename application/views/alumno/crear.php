@@ -137,7 +137,7 @@
                                 </div>
                             </div>                            
                             <div class="form-group">
-                                <label>Correo Electrónico</label>
+                                <label>Correo Electrónico<em class="required_asterisco">*</em></label>
                                 <input name="email" id="email" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
                             </div>                            
                             <div class="form-group">
