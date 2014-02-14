@@ -683,13 +683,12 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function plan_pago_prestamo($prefijo_prestamo, $id_prestamo, $num_cuota, $fecha_pago, $cancelado) {
+    public function plan_pago_prestamo($prefijo_prestamo, $id_prestamo, $num_cuota, $fecha_pago) {
         $data = array(
             'prefijo_prestamo' => $prefijo_prestamo,
             'id_prestamo' => $id_prestamo,
             'num_cuota' => $num_cuota,
-            'fecha_pago' => $fecha_pago,
-            'cancelado' => $cancelado
+            'fecha_pago' => $fecha_pago
         );
         $this->db->insert('plan_pago_prestamo', $data);
         if ($error = $this->db->_error_message()) {
