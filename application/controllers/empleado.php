@@ -256,6 +256,7 @@ class Empleado extends CI_Controller {
 
     public function llena_cargo_departamento() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('depto')) {
                 $depto = $this->input->post('depto');
                 $t_cargo = $this->select_model->cargo_depto($depto);
@@ -277,6 +278,7 @@ class Empleado extends CI_Controller {
 
     public function llena_jefe_new_empleado() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('cargo')) && ($this->input->post('sedePpal')) && ($this->input->post('depto'))) {
                 list($cargo, $perfil) = explode("-", $this->input->post('cargo'));
                 $sede_ppal = $this->input->post('sedePpal');
@@ -301,6 +303,7 @@ class Empleado extends CI_Controller {
     //Llenar elementos html dinamicamente
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $provincias = $this->select_model->provincia_pais($pais);
@@ -321,6 +324,7 @@ class Empleado extends CI_Controller {
 
     public function llena_ciudad() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('provincia')) && ($this->input->post('provincia') != '{id}') && ($this->input->post('provincia') != 'default')) {
                 $provincia = $this->input->post('provincia');
                 $ciudades = $this->select_model->ciudad_provincia($provincia);
@@ -341,6 +345,7 @@ class Empleado extends CI_Controller {
 
     public function llena_salario_departamento() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('depto')) {
                 $depto = $this->input->post('depto');
                 $salarios = $this->select_model->salario_t_salario_x_t_depto($depto);

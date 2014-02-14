@@ -77,6 +77,7 @@ class Login extends CI_Controller {
 //new_user se ejecuta cuando la vista manda los datos por post aqui.
     public function validar_user() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('token') && ($this->input->post('token') == $this->session->userdata('token'))) {
                 $this->form_validation->set_rules('t_usuario', 'T.U', 'required|callback_select_default');
                 $this->form_validation->set_rules('dni', 'T.I', 'required|callback_select_default');
@@ -106,6 +107,7 @@ class Login extends CI_Controller {
     }
 
     public function new_user() {
+        $this->escapar($_POST);        
         if (($this->input->post('token') && $this->input->post('token') == $this->session->userdata('token')) && ($this->input->post('submit'))) {
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');

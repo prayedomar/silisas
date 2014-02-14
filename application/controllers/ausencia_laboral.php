@@ -30,6 +30,7 @@ class Ausencia_laboral extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicial', 'required|xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('fecha_fin', 'Fecha Final', 'required|xss_clean|callback_fecha_valida');
@@ -53,6 +54,7 @@ class Ausencia_laboral extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $fecha_inicio = $this->input->post('fecha_inicio');
             $fecha_fin = $this->input->post('fecha_fin');

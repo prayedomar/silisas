@@ -27,6 +27,7 @@ class Traslado_contrato_matricula extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('contrato_inicial', 'Número de Contrato Inicial', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('contrato_final', 'Número de Contrato Final', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('sede_actual', 'Sede Actual', 'required|callback_select_default');
@@ -94,6 +95,7 @@ class Traslado_contrato_matricula extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             $contrato_inicial = ucwords(strtolower($this->input->post('contrato_inicial')));
             $contrato_final = ucwords(strtolower($this->input->post('contrato_final')));
             $sede_actual = ucwords(strtolower($this->input->post('sede_actual')));

@@ -93,6 +93,7 @@ class Salario extends CI_Controller {
 
     public function llena_t_concepto_salario() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('t_salario')) {
                 $t_salario = $this->input->post('t_salario');
                 $conceptos = $this->select_model->t_concepto_nomina_base($t_salario);

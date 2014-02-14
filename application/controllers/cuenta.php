@@ -31,6 +31,7 @@ class Cuenta extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'required|trim|min_length[12]|max_length[12]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('t_cuenta', 'Tipo de Cuenta', 'required|callback_select_default');
             $this->form_validation->set_rules('pais', 'País del Banco', 'required|callback_select_default');
@@ -58,6 +59,7 @@ class Cuenta extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             $cuenta = $this->input->post('cuenta');
             $t_cuenta = $this->input->post('t_cuenta');
             $banco = $this->input->post('banco');
@@ -90,6 +92,7 @@ class Cuenta extends CI_Controller {
 
     public function llena_banco_pais() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $bancos = $this->select_model->banco_pais($pais);
@@ -130,6 +133,7 @@ class Cuenta extends CI_Controller {
 
     public function insertar_asignar_empleado() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             //Validamos que haya seleccionado al menos una sede
             $checkbox = $this->input->post('empleados_checkbox');
             if ($checkbox != TRUE) {
@@ -172,6 +176,7 @@ class Cuenta extends CI_Controller {
 
     public function anular_asignar_empleado() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             list($id_encargado, $dni_encargado, $cuenta) = explode("-", $this->input->post('empleado_cuenta'));
             $sede = $this->select_model->empleado($id_encargado, $dni_encargado)->sede_ppal;
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
@@ -229,6 +234,7 @@ class Cuenta extends CI_Controller {
 
     public function llena_checkbox_empleados_cuenta() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('cuenta')) && ($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $cuenta = $this->input->post('cuenta');
                 $id_responsable = $this->input->post('idResposable');
@@ -255,6 +261,7 @@ class Cuenta extends CI_Controller {
 
     public function llena_empleados_cuenta_banco() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('cuenta')) {
                 $cuenta = $this->input->post('cuenta');
                 $empleados = $this->select_model->empleados_cuenta_bancaria($cuenta);
@@ -298,6 +305,7 @@ class Cuenta extends CI_Controller {
 
     public function insertar_asignar_sede() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             //Validamos que haya seleccionado al menos una sede
             $checkbox = $this->input->post('sede_checkbox');
             if ($checkbox != TRUE) {
@@ -338,6 +346,7 @@ class Cuenta extends CI_Controller {
 
     public function anular_asignar_sede() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             list($sede, $cuenta) = explode("-", $this->input->post('sede_cuenta'));
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
             $id_responsable = $this->input->post('id_responsable');
@@ -367,6 +376,7 @@ class Cuenta extends CI_Controller {
 
     public function llena_sedes_cuenta_banco() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('cuenta')) {
                 $cuenta = $this->input->post('cuenta');
                 $sedes = $this->select_model->sedes_cuenta_bancaria($cuenta);
@@ -392,6 +402,7 @@ class Cuenta extends CI_Controller {
 
     public function llena_checkbox_sedes_cuenta() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('cuenta')) && ($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $cuenta = $this->input->post('cuenta');
                 $id_responsable = $this->input->post('idResposable');

@@ -33,6 +33,7 @@ class Proveedor extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('razon_social', 'Razón Social', 'required|trim|xss_clean|max_length[100]');
@@ -63,6 +64,7 @@ class Proveedor extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');
             $d_v = $this->input->post('d_v');
@@ -109,6 +111,7 @@ class Proveedor extends CI_Controller {
 
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $provincias = $this->select_model->provincia_pais($pais);
@@ -129,6 +132,7 @@ class Proveedor extends CI_Controller {
 
     public function llena_ciudad() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('provincia')) && ($this->input->post('provincia') != '{id}') && ($this->input->post('provincia') != 'default')) {
                 $provincia = $this->input->post('provincia');
                 $ciudades = $this->select_model->ciudad_provincia($provincia);

@@ -36,6 +36,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
 
     public function editar_cargo_empleado() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('cargo', 'Nuevo Cargo', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             if ($this->form_validation->run() == FALSE) {
@@ -98,6 +99,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
 
     public function editar_jefe_empleado() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('jefe', 'Nuevo Jefe', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             if ($this->form_validation->run() == FALSE) {
@@ -142,6 +144,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
     
     public function llena_empleado_rrpp_sedes_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -164,6 +167,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
     
     public function llena_cargo_empleado() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
@@ -197,6 +201,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
     
     public function llena_jefe_empleado() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $jefe = $this->select_model->empleado_jefe($id_empleado, $dni_empleado);
@@ -220,6 +225,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
     
     public function llena_jefe_faltante() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado_jefe')) {
                 list($id_empleado, $dni_empleado, $id_jefe, $dni_jefe) = explode("-", $this->input->post('empleado_jefe'));
                 //Sacamos el empleado de las lista de jefes
@@ -243,6 +249,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
     
     public function llena_cargo_genero_cargo_old() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('genero_cargo')) {
                 list($genero, $cargo_old) = explode("-", $this->input->post('genero_cargo'));
                 //Sacamos el cargo que ya tiene para no mostrarlo

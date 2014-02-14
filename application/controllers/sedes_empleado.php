@@ -30,6 +30,7 @@ class Sedes_empleado extends CI_Controller {
 
     public function insertar_sede_secundaria() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             //Validamos que haya seleccionado al menos una sede
             $checkbox = $this->input->post('sede_checkbox');
             if ($checkbox != TRUE) {
@@ -70,6 +71,7 @@ class Sedes_empleado extends CI_Controller {
 
     public function editar_sede_ppal() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('sede_ppal', 'sede_ppal', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             if ($this->form_validation->run() == FALSE) {
@@ -114,6 +116,7 @@ class Sedes_empleado extends CI_Controller {
 
     public function anular_sede_secundaria() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             list($sede_secundaria, $id_empleado, $dni_empleado) = explode("-", $this->input->post('id_empleado_sede'));
             $sede_ppal = $this->input->post('sede_ppal');
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
@@ -144,6 +147,7 @@ class Sedes_empleado extends CI_Controller {
 
     public function llena_empleado_sede_ppal() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $sede_ppal = $this->select_model->empleado_sede_ppal($id_empleado, $dni_empleado);
@@ -167,6 +171,7 @@ class Sedes_empleado extends CI_Controller {
 
     public function llena_empleado_sede_secundaria() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $sedes_secundarias = $this->select_model->empleado_sede_secundaria($id_empleado, $dni_empleado);
@@ -192,6 +197,7 @@ class Sedes_empleado extends CI_Controller {
 
     public function llena_checkbox_secundarias() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $id_responsable = $this->input->post('idResposable');
@@ -218,6 +224,7 @@ class Sedes_empleado extends CI_Controller {
 
     public function llena_sede_ppal_faltante() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('sede_ppal')) {
                 $sede_ppal = $this->input->post('sede_ppal');
                 $id_responsable = $this->input->post('idResposable');

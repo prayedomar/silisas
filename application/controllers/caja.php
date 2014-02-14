@@ -31,6 +31,7 @@ class Caja extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
             $this->form_validation->set_rules('sede', 'Sede', 'required|callback_select_default');
             $this->form_validation->set_rules('t_caja', 'Tipo de Caja', 'required|callback_select_default');
             $this->form_validation->set_rules('empleado', 'Empleado Encargado', 'required|callback_select_default');
@@ -47,6 +48,7 @@ class Caja extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+            $this->escapar($_POST);
             $sede = $this->input->post('sede');
             $t_caja = $this->input->post('t_caja');
             list($id_encargado, $dni_encargado) = explode("-", $this->input->post('empleado'));
@@ -75,6 +77,7 @@ class Caja extends CI_Controller {
 
     public function llena_t_caja_sede() {
         if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
             if (($this->input->post('sede')) && ($this->input->post('sede') != '{id}') && ($this->input->post('sede') != 'default')) {
                 $sede = $this->input->post('sede');
                 $t_cajas = $this->select_model->t_caja_faltante($sede);
@@ -94,6 +97,7 @@ class Caja extends CI_Controller {
     }
 
     public function llena_encargado_sede() {
+        $this->escapar($_POST);
         if ($this->input->is_ajax_request()) {
             if (($this->input->post('sede')) && ($this->input->post('sede') != '{id}') && ($this->input->post('sede') != 'default')) {
                 $sede = $this->input->post('sede');

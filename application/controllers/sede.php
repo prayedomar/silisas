@@ -105,6 +105,7 @@ class Sede extends CI_Controller {
 
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $provincias = $this->select_model->provincia_pais($pais);
@@ -125,6 +126,7 @@ class Sede extends CI_Controller {
 
     public function llena_ciudad() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);
             if (($this->input->post('provincia')) && ($this->input->post('provincia') != '{id}') && ($this->input->post('provincia') != 'default')) {
                 $provincia = $this->input->post('provincia');
                 $ciudades = $this->select_model->ciudad_provincia($provincia);

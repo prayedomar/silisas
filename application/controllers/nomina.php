@@ -43,6 +43,7 @@ class Nomina extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('periodicidad', 'Periodicidad', 'required|callback_select_default');
             $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'required|xss_clean|callback_fecha_valida');
@@ -102,6 +103,7 @@ class Nomina extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $t_periodicidad = $this->input->post('periodicidad');
             $fecha_inicio = $this->input->post('fecha_inicio');
@@ -190,6 +192,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_contrato_laboral() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $contrato = $this->select_model->contrato_laboral_empleado($id_empleado, $dni_empleado);
@@ -240,6 +243,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_ultimas_nominas() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $nominas = $this->select_model->ultimas_nominas_empleado($id_empleado, $dni_empleado);
@@ -283,6 +287,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_adelantos() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $adelantos = $this->select_model->adelanto_vigente_empleado($id_empleado, $dni_empleado);
@@ -326,6 +331,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_prestamos() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $prestamos = $this->select_model->prestamo_vigente_beneficiario($id_empleado, $dni_empleado);
@@ -372,6 +378,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_ausencias() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('empleado')) && ($this->input->post('fechaInicio')) && ($this->input->post('fechaFin'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $fecha_inicio_nomina = $this->input->post('fechaInicio');
@@ -454,6 +461,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_seguridad_social() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $seguridades = $this->select_model->concepto_nomina_seguridad_social($id_empleado, $dni_empleado);
@@ -495,6 +503,7 @@ class Nomina extends CI_Controller {
 
     public function llena_concepto_pdtes_rrpp() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $conceptos = $this->select_model->concepto_nomina_pdte_rrpp($id_empleado, $dni_empleado);
@@ -568,6 +577,7 @@ class Nomina extends CI_Controller {
 
     public function llena_concepto_cotidiano() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $i = $this->input->post('idUltimoConcepto');
@@ -658,6 +668,7 @@ class Nomina extends CI_Controller {
 
     public function llena_agregar_concepto() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $i = $this->input->post('idUltimoConcepto') + 1;
@@ -728,6 +739,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_t_concepto() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('tConceptoNomina')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $id_t_concepto = $this->input->post('tConceptoNomina');
@@ -771,6 +783,7 @@ class Nomina extends CI_Controller {
 
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -800,6 +813,7 @@ class Nomina extends CI_Controller {
 
     public function llena_periodicidad_nomina() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $periodicidades = $this->select_model->periodicidad_nomina($id_empleado, $dni_empleado);
@@ -820,6 +834,7 @@ class Nomina extends CI_Controller {
 
     public function validar_fechas_periodicidad() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('periodicidad')) && ($this->input->post('fechaInicio')) && ($this->input->post('fechaFin'))) {
                 $periodicidad = $this->input->post('periodicidad');
                 $fecha_inicio = $this->input->post('fechaInicio');
@@ -879,6 +894,7 @@ class Nomina extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

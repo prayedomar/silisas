@@ -43,6 +43,7 @@ class Factura extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('periodicidad', 'Periodicidad', 'required|callback_select_default');
             $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'required|xss_clean|callback_fecha_valida');
@@ -102,6 +103,7 @@ class Factura extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $t_periodicidad = $this->input->post('periodicidad');
             $fecha_inicio = $this->input->post('fecha_inicio');

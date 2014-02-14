@@ -31,6 +31,7 @@ class Adelanto extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             //coloca maxlength en 15, para incluir los puntos de miles 888.777.666.273
             $this->form_validation->set_rules('total', 'Valor del Adelanto', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
@@ -66,6 +67,7 @@ class Adelanto extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
@@ -110,6 +112,7 @@ class Adelanto extends CI_Controller {
     
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -139,6 +142,7 @@ class Adelanto extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

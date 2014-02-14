@@ -32,6 +32,7 @@ class Llamado_atencion extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('t_falta_laboral', 'Falta Laboral', 'required');
             $this->form_validation->set_rules('t_sancion', 'Sanción a Imponer', 'required|callback_select_default');
@@ -60,6 +61,7 @@ class Llamado_atencion extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $t_falta_laboral = $this->input->post('t_falta_laboral');
             $t_sancion = $this->input->post('t_sancion');
@@ -207,6 +209,7 @@ class Llamado_atencion extends CI_Controller {
 
     public function llena_falta_laboral() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $faltas = $this->select_model->t_falta_laboral();
             if (($faltas == TRUE)) {
                 foreach ($faltas as $fila) {

@@ -32,6 +32,7 @@ class Ingreso extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('t_ingreso', 'Tipo de Ingreso', 'required|callback_select_default');
             $this->form_validation->set_rules('t_depositante', 'Tipo de Usuario Depositante', 'required|callback_select_default');
             $this->form_validation->set_rules('dni_depositante', 'Tipo Id. Depositante', 'required|callback_select_default');
@@ -127,6 +128,7 @@ class Ingreso extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             $t_ingreso = $this->input->post('t_ingreso');
             $t_depositante = $this->input->post('t_depositante');
             $dni_depositante = $this->input->post('dni_depositante');
@@ -185,6 +187,7 @@ class Ingreso extends CI_Controller {
     
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -214,6 +217,7 @@ class Ingreso extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

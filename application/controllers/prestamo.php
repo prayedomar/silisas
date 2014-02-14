@@ -34,6 +34,7 @@ class Prestamo extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('t_beneficiario', 'Tipo de Usuario Beneficiario', 'required|callback_select_default');
             //coloca maxlength en 18, para incluir los puntos de miles 888,777,666,273,23
             $this->form_validation->set_rules('total', 'Valor del Prestamo', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
@@ -82,6 +83,7 @@ class Prestamo extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             $t_beneficiario = $this->input->post('t_beneficiario');
             if ($t_beneficiario == 1) {
                 //En el caso en que el beneficiario sea un empleado
@@ -153,6 +155,7 @@ class Prestamo extends CI_Controller {
 
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -182,6 +185,7 @@ class Prestamo extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

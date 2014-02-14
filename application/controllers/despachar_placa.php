@@ -24,6 +24,7 @@ class Despachar_placa extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
+        $this->escapar($_POST);            
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             $placas_checkbox = $this->input->post('placas_checkbox');
             $error_check_placas = "";
@@ -44,6 +45,7 @@ class Despachar_placa extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
+        $this->escapar($_POST);            
             $placas_checkbox = $this->input->post('placas_checkbox');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
@@ -95,7 +97,6 @@ class Despachar_placa extends CI_Controller {
             redirect(base_url());
         }
     }
-    
-    //Metodos para Consultar    
+     
 
 }
