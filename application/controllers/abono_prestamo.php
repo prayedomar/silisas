@@ -37,7 +37,7 @@ class Abono_prestamo extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('t_beneficiario', 'Tipo de Usuario Beneficiario', 'required|callback_select_default');
             //Si escogió empleado o cliente, valido los campos
             if ($this->input->post('t_beneficiario') == '1') {
@@ -94,7 +94,7 @@ class Abono_prestamo extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             list($prefijo_prestamo, $id_prestamo) = explode("-", $this->input->post('prestamo'));
             $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
             $cant_dias_mora = $this->input->post('cant_dias_mora');
@@ -123,33 +123,41 @@ class Abono_prestamo extends CI_Controller {
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_abono = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_abono = ($this->select_model->nextId_abono_prestamo($prefijo_abono)->id) + 1;
-
-            $error = $this->insert_model->abono_prestamo($prefijo_abono, $id_abono, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $t_trans = 4; //Abono a prestamo
+            $credito_debito = 1; //Credito            
 
             $data["tab"] = "crear_abono_prestamo";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_prestamo/crear";
             $data['msn_recrear'] = "Crear otro Abono a Prestamo";
+
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                //Si no hubo error entonces si el saldo es igual al total abonado, entonces lo colocamos paz y salvo
-                $abono_maximo = $this->input->post('abono_maximo');
-                if ($subtotal == $abono_maximo) {
-                    $new_estado = 3; //Paz y Salvo Voluntario   
-                    $this->update_model->prestamo_estado($prefijo_prestamo, $id_prestamo, $new_estado);
+                $error1 = $this->insert_model->abono_prestamo($prefijo_abono, $id_abono, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1;
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    //Si no hubo error entonces si el saldo es igual al total abonado, entonces lo colocamos paz y salvo
+                    $abono_maximo = $this->input->post('abono_maximo');
+                    if ($subtotal == $abono_maximo) {
+                        $new_estado = 3; //Paz y Salvo Voluntario   
+                        $this->update_model->prestamo_estado($prefijo_prestamo, $id_prestamo, $new_estado);
+                    }
+                    $this->parser->parse('trans_success', $data);
                 }
-                $this->parser->parse('trans_success', $data);
             }
         } else {
             redirect(base_url());
         }
     }
-    
+
     public function llena_empleado_prestamo() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -167,11 +175,11 @@ class Abono_prestamo extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }   
-    
+    }
+
     public function llena_cliente_prestamo() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -189,11 +197,11 @@ class Abono_prestamo extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }  
-    
+    }
+
     public function llena_prestamo_beneficiario() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('beneficiario')) && ($this->input->post('beneficiario') != '{id}-{dni}') && ($this->input->post('beneficiario') != 'default')) {
                 list($id_beneficiario, $dni_beneficiario) = explode("-", $this->input->post('beneficiario'));
                 $prestamos = $this->select_model->prestamo_vigente_beneficiario($id_beneficiario, $dni_beneficiario);
@@ -218,11 +226,11 @@ class Abono_prestamo extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_cuotas_prestamo_pdtes() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('prestamo')) {
                 list($prefijo_prestamo, $id_prestamo) = explode("-", $this->input->post('prestamo'));
                 $matriz_prestamo = $this->matriz_prestamo($prefijo_prestamo, $id_prestamo);
@@ -303,7 +311,7 @@ class Abono_prestamo extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     function matriz_prestamo($prefijo_prestamo, $id_prestamo) {
         $prestamo = $this->select_model->prestamo_prefijo_id($prefijo_prestamo, $id_prestamo);
         if ($prestamo == TRUE) {
@@ -405,11 +413,11 @@ class Abono_prestamo extends CI_Controller {
         } else {
             return false;
         }
-    }    
+    }
 
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -439,7 +447,7 @@ class Abono_prestamo extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -463,6 +471,6 @@ class Abono_prestamo extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }
 
 }

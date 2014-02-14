@@ -34,7 +34,7 @@ class Abono_adelanto extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('adelanto', 'Adelanto a Abonar', 'required');
             $this->form_validation->set_rules('total', 'Valor del Abono', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
@@ -76,7 +76,7 @@ class Abono_adelanto extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             list($prefijo_adelanto, $id_adelanto, $saldo) = explode("-", $this->input->post('adelanto'));
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
@@ -103,23 +103,31 @@ class Abono_adelanto extends CI_Controller {
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_abono = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_abono = ($this->select_model->nextId_abono_adelanto($prefijo_abono)->id) + 1;
-
-            $error = $this->insert_model->abono_adelanto($prefijo_abono, $id_abono, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $t_trans = 3; //Abono a adelanto
+            $credito_debito = 1; //Credito
 
             $data["tab"] = "crear_abono_adelanto";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_adelanto/crear";
             $data['msn_recrear'] = "Crear otro Abono a Adelanto";
+
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                //Si no hubo error entonces si el saldo es igual al total abonado, entonces lo colocamos paz y salvo
-                if ($total == $saldo) {
-                    $new_estado = 3; //Paz y Salvo Voluntario   
-                    $this->update_model->adelanto_estado($prefijo_adelanto, $id_adelanto, $new_estado);
+                $error1 = $this->insert_model->abono_adelanto($prefijo_abono, $id_abono, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1;
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    //Si no hubo error entonces si el saldo es igual al total abonado, entonces lo colocamos paz y salvo
+                    if ($total == $saldo) {
+                        $new_estado = 3; //Paz y Salvo Voluntario   
+                        $this->update_model->adelanto_estado($prefijo_adelanto, $id_adelanto, $new_estado);
+                    }
+                    $this->parser->parse('trans_success', $data);
                 }
-                $this->parser->parse('trans_success', $data);
             }
         } else {
             redirect(base_url());
@@ -128,7 +136,7 @@ class Abono_adelanto extends CI_Controller {
 
     public function llena_empleado_adelanto() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -150,7 +158,7 @@ class Abono_adelanto extends CI_Controller {
 
     public function llena_adelanto_empleado() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('empleado')) && ($this->input->post('empleado') != "default")) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $adelantos = $this->select_model->adelanto_vigente_empleado($id_empleado, $dni_empleado);
@@ -178,7 +186,7 @@ class Abono_adelanto extends CI_Controller {
 
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -208,7 +216,7 @@ class Abono_adelanto extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

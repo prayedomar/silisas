@@ -30,7 +30,7 @@ class Egreso extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('t_egreso', 'Tipo de Egreso', 'required|callback_select_default');
             $this->form_validation->set_rules('t_beneficiario', 'Tipo de Usuario Beneficiario', 'required|callback_select_default');
             $this->form_validation->set_rules('dni_beneficiario', 'Tipo Id. Beneficiario', 'required|callback_select_default');
@@ -126,7 +126,7 @@ class Egreso extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $t_egreso = $this->input->post('t_egreso');
             $t_beneficiario = $this->input->post('t_beneficiario');
             $dni_beneficiario = $this->input->post('dni_beneficiario');
@@ -164,18 +164,26 @@ class Egreso extends CI_Controller {
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_egreso = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_egreso = ($this->select_model->nextId_egreso($prefijo_egreso)->id) + 1;
-
-            $error = $this->insert_model->egreso($prefijo_egreso, $id_egreso, $t_egreso, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
+            $t_trans = 6; //Egreso
+            $credito_debito = 0; //Debito            
 
             $data["tab"] = "crear_egreso";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "egreso/crear";
             $data['msn_recrear'] = "Crear otro Egreso";
+
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_egreso, $id_egreso, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $this->parser->parse('trans_success', $data);
+                $error1 = $this->insert_model->egreso($prefijo_egreso, $id_egreso, $t_egreso, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1;
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $this->parser->parse('trans_success', $data);
+                }
             }
         } else {
             redirect(base_url());
@@ -184,7 +192,7 @@ class Egreso extends CI_Controller {
 
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -214,7 +222,7 @@ class Egreso extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

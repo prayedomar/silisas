@@ -43,7 +43,7 @@ class Nomina extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('periodicidad', 'Periodicidad', 'required|callback_select_default');
             $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'required|xss_clean|callback_fecha_valida');
@@ -81,10 +81,10 @@ class Nomina extends CI_Controller {
                     if ($fila == "default") {
                         $error_conceptos .= "<p>El campo Tipo Concepto, es obligatorio.</p>";
                     }
-                    if (($cantidad[$i] <= '0')||($cantidad[$i] == '')) {
+                    if (($cantidad[$i] <= '0') || ($cantidad[$i] == '')) {
                         $error_conceptos .= "<p>El campo Cantidad, debe ser mayor a cero.</p>";
                     }
-                    if (($valor_unitario[$i] <= '0')||($valor_unitario[$i] == '')) {
+                    if (($valor_unitario[$i] <= '0') || ($valor_unitario[$i] == '')) {
                         $error_conceptos .= "<p>El campo Valor Unitario, debe ser mayor a cero.</p>";
                     }
                     $i++;
@@ -103,7 +103,7 @@ class Nomina extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $t_periodicidad = $this->input->post('periodicidad');
             $fecha_inicio = $this->input->post('fecha_inicio');
@@ -132,57 +132,64 @@ class Nomina extends CI_Controller {
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_nomina = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
+            $t_trans = 9; //Nomina Laboral
+            $credito_debito = 0; //Debito             
 
             $data["tab"] = "crear_nomina";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "nomina/crear";
             $data['msn_recrear'] = "Crear otra Nómina";
 
-            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
-
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nomina, $id_nomina, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                //traemos los campos de los conceptos
-                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $id_concepto = $this->input->post('id_concepto');
-                $t_concepto_nomina = $this->input->post('t_concepto_nomina');
-                $detalle = $this->input->post('detalle');
-                $cantidad = $this->input->post('cantidad');
-                $valor_unitario = $this->input->post('valor_unitario');
-                if (($rrpp_nuevo == TRUE) && ($id_concepto == TRUE) && ($t_concepto_nomina == TRUE) && ($detalle == TRUE) && ($cantidad == TRUE) && ($valor_unitario == TRUE)) {
-                    $i = 0;
-                    foreach ($rrpp_nuevo as $fila) {
-                        //En el caso que sean conceptos pendiente de nomina por ser actualizados a OK
-                        if ($fila == '1') {
-                            //ACtualizamos los conceptos de rrpp a 1: OK
-                            $error1 = $this->update_model->concepto_nomina_estado($id_concepto[$i], 1);
-                            if (isset($error1)) {
-                                $data['trans_error'] = $error1;
-                                $this->parser->parse('trans_error', $data);
-                                return;
-                            }
-                            //en el caso en que hayan que crear los conceptos
-                        } else {
-                            $t_concepto_temp = $t_concepto_nomina[$i];
-                            $detalle_temp = strtolower($detalle[$i]);
-                            $cantidad_temp = $cantidad[$i];
-                            $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
-                            $error2 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
-                            if (isset($error2)) {
-                                $data['trans_error'] = $error2;
-                                $this->parser->parse('trans_error', $data);
-                                return;
-                            }
-                        }
-                        $i++;
-                    }
-                    $this->parser->parse('trans_success', $data);
-                } else {
-                    $data['trans_error'] = "<p>No llegaron correctamente los conceptos al servidor. Comuníquele este error a soporte de sistemas.</p>";
+                $error1 = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1;
                     $this->parser->parse('trans_error', $data);
-                    return;
+                } else {
+                    //traemos los campos de los conceptos
+                    $rrpp_nuevo = $this->input->post('rrpp_nuevo');
+                    $id_concepto = $this->input->post('id_concepto');
+                    $t_concepto_nomina = $this->input->post('t_concepto_nomina');
+                    $detalle = $this->input->post('detalle');
+                    $cantidad = $this->input->post('cantidad');
+                    $valor_unitario = $this->input->post('valor_unitario');
+                    if (($rrpp_nuevo == TRUE) && ($id_concepto == TRUE) && ($t_concepto_nomina == TRUE) && ($detalle == TRUE) && ($cantidad == TRUE) && ($valor_unitario == TRUE)) {
+                        $i = 0;
+                        foreach ($rrpp_nuevo as $fila) {
+                            //En el caso que sean conceptos pendiente de nomina por ser actualizados a OK
+                            if ($fila == '1') {
+                                //ACtualizamos los conceptos de rrpp a 1: OK
+                                $error2 = $this->update_model->concepto_nomina_estado($id_concepto[$i], 1);
+                                if (isset($error2)) {
+                                    $data['trans_error'] = $error2;
+                                    $this->parser->parse('trans_error', $data);
+                                    return;
+                                }
+                                //en el caso en que hayan que crear los conceptos
+                            } else {
+                                $t_concepto_temp = $t_concepto_nomina[$i];
+                                $detalle_temp = strtolower($detalle[$i]);
+                                $cantidad_temp = $cantidad[$i];
+                                $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
+                                $error3 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                                if (isset($error3)) {
+                                    $data['trans_error'] = $error3;
+                                    $this->parser->parse('trans_error', $data);
+                                    return;
+                                }
+                            }
+                            $i++;
+                        }
+                        $this->parser->parse('trans_success', $data);
+                    } else {
+                        $data['trans_error'] = "<p>No llegaron correctamente los conceptos al servidor. Comuníquele este error a soporte de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                        return;
+                    }
                 }
             }
         } else {
@@ -192,7 +199,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_contrato_laboral() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $contrato = $this->select_model->contrato_laboral_empleado($id_empleado, $dni_empleado);
@@ -243,7 +250,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_ultimas_nominas() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $nominas = $this->select_model->ultimas_nominas_empleado($id_empleado, $dni_empleado);
@@ -287,7 +294,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_adelantos() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $adelantos = $this->select_model->adelanto_vigente_empleado($id_empleado, $dni_empleado);
@@ -331,7 +338,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_prestamos() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $prestamos = $this->select_model->prestamo_vigente_beneficiario($id_empleado, $dni_empleado);
@@ -378,7 +385,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_ausencias() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('empleado')) && ($this->input->post('fechaInicio')) && ($this->input->post('fechaFin'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $fecha_inicio_nomina = $this->input->post('fechaInicio');
@@ -461,7 +468,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_seguridad_social() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $seguridades = $this->select_model->concepto_nomina_seguridad_social($id_empleado, $dni_empleado);
@@ -503,7 +510,7 @@ class Nomina extends CI_Controller {
 
     public function llena_concepto_pdtes_rrpp() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $conceptos = $this->select_model->concepto_nomina_pdte_rrpp($id_empleado, $dni_empleado);
@@ -577,7 +584,7 @@ class Nomina extends CI_Controller {
 
     public function llena_concepto_cotidiano() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $i = $this->input->post('idUltimoConcepto');
@@ -668,7 +675,7 @@ class Nomina extends CI_Controller {
 
     public function llena_agregar_concepto() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idUltimoConcepto')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $i = $this->input->post('idUltimoConcepto') + 1;
@@ -739,7 +746,7 @@ class Nomina extends CI_Controller {
 
     public function llena_info_t_concepto() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('tConceptoNomina')) && ($this->input->post('empleado'))) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $id_t_concepto = $this->input->post('tConceptoNomina');
@@ -783,7 +790,7 @@ class Nomina extends CI_Controller {
 
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -813,7 +820,7 @@ class Nomina extends CI_Controller {
 
     public function llena_periodicidad_nomina() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $periodicidades = $this->select_model->periodicidad_nomina($id_empleado, $dni_empleado);
@@ -834,7 +841,7 @@ class Nomina extends CI_Controller {
 
     public function validar_fechas_periodicidad() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('periodicidad')) && ($this->input->post('fechaInicio')) && ($this->input->post('fechaFin'))) {
                 $periodicidad = $this->input->post('periodicidad');
                 $fecha_inicio = $this->input->post('fechaInicio');
@@ -894,7 +901,7 @@ class Nomina extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

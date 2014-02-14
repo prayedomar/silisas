@@ -204,14 +204,14 @@
                                     <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
                                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                                     <li><a href="<?= base_url() ?>factura/crear">Factura</a></li>
+                                    <li><a href="#">Recibo de Caja</a></li>                                    
                                     <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
                                     <li><a href="#">Nota Credito</a></li>
                                     <li><a href="#">Pago Proveedor</a></li>
-                                    <li><a href="#">Cuentas por Pagar</a></li>
-                                    <li><a href="#">Recibo de Caja</a></li>
+                                    <!--<li><a href="#">Cuentas por Pagar</a></li>-->
                                     <li><a href="#">Retención en la fuente</a></li>
                                     <li><a href="#">Transferencia Intersede</a></li>
-                                    <li><a href="#">Informe de Datacredito</a></li>
+                                    <!--<li><a href="#">Informe de Datacredito</a></li>-->
                                 </ul>
                             </li>
                             <li class="col-sm-3">

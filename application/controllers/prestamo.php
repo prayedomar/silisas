@@ -34,7 +34,7 @@ class Prestamo extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('t_beneficiario', 'Tipo de Usuario Beneficiario', 'required|callback_select_default');
             //coloca maxlength en 18, para incluir los puntos de miles 888,777,666,273,23
             $this->form_validation->set_rules('total', 'Valor del Prestamo', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
@@ -83,7 +83,7 @@ class Prestamo extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $t_beneficiario = $this->input->post('t_beneficiario');
             if ($t_beneficiario == 1) {
                 //En el caso en que el beneficiario sea un empleado
@@ -125,28 +125,36 @@ class Prestamo extends CI_Controller {
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_prestamo = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_prestamo = ($this->select_model->nextId_prestamo($prefijo_prestamo)->id) + 1;
-
-            $error = $this->insert_model->prestamo($prefijo_prestamo, $id_prestamo, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $t_trans = 2; //Prestamo
+            $credito_debito = 0; //Debito
 
             $data["tab"] = "crear_prestamo";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "prestamo/crear";
             $data['msn_recrear'] = "Crear otro Prestamo";
+
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_prestamo, $id_prestamo, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                //Si creo el prestamo entonces creamos el plan pagos de prestamo
-                for ($i = 1; $i <= $cant_cuotas; $i++) {
-                    $fecha_pago = date("Y-m-d", strtotime("$fecha_desembolso +$i month"));
-                    $error1 = $this->insert_model->plan_pago_prestamo($prefijo_prestamo, $id_prestamo, $i, $fecha_pago, 0);
-                    if (isset($error1)) {
-                        $data['trans_error'] = $error2;
-                        $this->parser->parse('trans_error', $data);
-                        return;
+                $error1 = $this->insert_model->prestamo($prefijo_prestamo, $id_prestamo, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1;
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    //Si creo el prestamo entonces creamos el plan pagos de prestamo
+                    for ($i = 1; $i <= $cant_cuotas; $i++) {
+                        $fecha_pago = date("Y-m-d", strtotime("$fecha_desembolso +$i month"));
+                        $error1 = $this->insert_model->plan_pago_prestamo($prefijo_prestamo, $id_prestamo, $i, $fecha_pago, 0);
+                        if (isset($error1)) {
+                            $data['trans_error'] = $error2;
+                            $this->parser->parse('trans_error', $data);
+                            return;
+                        }
                     }
+                    $this->parser->parse('trans_success', $data);
                 }
-                $this->parser->parse('trans_success', $data);
             }
         } else {
             redirect(base_url());
@@ -155,7 +163,7 @@ class Prestamo extends CI_Controller {
 
     public function llena_cuenta_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -185,7 +193,7 @@ class Prestamo extends CI_Controller {
 
     public function llena_caja_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

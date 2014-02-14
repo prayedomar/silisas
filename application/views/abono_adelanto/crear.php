@@ -159,52 +159,62 @@
         $("#total").removeAttr("readonly");
     });
 
-    //Llena cuentas del responsable
-    $.post('{action_llena_cuenta_responsable}', {
-        idResposable: '{id_responsable}',
-        dniResposable: '{dni_responsable}'
-    }, function(data) {
-        $("#tbody_cuenta_bancaria").html(data);
-    });
-
-    //Habilita las cajas y las cuentas
-    $("table").delegate("#cuenta", "change", function() {
-        var total = new Number($('#total').val().split(",").join(""));
-        var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
-        $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
-        $('#valor_consignado').change();
-        $("#valor_consignado").removeAttr("readonly");
-    });
-
-    $(".form-group").delegate("#valor_consignado", "blur", function() {
-        var total = new Number($('#total').val().split(",").join(""));
-        var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
-        $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
-        $('#efectivo_ingresado').change();
-    });
-
-    //Llena cajas del responsable
+    //Llenamos la cajas del responsable
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',
         dniResposable: '{dni_responsable}'
     }, function(data) {
         $("#tbody_caja_efectivo").html(data);
     });
-
-    //Cargar div de valor retirado cuenta bancaria
+    //Llenamos las cajas del responsable
+    $.post('{action_llena_cuenta_responsable}', {
+        idResposable: '{id_responsable}',
+        dniResposable: '{dni_responsable}'
+    }, function(data) {
+        $("#tbody_cuenta_bancaria").html(data);
+    });
+    //Habilitamos input de efectivo retirado de las cajas
     $("table").delegate("#caja", "change", function() {
         var total = new Number($('#total').val().split(",").join(""));
-        var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
-        $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
+        if ($('#valor_consignado').is('[readonly]')) {
+            $('#efectivo_ingresado').attr('value', ((total).toFixed(2)));
+        } else {
+            var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
+            $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
+        }
         $('#efectivo_ingresado').change();
         $("#efectivo_ingresado").removeAttr("readonly");
     });
-
-    $(".form-group").delegate("#efectivo_ingresado", "blur", function() {
+    //Habilitamos inputde valor retirado de las cuentas
+    $("table").delegate("#cuenta", "change", function() {
         var total = new Number($('#total').val().split(",").join(""));
-        var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
-        $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
+        if ($('#efectivo_ingresado').is('[readonly]')) {
+            $('#valor_consignado').attr('value', ((total).toFixed(2)));
+        } else {
+            var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
+            $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
+        }
         $('#valor_consignado').change();
+        $("#valor_consignado").removeAttr("readonly");
+    });
+    //Calcula el valor contrario al modificar el valor retirado.
+    $(".form-group").delegate("#valor_consignado", "blur", function() {
+        //Preguntamos si el valor retirado es readonly
+        if (!($('#efectivo_ingresado').is('[readonly]'))) {
+            var total = new Number($('#total').val().split(",").join(""));
+            var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
+            $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
+        }
+        $('#efectivo_ingresado').change();        
+    });
+    //Calcula el valor contrario al modificar el efectivo retirado.
+    $(".form-group").delegate("#efectivo_ingresado", "blur", function() {
+        if (!($('#valor_consignado').is('[readonly]'))) {
+            var total = new Number($('#total').val().split(",").join(""));
+            var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
+            $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
+        }
+        $('#valor_consignado').change();        
     });
 
 </script>

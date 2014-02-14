@@ -503,56 +503,63 @@
         });
     });
 
-
-
-    //Cargamos la info de las cuentas para el pago
-    $.post('{action_llena_cuenta_responsable}', {
-        idResposable: '{id_responsable}',
-        dniResposable: '{dni_responsable}'
-    }, function(data) {
-        $("#tbody_cuenta_bancaria").html(data);
-    });
-
-    //Habilita las cajas y las cuentas
-    $("table").delegate("#cuenta", "change", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-        $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
-        $('#valor_retirado').change();
-        $("#valor_retirado").removeAttr("readonly");
-    });
-
-    $(".form-group").delegate("#valor_retirado", "blur", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-        $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
-        $('#efectivo_retirado').change();
-    });
-
+    //Llenamos la cajas del responsable
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',
         dniResposable: '{dni_responsable}'
     }, function(data) {
         $("#tbody_caja_efectivo").html(data);
     });
-
-    //Cargar div de valor retirado cuenta bancaria
+    //Llenamos las cajas del responsable
+    $.post('{action_llena_cuenta_responsable}', {
+        idResposable: '{id_responsable}',
+        dniResposable: '{dni_responsable}'
+    }, function(data) {
+        $("#tbody_cuenta_bancaria").html(data);
+    });
+    //Habilitamos input de efectivo retirado de las cajas
     $("table").delegate("#caja", "change", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-        $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
+        var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
+        if ($('#valor_retirado').is('[readonly]')) {
+            $('#efectivo_retirado').attr('value', ((total_nomina).toFixed(2)));
+        } else {
+            var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
+            $('#efectivo_retirado').attr('value', ((total_nomina - valor_retirado).toFixed(2)));
+        }
         $('#efectivo_retirado').change();
         $("#efectivo_retirado").removeAttr("readonly");
     });
-
-    $(".form-group").delegate("#efectivo_retirado", "blur", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-        $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
+    //Habilitamos inputde valor retirado de las cuentas
+    $("table").delegate("#cuenta", "change", function() {
+        var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
+        if ($('#efectivo_retirado').is('[readonly]')) {
+            $('#valor_retirado').attr('value', ((total_nomina).toFixed(2)));
+        } else {
+            var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
+            $('#valor_retirado').attr('value', ((total_nomina - efectivo_retirado).toFixed(2)));
+        }
         $('#valor_retirado').change();
-    }
-    );
-
+        $("#valor_retirado").removeAttr("readonly");
+    });
+    //Calcula el valor contrario al modificar el valor retirado.
+    $(".form-group").delegate("#valor_retirado", "blur", function() {
+        //Preguntamos si el valor retirado es readonly
+        if (!($('#efectivo_retirado').is('[readonly]'))) {
+            var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
+            var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
+            $('#efectivo_retirado').attr('value', ((total_nomina - valor_retirado).toFixed(2)));
+        }
+        $('#efectivo_retirado').change();        
+    });
+    //Calcula el valor contrario al modificar el efectivo retirado.
+    $(".form-group").delegate("#efectivo_retirado", "blur", function() {
+        if (!($('#valor_retirado').is('[readonly]'))) {
+            var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
+            var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
+            $('#valor_retirado').attr('value', ((total_nomina - efectivo_retirado).toFixed(2)));
+        }
+        $('#valor_retirado').change();        
+    });
 
 //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax

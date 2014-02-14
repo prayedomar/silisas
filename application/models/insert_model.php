@@ -725,7 +725,7 @@ class Insert_model extends CI_Model {
     public function abono_prestamo($prefijo, $id, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
-            'id' => $id,            
+            'id' => $id,
             'prefijo_prestamo' => $prefijo_prestamo,
             'id_prestamo' => $id_prestamo,
             'subtotal' => $subtotal,
@@ -891,7 +891,7 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function nomina($prefijo, $id, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
@@ -918,7 +918,7 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function cambio_ejecutivo_matricula($matricula, $id_ejecutivo_old, $dni_ejecutivo_old, $id_ejecutivo_new, $dni_ejecutivo_new, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
@@ -932,6 +932,30 @@ class Insert_model extends CI_Model {
             'dni_responsable' => $dni_responsable
         );
         $this->db->insert('cambio_ejecutivo_matricula', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function movimiento_transaccion($t_trans, $prefijo, $id, $credito_debito, $total, $sede_caja, $t_caja, $efectivo_caja, $cuenta, $valor_cuenta, $vigente, $sede, $fecha_trans, $id_responsable, $dni_responsable) {
+        $data = array(
+            't_trans' => $t_trans,
+            'prefijo' => $prefijo,
+            'id' => $id,
+            'credito_debito' => $credito_debito,
+            'total' => $total,
+            'sede_caja' => $sede_caja,
+            't_caja' => $t_caja,
+            'efectivo_caja' => $efectivo_caja,
+            'cuenta' => $cuenta,
+            'valor_cuenta' => $valor_cuenta,
+            'vigente' => $vigente,
+            'sede' => $sede,
+            'fecha_trans' => $fecha_trans,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->insert('movimiento_transaccion', $data);
         if ($error = $this->db->_error_message()) {
             return $error;
         }
