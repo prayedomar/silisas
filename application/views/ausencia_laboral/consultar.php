@@ -77,6 +77,15 @@
                                 <option value="1" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "1" ? "selected" : "" ?>>Si</option>
                             </select>
                         </div>
+                        <div class="col-xs-2">
+                            <label>Sede principal</label>
+                            <select id="sede" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($lista_sedes as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["sede"]) && $_GET["sede"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <hr>
@@ -86,7 +95,7 @@
                             <thead>
                                 <tr>
                                     <th>Tipo documento</th>
-                                     <th>Num documento</th>
+                                    <th>Num documento</th>
                                     <th>Nombre</th>
                                     <th>Fecha inicio</th>
                                     <th>Fecha fin</th>
@@ -128,8 +137,8 @@
                              data-desde="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>"
                              data-hasta="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>"
                              data-tipoausencia="<?= isset($_GET["tipo_ausencia"]) ? $_GET["tipo_ausencia"] : "" ?>"
-                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>">
-
+                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>"
+                             data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>">
 
                             <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">

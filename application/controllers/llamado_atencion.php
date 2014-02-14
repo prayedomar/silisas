@@ -32,7 +32,7 @@ class Llamado_atencion extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('t_falta_laboral', 'Falta Laboral', 'required');
             $this->form_validation->set_rules('t_sancion', 'Sanción a Imponer', 'required|callback_select_default');
@@ -61,7 +61,7 @@ class Llamado_atencion extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $t_falta_laboral = $this->input->post('t_falta_laboral');
             $t_sancion = $this->input->post('t_sancion');
@@ -92,13 +92,13 @@ class Llamado_atencion extends CI_Controller {
                         $data['trans_error'] = $error2;
                         $this->parser->parse('trans_error', $data);
                         return;
-                    }else{
-                    //Enviamos Correo de notificación
+                    } else {
+                        //Enviamos Correo de notificación
                         $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
                         $tipo_ausencia = $this->select_model->t_ausencia_id($t_ausencia);
-                        if($empleado->genero == 'M'){
+                        if ($empleado->genero == 'M') {
                             $prefijo = "Sr.";
-                        }else{
+                        } else {
                             $prefijo = "Sra.";
                         }
                         $asunto = "Notificación de ausencia laboral";
@@ -106,24 +106,24 @@ class Llamado_atencion extends CI_Controller {
                         $mensaje = '<p>' . $prefijo . ' ' . $empleado->nombre1 . ' ' . $empleado->nombre2 . ' ' . $empleado->apellido1 . ' ' . $empleado->apellido2 . '</p>'
                                 . '<p>Le notificamos que en el sistema, fue ingresada una ausencia laboral a su nombre.<br/>'
                                 . '<center>'
-                                    . '<table>'
-                                        . '<tr>'
-                                            . '<td style="width:170px;"><b>Fecha inicial: </b></td>'
-                                            . '<td>' . $fecha_inicio . '</td>'
-                                        . '</tr>'
-                                        . '<tr>'
-                                            . '<td><b>Fecha final: </b></td>'
-                                            . '<td>' . $fecha_fin . '</td>'
-                                        . '</tr>'
-                                        . '<tr>'
-                                            . '<td><b>Tipo de ausencia: </b></td>'
-                                            . '<td>' . $tipo_ausencia->tipo . ' (' . $tipo_ausencia->salarial . ')</td>'
-                                        . '</tr>'
-                                        . '<tr>'
-                                            . '<td><b>Descipción: </b></td>'
-                                            . '<td>' . $descripcion . '</td>'
-                                        . '</tr>'
-                                    . '</table>'
+                                . '<table>'
+                                . '<tr>'
+                                . '<td style="width:170px;"><b>Fecha inicial: </b></td>'
+                                . '<td>' . $fecha_inicio . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Fecha final: </b></td>'
+                                . '<td>' . $fecha_fin . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Tipo de ausencia: </b></td>'
+                                . '<td>' . $tipo_ausencia->tipo . ' (' . $tipo_ausencia->salarial . ')</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Descipción: </b></td>'
+                                . '<td>' . $descripcion . '</td>'
+                                . '</tr>'
+                                . '</table>'
                                 . '</center>'
                                 . '<br/><p>Para garantizar la seguridad de su cuenta, recuerde modificar periódicamente su contraseña de ingreso al sistema, a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
                                 . '<center><br/>¡Gracias por estar con nosostros!</center>';
@@ -137,33 +137,33 @@ class Llamado_atencion extends CI_Controller {
                             $data['trans_error'] = $error3;
                             $this->parser->parse('trans_error', $data);
                             return;
-                        }else{
+                        } else {
                             //Enviamos Correo de notificación
-                                $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
-                                $tipo_falta_laboral = $this->select_model->t_falta_laboral_id($t_falta_laboral);                                
-                                if($empleado->genero == 'M'){
-                                    $prefijo = "Sr.";
-                                }else{
-                                    $prefijo = "Sra.";
-                                }
-                                $asunto = "Notificación de anulación del contrato laboral";
-                                $email = $empleado->email;
-                                $mensaje = '<p>' . $prefijo . ' ' . $empleado->nombre1 . ' ' . $empleado->nombre2 . ' ' . $empleado->apellido1 . ' ' . $empleado->apellido2 . '</p>'
-                                        . '<p>Le notificamos que su contrato laboral ha sido anulado, por motivo de sanción disciplinaria por falta grave al reglamento laboral de la empresa.<br/>'
-                                        . '<center>'
-                                            . '<table>'
-                                                . '<tr>'
-                                                    . '<td style="width:230px;"><b>Falta Laboral: </b></td>'
-                                                    . '<td>' . $tipo_falta_laboral->falta . '</td>'
-                                                . '</tr>'
-                                                . '<tr>'
-                                                    . '<td><b>Gravedad: </b></td>'
-                                                    . '<td>' . $tipo_falta_laboral->gravedad . '</td>'
-                                                . '</tr>'   
-                                            . '</table>'
-                                        . '</center>'
-                                        . '<center><br/>¡Le agradecemos todo el tiempo que laboró para nuestra compañía!</center>';
-                                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);                            
+                            $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
+                            $tipo_falta_laboral = $this->select_model->t_falta_laboral_id($t_falta_laboral);
+                            if ($empleado->genero == 'M') {
+                                $prefijo = "Sr.";
+                            } else {
+                                $prefijo = "Sra.";
+                            }
+                            $asunto = "Notificación de anulación del contrato laboral";
+                            $email = $empleado->email;
+                            $mensaje = '<p>' . $prefijo . ' ' . $empleado->nombre1 . ' ' . $empleado->nombre2 . ' ' . $empleado->apellido1 . ' ' . $empleado->apellido2 . '</p>'
+                                    . '<p>Le notificamos que su contrato laboral ha sido anulado, por motivo de sanción disciplinaria por falta grave al reglamento laboral de la empresa.<br/>'
+                                    . '<center>'
+                                    . '<table>'
+                                    . '<tr>'
+                                    . '<td style="width:230px;"><b>Falta Laboral: </b></td>'
+                                    . '<td>' . $tipo_falta_laboral->falta . '</td>'
+                                    . '</tr>'
+                                    . '<tr>'
+                                    . '<td><b>Gravedad: </b></td>'
+                                    . '<td>' . $tipo_falta_laboral->gravedad . '</td>'
+                                    . '</tr>'
+                                    . '</table>'
+                                    . '</center>'
+                                    . '<center><br/>¡Le agradecemos todo el tiempo que laboró para nuestra compañía!</center>';
+                            $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);
                         }
                     }
                 }
@@ -171,9 +171,9 @@ class Llamado_atencion extends CI_Controller {
                 $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
                 $tipo_falta_laboral = $this->select_model->t_falta_laboral_id($t_falta_laboral);
                 $tipo_sancion = $this->select_model->t_sancion_id($t_sancion);
-                if($empleado->genero == 'M'){
+                if ($empleado->genero == 'M') {
                     $prefijo = "Sr.";
-                }else{
+                } else {
                     $prefijo = "Sra.";
                 }
                 $asunto = "Notificación de llamado de atención";
@@ -181,24 +181,24 @@ class Llamado_atencion extends CI_Controller {
                 $mensaje = '<p>' . $prefijo . ' ' . $empleado->nombre1 . ' ' . $empleado->nombre2 . ' ' . $empleado->apellido1 . ' ' . $empleado->apellido2 . '</p>'
                         . '<p>Le notificamos que en el sistema, fue ingresado un llamado de atención a su nombre.<br/>'
                         . '<center>'
-                            . '<table>'
-                                . '<tr>'
-                                    . '<td style="width:230px;"><b>Falta Laboral: </b></td>'
-                                    . '<td>' . $tipo_falta_laboral->falta . '</td>'
-                                . '</tr>'
-                                . '<tr>'
-                                    . '<td><b>Gravedad: </b></td>'
-                                    . '<td>' . $tipo_falta_laboral->gravedad . '</td>'
-                                . '</tr>'                        
-                                . '<tr>'
-                                    . '<td><b>Sanción: </b></td>'
-                                    . '<td>' . $tipo_sancion->tipo . '</td>'
-                                . '</tr>'
-                            . '</table>'
+                        . '<table>'
+                        . '<tr>'
+                        . '<td style="width:230px;"><b>Falta Laboral: </b></td>'
+                        . '<td>' . $tipo_falta_laboral->falta . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td><b>Gravedad: </b></td>'
+                        . '<td>' . $tipo_falta_laboral->gravedad . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td><b>Sanción: </b></td>'
+                        . '<td>' . $tipo_sancion->tipo . '</td>'
+                        . '</tr>'
+                        . '</table>'
                         . '</center>'
                         . '<br/><p>Para garantizar la seguridad de su cuenta, recuerde modificar periódicamente su contraseña de ingreso al sistema, a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
                         . '<center><br/>¡Gracias por estar con nosostros!</center>';
-                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);               
+                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);
                 //Cargamos mensaje de Ok                   
                 $this->parser->parse('trans_success', $data);
             }
@@ -209,7 +209,7 @@ class Llamado_atencion extends CI_Controller {
 
     public function llena_falta_laboral() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $faltas = $this->select_model->t_falta_laboral();
             if (($faltas == TRUE)) {
                 foreach ($faltas as $fila) {
@@ -231,10 +231,11 @@ class Llamado_atencion extends CI_Controller {
     function consultar() {
         $this->load->model('t_dnim');
         $this->load->model('t_sancionm');
+        $this->load->model('sedem');
         $data["tab"] = "llamado_atencion";
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_sanciones'] = $this->t_sancionm->listar_tiopos_de_sancion();
-
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $filasPorPagina = 20;
         if (empty($_GET["page"])) {
             $inicio = 0;

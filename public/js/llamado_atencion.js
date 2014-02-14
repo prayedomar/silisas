@@ -31,7 +31,9 @@ $(function() {
         if ($("#vigente").val() != "") {
             url += "vigente=" + $("#vigente").val() + "&";
         }
-
+        if ($("#sede").val() != "") {
+            url += "sede=" + $("#sede").val() + "&";
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
     });
@@ -76,8 +78,11 @@ $(function() {
         if ($("#paginacion").data("tipoausencia") != "") {
             url += "tipo_ausencia=" + $("#paginacion").data("tipoausencia") + "&";
         }
-       if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0" ) {
+        if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0") {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";
+        }
+        if ($("#paginacion").data("sede") != "") {
+            url += "sede=" + $("#paginacion").data("sede") + "&";
         }
 
         url = url.substr(0, url.length - 1);

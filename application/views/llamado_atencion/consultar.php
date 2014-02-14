@@ -5,7 +5,7 @@
                 <legend>Consultar llamados de atención <span class="help-block pull-right">(<?= $cantidad_empleados ?> llamados de atención encontrados)</span></legend>
                 <div id="divCriterios">
                     <div  class="row">
-                        <div class="col-xs-2">
+                        <div class="col-xs-2 col-xs-offset-1">
                             <label>Tipo de documento</label>
                             <select id="tipo_documento" class="form-control">
                                 <option value="">Seleccionar...</option>
@@ -26,10 +26,7 @@
                             <label>Segundo nombre</label>
                             <input type='text' id="segundo_nombre" class='form-control letras_numeros' placeholder="Segundo nombre" value="<?= isset($_GET["segundo_nombre"]) ? $_GET["segundo_nombre"] : "" ?>">
                         </div>
-                        <div class="col-xs-2">
-                            <label>Primer apellido</label>
-                            <input type='text' id="primer_apellido" class='form-control letras_numeros' placeholder="Primer apellido" value="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>">
-                        </div>
+                      
                         <div class="col-xs-1">
                             <br>
                             <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
@@ -42,6 +39,10 @@
                     <br>
 
                     <div class="row">
+                          <div class="col-xs-2 col-xs-offset-1">
+                            <label>Primer apellido</label>
+                            <input type='text' id="primer_apellido" class='form-control letras_numeros' placeholder="Primer apellido" value="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>">
+                        </div>
                         <div class="col-xs-2">
                             <label>Segundo apellido</label>
                             <input type='text' id="segundo_apellido" class='form-control letras_numeros' placeholder="Segundo apellido" value="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>">
@@ -61,6 +62,15 @@
                                 <option value="">Seleccionar...</option>
                                 <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "0" ? "selected" : "" ?>>No</option>
                                 <option value="1" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "1" ? "selected" : "" ?>>Si</option>
+                            </select>
+                        </div>
+                         <div class="col-xs-2">
+                            <label>Sede principal</label>
+                            <select id="sede" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($lista_sedes as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["sede"]) && $_GET["sede"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -110,7 +120,9 @@
                              data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
                              data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
                              data-tiposancion="<?= isset($_GET["tiposancion"]) ? $_GET["tiposancion"] : "" ?>"
-                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>">
+                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>"
+                              data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
+                             >
 
 
                             <ul class="pagination">

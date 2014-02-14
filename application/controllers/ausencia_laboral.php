@@ -30,7 +30,7 @@ class Ausencia_laboral extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicial', 'required|xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('fecha_fin', 'Fecha Final', 'required|xss_clean|callback_fecha_valida');
@@ -54,7 +54,7 @@ class Ausencia_laboral extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $fecha_inicio = $this->input->post('fecha_inicio');
             $fecha_fin = $this->input->post('fecha_fin');
@@ -75,12 +75,12 @@ class Ausencia_laboral extends CI_Controller {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-            //Enviamos Correo de notificación
+                //Enviamos Correo de notificación
                 $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
                 $tipo_ausencia = $this->select_model->t_ausencia_id($t_ausencia);
-                if($empleado->genero == 'M'){
+                if ($empleado->genero == 'M') {
                     $prefijo = "Sr.";
-                }else{
+                } else {
                     $prefijo = "Sra.";
                 }
                 $asunto = "Notificación de ausencia laboral";
@@ -88,28 +88,28 @@ class Ausencia_laboral extends CI_Controller {
                 $mensaje = '<p>' . $prefijo . ' ' . $empleado->nombre1 . ' ' . $empleado->nombre2 . ' ' . $empleado->apellido1 . ' ' . $empleado->apellido2 . '</p>'
                         . '<p>Le notificamos que en el sistema, fue ingresada una ausencia laboral a su nombre.<br/>'
                         . '<center>'
-                            . '<table>'
-                                . '<tr>'
-                                    . '<td style="width:170px;"><b>Fecha inicial: </b></td>'
-                                    . '<td>' . $fecha_inicio . '</td>'
-                                . '</tr>'
-                                . '<tr>'
-                                    . '<td><b>Fecha final: </b></td>'
-                                    . '<td>' . $fecha_fin . '</td>'
-                                . '</tr>'
-                                . '<tr>'
-                                    . '<td><b>Tipo de ausencia: </b></td>'
-                                    . '<td>' . $tipo_ausencia->tipo . ' (' . $tipo_ausencia->salarial . ')</td>'
-                                . '</tr>'
-                                . '<tr>'
-                                    . '<td><b>Descipción: </b></td>'
-                                    . '<td>' . $descripcion . '</td>'
-                                . '</tr>'
-                            . '</table>'
+                        . '<table>'
+                        . '<tr>'
+                        . '<td style="width:170px;"><b>Fecha inicial: </b></td>'
+                        . '<td>' . $fecha_inicio . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td><b>Fecha final: </b></td>'
+                        . '<td>' . $fecha_fin . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td><b>Tipo de ausencia: </b></td>'
+                        . '<td>' . $tipo_ausencia->tipo . ' (' . $tipo_ausencia->salarial . ')</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td><b>Descipción: </b></td>'
+                        . '<td>' . $descripcion . '</td>'
+                        . '</tr>'
+                        . '</table>'
                         . '</center>'
                         . '<br/><p>Para garantizar la seguridad de su cuenta, recuerde modificar periódicamente su contraseña de ingreso al sistema, a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
                         . '<center><br/>¡Gracias por estar con nosostros!</center>';
-                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);               
+                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);
                 //Cargamos mensaje de Ok                 
                 $this->parser->parse('trans_success', $data);
             }
@@ -120,7 +120,7 @@ class Ausencia_laboral extends CI_Controller {
 
     //Metodos para Consultar    
     function consultar() {
-         $this->load->model('ausencia_laboralm');
+        $this->load->model('ausencia_laboralm');
         $this->load->model('t_dnim');
         $this->load->model('est_empleadom');
         $this->load->model('sedem');
@@ -128,7 +128,7 @@ class Ausencia_laboral extends CI_Controller {
         $data["tab"] = "ausencia_laboral";
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_ausencias'] = $this->t_ausenciam->listar_tiopos_de_ausencia();
-
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
 
 
         $filasPorPagina = 20;
