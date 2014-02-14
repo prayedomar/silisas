@@ -5,7 +5,7 @@
                 <legend>Consultar transacciones <span class="help-block pull-right">(<?= $cantidad ?> transacciones encontrados)</span></legend>
                 <div id="divCriterios">
                     <div  class="row">
-                        <div class="col-xs-2 col-xs-offset-1">
+                        <div class="col-xs-2">
                             <label>Desde</label>
                             <div class="input-group">
                                 <input id="desde"  type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Desde" value="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>">
@@ -32,20 +32,7 @@
                             <label>Id</label>
                             <input type='text' id="id" class='form-control letras_numeros' placeholder="Id" value="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>">
                         </div>
-
-                        <div class="col-xs-1">
-                            <br>
-                            <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
-                        </div>
-                        <div class="col-xs-1">
-                            <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>transacciones/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
-                        </div>
-                    </div>
-                    <br>
-
-                    <div class="row">
-                        <div class="col-xs-2 col-xs-offset-1">
+                        <div class="col-xs-2">
                             <label>Caja</label>
                             <select id="caja" class="form-control">
                                 <option value="">Seleccionar...</option>
@@ -54,6 +41,20 @@
                                 <?php } ?>
                             </select>
                         </div>
+                        <div class="col-xs-1">
+                            <br>
+                            <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
+                        </div>
+                        <div class="col-xs-1">
+                            <br>
+                            <a class='btn btn-primary' href="<?= base_url() ?>transacciones/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
+                        </div>
+
+                    </div>
+                    <br>
+
+                    <div class="row">
+
                         <div class="col-xs-2">
                             <label>Vigente</label>
                             <select id="vigente" class="form-control">
@@ -81,6 +82,14 @@
                                 <?php foreach ($lista_trans as $row) { ?>
                                     <option value="<?= $row->id ?>" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>><?= $row->nombre_tabla ?></option>
                                 <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Efectivo / Bancos</label>
+                            <select id="efectivo_bancos" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <<option value="e"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "e" ? "selected" : "" ?>>Efectivo</option>
+                                <option value="b"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "b" ? "selected" : "" ?>>Bancos</option>
                             </select>
                         </div>
                         <!--                        <div class="col-xs-2">

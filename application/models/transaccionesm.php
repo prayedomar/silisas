@@ -25,6 +25,8 @@ class Transaccionesm extends CI_Model {
         $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
         $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
         $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
+        $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
+        $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
         return $this->db->query($query)->result();
     }
 
@@ -44,6 +46,8 @@ class Transaccionesm extends CI_Model {
         $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
         $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
         $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
+                $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
+        $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
         return $this->db->query($query)->result();
     }
 
@@ -63,6 +67,8 @@ class Transaccionesm extends CI_Model {
         $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
         $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
         $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
+                $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
+        $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
         $query.=" ORDER BY mt.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }

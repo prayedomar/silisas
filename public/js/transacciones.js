@@ -31,8 +31,11 @@ $(function() {
         if ($("#documento").val() != "") {
             url += "documento=" + $("#documento").val() + "&";
         }
-          if ($("#tipo_trans").val() != "") {
+        if ($("#tipo_trans").val() != "") {
             url += "tipo_trans=" + $("#tipo_trans").val() + "&";
+        }
+        if ($("#efectivo_bancos").val() != "") {
+            url += "efectivo_bancos=" + $("#efectivo_bancos").val() + "&";
         }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
@@ -128,6 +131,9 @@ $(function() {
         }
         if ($("#paginacion").data("tipotrans") != "") {
             url += "tipo_trans=" + $("#paginacion").data("tipotrans") + "&";
+        }
+        if ($("#efectivobancos").data("efectivobancos") != "") {
+            url += "efectivo_bancos=" + $("#efectivobancos").data("tipotrans") + "&";
         }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
