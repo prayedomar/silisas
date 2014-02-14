@@ -10,6 +10,8 @@ class Empleadom extends CI_Model {
     }
 
     public function cantidad_empleados($criterios, $inicio, $filasPorPagina) {
+        $id_responsable = $_SESSION["idResponsable"];
+        $dni_responsable = $_SESSION["dniResponsable"];
         $query = "SELECT count(*) cantidad FROM empleado e
                   JOIN t_dni td ON e.dni=td.id
                   JOIN sede s ON e.sede_ppal=s.id
@@ -22,7 +24,7 @@ class Empleadom extends CI_Model {
                   JOIN t_cargo tcargo ON e.cargo=tcargo.id
                   JOIN salario sl ON e.salario=sl.id
                   JOIN empleado e2 ON e.id_jefe=e2.id AND e.dni_jefe=e2.dni
-                  WHERE true ";
+                  WHERE e.sede_ppal IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='$id_responsable' AND dni='$dni_responsable' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='$id_responsable' AND dni_empleado='$dni_responsable' AND vigente=1) as T1) ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND e.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND e.id = '{$criterios['numero_documento']}'" : "";
         $query.=(!empty($criterios['primer_nombre'])) ? "AND lower(e.nombre1) LIKE '%" . strtolower($criterios['primer_nombre']) . "%'" : " ";
@@ -38,6 +40,8 @@ class Empleadom extends CI_Model {
     }
 
     public function listar_empleados($criterios, $inicio, $filasPorPagina) {
+          $id_responsable = $_SESSION["idResponsable"];
+        $dni_responsable = $_SESSION["dniResponsable"];
         $query = "SELECT e.*,e.id documento,td.*,s.nombre sede,pa.nombre pais,pro.nombre provincia,ciu.nombre ciudad,
                   tdom.tipo tipo_domicilio,estem.estado estado_empleado,tdepto.tipo depto,
                   tcargo.cargo_masculino,tcargo.cargo_femenino,sl.nombre nombre_salario,
@@ -54,7 +58,7 @@ class Empleadom extends CI_Model {
                   JOIN t_cargo tcargo ON e.cargo=tcargo.id
                   JOIN salario sl ON e.salario=sl.id
                   JOIN empleado e2 ON e.id_jefe=e2.id AND e.dni_jefe=e2.dni
-                  WHERE true ";
+                   WHERE e.sede_ppal IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='$id_responsable' AND dni='$dni_responsable' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='$id_responsable' AND dni_empleado='$dni_responsable' AND vigente=1) as T1) ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND e.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND e.id = '{$criterios['numero_documento']}'" : "";
         $query.=(!empty($criterios['primer_nombre'])) ? "AND lower(e.nombre1) LIKE '%" . strtolower($criterios['primer_nombre']) . "%'" : " ";

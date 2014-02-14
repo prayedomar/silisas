@@ -10,7 +10,9 @@ class Sedem extends CI_Model {
     }
 
     public function listar_todas_las_sedes() {
-        $query = "SELECT * FROM sede order by nombre";
+        $id_responsable = $_SESSION["idResponsable"];
+        $dni_responsable = $_SESSION["dniResponsable"];
+        $query = "SELECT * FROM sede WHERE id IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='$id_responsable' AND dni='$dni_responsable' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='$id_responsable' AND dni_empleado='$dni_responsable' AND vigente=1) as T1) order by nombre ";
         return $this->db->query($query)->result();
     }
 
