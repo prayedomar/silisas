@@ -683,19 +683,6 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function plan_pago_prestamo($prefijo_prestamo, $id_prestamo, $num_cuota, $fecha_pago) {
-        $data = array(
-            'prefijo_prestamo' => $prefijo_prestamo,
-            'id_prestamo' => $id_prestamo,
-            'num_cuota' => $num_cuota,
-            'fecha_pago' => $fecha_pago
-        );
-        $this->db->insert('plan_pago_prestamo', $data);
-        if ($error = $this->db->_error_message()) {
-            return $error;
-        }
-    }
-
     public function abono_adelanto($prefijo, $id, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,

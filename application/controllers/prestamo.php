@@ -143,16 +143,6 @@ class Prestamo extends CI_Controller {
                     $data['trans_error'] = $error1;
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    //Si creo el prestamo entonces creamos el plan pagos de prestamo
-                    for ($i = 1; $i <= $cant_cuotas; $i++) {
-                        $fecha_pago = date("Y-m-d", strtotime("$fecha_desembolso +$i month"));
-                        $error1 = $this->insert_model->plan_pago_prestamo($prefijo_prestamo, $id_prestamo, $i, $fecha_pago);
-                        if (isset($error1)) {
-                            $data['trans_error'] = $error2;
-                            $this->parser->parse('trans_error', $data);
-                            return;
-                        }
-                    }
                     $this->parser->parse('trans_success', $data);
                 }
             }
