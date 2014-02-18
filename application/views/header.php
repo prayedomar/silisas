@@ -423,40 +423,40 @@
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>sede/consultar">Sedes</a></li>
                                     <?php } ?>                           
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "calidad", "docente", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>salon/consultar">Salones</a></li>
                                     <?php } ?>                                    
                                     <li class="divider"></li>                                            
                                     <li class="dropdown-header">Empleados</li>
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>salario/consultar">Salarios Laborales</a></li> 
                                     <?php } ?>                                
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>empleado/consultar">Empleados</a></li>
                                     <?php } ?>                           
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>sede_secundaria/crear">Sedes Secundarias</a></li>
                                     <?php } ?>                                   
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>ausencia_laboral/consultar">Ausencias Laborales</a></li>
                                     <?php } ?>                              
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>llamado_atencion/consultar">Llamados de Atención</a></li>
                                     <?php } ?>                                    
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Clientes</li>
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>titular/consultar">Titulares</a></li>
                                     <?php } ?>                              
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>alumno/consultar">Alumnos</a></li>
                                     <?php } ?>                            
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cliente/consultar">Clientes Prestatarios</a></li>
                                     <?php } ?>                                    
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>proveedor/consultar">Proveedores</a></li>  
                                     <?php } ?>                                    
                                 </ul>
@@ -464,21 +464,21 @@
                             <li class="col-sm-6">
                                 <ul>
                                     <li class="dropdown-header">Cajas y Bancos</li>
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de Venta)</a></li> 
                                     <?php } ?>                                 
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/consultar">Cuenta Bancaria</a></li>
                                     <?php } ?>                            
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/asignar_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
                                     <?php } ?>                           
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/asignar_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
                                     <?php } ?>                                    
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
-                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>transacciones/consultar">Transacciones</a></li>
                                     <?php } ?>                                    
                                 </ul>
