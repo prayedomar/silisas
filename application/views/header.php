@@ -166,7 +166,9 @@
                         <ul class="dropdown-menu dropdown-menu-large row">
                             <li class="col-sm-4">
                                 <ul>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
                                     <li class="dropdown-header">Sedes</li>
+                                    <?php } ?>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
                                         <li><a href="<?= base_url() ?>sede/crear">Sede</a></li>
                                     <?php } ?>
@@ -216,7 +218,9 @@
                             </li>
                             <li class="col-sm-4">
                                 <ul>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>   
                                     <li class="dropdown-header">Cajas y Bancos</li>
+                                    <?php } ?>   
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de Venta)</a></li>
                                     <?php } ?>                       
@@ -290,14 +294,14 @@
                                     <li class="dropdown-header">Permisos</li>
                                     <li><a href="#">Código de Autorización</a></li>                                    -->
                                     <li class="divider"></li>  
-                                    <li class="dropdown-header">Traslados</li>
-                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "traslado"))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "traslado"))) { ?>                                           
+                                    <li class="dropdown-header">Traslados</li>                                
                                     <li><a href="<?= base_url() ?>traslado_contrato_matricula/crear">Contratos Físicos</a></li>
                                     <?php } ?>                                    
 <!--                                    <li><a href="#">Material de Estudio</a></li>
                                     <li><a href="#">Articulo de Inventario</a></li>                                   -->
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Enseñanza</li>
+<!--                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Enseñanza</li>-->
 <!--                                    <li><a href="#">Horario de Clase</a></li>
                                     <li><a href="#">Reserva de Clase</a></li>-->
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "docente"))) { ?> 
@@ -463,7 +467,9 @@
                             </li>
                             <li class="col-sm-6">
                                 <ul>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>  
                                     <li class="dropdown-header">Cajas y Bancos</li>
+                                    <?php } ?>    
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de Venta)</a></li> 
                                     <?php } ?>                                 
@@ -480,6 +486,11 @@
                                     <li class="dropdown-header">Transacciones</li>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>transacciones/consultar">Transacciones</a></li>
+                                    <?php } ?>       
+                                    <li class="divider"></li>                                    
+                                    <li class="dropdown-header">Matrículas</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera"))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>liquidar_comisiones/consultar">Liquidación de comisiones</a></li>
                                     <?php } ?>                                    
                                 </ul>
                             </li>
@@ -541,7 +552,7 @@
                             <li class="col-sm-8">
                                 <ul>
                                     <!--<li><a href="#">Ver Perfil</a></li>-->
-                                    <li><a href="#">Cambiar Contraseña</a></li>
+                                    <li><a href="<?= base_url() ?>password/cambiar">Cambiar Contraseña</a></li>
                                     <li class="divider"></li>
                                     <li><a href="<?= base_url() ?>login/logout_ci">Cerrar Sesión &raquo;</a></li>
                                 </ul>

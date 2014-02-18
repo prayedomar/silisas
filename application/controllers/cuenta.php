@@ -115,7 +115,7 @@ class Cuenta extends CI_Controller {
 
     //Asignar Cuenta a sedes    
     function asignar_empleado() {
-        $data["tab"] = "crear_asignar_cuenta_empeado";
+        $data["tab"] = "crear_asignar_cuenta_empleado";
         $this->isLogin($data["tab"]);           
         $this->load->view("header", $data);
         $data['base_url'] = base_url();

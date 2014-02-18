@@ -756,6 +756,14 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function t_concepto_nomina_matricula($matricula) {
+        $this->db->where('matricula', $matricula);
+        $query = $this->db->get('t_concepto_nomina');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado) {
         $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))))";

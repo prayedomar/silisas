@@ -9,6 +9,19 @@ class Update_model extends CI_Model {
         parent::__construct();
     }
 
+    public function cambiar_contraseña($id, $dni, $t_usuario, $new_password) {
+        $data = array(
+            'password' => $new_password
+        );
+        $this->db->where('id', $id);
+        $this->db->where('dni', $dni);
+        $this->db->where('t_usuario', $t_usuario);
+        $this->db->update('usuario', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
+    
     public function empleado_sede_ppal($id, $dni, $sede_ppal) {
         $data = array(
             'sede_ppal' => $sede_ppal

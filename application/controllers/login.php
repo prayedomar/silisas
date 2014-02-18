@@ -142,6 +142,7 @@ class Login extends CI_Controller {
                     'perfil' => $check_user->perfil,
                     'idResponsable' => $check_user->id,
                     'dniResponsable' => $check_user->dni,
+                    't_usuario' => $check_user->t_usuario,
                     'rutaImg' => $rutaImg,
                     'msnBienvenida' => $msnBienvenida,
                     'textoBienvenida' => $textoBienvenida

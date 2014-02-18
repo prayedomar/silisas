@@ -19,15 +19,9 @@ class CI_Controller {
 
     private static $instance;
 
-    /**
-     * Constructor
-     */
     public function __construct() {
         self::$instance = & $this;
 
-// Assign all the class objects that were instantiated by the
-// bootstrap file (CodeIgniter.php) to local class variables
-// so that CI can run as one big super object.
         foreach (is_loaded() as $var => $class) {
             $this->$var = & load_class($class);
         }
@@ -47,29 +41,72 @@ class CI_Controller {
         }
         $perfil = $_SESSION["perfil"];
         switch ($perfil) {
-            case "admon_sede":
-                $privilegios = array("crear_ingreso", "crear_llamado_atencion");
-                if (!in_array($tab, $privilegios))
-                    redirect(base_url() . 'login');
-                break;
             case "admon_sistema":
-                $privilegios = array("crear_ingreso", "crear_llamado_atencion");
+                $privilegios = array("cambiar_password", "crear_ingreso", "crear_sede", "crear_salon", "crear_salario", "crear_empleado", "crear_sede_secundaria", "crear_despachar_placa", "crear_recibir_placa", "crear_ausencia_laboral", "crear_llamado_atencion", "crear_titular", "crear_alumno", "crear_cliente", "crear_proveedor", "crear_caja", "crear_cuenta", "crear_asignar_cuenta_sede", "crear_asignar_cuenta_empleado", "crear_adelanto", "crear_prestamo", "crear_abono_adelanto", "crear_abono_prestamo", "crear_ingreso", "crear_egreso", "crear_nomina", "crear_contrato_matricula", "crear_matricula", "crear_liquidar_comisiones", "crear_traslado_contrato_matricula", "editar_sedes_empleado", "editar_cargo_jefe_rrpp", "consultar_sede", "consultar_salon", "consultar_salario", "consultar_empleado", "consultar_ausencia_laboral", "consultar_llamado_atencion", "consultar_titular", "consultar_alumno", "consultar_cliente", "consultar_proveedor", "consultar_caja", "consultar_cuenta", "consultar_transacciones", "consultar_liquidar_comisiones");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;            
+            case "directivo":
+                $privilegios = array("cambiar_password", "crear_ingreso", "crear_sede", "crear_salon", "crear_salario", "crear_empleado", "crear_sede_secundaria", "crear_despachar_placa", "crear_recibir_placa", "crear_ausencia_laboral", "crear_llamado_atencion", "crear_titular", "crear_alumno", "crear_cliente", "crear_proveedor", "crear_caja", "crear_cuenta", "crear_asignar_cuenta_sede", "crear_asignar_cuenta_empleado", "crear_adelanto", "crear_prestamo", "crear_abono_adelanto", "crear_abono_prestamo", "crear_ingreso", "crear_egreso", "crear_nomina", "crear_contrato_matricula", "crear_matricula", "crear_liquidar_comisiones", "crear_traslado_contrato_matricula", "editar_sedes_empleado", "editar_cargo_jefe_rrpp", "consultar_sede", "consultar_salon", "consultar_salario", "consultar_empleado", "consultar_ausencia_laboral", "consultar_llamado_atencion", "consultar_titular", "consultar_alumno", "consultar_cliente", "consultar_proveedor", "consultar_caja", "consultar_cuenta", "consultar_transacciones", "consultar_liquidar_comisiones");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break;
-            case "alumno":
-                $privilegios = array("crear_ingreso");
+            case "admon_sede":
+                $privilegios = array("cambiar_password", "crear_empleado", "crear_despachar_placa", "crear_recibir_placa", "crear_ausencia_laboral", "crear_llamado_atencion", "crear_titular", "crear_alumno", "crear_proveedor", "crear_adelanto", "crear_abono_adelanto", "crear_ingreso", "crear_egreso", "crear_nomina", "crear_matricula", "crear_liquidar_comisiones", "editar_cargo_jefe_rrpp", "consultar_sede", "consultar_salon", "consultar_salario", "consultar_empleado", "consultar_ausencia_laboral", "consultar_llamado_atencion", "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_transacciones", "consultar_liquidar_comisiones");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
-                break;                
+                break;   
+            case "aux_admon":
+                $privilegios = array("cambiar_password", "crear_despachar_placa", "consultar_sede", "consultar_salon", "consultar_empleado",  "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_liquidar_comisiones");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;        
+            case "cartera":
+                $privilegios = array("cambiar_password", "consultar_sede", "consultar_salon", "consultar_empleado", "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_liquidar_comisiones");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break; 
+            case "contador":
+                $privilegios = array("cambiar_password", "consultar_sede", "consultar_empleado", "crear_ausencia_laboral", "consultar_proveedor", "consultar_caja", "consultar_cuenta", "consultar_transacciones");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break; 
+            case "calidad":
+                $privilegios = array("cambiar_password", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break; 
+            case "docente":
+                $privilegios = array("cambiar_password", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break; 
+            case "empleado_admon":
+                $privilegios = array("cambiar_password", "consultar_sede");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;   
+            case "empleado_rrpp":
+                $privilegios = array("cambiar_password", "consultar_sede", "consultar_salon");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;   
+            case "secretaria":
+                $privilegios = array("cambiar_password", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;   
+            case "titular":
+                $privilegios = array("cambiar_password");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;  
+            case "alumno":
+                $privilegios = array("cambiar_password");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;                 
         }
-
-
-        //No se puede utilizar esta funcion así porq login tambien hereda de este controlador y se quedará redirigiendo
-        //Habria que colocar la condicion que funcion en caso que no sea tab=login.
-//        if ($this->session->userdata('perfil') == FALSE) {
-//            redirect(base_url() . 'login');
-//        }
     }
 
     static function escapar(&$data) {
