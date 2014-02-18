@@ -15,6 +15,7 @@ class Sede extends CI_Controller {
 //    Metodos para crear
     function crear() {
         $data["tab"] = "crear_sede";
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -105,7 +106,7 @@ class Sede extends CI_Controller {
 
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $provincias = $this->select_model->provincia_pais($pais);
@@ -126,7 +127,7 @@ class Sede extends CI_Controller {
 
     public function llena_ciudad() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);
+            $this->escapar($_POST);
             if (($this->input->post('provincia')) && ($this->input->post('provincia') != '{id}') && ($this->input->post('provincia') != 'default')) {
                 $provincia = $this->input->post('provincia');
                 $ciudades = $this->select_model->ciudad_provincia($provincia);
@@ -149,6 +150,7 @@ class Sede extends CI_Controller {
     function consultar() {
         $this->load->model('est_sedem');
         $data["tab"] = "consultar_sede";
+        $this->isLogin($data["tab"]);
         $data["paises"] = $this->paism->listar_paises();
         if (!empty($_GET["pais"])) {
             $data["departamentos"] = $this->provinciam->listarProvinciasPorPais($_GET['pais']);

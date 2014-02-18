@@ -34,14 +34,32 @@ class CI_Controller {
         $this->load = & load_class('Loader', 'core');
         $this->load->initialize();
         log_message('debug', "Controller Class Initialized");
-        $this->isLogin();
     }
 
     public static function &get_instance() {
         return self::$instance;
     }
 
-    function isLogin() {
+    function isLogin($tab) {
+        if (empty($_SESSION["perfil"])) {
+            redirect(base_url() . 'login');
+            exit();
+        }
+        $perfil = $_SESSION["perfil"];
+        switch ($perfil) {
+            case "admon_sede":
+                $privilegios = array("crear_ingreso", "crear_llamado_atencion");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;
+            case "admon_sistema":
+                $privilegios = array("crear_ingreso", "crear_llamado_atencion");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;
+        }
+
+
         //No se puede utilizar esta funcion así porq login tambien hereda de este controlador y se quedará redirigiendo
         //Habria que colocar la condicion que funcion en caso que no sea tab=login.
 //        if ($this->session->userdata('perfil') == FALSE) {
