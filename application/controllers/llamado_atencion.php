@@ -12,6 +12,7 @@ class Llamado_atencion extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_llamado_atencion";
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -233,6 +234,7 @@ class Llamado_atencion extends CI_Controller {
         $this->load->model('t_sancionm');
         $this->load->model('sedem');
         $data["tab"] = "llamado_atencion";
+        $this->isLogin($data["tab"]);
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_sanciones'] = $this->t_sancionm->listar_tiopos_de_sancion();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();

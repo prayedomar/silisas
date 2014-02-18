@@ -57,6 +57,11 @@ class CI_Controller {
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break;
+            case "alumno":
+                $privilegios = array("crear_ingreso");
+                if (!in_array($tab, $privilegios))
+                    redirect(base_url() . 'login');
+                break;                
         }
 
 
