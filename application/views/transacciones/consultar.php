@@ -92,7 +92,18 @@
                                 <option value="b"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "b" ? "selected" : "" ?>>Bancos</option>
                             </select>
                         </div>
-                        <!--                        <div class="col-xs-2">
+                        <div class="col-xs-2">
+                            <br>
+                             <button  title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
+                        </div>
+                        <!--               <div class="col-xs-2">
+                            <label>Efectivo / Bancos</label>
+                            <select id="efectivo_bancos" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <<option value="e"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "e" ? "selected" : "" ?>>Efectivo</option>
+                                <option value="b"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "b" ? "selected" : "" ?>>Bancos</option>
+                            </select>
+                        </div>          <div class="col-xs-2">
                                                     <label>Total</label>
                                                    <label></label>
                                                 </div>-->

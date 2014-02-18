@@ -138,5 +138,40 @@ $(function() {
         url = url.substr(0, url.length - 1);
         window.location.href = url;
     });
+    $("#toExcel").click(function() {
+        var url = "transacciones/excel?";
 
+        if ($("#desde").val() != "") {
+            url += "desde=" + $("#desde").val() + "&";
+        }
+        if ($("#hasta").val() != "") {
+            url += "hasta=" + $("#hasta").val() + "&";
+        }
+        if ($("#sede").val() != null && $("#sede").val() != "") {
+            url += "sede=" + $("#sede").val() + "&";
+        }
+        if ($("#id").val() != null && $("#id").val() != "") {
+            url += "id=" + $("#id").val() + "&";
+        }
+        if ($("#caja").val() != "") {
+            url += "caja=" + $("#caja").val() + "&";
+        }
+        if ($("#vigente").val() == "0") {
+            url += "vigente=" + $("#vigente").val() + "&";
+        }
+        if ($("#tipo_documento").val() != "") {
+            url += "tipo_documento=" + $("#tipo_documento").val() + "&";
+        }
+        if ($("#documento").val() != "") {
+            url += "documento=" + $("#documento").val() + "&";
+        }
+        if ($("#tipo_trans").val() != "") {
+            url += "tipo_trans=" + $("#tipo_trans").val() + "&";
+        }
+        if ($("#efectivo_bancos").val() != "") {
+            url += "efectivo_bancos=" + $("#efectivo_bancos").val() + "&";
+        }
+        url = url.substr(0, url.length - 1);
+        window.location.href = url;
+    });
 });

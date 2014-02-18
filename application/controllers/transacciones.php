@@ -42,4 +42,60 @@ class Transacciones extends CI_Controller {
         $this->load->view("footer");
     }
 
+    public function excel() {
+        header("Content-type: application/vnd.ms-excel; name='excel'");
+        header("Content-Disposition: filename=reporte_transacciones_" . date("Y-m-d") . ".xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        if (!empty($_GET["depto"])) {
+            $this->load->model('t_cargom');
+            $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
+        }
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data["lista"] = $this->transaccionesm->listar_transacciones_excel($_GET);
+        ?>
+        <table class='table table-hover'>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo de transacción</th>
+                    <th>Id</th>
+                    <th>Total</th>
+                    <th>Caja</th>
+                    <th>Efectivo de caja</th>
+                    <th>Cuenta</th>
+                    <th>Valor de cuenta</th>
+                    <th>Vigente</th>
+                    <th>Sede</th>
+                    <th>Responsable</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla">
+                <?php foreach ($data["lista"] as $row) { ?>
+                    <tr>
+                        <td><?= $row->fecha_trans ?></td>
+                        <td><?= $row->tipo_trans ?></td>
+                        <td><?= $row->prefijo . " " . $row->id ?></td>
+                        <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
+                        <td><?= ($row->caja != "") ? $row->caja : "--" ?></td>
+                        <td><?= ($row->efectivo_caja != "") ? "$" . number_format($row->efectivo_caja, 2, '.', ',') : "--" ?></td>
+                        <td><?= ($row->cuenta != "") ? $row->cuenta : "--" ?></td>
+                        <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
+                        <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
+                        <td><?= $row->sede ?></td>
+                        <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php
+    }
+
 }
