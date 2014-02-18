@@ -768,8 +768,8 @@ class Select_model extends CI_Model {
     public function total_concepto_nomina_matricula($matricula) {
         $SqlInfo = "SELECT COALESCE(SUM(valor_unitario), 0) total from concepto_nomina where ((matricula = '" . $matricula . "') AND (estado = 1))";
         $query = $this->db->query($SqlInfo);
-        if ($query->num_rows() > 0) {
-            return $query->result();
+        if ($query->num_rows() == 1) {
+            return $query->row();
         }
     }    
 

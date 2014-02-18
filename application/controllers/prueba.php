@@ -12,8 +12,26 @@ class Prueba extends CI_Controller {
     function index() {
 //        $data['base_url'] = base_url();
 //        $this->load->view('testV');
-        $tipo_sancion = $this->select_model->t_sancion_id(2);
-        var_dump($tipo_sancion);
+
+                $matricula = '10002';
+                $conceptos = $this->select_model->concepto_nomina_matricula($matricula);
+                $total = $this->select_model->total_concepto_nomina_matricula($matricula);
+                var_dump($conceptos);
+                if ($conceptos == TRUE) {
+                    foreach ($prestamos as $fila) {
+                        echo '<tr>
+                                <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                        
+                                <td class="text-center">' . $fila->prefijo_nomina . ' ' . $fila->id_nomina . '</td>
+                                <td class="text-center">' . $fila->ejecutivo . '</td>
+                                <td class="text-center">' . $fila->tipo_concepto . '</td>
+                                <td class="text-center">' . $fila->escala . '</td>
+                                <td class="text-center">' . $fila->sede . '</td>
+                                <td class="text-center">$' . number_format($fila->valor_unitario, 2, '.', ',') . '</td>                                
+                            </tr>';
+                    }
+                } else {
+                    echo "";
+                }
 //        echo ($this->select_model->nextId_salario()->id) + 1;
 //        $SqlInfo = 'select * from empleado_x_sede AS a, sede AS b where (a.sede_secundaria = b.id) AND (a.dni_empleado=' . 1 . ')AND (a.id_empleado=' . 1 . ')AND (a.vigente=1)';
 //        $query = $this->db->query($SqlInfo);

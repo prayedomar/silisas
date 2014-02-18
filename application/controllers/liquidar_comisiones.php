@@ -310,17 +310,17 @@ class Liquidar_comisiones extends CI_Controller {
                 $conceptos = $this->select_model->concepto_nomina_matricula($matricula);
                 $total = $this->select_model->total_concepto_nomina_matricula($matricula);
                 if ($conceptos == TRUE) {
-                    foreach ($prestamos as $fila) {
+                    foreach ($conceptos as $fila) {
                         echo '<tr>
                                 <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                        
                                 <td class="text-center">' . $fila->prefijo_nomina . ' ' . $fila->id_nomina . '</td>
                                 <td class="text-center">' . $fila->ejecutivo . '</td>
                                 <td class="text-center">' . $fila->tipo_concepto . '</td>
                                 <td class="text-center">' . $fila->escala . '</td>
-                                <td class="text-center">' . $fila->sede . '</td>
                                 <td class="text-center">$' . number_format($fila->valor_unitario, 2, '.', ',') . '</td>                                
                             </tr>';
                     }
+                    echo '<tr><td colspan="5"><p style="text-align:right;font-size:18px;"><b>Total</b></p></td><td><p style="text-align:right;font-size:18px;">$' . number_format($total->total, 2, '.', ',') . '</p></td></tr>';
                 } else {
                     echo "";
                 }
