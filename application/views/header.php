@@ -164,7 +164,7 @@
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Crear <b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large row">
-                            <li class="col-sm-3">
+                            <li class="col-sm-4">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sede", "admon_sistema"))) { ?>
@@ -190,7 +190,7 @@
                                     <li><a href="<?= base_url() ?>proveedor/crear">Proveedor</a></li>                                
                                 </ul>
                             </li>
-                            <li class="col-sm-3">
+                            <li class="col-sm-4">
                                 <ul>
                                     <li class="dropdown-header">Cajas y Bancos</li>
                                     <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de Venta)</a></li>                                
@@ -205,30 +205,30 @@
                                     <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono a Préstamo</a></li>
                                     <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
                                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
-                                    <li><a href="<?= base_url() ?>factura/crear">Factura</a></li>
-                                    <li><a href="#">Recibo de Caja</a></li>                                    
+<!--                                    <li><a href="#">Factura</a></li>
+                                    <li><a href="#">Recibo de Caja</a></li>                                    -->
                                     <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
-                                    <li><a href="#">Nota Credito</a></li>
-                                    <li><a href="#">Pago Proveedor</a></li>
+                                    <!--<li><a href="#">Nota Credito</a></li>-->
+                                    <!--<li><a href="#">Pago Proveedor</a></li>-->
                                     <!--<li><a href="#">Cuentas por Pagar</a></li>-->
-                                    <li><a href="#">Retención en la fuente</a></li>
-                                    <li><a href="#">Transferencia Intersede</a></li>
+                                    <!--<li><a href="#">Retención en la fuente</a></li>-->
+                                    <!--<li><a href="#">Transferencia Intersede</a></li>-->
                                     <!--<li><a href="#">Informe de Datacredito</a></li>-->
                                 </ul>
                             </li>
-                            <li class="col-sm-3">
+                            <li class="col-sm-4">
                                 <ul>
-                                    <li class="dropdown-header">Inventario</li>
+<!--                                    <li class="dropdown-header">Inventario</li>
                                     <li><a href="#">Articulo Inventario</a></li>
                                     <li><a href="#">Articulo Insumo</a></li>
                                     <li><a href="#">Linea Celular</a></li>
                                     <li><a href="#">Pedido de Insumos</a></li>
-                                    <li class="divider"></li>                                    
+                                    <li class="divider"></li>                                    -->
                                     <li class="dropdown-header">Matrículas</li>
                                     <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li>                                
                                     <li><a href="<?= base_url() ?>matricula/crear">Matrícula</a></li>
                                     <li><a href="<?= base_url() ?>liquidar_comisiones/crear/new">Liquidar Matrícula</a></li>
-                                    <li><a href="#">Referido</a></li>
+<!--                                    <li><a href="#">Referido</a></li>
                                     <li><a href="#">Consolidar Referido</a></li>
                                     <li><a href="#">Material de Estudio</a></li>
                                     <li><a href="#">Entrega de Material</a></li>
@@ -236,44 +236,46 @@
                                     <li><a href="#">Comisión de Matrícula</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Permisos</li>
-                                    <li><a href="#">Código de Autorización</a></li>                                    
-                                </ul>
-                            </li>
-                            <li class="col-sm-3">
-                                <ul>
+                                    <li><a href="#">Código de Autorización</a></li>                                    -->
+                                    <li class="divider"></li>  
                                     <li class="dropdown-header">Traslados</li>
                                     <li><a href="<?= base_url() ?>traslado_contrato_matricula/crear">Contratos Físicos</a></li>
-                                    <li><a href="#">Material de Estudio</a></li>
-                                    <li><a href="#">Articulo de Inventario</a></li>                                   
+<!--                                    <li><a href="#">Material de Estudio</a></li>
+                                    <li><a href="#">Articulo de Inventario</a></li>                                   -->
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Enseñanza</li>
-                                    <li><a href="#">Horario de Clase</a></li>
-                                    <li><a href="#">Reserva de Clase</a></li>
+<!--                                    <li><a href="#">Horario de Clase</a></li>
+                                    <li><a href="#">Reserva de Clase</a></li>-->
                                     <li><a href="#">Reporte de Alumno</a></li>
-                                    <li><a href="#">Grados</a></li>                                  
-                                    <li><a href="#">Descargar Certificado</a></li>
-                                    <li class="divider"></li>
+                                </ul>
+                            </li>
+                            <!--<li class="col-sm-3">-->
+                                <!--<ul>-->
+<!--                                    <li><a href="#">Grados</a></li>                                  
+                                    <li><a href="#">Descargar Certificado</a></li>-->
+<!--                                    <li class="divider"></li>
                                     <li class="dropdown-header">Servicio al cliente</li>
                                     <li><a href="#">Acuerdo de Pago</a></li>
                                     <li><a href="#">Registro PQR</a></li>
-                                    <li><a href="#">Respuesta PQR</a></li>
-                                </ul>
-                            </li>
+                                    <li><a href="#">Respuesta PQR</a></li>-->
+                                <!--</ul>-->
+                            <!--</li>-->
                         </ul>
                     </li>
                     <li class="dropdown dropdown-large">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar / Anular<b class="caret"></b></a>
-                        <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 50px;">
-                            <li class="col-sm-3">
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar / Anular<b class="caret"></b></a>-->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar<b class="caret"></b></a>
+                        <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 310px;">
+                            <li class="col-sm-12">
                                 <ul>
-                                    <li class="dropdown-header">Sedes</li>
+<!--                                    <li class="dropdown-header">Sedes</li>
                                     <li><a href="#">Sede</a></li>
                                     <li><a href="#">Salon</a></li>
-                                    <li class="divider"></li>                                    
+                                    <li class="divider"></li>                                    -->
                                     <li class="dropdown-header">Empleados</li>
                                     <li><a href="<?= base_url() ?>sedes_empleado/editar">Sedes de Empleado</a></li>
                                     <li><a href="<?= base_url() ?>cargo_jefe_rrpp/editar">Cargo y Jefe de RRPP</a></li>
-                                    <li><a href="#">Renovar Contrato Laboral</a></li>                                
+<!--                                    <li><a href="#">Renovar Contrato Laboral</a></li>                                
                                     <li><a href="#">Entrega de Placa</a></li>
                                     <li><a href="#">Contrato Laboral</a></li>
                                     <li><a href="#">Ausencia Laboral</a></li>
@@ -281,10 +283,10 @@
                                     <li><a href="#">Suspensión Laboral</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
-                                    <li><a href="#">Proveedor</a></li>
+                                    <li><a href="#">Proveedor</a></li>-->
                                 </ul>
                             </li>
-                            <li class="col-sm-3">
+<!--                            <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Transacciones</li>
                                     <li><a href="#">Adelanto</a></li>
@@ -349,13 +351,13 @@
                                     <li><a href="#">Registro PQR</a></li>
                                     <li><a href="#">Respuesta PQR</a></li>
                                 </ul>
-                            </li>
+                            </li>-->
                         </ul>
                     </li>
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Consultar <b class="caret"></b></a>
-                        <ul class="dropdown-menu dropdown-menu-large row"  style="margin-left: 100px;">
-                            <li class="col-sm-3">
+                        <ul class="dropdown-menu dropdown-menu-large row"  style="margin-left: 432px;">
+                            <li class="col-sm-6">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
                                     <li><a href="<?= base_url() ?>sede/consultar">Sedes</a></li>
@@ -377,19 +379,19 @@
                                     <li><a href="<?= base_url() ?>proveedor/consultar">Proveedores</a></li>                                
                                 </ul>
                             </li>
-                            <li class="col-sm-3">
+                            <li class="col-sm-6">
                                 <ul>
                                     <li class="dropdown-header">Cajas y Bancos</li>
                                     <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de Venta)</a></li>                                
                                     <li><a href="<?= base_url() ?>cuenta/consultar">Cuenta Bancaria</a></li>
-                                    <li><a href="#">Autorizar Cuenta Bancaria a Sedes</a></li>
-                                    <li><a href="#">Autorizar Cuenta Bancaria a Empleado</a></li>
+                                    <li><a href="<?= base_url() ?>cuenta/asignar_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
+                                    <li><a href="<?= base_url() ?>cuenta/asignar_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
                                     <li><a href="<?= base_url() ?>transacciones/consultar">Transacciones</a></li>
                                 </ul>
                             </li>
-                            <li class="col-sm-3">
+<!--                            <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Inventario</li>
                                     <li><a href="#">Articulo Inventario</a></li>
@@ -431,7 +433,7 @@
                                     <li><a href="#">Registro PQR</a></li>
                                     <li><a href="#">Respuesta PQR</a></li>
                                 </ul>
-                            </li>
+                            </li>-->
                         </ul>
                     </li>                    
                 </ul>
@@ -446,7 +448,7 @@
                             </li>
                             <li class="col-sm-8">
                                 <ul>
-                                    <li><a href="#">Ver Perfil</a></li>
+                                    <!--<li><a href="#">Ver Perfil</a></li>-->
                                     <li><a href="#">Cambiar Contraseña</a></li>
                                     <li class="divider"></li>
                                     <li><a href="<?= base_url() ?>login/logout_ci">Cerrar Sesión &raquo;</a></li>

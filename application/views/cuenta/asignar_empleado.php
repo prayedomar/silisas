@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail"> 
             <div class="row">
-                <legend>Autorizar cuenta bancaria a empleado</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Autorizar y consultar, cuentas bancarias a empleados</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="col-xs-12">
                     <div class="overflow_tabla separar_div">
                         <label>Cuenta Bancaria<em class="required_asterisco">*</em></label>

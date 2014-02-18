@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail"> 
             <div class="row">
-                <legend>Autorizar cuenta bancaria a sedes</legend>
+                <legend>Autorizar y consultar, cuentas bancarias a sedes</legend>
                 <p class="help-block"><B>> </B>Esta función es importante para garantizar que los empleados a los que se le autorize el uso de una cuenta, pertenezcan a cualquiera de las sedes habilitadas para utilizar dicha cuenta.</p>                            
                 <p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="col-xs-12">
