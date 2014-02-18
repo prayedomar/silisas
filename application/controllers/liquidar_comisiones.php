@@ -11,7 +11,7 @@ class Liquidar_comisiones extends CI_Controller {
 
     function crear($contrato) {
         $data["tab"] = "crear_liquidar_comisiones";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -32,7 +32,7 @@ class Liquidar_comisiones extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|callback_select_default');
             $this->form_validation->set_rules('ejecutivo_directo', 'Comisión Directa', 'required|callback_select_default');
 
@@ -61,7 +61,7 @@ class Liquidar_comisiones extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $id_matricula = $this->input->post('matricula');
             list($id_ejecutivo_original, $dni_ejecutivo_original, $cargo_ejecutivo_original) = explode("-", $this->input->post('ejecutivo_original'));
             list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("-", $this->input->post('ejecutivo_directo'));
@@ -83,7 +83,7 @@ class Liquidar_comisiones extends CI_Controller {
             $detalle = "Matrícula: " . $id_matricula;
 
             $data["tab"] = "crear_liquidar_comisiones";
-            $this->isLogin($data["tab"]);                  
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "liquidar_comisiones/crear/new";
             $data['msn_recrear'] = "Crear otra Liquidación de Matrícula.";
@@ -143,10 +143,10 @@ class Liquidar_comisiones extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_matricula_iliquidada() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -165,11 +165,11 @@ class Liquidar_comisiones extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }   
-    
+    }
+
     public function llena_detalle_matricula_liquidar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('matricula')) && ($this->input->post('matricula') != "default")) {
                 $contrato = $this->input->post('matricula');
                 $detalle = $this->select_model->detalle_matricula_liquidar($contrato);
@@ -207,11 +207,11 @@ class Liquidar_comisiones extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }   
-    
+    }
+
     public function llena_empleado_rrpp_sedePpal() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -230,11 +230,11 @@ class Liquidar_comisiones extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_cargo_comision_faltante() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable')) && ($this->input->post('ejecutivoDirecto')) && (($this->input->post('ejecutivoDirecto')) != "default")) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -266,11 +266,11 @@ class Liquidar_comisiones extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    } 
-    
+    }
+
     public function llena_cargo_ejecutivo_directo() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('ejecutivoDirecto')) && ($this->input->post('ejecutivoDirecto') != "default")) {
                 list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $this->input->post('ejecutivoDirecto'));
                 $t_cargo = $this->select_model->t_cargo_id($cargo_ejecutivo);
@@ -286,11 +286,11 @@ class Liquidar_comisiones extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    } 
-    
+    }
+
     function consultar() {
         $data["tab"] = "consultar_liquidar_comisiones";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -301,14 +301,15 @@ class Liquidar_comisiones extends CI_Controller {
         $this->parser->parse('liquidar_comisiones/consultar', $data);
         $this->load->view('footer');
     }
-    
+
     public function llena_comisiones_matricula() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             if ($this->input->post('matricula')) {
-                list($id_beneficiario, $dni_beneficiario) = explode("-", $this->input->post('beneficiario'));
-                $prestamos = $this->select_model->prestamo_vigente_beneficiario($id_beneficiario, $dni_beneficiario);
-                if ($prestamos == TRUE) {
+                $matricula = $this->input->post('matricula');
+                $conceptos = $this->select_model->concepto_nomina_matricula($matricula);
+                $total = $this->select_model->total_concepto_nomina_matricula($matricula);
+                if ($conceptos == TRUE) {
                     foreach ($prestamos as $fila) {
                         echo '<tr>
                             <td class="text-center"><input type="radio" class="exit_caution" name="prestamo" id="prestamo" value="' . $fila->prefijo_prestamo . "-" . $fila->id_prestamo . '"/></td>
@@ -329,7 +330,6 @@ class Liquidar_comisiones extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
 
 }
