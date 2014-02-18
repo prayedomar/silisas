@@ -61,11 +61,11 @@ class Transacciones extends CI_Controller {
         }
         $data["lista"] = $this->transaccionesm->listar_transacciones_excel($_GET);
         ?>
-        <table class='table table-hover'>
+       <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
             <thead>
                 <tr>
                     <th>Fecha</th>
-                    <th>Tipo de transacción</th>
+                    <th><?= utf8_decode("Tipo de transacción") ?></th>
                     <th>Id</th>
                     <th>Total</th>
                     <th>Caja</th>
@@ -81,16 +81,16 @@ class Transacciones extends CI_Controller {
                 <?php foreach ($data["lista"] as $row) { ?>
                     <tr>
                         <td><?= $row->fecha_trans ?></td>
-                        <td><?= $row->tipo_trans ?></td>
+                        <td><?= utf8_decode($row->tipo_trans) ?></td>
                         <td><?= $row->prefijo . " " . $row->id ?></td>
                         <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
-                        <td><?= ($row->caja != "") ? $row->caja : "--" ?></td>
+                        <td><?= ($row->caja != "") ? utf8_decode($row->caja) : "--" ?></td>
                         <td><?= ($row->efectivo_caja != "") ? "$" . number_format($row->efectivo_caja, 2, '.', ',') : "--" ?></td>
-                        <td><?= ($row->cuenta != "") ? $row->cuenta : "--" ?></td>
+                        <td><?= ($row->cuenta != "") ? utf8_decode($row->cuenta) : "--" ?></td>
                         <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
                         <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
-                        <td><?= $row->sede ?></td>
-                        <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
+                        <td><?= utf8_decode($row->sede) ?></td>
+                        <td><?= utf8_decode($row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2) ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
