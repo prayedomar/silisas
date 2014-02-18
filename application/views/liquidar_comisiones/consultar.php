@@ -9,7 +9,7 @@
                             <div class="col-xs-4 col-xs-offset-4">
                                 <div class="form-group" id="div_matricula">
                                     <label>Número de Matrícula<em class="required_asterisco">*</em></label>
-                                    <input name="contrato" id="contrato" type="text" class="form-control exit_caution numerico" placeholder="Número de Contrato Físico" maxlength="13">
+                                    <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" placeholder="Número de Contrato Físico" maxlength="13">
                                 </div> 
                             </div>
                         </div>

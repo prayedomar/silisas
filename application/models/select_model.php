@@ -362,14 +362,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function t_sancion_id($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('t_sancion');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     public function t_contrato_laboral() {
         $query = $this->db->get('t_contrato_laboral');
@@ -756,10 +756,18 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+
+    public function concepto_nomina_matricula($matricula) {
+        $SqlInfo = "SELECT c_n.*, t_c.cargo_masculino as escala, CONCAT(em.nombre1, ' ', em.nombre2, ' ', em.apellido1, ' ', em.apellido2) AS ejecutivo, t_co.tipo as tipo_concepto from concepto_nomina as c_n, t_cargo as t_c, empleado as em, t_concepto_nomina as t_co where ((c_n.matricula = '" . $matricula . "') AND (c_n.estado = 1) AND (c_n.escala_matricula = t_c.id) AND ((em.id=c_n.id_empleado) AND (em.dni=c_n.dni_empleado)) AND (c_n.t_concepto_nomina = t_co.id))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }
     
-    public function t_concepto_nomina_matricula($matricula) {
-        $this->db->where('matricula', $matricula);
-        $query = $this->db->get('t_concepto_nomina');
+    public function total_concepto_nomina_matricula($matricula) {
+        $SqlInfo = "SELECT COALESCE(SUM(valor_unitario), 0) total from concepto_nomina where ((matricula = '" . $matricula . "') AND (estado = 1))";
+        $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }

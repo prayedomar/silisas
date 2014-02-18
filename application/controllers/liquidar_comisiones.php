@@ -296,10 +296,39 @@ class Liquidar_comisiones extends CI_Controller {
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
 
-        $data['action_llena_matricula_iliquidada'] = base_url() . "liquidar_comisiones/llena_matricula_iliquidada";
+        $data['action_llena_comisiones_matricula'] = base_url() . "liquidar_comisiones/llena_comisiones_matricula";
 
         $this->parser->parse('liquidar_comisiones/consultar', $data);
         $this->load->view('footer');
+    }
+    
+    public function llena_comisiones_matricula() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            if ($this->input->post('matricula')) {
+                list($id_beneficiario, $dni_beneficiario) = explode("-", $this->input->post('beneficiario'));
+                $prestamos = $this->select_model->prestamo_vigente_beneficiario($id_beneficiario, $dni_beneficiario);
+                if ($prestamos == TRUE) {
+                    foreach ($prestamos as $fila) {
+                        echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="prestamo" id="prestamo" value="' . $fila->prefijo_prestamo . "-" . $fila->id_prestamo . '"/></td>
+                            <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $fila->cant_cuotas . '</td>
+                            <td class="text-center">$' . $fila->tasa_interes . '%</td>                                
+                            <td class="text-center">$' . number_format($fila->cuota_fija, 2, '.', ',') . '</td>                                
+                            <td class="text-center">' . $fila->sede . '</td>                         
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>  
+                        </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
     }    
     
 
