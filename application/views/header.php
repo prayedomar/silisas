@@ -167,7 +167,9 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
-                                    <li><a href="<?= base_url() ?>sede/crear">Sede</a></li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sede", "admon_sistema"))) { ?>
+                                        <li><a href="<?= base_url() ?>sede/crear">Sede</a></li>
+                                    <?php } ?>
                                     <li><a href="<?= base_url() ?>salon/crear">Salón</a></li>
                                     <li class="divider"></li>                                            
                                     <li class="dropdown-header">Empleados</li>
