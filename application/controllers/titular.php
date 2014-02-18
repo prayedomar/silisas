@@ -11,6 +11,7 @@ class Titular extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_titular";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -100,12 +101,14 @@ class Titular extends CI_Controller {
             $password = $this->encrypt->encode($id);
             $vigente = 1;
             $t_usuario = 2; //Titular
-            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
 
             $data["tab"] = "crear_titular";
+            $this->isLogin($data["tab"]);            
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "titular/crear";
-            $data['msn_recrear'] = "Crear otro Titular";
+            $data['msn_recrear'] = "Crear otro Titular";            
+            
+            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
@@ -215,6 +218,7 @@ class Titular extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_deptom');
         $data["tab"] = "consultar_titular";
+        $this->isLogin($data["tab"]);        
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();

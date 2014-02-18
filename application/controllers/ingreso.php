@@ -12,6 +12,7 @@ class Ingreso extends CI_Controller {
 //Crear: Ingreso
     function crear() {
         $data["tab"] = "crear_ingreso";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -171,6 +172,7 @@ class Ingreso extends CI_Controller {
             $credito_debito = 1; //Credito
 
             $data["tab"] = "crear_ingreso";
+            $this->isLogin($data["tab"]);               
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "ingreso/crear";
             $data['msn_recrear'] = "Crear otro Ingreso";

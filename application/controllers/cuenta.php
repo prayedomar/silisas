@@ -11,6 +11,7 @@ class Cuenta extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_cuenta";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -69,12 +70,13 @@ class Cuenta extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
-            $error = $this->insert_model->cuenta($cuenta, $t_cuenta, $banco, $nombre_cuenta, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
-
             $data["tab"] = "crear_cuenta";
+            $this->isLogin($data["tab"]);                
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "cuenta/crear";
             $data['msn_recrear'] = "Crear otra Cuenta";
+            
+            $error = $this->insert_model->cuenta($cuenta, $t_cuenta, $banco, $nombre_cuenta, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
@@ -114,6 +116,7 @@ class Cuenta extends CI_Controller {
     //Asignar Cuenta a sedes    
     function asignar_empleado() {
         $data["tab"] = "crear_asignar_cuenta_empeado";
+        $this->isLogin($data["tab"]);           
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -288,6 +291,7 @@ class Cuenta extends CI_Controller {
     //Asignar Cuenta a sedes
     function asignar_sede() {
         $data["tab"] = "crear_asignar_cuenta_sede";
+        $this->isLogin($data["tab"]);           
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -430,6 +434,7 @@ class Cuenta extends CI_Controller {
         $this->load->model('t_cuentam');
         $this->load->model('bancom');
         $data["tab"] = "consultar_cuenta";
+        $this->isLogin($data["tab"]);        
         $data['tipos_cuentas'] = $this->t_cuentam->listar_todas_los_tipos_cuentas();
         $data['lista_bancos'] = $this->bancom->listar_bancos();
 

@@ -12,6 +12,7 @@ class Abono_adelanto extends CI_Controller {
 //Crear: Abono a Adelanto de nomina
     function crear() {
         $data["tab"] = "crear_abono_adelanto";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -107,6 +108,7 @@ class Abono_adelanto extends CI_Controller {
             $credito_debito = 1; //Credito
 
             $data["tab"] = "crear_abono_adelanto";
+            $this->isLogin($data["tab"]);               
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_adelanto/crear";
             $data['msn_recrear'] = "Crear otro Abono a Adelanto";

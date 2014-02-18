@@ -12,6 +12,7 @@ class Salario extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_salario";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -56,13 +57,13 @@ class Salario extends CI_Controller {
             //se calcula con el ultimo id
             $id_salario = ($this->select_model->nextId_salario()->id) + 1;
 
-            $error1 = $this->insert_model->new_salario($id_salario, $nombre, $t_salario, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
-
             $data["tab"] = "crear_salario";
+            $this->isLogin($data["tab"]);            
             $this->load->view("header", $data);
-
             $data['url_recrear'] = base_url() . "salario/crear";
             $data['msn_recrear'] = "Crear otro Salario";
+            
+            $error1 = $this->insert_model->new_salario($id_salario, $nombre, $t_salario, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
@@ -131,6 +132,7 @@ class Salario extends CI_Controller {
     public function consultar() {
         $this->load->model('t_salariom');
         $data["tab"] = "consultar_salario";
+        $this->isLogin($data["tab"]);        
         $data['tipos_salarios'] = $this->t_salariom->listar_todos_los_salarios();
         $filasPorPagina = 3;
         if (empty($_GET["page"])) {

@@ -12,6 +12,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
     //Editar: Cargo y Jefe
     function editar() {
         $data["tab"] = "editar_cargo_jefe_rrpp";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');

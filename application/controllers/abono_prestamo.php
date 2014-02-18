@@ -12,6 +12,7 @@ class Abono_prestamo extends CI_Controller {
 //Crear: Abono a Prestamo
     function crear() {
         $data["tab"] = "crear_abono_prestamo";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -127,6 +128,7 @@ class Abono_prestamo extends CI_Controller {
             $credito_debito = 1; //Credito            
 
             $data["tab"] = "crear_abono_prestamo";
+            $this->isLogin($data["tab"]);               
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_prestamo/crear";
             $data['msn_recrear'] = "Crear otro Abono a Prestamo";

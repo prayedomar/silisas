@@ -12,6 +12,7 @@ class Nomina extends CI_Controller {
 //Crear: Nomina
     function crear() {
         $data["tab"] = "crear_nomina";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -136,6 +137,7 @@ class Nomina extends CI_Controller {
             $credito_debito = 0; //Debito             
 
             $data["tab"] = "crear_nomina";
+            $this->isLogin($data["tab"]);               
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "nomina/crear";
             $data['msn_recrear'] = "Crear otra Nómina";

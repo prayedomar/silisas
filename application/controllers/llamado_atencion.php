@@ -70,15 +70,15 @@ class Llamado_atencion extends CI_Controller {
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
-
             $id_llamado_atencion = ($this->select_model->nextId_llamado_atencion()->id) + 1;
 
-            $error1 = $this->insert_model->llamado_atencion($id_llamado_atencion, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
-
             $data["tab"] = "crear_llamado_atencion";
+            $this->isLogin($data["tab"]);            
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "llamado_atencion/crear";
             $data['msn_recrear'] = "Crear otro llamado de atención";
+            
+            $error1 = $this->insert_model->llamado_atencion($id_llamado_atencion, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
@@ -233,7 +233,7 @@ class Llamado_atencion extends CI_Controller {
         $this->load->model('t_dnim');
         $this->load->model('t_sancionm');
         $this->load->model('sedem');
-        $data["tab"] = "llamado_atencion";
+        $data["tab"] = "consultar_llamado_atencion";
         $this->isLogin($data["tab"]);
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_sanciones'] = $this->t_sancionm->listar_tiopos_de_sancion();

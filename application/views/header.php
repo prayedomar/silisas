@@ -301,7 +301,7 @@
 <!--                                    <li><a href="#">Horario de Clase</a></li>
                                     <li><a href="#">Reserva de Clase</a></li>-->
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "docente"))) { ?> 
-                                    <li><a href="#">Reporte de Alumno</a></li>
+                                    <!--<li><a href="#">Reporte de Alumno</a></li>-->
                                     <?php } ?>                                    
                                 </ul>
                             </li>

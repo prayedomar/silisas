@@ -11,6 +11,7 @@ class Salon extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_salon";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -57,13 +58,13 @@ class Salon extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
-            $error = $this->insert_model->new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
-
             $data["tab"] = "crear_salon";
+            $this->isLogin($data["tab"]);            
             $this->load->view("header", $data);
-
             $data['url_recrear'] = base_url() . "salon/crear";
             $data['msn_recrear'] = "Crear otro Salón";
+            
+            $error = $this->insert_model->new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
@@ -79,6 +80,7 @@ class Salon extends CI_Controller {
     public function consultar() {
         $this->load->model('sedem');
         $data["tab"] = "consultar_salon";
+        $this->isLogin($data["tab"]);        
         $data['listaSedes'] = $this->sedem->listar_todas_las_sedes();
         $filasPorPagina = 20;
         if (empty($_GET["page"])) {

@@ -11,6 +11,7 @@ class Traslado_contrato_matricula extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_traslado_contrato_matricula";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -105,6 +106,7 @@ class Traslado_contrato_matricula extends CI_Controller {
             $dni_responsable = $this->input->post('dni_responsable');
 
             $data["tab"] = "crear_traslado_contrato_matricula";
+            $this->isLogin($data["tab"]);              
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "traslado_contrato_matricula/crear";
             $data['msn_recrear'] = "Crear otro Traslado de Contratos";

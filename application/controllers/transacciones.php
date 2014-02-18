@@ -12,7 +12,8 @@ class Transacciones extends CI_Controller {
         $this->load->model('t_cajam');
         $this->load->model('sedem');
         $this->load->model('t_transm');
-        $data["tab"] = "transacciones";
+        $data["tab"] = "consultar_transacciones";
+        $this->isLogin($data["tab"]);        
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $data['lista_trans'] = $this->t_transm->listar_tipos_de_transacciones();

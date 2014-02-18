@@ -12,6 +12,7 @@ class Sedes_empleado extends CI_Controller {
     //Editar: Sede Empleado
     function editar() {
         $data["tab"] = "editar_sedes_empleado";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');

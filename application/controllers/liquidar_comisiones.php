@@ -11,6 +11,7 @@ class Liquidar_comisiones extends CI_Controller {
 
     function crear($contrato) {
         $data["tab"] = "crear_liquidar_comisiones";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -82,6 +83,7 @@ class Liquidar_comisiones extends CI_Controller {
             $detalle = "Matrícula: " . $id_matricula;
 
             $data["tab"] = "crear_liquidar_comisiones";
+            $this->isLogin($data["tab"]);                  
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "liquidar_comisiones/crear/new";
             $data['msn_recrear'] = "Crear otra Liquidación de Matrícula.";

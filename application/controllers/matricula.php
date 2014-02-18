@@ -12,6 +12,7 @@ class MAtricula extends CI_Controller {
     //Crear: Matrícula
     function crear() {
         $data["tab"] = "crear_matricula";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -105,10 +106,13 @@ class MAtricula extends CI_Controller {
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
 
+            $data["tab"] = "crear_matricula";
+            $this->isLogin($data["tab"]);             
+            
             $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
 
             if (isset($error)) {
-                $data["tab"] = "crear_matricula";
+                $data["tab"] = "crear_matricula";                 
                 $this->load->view("header", $data);
                 $data['trans_error'] = $error;
                 $data['url_recrear'] = base_url() . "matricula/crear";

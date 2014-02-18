@@ -11,6 +11,7 @@ class Ausencia_laboral extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_ausencia_laboral";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -64,13 +65,13 @@ class Ausencia_laboral extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
-
-            $error = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
-
             $data["tab"] = "crear_ausencia_laboral";
+            $this->isLogin($data["tab"]);            
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "ausencia_laboral/crear";
             $data['msn_recrear'] = "Crear otra Ausencia Laboral";
+
+            $error = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
@@ -125,7 +126,8 @@ class Ausencia_laboral extends CI_Controller {
         $this->load->model('est_empleadom');
         $this->load->model('sedem');
         $this->load->model('t_ausenciam');
-        $data["tab"] = "ausencia_laboral";
+        $data["tab"] = "consultar_ausencia_laboral";
+        $this->isLogin($data["tab"]);        
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_ausencias'] = $this->t_ausenciam->listar_tiopos_de_ausencia();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();

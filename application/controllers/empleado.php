@@ -11,6 +11,7 @@ class Empleado extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_empleado";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -139,16 +140,16 @@ class Empleado extends CI_Controller {
                 $fecha_fin = NULL;
             }
 
+            $data["tab"] = "crear_empleado";
+            $this->isLogin($data["tab"]);            
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "empleado/crear";
+            $data['msn_recrear'] = "Crear otro Empleado";
+            
             $password = $this->encrypt->encode($id);
             $vigente = 1;
             $t_usuario = 1; //Empleado
             $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
-
-            $data["tab"] = "crear_empleado";
-            $this->load->view("header", $data);
-
-            $data['url_recrear'] = base_url() . "empleado/crear";
-            $data['msn_recrear'] = "Crear otro Empleado";
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
@@ -371,6 +372,7 @@ class Empleado extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_deptom');
         $data["tab"] = "consultar_empleado";
+        $this->isLogin($data["tab"]);        
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();

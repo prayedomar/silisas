@@ -12,6 +12,7 @@ class Alumno extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_alumno";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -128,12 +129,14 @@ class Alumno extends CI_Controller {
 
             $perfil = 'alumno';
             $vigente = 1;
-            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
 
-            $data["tab"] = "crear_alumno";
+            $data["tab"] = "crear_alumno";            
+            $this->isLogin($data["tab"]);                
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "alumno/crear";
             $data['msn_recrear'] = "Crear otro Alumno";
+            
+            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
@@ -250,6 +253,7 @@ class Alumno extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_cursom');
         $data["tab"] = "consultar_alumno";
+        $this->isLogin($data["tab"]);        
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
         $data['estados_alumnos'] = $this->est_alumnom->listar_todas_los_estados_de_alumno();

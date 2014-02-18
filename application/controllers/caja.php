@@ -11,6 +11,7 @@ class Caja extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_caja";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -57,13 +58,13 @@ class Caja extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
-
-            $error = $this->insert_model->caja($sede, $t_caja, $id_encargado, $dni_encargado, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
-
             $data["tab"] = "crear_caja";
+            $this->isLogin($data["tab"]);               
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "caja/crear";
             $data['msn_recrear'] = "Crear otra Caja (Punto de Venta)";
+
+            $error = $this->insert_model->caja($sede, $t_caja, $id_encargado, $dni_encargado, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
@@ -122,8 +123,8 @@ class Caja extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_cajam');
 
-
         $data["tab"] = "consultar_caja";
+        $this->isLogin($data["tab"]);        
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_cajas'] = $this->t_cajam->listar_tipos_de_caja();
