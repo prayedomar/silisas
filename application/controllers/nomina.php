@@ -164,8 +164,8 @@ class Nomina extends CI_Controller {
                         foreach ($rrpp_nuevo as $fila) {
                             //En el caso que sean conceptos pendiente de nomina por ser actualizados a OK
                             if ($fila == '1') {
-                                //ACtualizamos los conceptos de rrpp a 1: OK
-                                $error2 = $this->update_model->concepto_nomina_estado($id_concepto[$i], 1);
+                                //ACtualizamos los conceptos de rrpp a 1: OK y actualizamos el prefid de la nomina
+                                $error2 = $this->update_model->concepto_nomina_rrpp_ok($id_concepto[$i], $prefijo_nomina, $id_nomina);
                                 if (isset($error2)) {
                                     $data['trans_error'] = $error2;
                                     $this->parser->parse('trans_error', $data);

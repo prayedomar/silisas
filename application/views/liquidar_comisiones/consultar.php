@@ -25,13 +25,13 @@
                             <label>Detalles de la Matrícula</label>
                             <table class="table table-hover">
                                 <thead>
-                                    <tr>                                           
-                                        <th class="text-center">id. Nómina</th>
+                                    <tr>                 
+                                        <th class="text-center">Fecha</th>                                        
+                                        <th class="text-center">Id. Nómina</th>
                                         <th class="text-center">Ejecutivo</th>
                                         <th class="text-center">Detalle</th>
                                         <th class="text-center">Escala</th>
-                                        <th class="text-center">valor</th>                                  
-                                        <th class="text-center">Fecha</th>
+                                        <th class="text-center">Valor</th>                                  
                                     </tr>
                                 </thead>
                                 <tbody id="tbody_detalle_matricula">

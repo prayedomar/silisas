@@ -312,14 +312,14 @@ class Liquidar_comisiones extends CI_Controller {
                 if ($conceptos == TRUE) {
                     foreach ($prestamos as $fila) {
                         echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="prestamo" id="prestamo" value="' . $fila->prefijo_prestamo . "-" . $fila->id_prestamo . '"/></td>
-                            <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>
-                            <td class="text-center">' . $fila->cant_cuotas . '</td>
-                            <td class="text-center">$' . $fila->tasa_interes . '%</td>                                
-                            <td class="text-center">$' . number_format($fila->cuota_fija, 2, '.', ',') . '</td>                                
-                            <td class="text-center">' . $fila->sede . '</td>                         
-                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>  
-                        </tr>';
+                                <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                        
+                                <td class="text-center">' . $fila->prefijo_nomina . ' ' . $fila->id_nomina . '</td>
+                                <td class="text-center">' . $fila->ejecutivo . '</td>
+                                <td class="text-center">' . $fila->tipo_concepto . '</td>
+                                <td class="text-center">' . $fila->escala . '</td>
+                                <td class="text-center">' . $fila->sede . '</td>
+                                <td class="text-center">$' . number_format($fila->valor_unitario, 2, '.', ',') . '</td>                                
+                            </tr>';
                     }
                 } else {
                     echo "";

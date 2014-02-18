@@ -223,9 +223,11 @@ class Update_model extends CI_Model {
         }
     }  
     
-    public function concepto_nomina_estado($id, $new_estado) {
+    public function concepto_nomina_rrpp_ok($id, $prefijo_nomina, $id_nomina) {
         $data = array(
-            'estado' => $new_estado
+            'prefijo_nomina' => $prefijo_nomina,
+            'id_nomina' => $id_nomina,
+            'estado' => 1
         );
         $this->db->where('id', $id);
         $this->db->update('concepto_nomina', $data);
