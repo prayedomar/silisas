@@ -139,7 +139,7 @@ $(function() {
         window.location.href = url;
     });
     $("#toExcel").click(function() {
-        var url = "transacciones/excel?";
+        var url = "excel?";
 
         if ($("#desde").val() != "") {
             url += "desde=" + $("#desde").val() + "&";
