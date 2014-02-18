@@ -167,47 +167,93 @@
                             <li class="col-sm-4">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
-                                    <?php if (in_array($_SESSION["perfil"], array("admon_sede", "admon_sistema"))) { ?>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
                                         <li><a href="<?= base_url() ?>sede/crear">Sede</a></li>
                                     <?php } ?>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                        
                                     <li><a href="<?= base_url() ?>salon/crear">Salón</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>                                            
                                     <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>                                   
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                    
+                                    <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>  
+                                    <?php } ?>                                    
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>empleado/crear">Empleado</a></li>
+                                    <?php } ?>                                    
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>sede_secundaria/crear">Sedes Secundarias</a></li>
+                                    <?php } ?>                          
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>despachar_placa/crear">Despachar Placas</a></li>
+                                    <?php } ?>                              
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>recibir_placa/crear">Recibir Placas</a></li>
+                                    <?php } ?>                             
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>ausencia_laboral/crear">Ausencia Laboral</a></li>
+                                    <?php } ?>                           
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>llamado_atencion/crear">Llamado de Atención</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Clientes</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>titular/crear">Titular</a></li>
+                                    <?php } ?>                            
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>alumno/crear">Alumno</a></li>
+                                    <?php } ?>                        
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cliente/crear">Cliente Prestatario</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
-                                    <li><a href="<?= base_url() ?>proveedor/crear">Proveedor</a></li>                                
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>proveedor/crear">Proveedor</a></li>
+                                    <?php } ?>                                    
                                 </ul>
                             </li>
                             <li class="col-sm-4">
                                 <ul>
                                     <li class="dropdown-header">Cajas y Bancos</li>
-                                    <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de Venta)</a></li>                                
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de Venta)</a></li>
+                                    <?php } ?>                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/crear">Cuenta Bancaria</a></li>
+                                    <?php } ?>                        
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/asignar_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
+                                    <?php } ?>                           
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/asignar_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>adelanto/crear">Adelanto</a></li>
+                                    <?php } ?>                             
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
-                                    <li><a href="<?= base_url() ?>abono_adelanto/crear">Abono a Adelanto</a></li>                                
+                                    <?php } ?>                           
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>abono_adelanto/crear">Abono a Adelanto</a></li> 
+                                    <?php } ?>                            
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono a Préstamo</a></li>
+                                    <?php } ?>                          
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
+                                    <?php } ?>                          
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
+                                    <?php } ?>                                    
 <!--                                    <li><a href="#">Factura</a></li>
                                     <li><a href="#">Recibo de Caja</a></li>                                    -->
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
                                     <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
+                                    <?php } ?>                                    
                                     <!--<li><a href="#">Nota Credito</a></li>-->
                                     <!--<li><a href="#">Pago Proveedor</a></li>-->
                                     <!--<li><a href="#">Cuentas por Pagar</a></li>-->
@@ -225,9 +271,15 @@
                                     <li><a href="#">Pedido de Insumos</a></li>
                                     <li class="divider"></li>                                    -->
                                     <li class="dropdown-header">Matrículas</li>
-                                    <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li>                                
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li> 
+                                    <?php } ?>                                    
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>matricula/crear">Matrícula</a></li>
+                                    <?php } ?>                                    
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>liquidar_comisiones/crear/new">Liquidar Matrícula</a></li>
+                                    <?php } ?>                                    
 <!--                                    <li><a href="#">Referido</a></li>
                                     <li><a href="#">Consolidar Referido</a></li>
                                     <li><a href="#">Material de Estudio</a></li>
@@ -239,14 +291,18 @@
                                     <li><a href="#">Código de Autorización</a></li>                                    -->
                                     <li class="divider"></li>  
                                     <li class="dropdown-header">Traslados</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "traslado"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>traslado_contrato_matricula/crear">Contratos Físicos</a></li>
+                                    <?php } ?>                                    
 <!--                                    <li><a href="#">Material de Estudio</a></li>
                                     <li><a href="#">Articulo de Inventario</a></li>                                   -->
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Enseñanza</li>
 <!--                                    <li><a href="#">Horario de Clase</a></li>
                                     <li><a href="#">Reserva de Clase</a></li>-->
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "docente"))) { ?> 
                                     <li><a href="#">Reporte de Alumno</a></li>
+                                    <?php } ?>                                    
                                 </ul>
                             </li>
                             <!--<li class="col-sm-3">-->
@@ -273,8 +329,12 @@
                                     <li><a href="#">Salon</a></li>
                                     <li class="divider"></li>                                    -->
                                     <li class="dropdown-header">Empleados</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>sedes_empleado/editar">Sedes de Empleado</a></li>
+                                    <?php } ?>                              
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cargo_jefe_rrpp/editar">Cargo y Jefe de RRPP</a></li>
+                                    <?php } ?>                                    
 <!--                                    <li><a href="#">Renovar Contrato Laboral</a></li>                                
                                     <li><a href="#">Entrega de Placa</a></li>
                                     <li><a href="#">Contrato Laboral</a></li>
@@ -360,35 +420,67 @@
                             <li class="col-sm-6">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>sede/consultar">Sedes</a></li>
+                                    <?php } ?>                           
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>salon/consultar">Salones</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>                                            
                                     <li class="dropdown-header">Empleados</li>
-                                    <li><a href="<?= base_url() ?>salario/consultar">Salarios Laborales</a></li>                                   
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>salario/consultar">Salarios Laborales</a></li> 
+                                    <?php } ?>                                
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>empleado/consultar">Empleados</a></li>
+                                    <?php } ?>                           
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>sede_secundaria/crear">Sedes Secundarias</a></li>
+                                    <?php } ?>                                   
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>ausencia_laboral/consultar">Ausencias Laborales</a></li>
+                                    <?php } ?>                              
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>llamado_atencion/consultar">Llamados de Atención</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Clientes</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>titular/consultar">Titulares</a></li>
+                                    <?php } ?>                              
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>alumno/consultar">Alumnos</a></li>
+                                    <?php } ?>                            
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cliente/consultar">Clientes Prestatarios</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Proveedores</li>
-                                    <li><a href="<?= base_url() ?>proveedor/consultar">Proveedores</a></li>                                
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>proveedor/consultar">Proveedores</a></li>  
+                                    <?php } ?>                                    
                                 </ul>
                             </li>
                             <li class="col-sm-6">
                                 <ul>
                                     <li class="dropdown-header">Cajas y Bancos</li>
-                                    <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de Venta)</a></li>                                
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de Venta)</a></li> 
+                                    <?php } ?>                                 
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/consultar">Cuenta Bancaria</a></li>
+                                    <?php } ?>                            
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/asignar_sede">Autorizar Cuenta Bancaria a Sedes</a></li>
+                                    <?php } ?>                           
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>cuenta/asignar_empleado">Autorizar Cuenta Bancaria a Empleado</a></li>
+                                    <?php } ?>                                    
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("", ""))) { ?>                                       
                                     <li><a href="<?= base_url() ?>transacciones/consultar">Transacciones</a></li>
+                                    <?php } ?>                                    
                                 </ul>
                             </li>
 <!--                            <li class="col-sm-3">
