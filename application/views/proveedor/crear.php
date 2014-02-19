@@ -34,7 +34,7 @@
                                 <input name="razon_social" id="razon_social" type="text" class="form-control exit_caution letras_numeros" placeholder="Razón Social" maxlength="100">
                             </div>
                             <div class="form-group">
-                                <label>País<em class="required_asterisco">*</em></label>
+                                <label>País de domicilio<em class="required_asterisco">*</em></label>
                                 <select name="pais" id="pais" class="form-control exit_caution">
                                     <option value="default">Seleccione País</option>
                                     {pais}

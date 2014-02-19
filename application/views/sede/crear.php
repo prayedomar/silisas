@@ -11,7 +11,7 @@
                                 <input name="nombre" id="nombre" type="text" class="form-control exit_caution letras_numeros" placeholder="Nombre de la Sede" maxlength="40" autofocus="autofocus">
                             </div>
                             <div class="form-group">
-                                <label>País<em class="required_asterisco">*</em></label>
+                                <label>País de domicilio<em class="required_asterisco">*</em></label>
                                 <select name="pais" id="pais" class="form-control exit_caution">
                                     <option value="default">Seleccione País</option>
                                     {pais}
@@ -20,13 +20,13 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Departamento<em class="required_asterisco">*</em></label>
+                                <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
                                 <select name="provincia" id="provincia" class="form-control exit_caution" disabled>
                                     <option value="default">Seleccione primero País</option>
                                 </select>                                
                             </div>
                             <div class="form-group">
-                                <label>Ciudad<em class="required_asterisco">*</em></label>
+                                <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
                                 <select name="ciudad" id="ciudad" class="form-control exit_caution" disabled>
                                     <option value="default">Seleccione primero Depto</option>
                                 </select>

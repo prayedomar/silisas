@@ -10,7 +10,7 @@ class T_transm extends CI_Model {
     }
 
     public function listar_tipos_de_transacciones() {
-        $query = "SELECT * FROM T_trans order by nombre_tabla";
+        $query = "SELECT * FROM t_trans order by nombre_tabla";
         return $this->db->query($query)->result();
     }
 

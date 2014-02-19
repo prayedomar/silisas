@@ -84,7 +84,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>País<em class="required_asterisco">*</em></label>
+                                <label>País de domicilio<em class="required_asterisco">*</em></label>
                                 <select name="pais" id="pais" class="form-control exit_caution">
                                     <option value="default">Seleccione País</option>
                                     {pais}
@@ -95,7 +95,7 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Departamento<em class="required_asterisco">*</em></label>
+                                        <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
                                         <select name="provincia" id="provincia" class="form-control exit_caution" disabled>
                                             <option value="default">Seleccione primero País</option>
                                         </select>                                
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Ciudad<em class="required_asterisco">*</em></label>
+                                        <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
                                         <select name="ciudad" id="ciudad" class="form-control exit_caution" disabled>
                                             <option value="default">Seleccione primero Depto</option>
                                         </select>
@@ -132,8 +132,8 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Telefonos<em class="required_asterisco">*</em></label>
-                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Telefonos" maxlength="40">
+                                        <label>Telefonos de contacto<em class="required_asterisco">*</em></label>                                    
+                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034)" maxlength="40">
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <legend>Contrato Laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Último contrato laboral vigente</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-8 col-xs-offset-2">
                             <div class="form-group">
@@ -209,7 +209,7 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Fecha Inicio de Labores<em class="required_asterisco">*</em></label>
+                                        <label>Fecha Inicio último contrato laboral<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
                                             <input name="fecha_inicio" id="fecha_inicio" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>

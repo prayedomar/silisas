@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>País<em class="required_asterisco">*</em></label>
+                                <label>País de domicilio<em class="required_asterisco">*</em></label>
                                 <select name="pais" id="pais" class="form-control exit_caution">
                                     <option value="default">Seleccione País</option>
                                     {pais}
@@ -86,7 +86,7 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Departamento<em class="required_asterisco">*</em></label>
+                                        <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
                                         <select name="provincia" id="provincia" class="form-control exit_caution" disabled>
                                             <option value="default">Seleccione primero País</option>
                                         </select>                                
@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Ciudad<em class="required_asterisco">*</em></label>
+                                        <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
                                         <select name="ciudad" id="ciudad" class="form-control exit_caution" disabled>
                                             <option value="default">Seleccione primero Depto</option>
                                         </select>
@@ -125,8 +125,8 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Telefonos<em class="required_asterisco">*</em></label>
-                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Telefonos" maxlength="40">
+                                        <label>Telefonos de contacto<em class="required_asterisco">*</em></label>     
+                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034)" maxlength="40">
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
