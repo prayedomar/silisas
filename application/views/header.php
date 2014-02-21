@@ -180,7 +180,7 @@
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                    
                                     <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>  
                                     <?php } ?>                                    
-                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>empleado/crear">Empleado</a></li>
                                     <?php } ?>                                    
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       

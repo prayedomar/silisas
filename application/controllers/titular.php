@@ -38,7 +38,7 @@ class Titular extends CI_Controller {
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
-            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
             $this->form_validation->set_rules('pais', 'País', 'required|callback_select_default');
             $this->form_validation->set_rules('provincia', 'Departamento', 'required|callback_select_default');
@@ -106,9 +106,10 @@ class Titular extends CI_Controller {
             $this->isLogin($data["tab"]);            
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "titular/crear";
-            $data['msn_recrear'] = "Crear otro Titular";            
+            $data['msn_recrear'] = "Crear otro Titular"; 
+            $nombres = $nombre1 . " " . $nombre2;
             
-            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
+            $error1 = $this->insert_model->new_usuario($id, $dni,  $genero, $nombres, $t_usuario, $password, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1;

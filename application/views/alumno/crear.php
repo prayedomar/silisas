@@ -125,8 +125,8 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Telefonos de contacto<em class="required_asterisco">*</em></label>                         
-                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034)" maxlength="40">
+                                        <label>Telefonos fijos de contacto<em class="required_asterisco">*</em></label>                         
+                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
                                     </div>
                                 </div>
                                 <div class="col-xs-6">

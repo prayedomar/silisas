@@ -215,10 +215,12 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente) {
+    public function new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $perfil, $vigente) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
+            'genero' => $genero,
+            'nombres' => $nombres,
             't_usuario' => $t_usuario,
             'password' => $password,
             'perfil' => $perfil,

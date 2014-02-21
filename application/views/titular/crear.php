@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Fecha de Nacimiento<em class="required_asterisco">*</em></label>
+                                        <label>Fecha de Nacimiento</label>
                                         <div class="input-group">
                                             <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -125,8 +125,8 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Telefonos de contacto<em class="required_asterisco">*</em></label>     
-                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034)" maxlength="40">
+                                        <label>Telefonos fijos de contacto<em class="required_asterisco">*</em></label>     
+                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
                                     </div>
                                 </div>
                                 <div class="col-xs-6">

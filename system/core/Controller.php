@@ -57,7 +57,7 @@ class CI_Controller {
                     redirect(base_url() . 'login');
                 break;   
             case "aux_admon":
-                $privilegios = array("cambiar_password", "crear_despachar_placa", "consultar_sede", "consultar_salon", "consultar_empleado",  "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_liquidar_comisiones");
+                $privilegios = array("cambiar_password", "crear_empleado", "crear_despachar_placa", "consultar_sede", "consultar_salon", "consultar_empleado",  "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_liquidar_comisiones");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break;        

@@ -132,8 +132,8 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Telefonos de contacto<em class="required_asterisco">*</em></label>                                    
-                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034)" maxlength="40">
+                                        <label>Telefonos fijos de contacto<em class="required_asterisco">*</em></label>                                    
+                                        <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
@@ -148,7 +148,7 @@
                                 <input name="email" id="email" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
                             </div>                            
                             <div class="form-group">
-                                <label>Número de Cuenta Bancaria Nomina</label>
+                                <label>Número de Cuenta Bancaria Nomina de Sili</label>
                                 <input name="cuenta" id="cuenta" type="text" class="form-control exit_caution numerico" placeholder="Cuenta Bancaria de Nómina" maxlength="12">
                             </div>
                             <div class="form-group">

@@ -149,7 +149,8 @@ class Empleado extends CI_Controller {
             $password = $this->encrypt->encode($id);
             $vigente = 1;
             $t_usuario = 1; //Empleado
-            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
+            $nombres = $nombre1 . " " . $nombre2;
+            $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
