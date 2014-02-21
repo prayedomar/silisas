@@ -64,6 +64,29 @@ class Sede extends CI_Controller {
         }
     }
 
+    function validarParaEditar() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('nombre', 'Nombre de la Sede', 'required|trim|xss_clean|max_length[40]');
+            $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
+            $this->form_validation->set_rules('pais', 'País', 'required|callback_select_default');
+            $this->form_validation->set_rules('provincia', 'Departamento', 'required|callback_select_default');
+            $this->form_validation->set_rules('ciudad', 'Ciudad', 'required|callback_select_default');
+            $this->form_validation->set_rules('estado', 'Estado', 'required|callback_select_default');
+            $this->form_validation->set_rules('tel1', 'Telefono 1', 'trim|xss_clean|min_length[7]|max_length[40]');
+            $this->form_validation->set_rules('tel2', 'Telefono 2', 'trim|xss_clean|min_length[7]|max_length[40]');
+            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
+
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('nombre') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('estado') . form_error('direccion') . form_error('tel1') . form_error('tel2') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     function insertar() {
         $this->escapar($_POST);
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
@@ -85,12 +108,12 @@ class Sede extends CI_Controller {
             $dni_responsable = $this->input->post('dni_responsable');
 
             $data["tab"] = "crear_sede";
-            $this->isLogin($data["tab"]);            
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "sede/crear";
             $data['msn_recrear'] = "Crear otra Sede";
-            
-            $error = $this->insert_model->new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable);            
+
+            $error = $this->insert_model->new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
@@ -149,6 +172,11 @@ class Sede extends CI_Controller {
     //Metodos para Consultar
     function consultar() {
         $this->load->model('est_sedem');
+        $data['pais'] = $this->select_model->pais();
+        $data['provincia'] = $this->select_model->provincia();
+        $data['ciudad'] = $this->select_model->ciudad();
+        $data['est_sede'] = $this->select_model->est_sede();
+        $data['est_sede'] = $this->select_model->est_sede();
         $data["tab"] = "consultar_sede";
         $this->isLogin($data["tab"]);
         $data["paises"] = $this->paism->listar_paises();
@@ -189,4 +217,9 @@ class Sede extends CI_Controller {
         echo json_encode($this->ciudadm->listarCiudadesPorProvicia($_GET['idDepartamento']));
     }
 
+    function actualizar() {
+        $this->sedem->actualizarSede($_POST["id_sede"],$_POST["nombre"],$_POST["pais"],$_POST["provincia"],$_POST["ciudad"],$_POST["estado"],$_POST["direccion"],$_POST["tel1"],$_POST["tel2"],$_POST["observacion"]);
+    
+          redirect(base_url()."sede/consultar");
+    }
 }
