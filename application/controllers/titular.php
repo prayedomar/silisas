@@ -109,7 +109,7 @@ class Titular extends CI_Controller {
             $data['msn_recrear'] = "Crear otro Titular"; 
             $nombres = $nombre1 . " " . $nombre2;
             
-            $error1 = $this->insert_model->new_usuario($id, $dni,  $genero, $nombres, $t_usuario, $password, $perfil, $vigente);
+            $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1;

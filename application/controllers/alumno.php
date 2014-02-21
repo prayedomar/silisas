@@ -122,13 +122,12 @@ class Alumno extends CI_Controller {
             $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
-            $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
             $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
 
+            $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion            
             $perfil = 'alumno';
             $vigente = 1;
+            $nombres = $nombre1 . " " . $nombre2;            
 
             $data["tab"] = "crear_alumno";            
             $this->isLogin($data["tab"]);                
@@ -136,7 +135,7 @@ class Alumno extends CI_Controller {
             $data['url_recrear'] = base_url() . "alumno/crear";
             $data['msn_recrear'] = "Crear otro Alumno";
             
-            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
+            $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1;

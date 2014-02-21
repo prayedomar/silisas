@@ -215,7 +215,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $perfil, $vigente) {
+    public function new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -223,6 +223,7 @@ class Insert_model extends CI_Model {
             'nombres' => $nombres,
             't_usuario' => $t_usuario,
             'password' => $password,
+            'email' => $email,
             'perfil' => $perfil,
             'vigente' => $vigente
         );
