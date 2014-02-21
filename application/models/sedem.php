@@ -34,7 +34,7 @@ class Sedem extends CI_Model {
     }
 
     public function listar_sedes($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT s.*,p.nombre pais,pr.nombre departamento,c.nombre ciudad,es.estado,em.nombre1,em.nombre2,em.apellido1,em.apellido2
+        $query = "SELECT s.*,p.id id_pais,pr.id id_departamento,c.id id_ciudad,es.id id_estado, p.nombre pais,pr.nombre departamento,c.nombre ciudad,es.estado,em.nombre1,em.nombre2,em.apellido1,em.apellido2
                   FROM sede s
                   JOIN pais p ON p.id=s.pais
                   JOIN provincia pr ON pr.id=s.provincia
@@ -49,6 +49,11 @@ class Sedem extends CI_Model {
         $query.=(!empty($criterios['estado'])) ? "AND s.estado = '{$criterios['estado']}'" : "";
         $query.=" order by s.nombre LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
+    }
+
+    public function actualizarSede($id_sede, $nombre, $pais, $departamento, $ciudad, $estado, $direccion, $tel1, $tel2, $observacion) {
+        $query = "UPDATE sede SET nombre='$nombre',pais='$pais',provincia='$departamento',ciudad='$ciudad',direccion='$direccion',tel1='$tel1',tel2='$tel2',estado='$estado',observacion='$observacion',id_responsable='{$_SESSION["idResponsable"]}',dni_responsable='{$_SESSION["dniResponsable"]}' WHERE id='$id_sede'";
+        return $this->db->query($query);
     }
 
 }

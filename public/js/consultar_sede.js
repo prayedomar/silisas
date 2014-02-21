@@ -112,15 +112,101 @@ $(function() {
         window.location.href = url;
     });
 
-//    if ($("#ciudad").val() == null || $("#ciudad").val() == "") {
-//        if ($("#departamento").val() == null || $("#departamento").val() == "") {
-//            if ($("#pais").val() != null && $("#pais").val() != "") {
-//                $("#pais").trigger("change");
-//                console.log("s");
-//            }
-//        } else {
-//            $("#departamento").trigger("change");
-//        }
-//    }
+    //PAra cargar los selects dinamicos de pais y departamento
+    $("#pais-modal").live("change", function() {
+        pais = $('#pais-modal').val();
+        $.post('llena_provincia', {
+            pais: pais
+        }, function(data) {
+            $("#provincia-modal").removeAttr("disabled");
+            $("#provincia-modal").html(data);
+            $("#provincia-modal").prepend('<option value="default" selected>Seleccione Departamento</option>');
+            //Con esto activamos automaticamente el evento click como si lo hicieramos nosotros.
+            $("#provincia-modal").change();
+        });
+    });
+    $("#provincia-modal").live("change", function() {
+        provincia = $('#provincia-modal').val();
+        $.post('llena_ciudad', {
+            provincia: provincia
+        }, function(data) {
+            $("#ciudad-modal").removeAttr("disabled")
+            $("#ciudad-modal").html(data);
+            $("#ciudad-modal").prepend('<option value="default" selected>Seleccione Ciudad</option>');
+        });
+    });
 
+    $("table .editar").click(function() {
+        document.getElementById("formulario").reset();
+        $("#id_sede").val($(this).data("id"));
+        $("#nombre-modal").val($(this).data("nombre"));
+
+        var id_pais = $(this).data("pais");
+        var id_departamento = $(this).data("departamento");
+        var id_ciudad = $(this).data("ciudad");
+        $("#pais-modal").val(id_pais);
+
+        $.post('llena_provincia', {
+            pais: id_pais
+        }, function(data) {
+            $("#provincia-modal").removeAttr("disabled");
+            $("#provincia-modal").html(data);
+            $("#provincia-modal").prepend('<option value="default" selected>Seleccione Departamento</option>');
+            //Con esto activamos automaticamente el evento click como si lo hicieramos nosotros.
+            $("#provincia-modal").val(id_departamento);
+        });
+
+        $.post('llena_ciudad', {
+            provincia: id_departamento
+        }, function(data) {
+            $("#ciudad-modal").removeAttr("disabled")
+            $("#ciudad-modal").html(data);
+            $("#ciudad-modal").prepend('<option value="default" selected>Seleccione Ciudad</option>');
+            $("#ciudad-modal").val(id_ciudad);
+        });
+        $("#estado-modal").val($(this).data("estado"));
+        $("#direccion-modal").val($(this).data("direccion"));
+        $("#tel1-modal").val($(this).data("tel1"));
+        $("#tel2-modal").val($(this).data("tel2"));
+        $("#prefijo_trans-modal").val($(this).data("prefijo_trans"));
+        $("#observacion-modal").val($(this).data("observacion"));
+        $("#modal-editar").modal("show");
+    });
+
+    $('#botonValidarSede').live('click', function() {
+        //PAra desactivar el click al lado del modal para cerrarlo
+        $(function() {
+            $('#modal_loading').modal({
+                show: true,
+                keyboard: false,
+                backdrop: 'static'
+            });
+        });
+        $.ajax({
+            type: "POST",
+            url: "validarParaEditar",
+            cache: false,
+            data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+            success: function(data)
+            {
+                if (data != "OK") {
+                    $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                    $("#div_alert").html(data);
+                    $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                    //Para cerrar el modal de loading
+                    $('#modal_loading').modal('hide');
+                } else {
+                    $(window).unbind('beforeunload');
+                    $("#btn_submit").click();
+                }
+            },
+            error: function(data) {
+                $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+
+            }
+        });
+        return false; // Evitar ejecutar el submit del formulario
+    });
 });
