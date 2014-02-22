@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
-                    <legend>Crear Factura de Venta</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Crear factura de venta</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Titular</legend>
@@ -26,60 +26,34 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Periodicidad<em class="required_asterisco">*</em></label>
-                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" readonly>
-                                    <option value="default">Seleccione primero Empleado</option>
-                                </select>
-                            </div>                            
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label>Fecha Inicial<em class="required_asterisco">*</em></label>
-                                        <div class="input-group">
-                                            <input name="fecha_inicio" id="fecha_inicio" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha inicial de la Nómina">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                        </div> 
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label>Fecha Final<em class="required_asterisco">*</em></label>
-                                        <div class="input-group">
-                                            <input name="fecha_fin" id="fecha_fin" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha final de la Nómina">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                        </div> 
-                                    </div>
-                                </div>
-                            </div>
                             <div id="validacion_inicial">
                             </div>                            
                             <div class="row text-center separar_submit">
-                                <button type="button" class="btn btn-default" id="consultar_empleado"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Empleado </a>
+                                <button type="button" class="btn btn-default" id="consultar_titular"><span class="glyphicon glyphicon-search"></span> Consultar </button>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Titular </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="div_info_apoyo" style="display: none">
-                    <div class="row separar_div">
-                        <legend>Información de Apoyo</legend>
-                        <div class="row">
-                            <div class="col-xs-10 col-xs-offset-1">
-                                <div id="div_contrato_laboral">
-                                </div>
-                                <div id="div_ultimas_nominas">
-                                </div>
-                                <div id="div_adelantos">
-                                </div>
-                                <div id="div_prestamos">
-                                </div>
-                                <div id="div_ausencias">
-                                </div>
-                                <div id="div_seguridad_social">
-                                </div>
-                            </div>
-                        </div>
+                <div id="div_matriculas" style="display: none">
+                <!--<div id="div_matriculas">-->
+                    <div class="overflow_tabla">
+                        <label>Matrículas vígentes<em class="required_asterisco">*</em></label>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Escojer</th>
+                                    <th class="text-center">Contrato</th>
+                                    <th class="text-center">Plan</th>
+                                    <th class="text-center">Valor Inicial</th>
+                                    <th class="text-center">Saldo</th>
+                                    <th class="text-center">Sede Origen</th>
+                                    <th class="text-center">Fecha del Préstamo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_matricula_vigente">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div id="div_nomina" style="display: none;">
@@ -246,166 +220,29 @@
     });
 
     //Llenamos la informacion de apoyo
-    $("form").delegate("#consultar_empleado", "click", function() {
-        var empleado = $('#empleado').val();
-        var periodicidad = $('#periodicidad').val();
-        var fechaInicio = $('#fecha_inicio').val();
-        var fechaFin = $('#fecha_fin').val();
-        if ((empleado != "default") && (periodicidad != "default") && (fechaInicio != "") && (fechaFin != "")) {
-            //Validamos las fecha que coincidan con la periodicidad
-            $.post('{action_validar_fechas_periodicidad}', {
-                periodicidad: periodicidad,
-                fechaInicio: fechaInicio,
-                fechaFin: fechaFin
+    $("form").delegate("#consultar_titular", "click", function() {
+        var dni = $('#dni').val();
+        var id = $('#id').val();
+        if ((dni != "default") && (id != "")) {
+            $.post('{action_validar_titular_llena_matriculas}', {
+                dni: dni,
+                id: id
             }, function(data) {
-                if (data == "OK") {
-                    //Bloqueamos los 3 primeros campos
-                    $('#empleado').attr('readonly', 'readonly');
-                    $('#periodicidad').attr('readonly', 'readonly');
-                    $('#fecha_inicio').attr('readonly', 'readonly');
-                    $('#fecha_fin').attr('readonly', 'readonly');
-                    $('#consultar_empleado').attr('readonly', 'readonly');
-
-                    //Llenamos El contrato laboral
-                    $.post('{action_llena_info_contrato_laboral}', {
-                        empleado: empleado
-                    }, function(data) {
-                        //Mostramos el div de info ayuda
-                        $("#div_info_apoyo").css("display", "block");
-                        if (data == "") {
-                            $("#div_contrato_laboral").html('<label>Contrato Laboral</label><div class="alert alert-info separar_div" id="div_info_contrato_laboral"></div>');
-                            $("#div_info_contrato_laboral").html("<p>No se encontró un Contrato Laboral para el empleado, por lo tanto, No es posible realizar la nómina.</p>");
-                        } else {
-                            $("#div_contrato_laboral").html(data);
-                            $("#div_contrato_laboral").prepend('<label>Contrato Laboral</label>');
-                            $("#div_nomina").css("display", "block");
-
-                            //Llenamos la ultima nomina
-                            $.post('{action_llena_info_ultimas_nominas}', {
-                                empleado: empleado
-                            }, function(data) {
-                                if (data == "") {
-                                    $("#div_ultimas_nominas").html('<label>Últimas Nóminas</label><div class="alert alert-info separar_div" id="div_info_ultimas_nominas"></div>');
-                                    $("#div_info_ultimas_nominas").html("<p>No se encontraron Nóminas para el empleado.</p>");
-                                } else {
-                                    $("#div_ultimas_nominas").html(data);
-                                    $("#div_ultimas_nominas").prepend('<label>Últimas Nóminas</label>');
-                                }
-                            });
-                            //Llenamos los adelantos vigentes
-                            $.post('{action_llena_info_adelantos}', {
-                                empleado: empleado
-                            }, function(data) {
-                                if (data == "") {
-                                    $("#div_adelantos").html('<label>Adelantos Vigentes</label><div class="alert alert-info separar_div" id="div_info_adelantos"></div>');
-                                    $("#div_info_adelantos").html("<p>No se encontraron Adelantos vigentes para el empleado.</p>");
-                                } else {
-                                    $("#div_adelantos").html(data);
-                                    $("#div_adelantos").prepend('<label>Adelantos Vigentes</label>');
-                                }
-                            });
-                            //Llenamos los Prestamos vigentes
-                            $.post('{action_llena_info_prestamos}', {
-                                empleado: empleado
-                            }, function(data) {
-                                if (data == "") {
-                                    $("#div_prestamos").html('<label>Préstamos Vigentes</label><div class="alert alert-info separar_div" id="div_info_prestamos"></div>');
-                                    $("#div_info_prestamos").html("<p>No se encontraron Prestamos vigentes para el empleado.</p>");
-                                } else {
-                                    $("#div_prestamos").html(data);
-                                    $("#div_prestamos").prepend('<label>Préstamos Vigentes</label>');
-                                }
-                            });
-                            //Llenamos las Ausencias Laborales vigentes dentro del periodo de la nomina
-                            $.post('{action_llena_info_ausencias}', {
-                                empleado: empleado,
-                                fechaInicio: fechaInicio,
-                                fechaFin: fechaFin
-                            }, function(data) {
-                                var obj = JSON.parse(data);
-                                if (obj.respuesta == "OK")
-                                {
-                                    if ($("#periodicidad").val() == '1') {
-                                        var dias_nomina = new Number(obj.cant_nomina);
-                                    } else {
-                                        if ($("#periodicidad").val() == '2') {
-                                            var dias_nomina = new Number(7);
-                                        } else {
-                                            if ($("#periodicidad").val() == '3') {
-                                                var dias_nomina = new Number(15);
-                                            } else {
-                                                if ($("#periodicidad").val() == '4') {
-                                                    var dias_nomina = new Number(30);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    var dias_no_remunerados = new Number(obj.cant_no_remunerada);
-                                    $('#dias_nomina').attr('value', dias_nomina);
-                                    $('#dias_remunerados').attr('value', (dias_nomina - dias_no_remunerados));
-                                    if (obj.html_ausencias == "") {
-                                        $("#div_ausencias").html('<label>Ausencias Laborales</label><div class="alert alert-info separar_div" id="div_info_ausencias"></div>');
-                                        $("#div_info_ausencias").html("<p>No se encontraron Ausencias Laborales vigentes para el empleado, en el rango de fechas de la Nómina.</p>");
-                                    } else {
-                                        $("#div_ausencias").html(obj.html_ausencias);
-                                        $("#div_ausencias").prepend('<label>Ausencias Laborales</label>');
-                                    }
-                                }
-                            });
-                            //Llenamos los pagos de serguridad social
-                            $.post('{action_llena_info_seguridad_social}', {
-                                empleado: empleado
-                            }, function(data) {
-                                if (data == "") {
-                                    $("#div_seguridad_social").html('<label>Últimos pagos de Seguridad Social (RRPP y Prestación de Servicios)</label><div class="alert alert-info separar_div" id="div_info_seguridad_social"></div>');
-                                    $("#div_info_seguridad_social").html("<p>No se encontraron Pagos de Seguridad Social para el empleado.</p>");
-                                } else {
-                                    $("#div_seguridad_social").html(data);
-                                    $("#div_seguridad_social").prepend('<label>Últimos pagos de Seguridad Social (RRPP y Prestación de Servicios)</label>');
-                                }
-                            });
-                            //Llenamos los conceptos pendientes de RRPP
-                            $.post('{action_llena_concepto_pdtes_rrpp}', {
-                                empleado: empleado
-                            }, function(data) {
-                                if (data == "") {
-                                    $("#conceptos_pendientes").html(data);
-                                    $("#conceptos_pendientes").removeAttr('class');
-                                } else {
-                                    $("#conceptos_pendientes").html(data);
-                                    $('#conceptos_pendientes').attr('class', 'separar_div');
-                                }
-                                calcular_total();
-                            });
-                            //Agregamos los conceptos cotidianos dependiendo del t_salario
-                            var idUltimoConcepto = $('#contador_new_concepto').val();
-                            $.post('{action_llena_concepto_cotidiano}', {
-                                empleado: empleado,
-                                idUltimoConcepto: idUltimoConcepto
-                            }, function(data) {
-                                var obj = JSON.parse(data);
-                                if (obj.respuesta == "OK")
-                                {
-                                    $("#conceptos_nuevos").append(obj.html_concepto);
-                                    //Damos click a los select de t_concepto
-                                    $(".renglon_cotidiano").each(function() {
-                                        $(this).find("#t_concepto_nomina").change();
-                                    });
-                                    //Aumentamos el contador de nuevos conceptos.
-                                    $('#contador_new_concepto').attr('value', obj.ultimo_concepto);
-                                }
-                            });
-                        }
-                    });
+                var obj = JSON.parse(data);
+                if (obj.respuesta == "OK")
+                {
+                    $("#tbody_matricula_vigente").html(obj.filasTabla);
+                    $("#dni").css("display", "block");
+                    $('#id').attr('readonly', 'readonly');
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-                    $("#div_warning").html(data);
+                    $("#div_warning").html(obj.mensaje);
                     $("#div_warning").delay(5000).fadeOut(1000);
                 }
             });
         } else {
             $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-            $("#div_warning").html("<p><strong>Antes de consultar, ingrese primero empleado, periodicidad, fecha inicial y fecha final.</strong></p>");
+            $("#div_warning").html("<p><strong>Antes de consultar, ingrese el tipo y número de identificación del titular.</strong></p>");
             $("#div_warning").delay(8000).fadeOut(1000);
         }
     });

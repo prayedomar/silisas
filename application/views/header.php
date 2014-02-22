@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title>SILI - Inicio</title>
+        <title>SILI S.A.S - Inicio</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=9"/>
         <meta name="description" content="Inicio Directivo"/>
@@ -253,7 +253,7 @@
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                                     <?php } ?>                                    
-<!--                                    <li><a href="#">Factura</a></li>
+                                    <li><a href="<?= base_url() ?>factura/crear">Factura</a></li><!--
                                     <li><a href="#">Recibo de Caja</a></li>                                    -->
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
                                     <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>

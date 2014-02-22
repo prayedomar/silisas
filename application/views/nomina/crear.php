@@ -18,7 +18,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Periodicidad<em class="required_asterisco">*</em></label>
-                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" readonly>
+                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" disabled>
                                     <option value="default">Seleccione primero Empleado</option>
                                 </select>
                             </div>                            
@@ -124,7 +124,7 @@
                             <label>Valor retirado de la Caja de Efectivo</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="text" name="efectivo_retirado" id="efectivo_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                <input type="text" name="efectivo_retirado" id="efectivo_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" disabled="disabled">
                             </div>
                         </div>
                         <hr>
@@ -151,7 +151,7 @@
                             <label>Valor retirado de la Cuenta Bancaria</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="text" name="valor_retirado" id="valor_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                <input type="text" name="valor_retirado" id="valor_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" disabled="disabled">
                             </div>
                         </div>
                         <hr>
@@ -229,7 +229,7 @@
         $.post('{action_llena_periodicidad_nomina}', {
             empleado: empleado
         }, function(data) {
-            $("#periodicidad").removeAttr("readonly");
+            $("#periodicidad").removeAttr("disabled");
             $("#periodicidad").html(data);
             $("#periodicidad").prepend('<option value="default" selected>Seleccione Periodicidad</option>');
         });
@@ -250,11 +250,11 @@
             }, function(data) {
                 if (data == "OK") {
                     //Bloqueamos los 3 primeros campos
-                    $('#empleado').attr('readonly', 'readonly');
-                    $('#periodicidad').attr('readonly', 'readonly');
-                    $('#fecha_inicio').attr('readonly', 'readonly');
-                    $('#fecha_fin').attr('readonly', 'readonly');
-                    $('#consultar_empleado').attr('readonly', 'readonly');
+                    $('#empleado').attr('disabled', 'disabled');
+                    $('#periodicidad').attr('disabled', 'disabled');
+                    $('#fecha_inicio').attr('disabled', 'disabled');
+                    $('#fecha_fin').attr('disabled', 'disabled');
+                    $('#consultar_empleado').attr('disabled', 'disabled');
 
                     //Llenamos El contrato laboral
                     $.post('{action_llena_info_contrato_laboral}', {
@@ -395,7 +395,7 @@
             });
         } else {
             $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-            $("#div_warning").html("<p><strong>Antes de consultar, ingrese primero empleado, periodicidad, fecha inicial y fecha final.</strong></p>");
+            $("#div_warning").html("<p><strong>Antes de consultar, ingrese empleado, periodicidad, fecha inicial y fecha final.</strong></p>");
             $("#div_warning").delay(8000).fadeOut(1000);
         }
     });
@@ -459,13 +459,13 @@
                     if (obj.detalle_requerido == '0') {
                         $("#" + idDivConcepto).find("#label_detalle").html('<label>Detalles adicionales</label>');
                     }
-                } 
-                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);                
+                }
+                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);
                 if (new Number(obj.valor_unitario) == '0') {
                     $("#" + idDivConcepto).find("#valor_unitario").attr('value', 0);
-                    $("#" + idDivConcepto).find("#valor_unitario").removeAttr('readonly');
+                    $("#" + idDivConcepto).find("#valor_unitario").removeAttr('disabled');
                 } else {
-                    $("#" + idDivConcepto).find("#valor_unitario").attr('readonly', 'readonly');
+                    $("#" + idDivConcepto).find("#valor_unitario").attr('disabled', 'disabled');
                     $("#" + idDivConcepto).find("#valor_unitario").attr('value', obj.valor_unitario);
                     $("#" + idDivConcepto).find("#valor_unitario").change();
                 }
@@ -480,24 +480,24 @@
                 }
                 if (obj.t_cantidad_dias == '1') {
                     $("#" + idDivConcepto).find("#cantidad").attr('value', 1);
-                    $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
+                    $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
                 } else {
                     if (obj.t_cantidad_dias == '2') {
                         $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_nomina').val());
-                        $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
+                        $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
                     } else {
                         if (obj.t_cantidad_dias == '3') {
                             $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_remunerados').val());
-                            $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
+                            $("#" + idDivConcepto).find("#cantidad").attr('disabled', 'disabled');
                         } else {
                             if (obj.t_cantidad_dias == '4') {
                                 $("#" + idDivConcepto).find("#cantidad").attr('value', 0);
-                                $("#" + idDivConcepto).find("#cantidad").removeAttr('readonly');
+                                $("#" + idDivConcepto).find("#cantidad").removeAttr('disabled');
                             }
                         }
                     }
                 }
-                $("#" + idDivConcepto).find("#detalle").removeAttr('readonly');
+                $("#" + idDivConcepto).find("#detalle").removeAttr('disabled');
                 calcular_total();
             }
         });
@@ -520,50 +520,55 @@
     //Habilitamos input de efectivo retirado de las cajas
     $("table").delegate("#caja", "change", function() {
         var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
-        if ($('#valor_retirado').is('[readonly]')) {
+        if ($('#valor_retirado').is('[disabled]')) {
             $('#efectivo_retirado').attr('value', ((total_nomina).toFixed(2)));
         } else {
             var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
             $('#efectivo_retirado').attr('value', ((total_nomina - valor_retirado).toFixed(2)));
         }
         $('#efectivo_retirado').change();
-        $("#efectivo_retirado").removeAttr("readonly");
+        $("#efectivo_retirado").removeAttr("disabled");
     });
     //Habilitamos inputde valor retirado de las cuentas
     $("table").delegate("#cuenta", "change", function() {
         var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
-        if ($('#efectivo_retirado').is('[readonly]')) {
+        if ($('#efectivo_retirado').is('[disabled]')) {
             $('#valor_retirado').attr('value', ((total_nomina).toFixed(2)));
         } else {
             var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
             $('#valor_retirado').attr('value', ((total_nomina - efectivo_retirado).toFixed(2)));
         }
         $('#valor_retirado').change();
-        $("#valor_retirado").removeAttr("readonly");
+        $("#valor_retirado").removeAttr("disabled");
     });
     //Calcula el valor contrario al modificar el valor retirado.
     $(".form-group").delegate("#valor_retirado", "blur", function() {
-        //Preguntamos si el valor retirado es readonly
-        if (!($('#efectivo_retirado').is('[readonly]'))) {
+        //Preguntamos si el valor retirado es disabled
+        if (!($('#efectivo_retirado').is('[disabled]'))) {
             var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
             var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
             $('#efectivo_retirado').attr('value', ((total_nomina - valor_retirado).toFixed(2)));
         }
-        $('#efectivo_retirado').change();        
+        $('#efectivo_retirado').change();
     });
     //Calcula el valor contrario al modificar el efectivo retirado.
     $(".form-group").delegate("#efectivo_retirado", "blur", function() {
-        if (!($('#valor_retirado').is('[readonly]'))) {
+        if (!($('#valor_retirado').is('[disabled]'))) {
             var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
             var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
             $('#valor_retirado').attr('value', ((total_nomina - efectivo_retirado).toFixed(2)));
         }
-        $('#valor_retirado').change();        
+        $('#valor_retirado').change();
     });
 
 //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
+        $('#empleado').removeAttr("disabled");
+        $('#periodicidad').removeAttr("disabled");
+        $('#fecha_inicio').removeAttr("disabled");
+        $('#fecha_fin').removeAttr("disabled");
+        $('#consultar_empleado').removeAttr("disabled");
         $.ajax({
             type: "POST",
             url: $("#action_validar").attr("value"),
@@ -575,6 +580,11 @@
                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                     $("#div_alert").html(data);
                     $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                    $('#empleado').attr('disabled', 'disabled');
+                    $('#periodicidad').attr('disabled', 'disabled');
+                    $('#fecha_inicio').attr('disabled', 'disabled');
+                    $('#fecha_fin').attr('disabled', 'disabled');
+                    $('#consultar_empleado').attr('disabled', 'disabled');
                 } else {
                     $(window).unbind('beforeunload');
                     $("#btn_submit").click();
@@ -584,7 +594,11 @@
                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                 $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-
+                $('#empleado').attr('disabled', 'disabled');
+                $('#periodicidad').attr('disabled', 'disabled');
+                $('#fecha_inicio').attr('disabled', 'disabled');
+                $('#fecha_fin').attr('disabled', 'disabled');
+                $('#consultar_empleado').attr('disabled', 'disabled');
             }
         });
         return false; // Evitar ejecutar el submit del formulario

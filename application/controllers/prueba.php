@@ -13,25 +13,45 @@ class Prueba extends CI_Controller {
 //        $data['base_url'] = base_url();
 //        $this->load->view('testV');
 
-                $matricula = '10002';
-                $conceptos = $this->select_model->concepto_nomina_matricula($matricula);
-                $total = $this->select_model->total_concepto_nomina_matricula($matricula);
-                var_dump($conceptos);
-                if ($conceptos == TRUE) {
-                    foreach ($prestamos as $fila) {
-                        echo '<tr>
-                                <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>                        
-                                <td class="text-center">' . $fila->prefijo_nomina . ' ' . $fila->id_nomina . '</td>
-                                <td class="text-center">' . $fila->ejecutivo . '</td>
-                                <td class="text-center">' . $fila->tipo_concepto . '</td>
-                                <td class="text-center">' . $fila->escala . '</td>
-                                <td class="text-center">' . $fila->sede . '</td>
-                                <td class="text-center">$' . number_format($fila->valor_unitario, 2, '.', ',') . '</td>                                
-                            </tr>';
+            $dni_titular = '1';
+            $id_titular = '12345';
+            $titular = $this->select_model->titular($id_titular, $dni_titular);
+            var_dump($titular);
+            if ($titular == TRUE) {
+                $matriculas = $this->select_model->matricula_vigente_titular($id_titular, $dni_titular);
+                if ($matriculas == TRUE) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    foreach ($matriculas as $fila) {
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center">' . $fila->contrato . '</td>
+                            <td>' . $fila->nombre_plan . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                             
+                            <td class="text-center">' . $fila->sede . '</td>                         
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>  
+                        </tr>';
                     }
                 } else {
-                    echo "";
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
+                    );
+                    echo json_encode($response);
+                    return false;
                 }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>El titular ingresado, no se encontró en la base de datos.</p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+            var_dump($response);
 //        echo ($this->select_model->nextId_salario()->id) + 1;
 //        $SqlInfo = 'select * from empleado_x_sede AS a, sede AS b where (a.sede_secundaria = b.id) AND (a.dni_empleado=' . 1 . ')AND (a.id_empleado=' . 1 . ')AND (a.vigente=1)';
 //        $query = $this->db->query($SqlInfo);

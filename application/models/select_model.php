@@ -106,7 +106,7 @@ class Select_model extends CI_Model {
 
     //MAtriculas no nulas (est<>5), iliquidadas, que pertenezcan a la sede principal del responsable (cada administrador se encarga de las escalas de sus matriculas.
     public function matricula_iliquida_responsable($id_responsable, $dni_responsable) {
-        $where = "(estado != '5') AND (liquidacion_escalas='0') AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . ")))";
+        $where = "(estado != '5') AND (liquidacion_escalas='0') AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))";
         $this->db->where($where);
         $this->db->order_by('contrato', 'asc');
         $query = $this->db->get('matricula');
@@ -116,7 +116,7 @@ class Select_model extends CI_Model {
     }
 
     public function cuenta_banco_responsable($id_responsable, $dni_responsable) {
-        $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado=" . $id_responsable . ") AND (dni_encargado=" . $dni_responsable . ") AND (vigente=1))))) ORDER BY cu.fecha_trans";
+        $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (vigente=1))))) ORDER BY cu.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -124,7 +124,7 @@ class Select_model extends CI_Model {
     }
 
     public function caja_responsable($id_responsable, $dni_responsable) {
-        $SqlInfo = "SELECT DISTINCT c.sede, c.t_caja, c.observacion, c.fecha_trans, s.nombre AS name_sede, t.tipo AS name_t_caja FROM caja AS c, t_caja AS t, sede AS s WHERE ((c.t_caja=t.id) AND (c.sede=s.id) AND (c.vigente=1) AND ((c.id_encargado=" . $id_responsable . ") AND (dni_encargado=" . $dni_responsable . "))) ORDER BY c.fecha_trans";
+        $SqlInfo = "SELECT DISTINCT c.sede, c.t_caja, c.observacion, c.fecha_trans, s.nombre AS name_sede, t.tipo AS name_t_caja FROM caja AS c, t_caja AS t, sede AS s WHERE ((c.t_caja=t.id) AND (c.sede=s.id) AND (c.vigente=1) AND ((c.id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "'))) ORDER BY c.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -148,7 +148,7 @@ class Select_model extends CI_Model {
     }
 
     public function sedes_cuenta_bancaria($cuenta) {
-        $SqlInfo = "SELECT DISTINCT s.id, s.nombre FROM cuenta_x_sede AS c, sede AS s WHERE ((c.sede=s.id) AND (c.cuenta=" . $cuenta . ") AND (c.vigente=1))";
+        $SqlInfo = "SELECT DISTINCT s.id, s.nombre FROM cuenta_x_sede AS c, sede AS s WHERE ((c.sede=s.id) AND (c.cuenta='" . $cuenta . "') AND (c.vigente=1))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -156,7 +156,7 @@ class Select_model extends CI_Model {
     }
 
     public function empleados_cuenta_bancaria($cuenta) {
-        $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta=" . $cuenta . ") AND (c.vigente=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
+        $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta='" . $cuenta . "') AND (c.vigente=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -180,7 +180,7 @@ class Select_model extends CI_Model {
     }
 
     public function detalle_matricula_liquidar($contrato) {
-        $SqlInfo = "SELECT CONCAT(t.nombre1, ' ', t.nombre2, ' ', t.apellido1, ' ', t.apellido2) AS titular, CONCAT(t_p.nombre, ' - ', t_p.anio) AS plan, m.observacion, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) AS ejecutivo, e.id, e.dni, e.cargo, CASE e.genero WHEN 'F' THEN t_c.cargo_femenino ELSE t_c.cargo_masculino END AS name_cargo, m.fecha_matricula FROM matricula AS m, titular AS t, empleado AS e, t_cargo AS t_c, t_plan AS t_p WHERE ((m.contrato=" . $contrato . ") AND (m.id_titular=t.id) AND (m.dni_titular=t.dni) AND (m.id_ejecutivo=e.id) AND (m.dni_ejecutivo=e.dni) AND (e.cargo=t_c.id) AND (m.plan=t_p.id))";
+        $SqlInfo = "SELECT CONCAT(t.nombre1, ' ', t.nombre2, ' ', t.apellido1, ' ', t.apellido2) AS titular, CONCAT(t_p.nombre, ' - ', t_p.anio) AS plan, m.observacion, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) AS ejecutivo, e.id, e.dni, e.cargo, CASE e.genero WHEN 'F' THEN t_c.cargo_femenino ELSE t_c.cargo_masculino END AS name_cargo, m.fecha_matricula FROM matricula AS m, titular AS t, empleado AS e, t_cargo AS t_c, t_plan AS t_p WHERE ((m.contrato='" . $contrato . "') AND (m.id_titular=t.id) AND (m.dni_titular=t.dni) AND (m.id_ejecutivo=e.id) AND (m.dni_ejecutivo=e.dni) AND (e.cargo=t_c.id) AND (m.plan=t_p.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -214,6 +214,15 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    //Matriculas vigente con saldo incluido > 0
+    public function matricula_vigente_titular($id_titular, $dni_titular) {
+        $SqlInfo = "SELECT DISTINCT ma.contrato, ma.fecha_trans, t_p.nombre as nombre_plan, t_p.valor_total,  s.nombre AS sede, (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p, sede AS s  where ((ma.id_titular = '" . $id_titular . "') AND (ma.dni_titular = '" . $dni_titular . "') AND ((ma.estado=1)||(ma.estado=2)) AND (ma.plan = t_p.id) AND (ma.sede=s.id))";        
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function t_caja() {
         $query = $this->db->get('t_caja');
@@ -240,7 +249,7 @@ class Select_model extends CI_Model {
 
     //empleados que coincidan sede_ppal con la sede escogida y que no cuenten con una caja asignada.
     public function empleado_sede_caja($sede) {
-        $where = "(sede_ppal=$sede) AND (NOT(id='1' AND dni='1')) AND estado!='3'";
+        $where = "(sede_ppal='" . $sede . "') AND (NOT(id='1' AND dni='1')) AND estado!='3'";
         $this->db->where($where);
         $where2 = "(id NOT IN(SELECT DISTINCT c.id_encargado FROM caja AS c WHERE (c.vigente=1) AND (c.dni_encargado=dni)))";
         $this->db->where($where2);
@@ -338,7 +347,7 @@ class Select_model extends CI_Model {
 
     //Devuelve los cargos de rrpp (depto:3) superiores a un cargo ingresado.
     public function t_cargo_superior_rrpp($cargo) {
-        $where = "((depto=3)and (nivel_jerarquico < (SELECT nivel_jerarquico FROM t_cargo WHERE (id=" . $cargo . "))));";
+        $where = "((depto=3)and (nivel_jerarquico < (SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "'))));";
         $this->db->where($where);
         $query = $this->db->get('t_cargo');
         if ($query->num_rows() > 0) {
@@ -349,7 +358,7 @@ class Select_model extends CI_Model {
     //Devuelve los empleados de rrpp (depto:3) con un cargo superior a un cargo ingresado.
     //Si el cargo tiene un nivel jerarquico menor que el administrador de sede, solo devolverá los que perstenecen a la sede principal del administrador.
     public function empleado_rrpp_cargo_superior($cargo, $id_responsable, $dni_responsable) {
-        $SqlInfo = "(SELECT * FROM empleado AS e WHERE ((cargo IN (SELECT id FROM t_cargo WHERE depto=3)) AND (NOT(id='1' AND dni='1')) AND (estado!='3') AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<=8) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<=(SELECT nivel_jerarquico FROM t_cargo WHERE (id=" . $cargo . ")))))union(SELECT * FROM empleado AS e WHERE ((cargo IN (SELECT id FROM t_cargo WHERE depto=3)) AND (NOT(id='1' AND dni='1')) AND (estado!='3') AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))>8) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<=(SELECT nivel_jerarquico FROM t_cargo WHERE (id=" . $cargo . "))) AND (sede_ppal=(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . ")))))";
+        $SqlInfo = "(SELECT * FROM empleado AS e WHERE ((cargo IN (SELECT id FROM t_cargo WHERE depto=3)) AND (NOT(id='1' AND dni='1')) AND (estado!='3') AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<=8) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<=(SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "')))))union(SELECT * FROM empleado AS e WHERE ((cargo IN (SELECT id FROM t_cargo WHERE depto=3)) AND (NOT(id='1' AND dni='1')) AND (estado!='3') AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))>8) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<=(SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "'))) AND (sede_ppal=(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -387,7 +396,7 @@ class Select_model extends CI_Model {
     }
 
     public function contrato_laboral_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT c.*, s.nombre AS nombre_salario, t_c.contrato as tipo_contrato, CASE e.genero WHEN 'F' THEN t_ca.cargo_femenino ELSE t_ca.cargo_masculino END AS cargo FROM contrato_laboral AS c, empleado AS e, salario as s, t_contrato_laboral as t_c, t_cargo as t_ca WHERE ((c.id_empleado=" . $id_empleado . ") AND (c.dni_empleado=" . $dni_empleado . ") AND (c.t_contrato=t_c.id) AND (e.id=" . $id_empleado . ") AND (e.dni=" . $dni_empleado . ")  AND (e.salario=s.id) AND (e.cargo=t_ca.id))";
+        $SqlInfo = "SELECT c.*, s.nombre AS nombre_salario, t_c.contrato as tipo_contrato, CASE e.genero WHEN 'F' THEN t_ca.cargo_femenino ELSE t_ca.cargo_masculino END AS cargo FROM contrato_laboral AS c, empleado AS e, salario as s, t_contrato_laboral as t_c, t_cargo as t_ca WHERE ((c.id_empleado='" . $id_empleado . "') AND (c.dni_empleado='" . $dni_empleado . "') AND (c.t_contrato=t_c.id) AND (e.id='" . $id_empleado . "') AND (e.dni='" . $dni_empleado . "')  AND (e.salario=s.id) AND (e.cargo=t_ca.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -450,7 +459,7 @@ class Select_model extends CI_Model {
     }
 
     public function cliente_prestamo($id_responsable, $dni_responsable) {
-        $where = "((id IN(SELECT id_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . ")) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1))))))) AND (dni IN(SELECT dni_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . ")) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1))))))))";
+        $where = "((id IN(SELECT id_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))))) AND (dni IN(SELECT dni_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))))))";
         $this->db->where($where);
         $this->db->order_by('nombre1', 'asc');
         $query = $this->db->get('cliente');
@@ -476,7 +485,7 @@ class Select_model extends CI_Model {
     }
 
     public function sede_activa_faltante_responsable($sede, $id_responsable, $dni_responsable) {
-        $where = "((id IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1)))) AND (estado!='3') AND (id!=" . $sede . ")";
+        $where = "((id IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (estado!='3') AND (id!='" . $sede . "')";
         $this->db->where($where);
         $query = $this->db->get('sede');
         if ($query->num_rows() > 0) {
@@ -493,7 +502,7 @@ class Select_model extends CI_Model {
     }
 
     public function sede_activa_responsable($id_responsable, $dni_responsable) {
-        $where = "((id IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1)))) AND (estado!='3')";
+        $where = "((id IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (estado!='3')";
         $this->db->where($where);
         $query = $this->db->get('sede');
         if ($query->num_rows() > 0) {
@@ -525,7 +534,7 @@ class Select_model extends CI_Model {
     }
 
     public function salario_t_salario_x_t_depto($depto) {
-        $where = "(t_salario IN (SELECT t_salario FROM t_salario_x_t_depto WHERE (t_depto=" . $depto . ")))";
+        $where = "(t_salario IN (SELECT t_salario FROM t_salario_x_t_depto WHERE (t_depto='" . $depto . "')))";
         $this->db->where($where);
         $this->db->where('vigente', 1);
         $query = $this->db->get('salario');
@@ -550,7 +559,7 @@ class Select_model extends CI_Model {
     }
 
     public function t_ausencia_id($id) {
-        $SqlInfo = "SELECT id, tipo, CASE salarial WHEN '0' THEN 'No Remunerada' ELSE 'Remunerada' END AS salarial FROM t_ausencia where id=" . $id;
+        $SqlInfo = "SELECT id, tipo, CASE salarial WHEN '0' THEN 'No Remunerada' ELSE 'Remunerada' END AS salarial FROM t_ausencia where id='" . $id . "'";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -559,7 +568,7 @@ class Select_model extends CI_Model {
 
     //Cuando vamos a pasar fechas desde php a mysql, hay que hacerlo concatenando '', ya que de lo contratio quedaria en la consulta la fecha sin comillas y daria error: between 2014-02-03 en vez de between '2014-02-03'
     public function ausencia_entre_fechas($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin) {
-        $SqlInfo = "SELECT a.*, t.tipo, t.salarial FROM `ausencia_laboral` AS a, `t_ausencia` AS t WHERE (((a.fecha_inicio between '" . $fecha_inicio . "' AND '" . $fecha_fin . "') OR (a.fecha_fin between '" . $fecha_inicio . "' AND '" . $fecha_fin . "') OR ('" . $fecha_inicio . "' between a.fecha_inicio AND a.fecha_fin)) AND (a.vigente=1) AND (a.id_empleado=" . $id_empleado . ") AND (a.dni_empleado=" . $dni_empleado . ") AND (a.t_ausencia=t.id))";
+        $SqlInfo = "SELECT a.*, t.tipo, t.salarial FROM `ausencia_laboral` AS a, `t_ausencia` AS t WHERE (((a.fecha_inicio between '" . $fecha_inicio . "' AND '" . $fecha_fin . "') OR (a.fecha_fin between '" . $fecha_inicio . "' AND '" . $fecha_fin . "') OR ('" . $fecha_inicio . "' between a.fecha_inicio AND a.fecha_fin)) AND (a.vigente=1) AND (a.id_empleado='" . $id_empleado . "') AND (a.dni_empleado='" . $dni_empleado . "') AND (a.t_ausencia=t.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -574,6 +583,15 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function titular($id, $dni) {
+        $this->db->where('id', $id);
+        $this->db->where('dni', $dni);
+        $query = $this->db->get('titular');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     //excluimos al empleado 1 1 porq es el sistema y nadie lo debería ver.
     public function empleado_activo() {
@@ -588,7 +606,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados que pertenecen a la sede principal y a las secundarias de un responsable.
     public function empleado_sede_ppal_responsable($id_responsable, $dni_responsable) {
-        $where = "(sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
+        $where = "(sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $this->db->order_by('nombre1', 'asc');
         $query = $this->db->get('empleado');
@@ -599,7 +617,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados que pertenecen a la sede principal y a las secundarias de un responsable.
     public function empleado_sedes_responsable($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
+        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $this->db->order_by('nombre1', 'asc');
         $query = $this->db->get('empleado');
@@ -610,7 +628,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados de RRPPque pertenecen a la sede principal de un responsable.
     public function empleado_RRPP_sede_ppal($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ")) AND (dni=" . $dni_responsable . ")) AND ( NOT(id='1' AND dni='1')) AND (estado!='3'))";
+        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "')) AND (dni='" . $dni_responsable . "')) AND ( NOT(id='1' AND dni='1')) AND (estado!='3'))";
         $this->db->where($where);
         $where2 = "cargo IN (SELECT id FROM t_cargo WHERE depto=3)";
         $this->db->where($where2);
@@ -623,7 +641,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados de RRPPque pertenecen a la sede principal de un responsable.
     public function empleado_RRPP_sedes_responsable($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ")) AND (dni=" . $dni_responsable . ")) AND ( NOT(id='1' AND dni='1')) AND (estado!='3'))";
+        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "')) AND (dni='" . $dni_responsable . "')) AND ( NOT(id='1' AND dni='1')) AND (estado!='3'))";
         $this->db->where($where);
         $where2 = "cargo IN (SELECT id FROM t_cargo WHERE depto=3)";
         $this->db->where($where2);
@@ -636,7 +654,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados que tienen adelantos  vigentes y que pertenecen a la sede principal y a las secundarias de un responsable.
     public function empleado_sedes_responsable_adelantos($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
+        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $where2 = "((id IN(SELECT id_empleado FROM adelanto WHERE (((estado=1)||(estado=2))))) AND (dni IN(SELECT dni_empleado FROM adelanto WHERE (((estado=1)||(estado=2))))))";
         $this->db->where($where2);
@@ -649,7 +667,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados que tienen prestamos vigentes y que pertenecen a la sede principal y a las secundarias de un responsable.
     public function empleado_sedes_responsable_prestamos($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
+        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $where2 = "((id IN(SELECT id_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2))))) AND (dni IN(SELECT dni_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2))))))";
         $this->db->where($where2);
@@ -662,7 +680,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados que pertenecen a la sede principal y a las secundarias de un responsable y que no tienen contrato.
     public function empleado_sedes_responsable_sinContrato($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')  AND (NOT((id IN(SELECT id_empleado FROM contrato_laboral)) AND (dni IN(SELECT dni_empleado FROM contrato_laboral))))";
+        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')  AND (NOT((id IN(SELECT id_empleado FROM contrato_laboral)) AND (dni IN(SELECT dni_empleado FROM contrato_laboral))))";
         $this->db->where($where);
         $this->db->order_by('nombre1', 'asc');
         $query = $this->db->get('empleado');
@@ -733,7 +751,7 @@ class Select_model extends CI_Model {
     }
 
     public function t_falta_laboral_id($id) {
-        $SqlInfo = "SELECT id, falta, CASE gravedad WHEN '0' THEN 'Leve' ELSE 'Grave' END AS gravedad FROM t_falta_laboral where id=" . $id;
+        $SqlInfo = "SELECT id, falta, CASE gravedad WHEN '0' THEN 'Leve' ELSE 'Grave' END AS gravedad FROM t_falta_laboral where id='" . $id . "'";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -774,7 +792,7 @@ class Select_model extends CI_Model {
     }    
 
     public function t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))))";
+        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "')))))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -782,7 +800,7 @@ class Select_model extends CI_Model {
     }
 
     public function t_concepto_nomina_cotidiano_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (cotidiano=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))))";
+        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (cotidiano=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "')))))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -790,7 +808,7 @@ class Select_model extends CI_Model {
     }
 
     public function concepto_nomina_pdte_rrpp($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT c.*, t_c.tipo as tipo_concepto, t_ca.cargo_masculino as escala FROM concepto_nomina as c, t_concepto_nomina as t_c, t_cargo as t_ca WHERE ((c.id_empleado=" . $id_empleado . ") AND (c.dni_empleado=" . $dni_empleado . ") AND (c.estado=2) AND ((c.t_concepto_nomina=28) OR (c.t_concepto_nomina=29)) AND (c.t_concepto_nomina=t_c.id) AND (c.escala_matricula=t_ca.id))";
+        $SqlInfo = "SELECT c.*, t_c.tipo as tipo_concepto, t_ca.cargo_masculino as escala FROM concepto_nomina as c, t_concepto_nomina as t_c, t_cargo as t_ca WHERE ((c.id_empleado='" . $id_empleado . "') AND (c.dni_empleado='" . $dni_empleado . "') AND (c.estado=2) AND ((c.t_concepto_nomina=28) OR (c.t_concepto_nomina=29)) AND (c.t_concepto_nomina=t_c.id) AND (c.escala_matricula=t_ca.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -798,7 +816,7 @@ class Select_model extends CI_Model {
     }
 
     public function concepto_nomina_seguridad_social($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT c.*, s.nombre AS nombre_sede FROM concepto_nomina AS c, sede as s WHERE ((c.id_empleado=" . $id_empleado . ") AND (c.dni_empleado=" . $dni_empleado . ") AND (c.estado='1') AND ((c.t_concepto_nomina='23') OR (c.t_concepto_nomina='43')) AND (c.sede=s.id))";
+        $SqlInfo = "SELECT c.*, s.nombre AS nombre_sede FROM concepto_nomina AS c, sede as s WHERE ((c.id_empleado='" . $id_empleado . "') AND (c.dni_empleado='" . $dni_empleado . "') AND (c.estado='1') AND ((c.t_concepto_nomina='23') OR (c.t_concepto_nomina='43')) AND (c.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -806,7 +824,7 @@ class Select_model extends CI_Model {
     }
 
     public function concepto_base_nomina_empleado($id_empleado, $dni_empleado, $t_concepto_nomina) {
-        $SqlInfo = "SELECT * FROM concepto_base_nomina WHERE ((t_concepto_nomina=" . $t_concepto_nomina . ") AND (salario=(SELECT salario FROM empleado WHERE((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))";
+        $SqlInfo = "SELECT * FROM concepto_base_nomina WHERE ((t_concepto_nomina='" . $t_concepto_nomina . "') AND (salario=(SELECT salario FROM empleado WHERE((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "')))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -814,7 +832,7 @@ class Select_model extends CI_Model {
     }
 
     public function ultimas_nominas_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = 'SELECT n.*, s.nombre AS nombre_sede FROM nomina AS n, sede AS s WHERE ((vigente=1) AND (id_empleado=' . $id_empleado . ') AND (dni_empleado=' . $dni_empleado . ')  AND (n.sede=s.id)) order by fecha_trans desc limit 4';
+        $SqlInfo = "SELECT n.*, s.nombre AS nombre_sede FROM nomina AS n, sede AS s WHERE ((vigente=1) AND (id_empleado='" . $id_empleado . "') AND (dni_empleado='" . $dni_empleado . "')  AND (n.sede=s.id)) order by fecha_trans desc limit 4";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -922,7 +940,7 @@ class Select_model extends CI_Model {
     }
 
     public function empleado_sede_secundaria($id, $dni) {
-        $SqlInfo = 'SELECT * FROM empleado_x_sede AS a, sede AS b WHERE (a.sede_secundaria=b.id) AND (a.dni_empleado=' . $dni . ')AND (a.id_empleado=' . $id . ')AND (a.vigente=1)';
+        $SqlInfo = "SELECT * FROM empleado_x_sede AS a, sede AS b WHERE (a.sede_secundaria=b.id) AND (a.dni_empleado='" . $dni . "')AND (a.id_empleado='" . $id . "')AND (a.vigente=1)";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -930,9 +948,9 @@ class Select_model extends CI_Model {
     }
 
     public function sede_secundaria_faltante_empleado_responsable($id_empleado, $dni_empleado, $id_responsable, $dni_responsable) {
-        $where1 = "((id IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1))))";
+        $where1 = "((id IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))";
         $this->db->where($where1);
-        $where2 = 'id not IN (SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=' . $id_empleado . ') AND (dni_empleado=' . $dni_empleado . ') AND (vigente=1))';
+        $where2 = "id not IN (SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_empleado . "') AND (dni_empleado='" . $dni_empleado . "') AND (vigente=1))";
         $this->db->where($where2);
         $this->db->where('estado  !=', 3);
         $query = $this->db->get('sede');
@@ -942,9 +960,9 @@ class Select_model extends CI_Model {
     }
 
     public function sede_faltante_cuenta_bancaria_responsable($cuenta, $id_responsable, $dni_responsable) {
-        $where1 = "((id IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1))))";
+        $where1 = "((id IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))";
         $this->db->where($where1);
-        $where2 = 'id not IN (SELECT sede FROM cuenta_x_sede WHERE ((cuenta=' . $cuenta . ')  AND (vigente=1)))';
+        $where2 = "id not IN (SELECT sede FROM cuenta_x_sede WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))";
         $this->db->where($where2);
         $this->db->where('estado  !=', 3);
         $query = $this->db->get('sede');
@@ -958,11 +976,11 @@ class Select_model extends CI_Model {
     //empleados cuya sede principal o secundaria coinciden con la sede del responsable.
     //Empleados que no esten autorizados para esa sede, porq no tendria sentido volverlos a autorizar.
     public function empleado_faltante_cuenta_bancaria_responsable($cuenta, $id_responsable, $dni_responsable) {
-        $where1 = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id=" . $id_responsable . ") AND (dni=" . $dni_responsable . "))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado=" . $id_responsable . ") AND (dni_empleado=" . $dni_responsable . ") AND (vigente=1))))";
+        $where1 = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))";
         $this->db->where($where1);
-        $where2 = 'sede_ppal IN (SELECT sede FROM cuenta_x_sede WHERE ((cuenta=' . $cuenta . ')  AND (vigente=1)))';
+        $where2 = "sede_ppal IN (SELECT sede FROM cuenta_x_sede WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))";
         $this->db->where($where2);
-        $where3 = 'not((id IN (SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta=' . $cuenta . ')  AND (vigente=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta=' . $cuenta . ')  AND (vigente=1)))))';
+        $where3 = "not((id IN (SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))))";
         $this->db->where($where3);
         $where4 = '(NOT(id=1 AND dni=1))';
         $this->db->where($where4);
@@ -1005,7 +1023,7 @@ class Select_model extends CI_Model {
     //Como juan jose (directo de RRPP) es a la vez director general, entonces vamos a mostrar a juan jose con su documento. Cuando sea solo director general, se quitará esta condicion.
     //Si el cargo del jefe es un nivel jerarquico <= 8 (son jefes al interior de la misma sede), entonces debe cargar solo los empleados de la misma sede ppal.    
     public function empleado_jefe_faltante_rrpp($id_empleado, $dni_empleado) {
-        $SqlInfo = "(SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id=(SELECT cargo FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))) AND (e.depto=3) AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))>=(8)) AND (sede_ppal=(SELECT sede_ppal FROM empleado WHERE (id=" . $id_empleado . ") AND (dni=" . $dni_empleado . "))))) union (SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id=(SELECT cargo FROM empleado WHERE ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . ")))))) AND (e.depto=3) AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(8))))";
+        $SqlInfo = "(SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id=(SELECT cargo FROM empleado WHERE ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "')))))) AND (e.depto=3) AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))>=(8)) AND (sede_ppal=(SELECT sede_ppal FROM empleado WHERE (id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "'))))) union (SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id=(SELECT cargo FROM empleado WHERE ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "')))))) AND (e.depto=3) AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(8))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -1018,7 +1036,7 @@ class Select_model extends CI_Model {
     //Cuando Juan Jose solo Director General, entonces se quitaria la condicion "or (cargo=12) or"
     //Si el cargo del jefe es un nivel jerarquico <= 8 (son jefes al interior de la misma sede), entonces debe cargar solo los empleados de la misma sede ppal.
     public function empleado_jefe_faltante_sede_depto_cargo($sede_ppal, $depto, $cargo) {
-        $SqlInfo = "(SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id=" . $cargo . "))) AND (e.depto=" . $depto . ") AND (estado!='3') AND (NOT(id='1' AND dni='1'))) AND (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))>=(8))) AND (sede_ppal=" . $sede_ppal . ")) union (SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id=" . $cargo . "))) AND (e.depto=" . $depto . ") AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(8)))) union (SELECT * FROM empleado AS e WHERE (((cargo=1) OR (cargo=2) OR ((cargo=5) AND (sede_ppal =" . $sede_ppal . "))) AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id=" . $cargo . ")))))  union (SELECT * FROM empleado WHERE ((id=98667633) AND (dni=1)))";
+        $SqlInfo = "(SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "'))) AND (e.depto='" . $depto . "') AND (estado!='3') AND (NOT(id='1' AND dni='1'))) AND (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))>=(8))) AND (sede_ppal='" . $sede_ppal . "')) union (SELECT * FROM empleado AS e WHERE (((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "'))) AND (e.depto='" . $depto . "') AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(8)))) union (SELECT * FROM empleado AS e WHERE (((cargo=1) OR (cargo=2) OR ((cargo=5) AND (sede_ppal ='" . $sede_ppal . "'))) AND (estado!='3') AND (NOT(id='1' AND dni='1')) AND ((SELECT nivel_jerarquico FROM t_cargo WHERE (id=e.cargo))<(SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "')))))  union (SELECT * FROM empleado WHERE ((id=98667633) AND (dni=1)))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -1034,7 +1052,7 @@ class Select_model extends CI_Model {
     }
 
     public function despacho_placa($sede_responsable) {
-        $SqlInfo = "SELECT DISTINCT d.id AS id_despacho, e.nombre1, e.nombre2, e.apellido1, e.apellido2, CASE e.genero WHEN 'F' THEN t.cargo_femenino ELSE t.cargo_masculino END AS cargo, se.nombre AS sede, d.observacion, d.fecha_trans AS fecha_despacho FROM despachar_placa AS d, solicitud_placa AS so, empleado AS e, t_cargo AS t, sede AS se WHERE (d.solicitud_placa=so.id) AND (so.id_empleado=e.id) AND (so.dni_empleado=e.dni) AND (d.pendiente=1) AND (so.cargo_obtenido=t.id) AND (so.sede=" . $sede_responsable . ") AND (so.sede=se.id) ORDER BY d.fecha_trans";
+        $SqlInfo = "SELECT DISTINCT d.id AS id_despacho, e.nombre1, e.nombre2, e.apellido1, e.apellido2, CASE e.genero WHEN 'F' THEN t.cargo_femenino ELSE t.cargo_masculino END AS cargo, se.nombre AS sede, d.observacion, d.fecha_trans AS fecha_despacho FROM despachar_placa AS d, solicitud_placa AS so, empleado AS e, t_cargo AS t, sede AS se WHERE (d.solicitud_placa=so.id) AND (so.id_empleado=e.id) AND (so.dni_empleado=e.dni) AND (d.pendiente=1) AND (so.cargo_obtenido=t.id) AND (so.sede='" . $sede_responsable . "') AND (so.sede=se.id) ORDER BY d.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -1043,7 +1061,7 @@ class Select_model extends CI_Model {
 
     //adelantos vigente con saldo incluido > 0
     public function adelanto_vigente_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.observacion, ad.fecha_trans, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad, sede AS s WHERE ((ad.id_empleado=" . $id_empleado . ") AND (ad.dni_empleado=" . $dni_empleado . ") AND ((ad.estado=1)||(ad.estado=2)) AND (ad.sede=s.id))";
+        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.observacion, ad.fecha_trans, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad, sede AS s WHERE ((ad.id_empleado='" . $id_empleado . "') AND (ad.dni_empleado='" . $dni_empleado . "') AND ((ad.estado=1)||(ad.estado=2)) AND (ad.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -1052,7 +1070,7 @@ class Select_model extends CI_Model {
 
     //Prestamos vigente con saldo incluido > 0
     public function prestamo_vigente_beneficiario($id_beneficiario, $dni_beneficiario) {
-        $SqlInfo = "SELECT DISTINCT pr.prefijo AS prefijo_prestamo, pr.id AS id_prestamo, pr.total, pr.cant_cuotas, pr.tasa_interes, pr.cuota_fija, s.nombre AS sede, pr.fecha_trans, pr.observacion FROM prestamo AS pr, sede AS s WHERE ((pr.id_beneficiario=" . $id_beneficiario . ") AND (pr.dni_beneficiario=" . $dni_beneficiario . ") AND ((pr.estado=1)||(pr.estado=2)) AND (pr.sede=s.id))";
+        $SqlInfo = "SELECT DISTINCT pr.prefijo AS prefijo_prestamo, pr.id AS id_prestamo, pr.total, pr.cant_cuotas, pr.tasa_interes, pr.cuota_fija, s.nombre AS sede, pr.fecha_trans, pr.observacion FROM prestamo AS pr, sede AS s WHERE ((pr.id_beneficiario='" . $id_beneficiario . "') AND (pr.dni_beneficiario='" . $dni_beneficiario . "') AND ((pr.estado=1)||(pr.estado=2)) AND (pr.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -1107,7 +1125,7 @@ class Select_model extends CI_Model {
     }
 
     public function periodicidad_nomina($id_empleado, $dni_empleado) {
-        $SqlInfo = "select * from t_periodicidad_nomina where (id IN(select t_periodicidad_nomina from t_periodicidad_x_t_salario where (t_salario=(select t_salario from salario where (id=(select salario from empleado where ((id=" . $id_empleado . ") AND (dni=" . $dni_empleado . "))))))))";
+        $SqlInfo = "select * from t_periodicidad_nomina where (id IN(select t_periodicidad_nomina from t_periodicidad_x_t_salario where (t_salario=(select t_salario from salario where (id=(select salario from empleado where ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "'))))))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

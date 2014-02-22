@@ -35,7 +35,6 @@ class Nomina extends CI_Controller {
         $data['action_llena_info_t_concepto'] = base_url() . "nomina/llena_info_t_concepto";
         $data['action_llena_periodicidad_nomina'] = base_url() . "nomina/llena_periodicidad_nomina";
         $data['action_validar_fechas_periodicidad'] = base_url() . "nomina/validar_fechas_periodicidad";
-
         $data['action_llena_cuenta_responsable'] = base_url() . "nomina/llena_cuenta_responsable";
         $data['action_llena_caja_responsable'] = base_url() . "nomina/llena_caja_responsable";
         $this->parser->parse('nomina/crear', $data);

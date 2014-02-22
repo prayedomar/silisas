@@ -12,17 +12,22 @@ class Factura extends CI_Controller {
 //Crear: Nomina
     function crear() {
         $data["tab"] = "crear_factura";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $data['id_responsable'];
         $dni_responsable = $data['dni_responsable'];
+        $data['dni'] = $this->select_model->t_dni_titular();
+
         $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
         $data['action_validar'] = base_url() . "factura/validar";
         $data['action_crear'] = base_url() . "factura/insertar";
         $data['action_recargar'] = base_url() . "factura/crear";
+
+        $data['action_validar_titular_llena_matriculas'] = base_url() . "factura/validar_titular_llena_matriculas";
+
         $data['action_llena_info_contrato_laboral'] = base_url() . "factura/llena_info_contrato_laboral";
         $data['action_llena_info_ultimas_facturas'] = base_url() . "factura/llena_info_ultimas_facturas";
         $data['action_llena_info_adelantos'] = base_url() . "factura/llena_info_adelantos";
@@ -44,7 +49,7 @@ class Factura extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             $this->form_validation->set_rules('periodicidad', 'Periodicidad', 'required|callback_select_default');
             $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'required|xss_clean|callback_fecha_valida');
@@ -104,7 +109,7 @@ class Factura extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $t_periodicidad = $this->input->post('periodicidad');
             $fecha_inicio = $this->input->post('fecha_inicio');
@@ -185,6 +190,53 @@ class Factura extends CI_Controller {
                     $this->parser->parse('trans_error', $data);
                     return;
                 }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_titular_llena_matriculas() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $dni_titular = $this->input->post('dni');
+            $id_titular = $this->input->post('id');
+            $titular = $this->select_model->titular($id_titular, $dni_titular);
+            if ($titular == TRUE) {
+                $matriculas = $this->select_model->matricula_vigente_titular($id_titular, $dni_titular);
+                if ($matriculas == TRUE) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    foreach ($matriculas as $fila) {
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center">' . $fila->contrato . '</td>
+                            <td>' . $fila->nombre_plan . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                             
+                            <td class="text-center">' . $fila->sede . '</td>                         
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>  
+                        </tr>';
+                    }
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>El titular no existe en la base de datos.</p>'
+                );
+                echo json_encode($response);
+                return false;
             }
         } else {
             redirect(base_url());

@@ -35,7 +35,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Segundo Nombre</label>
-                                        <input name="nombre2" id="nombre2" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Nombre" maxlength="30">
+                                        <input name="nombre2" id="nombre2" type="text" class="form-control exit_caution alfabeto_espacios" placeholder="Segundo Nombre" maxlength="30">
                                     </div>
                                 </div>
                             </div>
