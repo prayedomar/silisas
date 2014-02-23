@@ -14,12 +14,6 @@ class Prueba extends CI_Controller {
 //        $this->load->view('testV');
 
 
-                                    <div class="col-xs-5  col-xs-offset-1">
-                                        <p><h3>Nombre del titular</h3></p>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <p><h3>$ 0.00</h3></div>
-                                    </div>
         
         
 //        echo ($this->select_model->nextId_salario()->id) + 1;
