@@ -81,7 +81,7 @@
                                     <th>Observación</th>
                                     <th>Fecha de cración</th>
                                     <th>Responsable</th>
-                                    <?php if ($_SESSION["perfil"] = "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
+                                    <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
                                         <th>Acciones</th>
                                     <?php } ?>
                                 </tr>
@@ -99,7 +99,7 @@
                                         <td><?= $row->observacion ?></td>
                                         <td><?= $row->fecha_trans ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2; ?></td>
-                                        <?php if ($_SESSION["perfil"] = "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
+                                        <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
                                             <td><button class="editar btn btn-success btn-sm"
                                                         data-id="<?= $row->id ?>"
                                                         data-nombre="<?= $row->nombre ?>"
