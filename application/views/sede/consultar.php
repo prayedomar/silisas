@@ -81,7 +81,9 @@
                                     <th>Observación</th>
                                     <th>Fecha de cración</th>
                                     <th>Responsable</th>
-                                    <th>Acciones</th>
+                                    <?php if ($_SESSION["perfil"] = "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
+                                        <th>Acciones</th>
+                                    <?php } ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -97,19 +99,21 @@
                                         <td><?= $row->observacion ?></td>
                                         <td><?= $row->fecha_trans ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2; ?></td>
-                                        <td><button class="editar btn btn-success btn-sm"
-                                                    data-id="<?= $row->id ?>"
-                                                    data-nombre="<?= $row->nombre ?>"
-                                                    data-pais="<?= $row->id_pais ?>"
-                                                    data-departamento="<?= $row->id_departamento ?>"
-                                                    data-ciudad="<?= $row->id_ciudad ?>"
-                                                    data-estado="<?= $row->id_estado ?>"
-                                                    data-direccion="<?= $row->direccion ?>"
-                                                    data-tel1="<?= $row->tel1 ?>"
-                                                    data-tel2="<?= $row->tel2 ?>"
-                                                    data-prefijo_trans="<?= $row->prefijo_trans ?>"
-                                                    data-observacion="<?= $row->observacion ?>"
-                                                    >Editar</button></td>
+                                        <?php if ($_SESSION["perfil"] = "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
+                                            <td><button class="editar btn btn-success btn-sm"
+                                                        data-id="<?= $row->id ?>"
+                                                        data-nombre="<?= $row->nombre ?>"
+                                                        data-pais="<?= $row->id_pais ?>"
+                                                        data-departamento="<?= $row->id_departamento ?>"
+                                                        data-ciudad="<?= $row->id_ciudad ?>"
+                                                        data-estado="<?= $row->id_estado ?>"
+                                                        data-direccion="<?= $row->direccion ?>"
+                                                        data-tel1="<?= $row->tel1 ?>"
+                                                        data-tel2="<?= $row->tel2 ?>"
+                                                        data-prefijo_trans="<?= $row->prefijo_trans ?>"
+                                                        data-observacion="<?= $row->observacion ?>"
+                                                        >Editar</button></td>
+                                            <?php } ?>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -184,7 +188,7 @@
                                 <label>Dirección<em class="required_asterisco">*</em></label>
                                 <input name="direccion" id="direccion-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección de la Sede" maxlength="80">
                             </div>                            
-                            
+
                         </div>
                         <div class="col-xs-6">
                             <div class="form-group">
@@ -207,13 +211,13 @@
                             <div class="form-group separar_submit">
                                 <input type="hidden" name="id_sede" id="id_sede" value=""/>
                             </div>
-                         
+
                         </div>
 
                     </div>
                     <div class="row">
-                           <div id="validacion_alert">
-                            </div>
+                        <div id="validacion_alert">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
