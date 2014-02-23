@@ -38,138 +38,166 @@
                 <div id="div_matriculas" style="display: none">
                     <!--<div id="div_matriculas">-->
                     <div class="row" id="nombre_titular">
+                    </div>                 
+                    <div class="overflow_tabla">
+                        <label>Matrículas vígentes<em class="required_asterisco">*</em></label>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Escojer</th>
+                                    <th class="text-center">Contrato</th>
+                                    <th class="text-center">Plan</th>
+                                    <th class="text-center">Valor Inicial</th>
+                                    <th class="text-center">Saldo</th>
+                                    <th class="text-center">Sede Origen</th>
+                                    <th class="text-center">Fecha del Préstamo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_matricula_vigente">
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="row">                    
-                        <div class="overflow_tabla">
-                            <label>Matrículas vígentes<em class="required_asterisco">*</em></label>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Escojer</th>
-                                        <th class="text-center">Contrato</th>
-                                        <th class="text-center">Plan</th>
-                                        <th class="text-center">Valor Inicial</th>
-                                        <th class="text-center">Saldo</th>
-                                        <th class="text-center">Sede Origen</th>
-                                        <th class="text-center">Fecha del Préstamo</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_matricula_vigente">
-                                </tbody>
-                            </table>
+                    <div class="overflow_tabla">
+                        <label>Cuota a Cancelar<em class="required_asterisco">*</em></label>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Escojer</th>
+                                    <th class="text-center"># Cuota</th>
+                                    <th class="text-center">Abono Mínimo</th>
+                                    <th class="text-center">Abono Máximo</th>
+                                    <th class="text-center">Abono Realizado</th>                                           
+                                    <th class="text-center">Cantidad Mora</th>
+                                    <th class="text-center">Int. Mora</th>
+                                    <th class="text-center">Saldo Deuda</th>
+                                    <th class="text-center">Fecha Límite</th>
+                                    <th class="text-center">Fecha Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_cuotas_pdtes">
+                            </tbody>
+                        </table>
+                    </div>  
+                    <div class="row">
+                        <div class="col-xs-6 col-xs-offset-3">
+                            <div class="form-group">
+                                <label>Valor del Abono<em class="required_asterisco">*</em></label>   
+                                <p class="help-block"><B>> </B>Con un abono superior al abono mínimo, disminuirán cuotas e intereses al final del préstamo.</p>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" name="subtotal" id="subtotal" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12"  readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Intereses de Mora</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" name="int_mora" id="int_mora" class="form-control decimal decimal2 miles" value="0.00" maxlength="12"  readonly="readonly">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Total a Pagar</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" name="total" id="total" class="form-control decimal decimal2 miles" value="0.00" maxlength="12"  readonly="readonly">
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="div_nomina" style="display: none;">
-                    <!--<div id="div_nomina">-->
-                    <div class="row separar_div">
-                        <legend>Conceptos de Nómina</legend><p class="required_alert"><em class="required_asterisco separar_div">*</em> Campos Obligatorios</p>
-                        <div id="conceptos_pendientes">
-                        </div>
-                        <div id="conceptos_nuevos">
-                            <label>Conceptos Nuevos</label>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-2">
-                                <button class="btn btn-default" type="button" id="agregar_concepto"><span class="glyphicon glyphicon-plus"></span> Agregar Concepto</button>  
-                            </div>
-                            <div class="col-xs-6 col-xs-offset-4">
-                                <div class="row">
-                                    <div class="col-xs-5  col-xs-offset-1">
-                                        <p><h4>Total Devengado</h4></p>
-                                        <p><h4>Total Deducido</h4></p>
-                                        <p><h3>Total Nómina</h3></p>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <div id="div_total_devengado"><h4>$ 0.00</h4></div>
-                                        <div id="div_total_deducido"><h4>$ 0.00</h4></div>
-                                        <div id="div_total_nomina"><h3>$ 0.00</h3></div>
-                                    </div>
-                                </div>   
-                            </div>
-                        </div>   
+                    <hr>
+                    <div class="overflow_tabla">
+                        <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                        <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>                                    
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Escojer</th>  
+                                    <th class="text-center">Sede</th>                                            
+                                    <th class="text-center">Tipo de Caja</th>
+                                    <th class="text-center">Observación</th>
+                                    <th class="text-center">Fecha de Creación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_caja_efectivo">
+                            </tbody>
+                        </table>
                     </div>
                     <div class="row">
-                        <legend>Pago de Nómina</legend>
-                        <div class="overflow_tabla">
-                            <label>Caja de Efectivo Origen (Punto de Venta)</label>
-                            <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Escojer</th>  
-                                        <th class="text-center">Sede</th>
-                                        <th class="text-center">Tipo de Caja</th>
-                                        <th class="text-center">Observación</th>
-                                        <th class="text-center">Fecha de Creación</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_caja_efectivo">
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group">
-                            <label>Valor retirado de la Caja de Efectivo</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">$</span>
-                                <input type="text" name="efectivo_retirado" id="efectivo_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                        <div class="col-xs-6 col-xs-offset-3 ">
+                            <div class="form-group">
+                                <label>Valor Ingresado a la Caja de Efectivo</label>                            
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" name="efectivo_ingresado" id="efectivo_ingresado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="overflow_tabla">
-                            <label>Cuenta Bancaria Origen</label>
-                            <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Escojer</th>
-                                        <th class="text-center"># Cuenta</th>
-                                        <th class="text-center">Tipo Cuenta</th>
-                                        <th class="text-center">Banco</th>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Observación</th>
-                                        <th class="text-center">Fecha Creación</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_cuenta_bancaria">
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group">
-                            <label>Valor retirado de la Cuenta Bancaria</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">$</span>
-                                <input type="text" name="valor_retirado" id="valor_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                    </div>                         
+                    <hr>                            
+                    <div class="overflow_tabla">
+                        <label>Cuenta Bancaria Destino</label>
+                        <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla consignado dinero en ella con el dinero recibido (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Escojer</th>                                            
+                                    <th class="text-center"># Cuenta</th>
+                                    <th class="text-center">Tipo Cuenta</th>
+                                    <th class="text-center">Banco</th>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Observación</th>
+                                    <th class="text-center">Fecha Creación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_cuenta_bancaria">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-xs-offset-3 ">
+                            <div class="form-group">
+                                <label>Valor Consignado a la Cuenta Bancaria</label>                            
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" name="valor_consignado" id="valor_consignado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="form-group">
-                            <label>Observación</label>
-                            <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
-                        </div>
-                        <div class="form-group separar_submit">
-                            <input type="hidden" id="action_validar" value={action_validar} />
-                            <input type="hidden" name="id_responsable" value={id_responsable} />
-                            <input type="hidden" name="dni_responsable" value={dni_responsable} />
-                            <!--calculamos la cantidad de dias de la nomina y la cantidad de dias laborados (dias_nomina - ausencias)-->
-                            <input type="hidden" name="dias_nomina" id="dias_nomina"/>
-                            <input type="hidden" name="dias_remunerados" id="dias_remunerados"/>
-                            <!--Aqui almacenamos el total devengado de la nomina-->
-                            <input type="hidden" name="total_devengado" class="miles decimal2" id="total_devengado"/>
-                            <input type="hidden" name="total_deducido" class="miles decimal2" id="total_deducido"/>
-                            <input type="hidden" name="total_nomina" class="miles decimal2" id="total_nomina"/>
-                            <!--para controlar el id de los nuevos conceptos agregados-->
-                            <input type="hidden" name="contador_new_concepto" class="miles decimal2" id="contador_new_concepto"/>
-                            <center>
-                                <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                                <button id="btn_validar" class="btn btn-success">Crear Nómina</button>  
-                                <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
-                                <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
-                            </center>
-                        </div>   
-                        <div id="validacion_alert">
-                        </div>
-                    </div> 
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label>Observación</label>
+                        <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                    </div>
+
+                    <div class="form-group separar_submit">
+                        <input type="hidden" id="action_validar" value={action_validar} />
+                        <input type="hidden" name="id_responsable" value={id_responsable} />
+                        <input type="hidden" name="dni_responsable" value={dni_responsable} />
+                        <!--calculamos la cantidad de dias de la nomina y la cantidad de dias laborados (dias_nomina - ausencias)-->
+                        <input type="hidden" name="dias_nomina" id="dias_nomina"/>
+                        <input type="hidden" name="dias_remunerados" id="dias_remunerados"/>
+                        <!--Aqui almacenamos el total devengado de la nomina-->
+                        <input type="hidden" name="total_devengado" class="miles decimal2" id="total_devengado"/>
+                        <input type="hidden" name="total_deducido" class="miles decimal2" id="total_deducido"/>
+                        <input type="hidden" name="total_nomina" class="miles decimal2" id="total_nomina"/>
+                        <!--para controlar el id de los nuevos conceptos agregados-->
+                        <input type="hidden" name="contador_new_concepto" class="miles decimal2" id="contador_new_concepto"/>
+                        <center>
+                            <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
+                            <button id="btn_validar" class="btn btn-success">Crear Nómina</button>  
+                            <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
+                            <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
+                        </center>
+                    </div>   
+                    <div id="validacion_alert">
+                    </div>
                 </div>
             </form>
         </div>
@@ -213,10 +241,9 @@
 
     //Cargar div de valor abono y cuotas  de matricula escogida
     $("table").delegate("#matricula", "change", function() {
-        alert("hola");
         matricula = $("input[name='matricula']:checked").val();
         $.post('{action_llena_cuotas_matricula}', {
-            prestamo: prestamo
+            matricula: matricula
         }, function(data) {
             var obj = JSON.parse(data);
             if (obj.respuesta == "OK")
@@ -252,7 +279,7 @@
                 var obj = JSON.parse(data);
                 if (obj.respuesta == "OK")
                 {
-                    $("#nombre_titular").html(',<div class="col-xs-5  col-xs-offset-1"><p><h3>Nombre del titular</h3></p></div><div class="col-xs-6"><p><h3>' + obj.nombreTitular + '</h3></p></div></div>');
+                    $("#nombre_titular").html('<center><table><th><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.nombreTitular + '</h4></td></th></table></center>');
                     $("#tbody_matricula_vigente").html(obj.filasTabla);
                     $("#div_matriculas").css("display", "block");
                     $('#dni').attr('disabled', 'disabled');
@@ -425,7 +452,7 @@
     );
 
 
-//Validamos el formulario antes de enviarlo por submit
+    //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
         $.ajax({

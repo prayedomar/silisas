@@ -162,7 +162,7 @@ table.table thead{
 
 .h_negrita{
     /*color:#000000;*/
-    color: rgb(85, 85, 85);
+    color: #555;
 }
 
 /*Esto sirve para que la tabla no se desovrde en un div al estar en pantalla pequeña*/
