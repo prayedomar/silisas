@@ -84,7 +84,7 @@
                                 <?php } ?>
                             </select>
                         </div>
-                          <div class="col-xs-2">
+                        <div class="col-xs-2">
                             <label>Fecha nacimiento</label>
                             <div class="input-group">
                                 <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
@@ -112,7 +112,7 @@
                             <tbody id="bodyTabla">
                                 <?php foreach ($lista_empleados as $row) { ?>
                                     <tr>
-                                        <td><?= $row->abreviacion."".$row->documento ?></td>
+                                        <td><?= $row->abreviacion . "" . $row->documento ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                         <td><?= $row->fecha_nacimiento ?></td>
                                         <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . " - " . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
@@ -132,7 +132,11 @@
                                                     data-apellido1jefe="<?= $row->apellido1_jefe ?>"
                                                     data-apellido2jefe="<?= $row->apellido2_jefe ?>"
                                                     data-observacion="<?= $row->observacion ?>"
-                                                    >Ver detalles</button></td>
+                                                    >Ver detalles</button>
+                                                    <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
+                                                <button class="editar btn btn-success btn-sm"
+                                                        >Editar</button>
+                                            <?php } ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -152,7 +156,7 @@
                              data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
                              data-depto="<?= isset($_GET["depto"]) ? $_GET["depto"] : "" ?>"
                              data-cargo="<?= isset($_GET["cargo"]) ? $_GET["cargo"] : "" ?>"
-                               data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                             data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
 
 
                             <ul class="pagination">
@@ -270,6 +274,26 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modal-editar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content modal-content-minimo">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Editar sede</h3>
+            </div>
+            <form role="form" method="post" action="actualizar" id="formulario">
+                <div  class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->                                    
+                    <button id="botonValidarSede" class="btn btn-success">Actualizar Sede</button>                                 
+                    <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

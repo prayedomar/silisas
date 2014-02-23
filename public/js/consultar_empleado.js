@@ -138,4 +138,8 @@ $(function() {
         window.location.href = url;
 
     });
+
+    $("table .editar").click(function() {
+    //  alert("asd");
+    });
 });
