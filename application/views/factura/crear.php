@@ -36,24 +36,28 @@
                     </div>
                 </div>
                 <div id="div_matriculas" style="display: none">
-                <!--<div id="div_matriculas">-->
-                    <div class="overflow_tabla">
-                        <label>Matrículas vígentes<em class="required_asterisco">*</em></label>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Escojer</th>
-                                    <th class="text-center">Contrato</th>
-                                    <th class="text-center">Plan</th>
-                                    <th class="text-center">Valor Inicial</th>
-                                    <th class="text-center">Saldo</th>
-                                    <th class="text-center">Sede Origen</th>
-                                    <th class="text-center">Fecha del Préstamo</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody_matricula_vigente">
-                            </tbody>
-                        </table>
+                    <!--<div id="div_matriculas">-->
+                    <div class="row" id="nombre_titular">
+                    </div>
+                    <div class="row">                    
+                        <div class="overflow_tabla">
+                            <label>Matrículas vígentes<em class="required_asterisco">*</em></label>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Escojer</th>
+                                        <th class="text-center">Contrato</th>
+                                        <th class="text-center">Plan</th>
+                                        <th class="text-center">Valor Inicial</th>
+                                        <th class="text-center">Saldo</th>
+                                        <th class="text-center">Sede Origen</th>
+                                        <th class="text-center">Fecha del Préstamo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_matricula_vigente">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div id="div_nomina" style="display: none;">
@@ -207,19 +211,36 @@
         $("#div_total_nomina").html("<h3>$ " + $('#total_nomina').val() + "</h3>");
     }
 
-    //Habilita el campo periodicidad
-    $("form").delegate("#empleado", "change", function() {
-        empleado = $(this).val();
-        $.post('{action_llena_periodicidad_nomina}', {
-            empleado: empleado
+    //Cargar div de valor abono y cuotas  de matricula escogida
+    $("table").delegate("#matricula", "change", function() {
+        alert("hola");
+        matricula = $("input[name='matricula']:checked").val();
+        $.post('{action_llena_cuotas_matricula}', {
+            prestamo: prestamo
         }, function(data) {
-            $("#periodicidad").removeAttr("readonly");
-            $("#periodicidad").html(data);
-            $("#periodicidad").prepend('<option value="default" selected>Seleccione Periodicidad</option>');
+            var obj = JSON.parse(data);
+            if (obj.respuesta == "OK")
+            {
+                $("#tbody_cuotas_pdtes").html(obj.filasTabla);
+                //LLenamos 3 campos ocultos para validar valores por ajax
+                $('#abono_minimo').attr('value', obj.abonoMinimo);
+                $('#abono_maximo').attr('value', obj.abonoMaximo);
+                $('#cant_dias_mora').attr('value', obj.cantMora);
+                //Llenamos los campos subtotal, int. mora y total
+                var subtotal = new Number(obj.abonoMinimo);
+                var intMora = new Number(obj.intMora);
+                $('#subtotal').attr('value', subtotal.toFixed(2));
+                $('#int_mora').attr('value', intMora.toFixed(2));
+                $('#total').attr('value', subtotal + intMora);
+                $('#subtotal').change();
+                $('#int_mora').change();
+                $('#total').change();
+                $("#subtotal").removeAttr("readonly");
+            }
         });
     });
 
-    //Llenamos la informacion de apoyo
+    //Llenamos la informacion de las matriculas y los pagos.
     $("form").delegate("#consultar_titular", "click", function() {
         var dni = $('#dni').val();
         var id = $('#id').val();
@@ -231,9 +252,12 @@
                 var obj = JSON.parse(data);
                 if (obj.respuesta == "OK")
                 {
+                    $("#nombre_titular").html(',<div class="col-xs-5  col-xs-offset-1"><p><h3>Nombre del titular</h3></p></div><div class="col-xs-6"><p><h3>' + obj.nombreTitular + '</h3></p></div></div>');
                     $("#tbody_matricula_vigente").html(obj.filasTabla);
-                    $("#dni").css("display", "block");
+                    $("#div_matriculas").css("display", "block");
+                    $('#dni').attr('disabled', 'disabled');
                     $('#id').attr('readonly', 'readonly');
+                    $('#consultar_titular').attr('disabled', 'disabled');
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);
