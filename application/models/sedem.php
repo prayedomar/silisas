@@ -52,7 +52,7 @@ class Sedem extends CI_Model {
     }
 
     public function actualizarSede($id_sede, $nombre, $pais, $departamento, $ciudad, $estado, $direccion, $tel1, $tel2, $observacion) {
-        $query = "UPDATE sede SET nombre='$nombre',pais='$pais',provincia='$departamento',ciudad='$ciudad',direccion='$direccion',tel1='$tel1',tel2='$tel2',estado='$estado',observacion='$observacion',id_responsable='{$_SESSION["idResponsable"]}',dni_responsable='{$_SESSION["dniResponsable"]}' WHERE id='$id_sede'";
+        $query = "UPDATE sede SET nombre='$nombre',pais='$pais',provincia='$departamento',ciudad='$ciudad',direccion='$direccion',tel1='$tel1',tel2='$tel2',estado='$estado',observacion='$observacion',id_responsable='{$_SESSION["idResponsable"]}',dni_responsable='{$_SESSION["dniResponsable"]}',fecha_trans=now() WHERE id='$id_sede'";
         return $this->db->query($query);
     }
 
