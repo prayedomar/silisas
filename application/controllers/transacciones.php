@@ -31,7 +31,7 @@ class Transacciones extends CI_Controller {
         }
         $data['paginaActiva'] = $paginaActual;
         $cantidad = $this->transaccionesm->cantidad_transacciones($_GET, $inicio, $filasPorPagina);
-        $cantidad = sizeof($cantidad);
+        $cantidad = $cantidad[0]->cantidad;
         $data['cantidad'] = $cantidad;
         $data['totales'] = $this->transaccionesm->total_transacciones($_GET, $inicio, $filasPorPagina);
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();

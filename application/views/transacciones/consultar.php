@@ -2,8 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-<!--                <legend>Consultar transacciones <span class="help-block pull-right">(<?= $cantidad ?> transacciones encontrados)</span></legend>-->
-                <legend>Consultar transacciones</legend>
+                <legend>Consultar transacciones <span class="help-block pull-right">(<?= $cantidad ?> transacciones encontrados)</span></legend>
                 <div id="divCriterios">
                     <div  class="row">
                         <div class="col-xs-2">
