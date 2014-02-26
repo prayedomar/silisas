@@ -263,7 +263,7 @@ class Titular extends CI_Controller {
                     <th>Nombre</th>
                     <th>Fecha de nacimiento</th>
                     <th>Domicilio</th>
-                    <th>Teléfonos</th>
+                    <th><?=  utf8_decode("Teléfonos") ?> </th>
                     <th>Email</th>
                     <th>Vigente</th>
                     <th>Observacion</th>
@@ -272,15 +272,15 @@ class Titular extends CI_Controller {
             <tbody id="bodyTabla">
                 <?php foreach ($lista as $row) { ?>
                     <tr>
-                        <td><?= $row->tipo ?></td>
+                        <td><?= utf8_decode($row->tipo) ?></td>
                         <td><?= $row->documento ?></td>
-                        <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
+                        <td><?= utf8_decode($row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2) ?></td>
                         <td><?= $row->fecha_nacimiento ?></td>
-                        <td><?= $row->pais . " / " . $row->provincia . " / " . $row->ciudad . " - " . $row->tipo_domicilio . " / " . $row->direccion . " / " . $row->barrio ?></td>
+                        <td><?= utf8_decode($row->pais . " / " . $row->provincia . " / " . $row->ciudad . " - " . $row->tipo_domicilio . " / " . $row->direccion . " / " . $row->barrio) ?></td>
                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                         <td><?= $row->email ?></td>
                         <td><?= $row->vigente == "1" ? "Si" : "No" ?></td>
-                        <td><?= $row->observacion ?></td>
+                        <td><?= utf8_decode($row->observacion) ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
