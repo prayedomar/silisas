@@ -134,7 +134,7 @@ class Factura extends CI_Controller {
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -250,18 +250,14 @@ class Factura extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             if ($this->input->post('matricula')) {
-                $matricula = $this->input->post('matricula');
-                $matriz_matricula = $this->matriz_matricula($matricula);
+                $id_matricula = $this->input->post('matricula');
+                $matriz_matricula = $this->matriz_matricula($id_matricula);
                 if ($matriz_matricula) {
                     $matricula = $this->select_model->matricula_id($id_matricula);
                     $plan = $this->select_model->t_plan_id($matricula->plan);
                     $cant_cuotas = $plan->cant_cuotas;
                     $response = array(
                         'respuesta' => 'OK',
-                        'abonoMinimo' => '0.00',
-                        'abonoMaximo' => '0.00',
-                        'cantMora' => '0',
-                        'intMora' => '0.00',
                         'filasTabla' => ''
                     );
 
@@ -271,8 +267,9 @@ class Factura extends CI_Controller {
                         //Solo se mostraran las cuotas que no se han cancelado
                         if ($matriz_matricula[$i][6] == 0) {
                             $num_cuota = $matriz_matricula[$i][1];
-                            $t_detalle = $matriz_matricula[$i][2];
+                            $t_detalle = $this->select_model->t_detalle($matriz_matricula[$i][2])->tipo;
                             $pendiente = $matriz_matricula[$i][5];
+                            $fecha_esperada = $matriz_matricula[$i][7];
                             $cant_dias_mora = $matriz_matricula[$i][8];
                             $int_mora = $matriz_matricula[$i][9];
 
@@ -304,10 +301,6 @@ class Factura extends CI_Controller {
                             <td class="text-center">' . $matriz_matricula[$i][11] . '</td>
                         </tr>';
                         }
-                        //Para que no muestre mas cuotas despues de la cuota proxima a cancelar.
-//                    if ($bandera_radio == 1) {
-//                        break;
-//                    }
                     }
                     echo json_encode($response);
                     return false;

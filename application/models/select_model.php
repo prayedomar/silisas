@@ -79,6 +79,14 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function t_detalle($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_detalle');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function t_cuenta() {
         $query = $this->db->get('t_cuenta');

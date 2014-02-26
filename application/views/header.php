@@ -92,6 +92,7 @@
                             }})
                     }
                 })(jQuery);
+                
                 //Para escribir solo letras, numeros, alfanumericos
                 $('.alfabeto').validar_inputs('abcdefghijklmnñopqrstuvwxyzáéíóú');
                 $('.alfabeto_espacios').validar_inputs(' abcdefghijklmnñopqrstuvwxyzáéíóú');
