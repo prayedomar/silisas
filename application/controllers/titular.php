@@ -83,6 +83,9 @@ class Titular extends CI_Controller {
             $apellido1 = ucwords(strtolower($this->input->post('apellido1')));
             $apellido2 = ucwords(strtolower($this->input->post('apellido2')));
             $fecha_nacimiento = $this->input->post('fecha_nacimiento');
+            if($fecha_nacimiento == ""){
+                $fecha_nacimiento = NULL;
+            }
             $genero = $this->input->post('genero');
             $pais = $this->input->post('pais');
             $provincia = $this->input->post('provincia');
