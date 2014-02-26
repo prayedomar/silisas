@@ -148,11 +148,11 @@
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label class="required">Nombre de la Sede<em class="required_asterisco">*</em></label>
-                                <input name="nombre" id="nombre-modal" type="text" class="form-control exit_caution letras_numeros" placeholder="Nombre de la Sede" maxlength="40" autofocus="autofocus">
+                                <input name="nombre" id="nombre-modal" type="text" class="form-control letras_numeros" placeholder="Nombre de la Sede" maxlength="40" autofocus="autofocus">
                             </div>
                             <div class="form-group">
                                 <label>País de domicilio<em class="required_asterisco">*</em></label>
-                                <select name="pais" id="pais-modal" class="form-control exit_caution">
+                                <select name="pais" id="pais-modal" class="form-control">
                                     <option value="default">Seleccione País</option>
                                     <?php foreach ($pais as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->nombre ?></option>
@@ -161,19 +161,19 @@
                             </div>
                             <div class="form-group">
                                 <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
-                                <select name="provincia" id="provincia-modal" class="form-control exit_caution" disabled>
+                                <select name="provincia" id="provincia-modal" class="form-control" disabled>
                                     <option value="default">Seleccione primero País</option>
                                 </select>                                
                             </div>
                             <div class="form-group">
                                 <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
-                                <select name="ciudad" id="ciudad-modal" class="form-control exit_caution" disabled>
+                                <select name="ciudad" id="ciudad-modal" class="form-control" disabled>
                                     <option value="default">Seleccione primero Depto</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Estado<em class="required_asterisco">*</em></label>
-                                <select name="estado" id="estado-modal" class="form-control exit_caution">
+                                <select name="estado" id="estado-modal" class="form-control">
                                     <option value="default">Seleccione Estado</option>
                                     <?php foreach ($est_sede as $row) { ?>
                                         <option value="<?= $row->id ?>"><?= $row->estado ?></option>
@@ -182,27 +182,27 @@
                             </div>
                             <div class="form-group">
                                 <label>Dirección<em class="required_asterisco">*</em></label>
-                                <input name="direccion" id="direccion-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección de la Sede" maxlength="80">
+                                <input name="direccion" id="direccion-modal" type="text" class="form-control alfanumerico" placeholder="Dirección de la Sede" maxlength="80">
                             </div>                            
 
                         </div>
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label>Telefono 1</label>
-                                <input name="tel1" id="tel1-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Telefono 1" maxlength="40">
+                                <input name="tel1" id="tel1-modal" type="text" class="form-control alfanumerico" placeholder="Telefono 1" maxlength="40">
                             </div>
                             <div class="form-group">
                                 <label>Telefono 2</label>
-                                <input name="tel2" id="tel2-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Telefono 2" maxlength="40">
+                                <input name="tel2" id="tel2-modal" type="text" class="form-control alfanumerico" placeholder="Telefono 2" maxlength="40">
                             </div>
                             <div class="form-group">
                                 <label class="required">Prefijo para Transacciones<em class="required_asterisco">*</em></label>
                                 <p class="help-block"><B>> </B>Prefijo de 4 letras para Facturas, Recibos de Caja, etc.</p>                                                                
-                                <input name="prefijo_trans" id="prefijo_trans-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Prefijo para Transacciones" maxlength="4" autofocus="autofocus" readonly>
+                                <input name="prefijo_trans" id="prefijo_trans-modal" type="text" class="form-control alfabeto" placeholder="Prefijo para Transacciones" maxlength="4" autofocus="autofocus" readonly>
                             </div>                            
                             <div class="form-group">
                                 <label>Observación</label>
-                                <textarea name="observacion" id="observacion-modal" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                                <textarea name="observacion" id="observacion-modal" class="form-control alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
                             </div>
                             <div class="form-group separar_submit">
                                 <input type="hidden" name="id_sede" id="id_sede" value=""/>
