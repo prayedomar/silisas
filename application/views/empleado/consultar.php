@@ -115,7 +115,7 @@
                                         <td><?= $row->abreviacion . "" . $row->documento ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                         <td><?= $row->fecha_nacimiento ?></td>
-                                        <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . " - " . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
+                                        <td><?= $row->pais . " / " . $row->provincia . " / " . $row->ciudad . " - " . $row->tipo_domicilio . " / " . $row->direccion . " / " . $row->barrio ?></td>
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->sede ?></td>
