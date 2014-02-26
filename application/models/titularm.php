@@ -47,8 +47,8 @@ class Titularm extends CI_Model {
         $query.=(!empty($criterios['segundo_nombre'])) ? "AND lower(t.nombre2) LIKE '%" . strtolower($criterios['segundo_nombre']) . "%'" : " ";
         $query.=(!empty($criterios['primer_apellido'])) ? "AND lower(t.apellido1) LIKE '%" . strtolower($criterios['primer_apellido']) . "%'" : " ";
         $query.=(!empty($criterios['segundo_apellido'])) ? "AND lower(t.apellido2) LIKE '%" . strtolower($criterios['segundo_apellido']) . "%'" : " ";
-        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND t.fecha_nacimiento >= '{$criterios['fecha_nacimiento']}'" : "";
-        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND t.fecha_nacimiento <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(t.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(t.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['vigente'])) ? "AND t.vigente = '{$criterios['vigente']}'" : "";
         return $this->db->query($query)->result();
     }
@@ -68,8 +68,8 @@ class Titularm extends CI_Model {
         $query.=(!empty($criterios['segundo_nombre'])) ? "AND lower(t.nombre2) LIKE '%" . strtolower($criterios['segundo_nombre']) . "%'" : " ";
         $query.=(!empty($criterios['primer_apellido'])) ? "AND lower(t.apellido1) LIKE '%" . strtolower($criterios['primer_apellido']) . "%'" : " ";
         $query.=(!empty($criterios['segundo_apellido'])) ? "AND lower(t.apellido2) LIKE '%" . strtolower($criterios['segundo_apellido']) . "%'" : " ";
-        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND t.fecha_nacimiento >= '{$criterios['fecha_nacimiento']}'" : "";
-        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND t.fecha_nacimiento <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(t.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(t.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['vigente'])) ? "AND t.vigente = '{$criterios['vigente']}'" : "";
         $query.=" order by t.apellido1,t.apellido2 LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
@@ -89,8 +89,8 @@ class Titularm extends CI_Model {
         $query.=(!empty($criterios['segundo_nombre'])) ? "AND lower(t.nombre2) LIKE '%" . strtolower($criterios['segundo_nombre']) . "%'" : " ";
         $query.=(!empty($criterios['primer_apellido'])) ? "AND lower(t.apellido1) LIKE '%" . strtolower($criterios['primer_apellido']) . "%'" : " ";
         $query.=(!empty($criterios['segundo_apellido'])) ? "AND lower(t.apellido2) LIKE '%" . strtolower($criterios['segundo_apellido']) . "%'" : " ";
-        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND t.fecha_nacimiento >= '{$criterios['fecha_nacimiento']}'" : "";
-        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND t.fecha_nacimiento <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(t.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(t.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['vigente'])) ? "AND t.vigente = '{$criterios['vigente']}'" : "";
         $query.=" order by t.apellido1,t.apellido2";
         return $this->db->query($query)->result();
