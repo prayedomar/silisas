@@ -47,9 +47,16 @@
                             <input type='text' id="segundo_apellido" class='form-control letras_numeros' placeholder="Segundo apellido" value="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>">
                         </div>
                         <div class="col-xs-2">
-                            <label>Fecha nacimiento</label>
+                            <label>F. nacimiento (desde)</label>
                             <div class="input-group">
                                 <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div> 
+                        </div>
+                         <div class="col-xs-2">
+                            <label>F. nacimiento (hasta)</label>
+                            <div class="input-group">
+                                <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
@@ -66,6 +73,12 @@
                                 <?php } ?>
                             </select>
                         </div>
+                        <div class="col-xs-2">
+                            <br>
+                             <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-xs-2">
                             <label>Estado</label>
                             <select id="estado" class="form-control">
@@ -137,6 +150,7 @@
                              data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
                              data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
                              data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
+                             data-fechanacimientohasta="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>"
                              data-matricula="<?= isset($_GET["matricula"]) ? $_GET["matricula"] : "" ?>"
                              data-curso="<?= isset($_GET["curso"]) ? $_GET["curso"] : "" ?>"
                              data-estado="<?= isset($_GET["estado"]) ? $_GET["estado"] : "" ?>"

@@ -12,7 +12,7 @@ class Alumno extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_alumno";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -33,7 +33,7 @@ class Alumno extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
@@ -92,7 +92,7 @@ class Alumno extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $dni = $this->input->post('dni');
             $id = $this->input->post('id');
             $t_usuario = 3; //Alumno
@@ -130,12 +130,12 @@ class Alumno extends CI_Controller {
             $perfil = 'alumno';
             $vigente = 1;
 
-            $data["tab"] = "crear_alumno";            
-            $this->isLogin($data["tab"]);                
+            $data["tab"] = "crear_alumno";
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "alumno/crear";
             $data['msn_recrear'] = "Crear otro Alumno";
-            
+
             $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
@@ -207,7 +207,7 @@ class Alumno extends CI_Controller {
 
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $provincias = $this->select_model->provincia_pais($pais);
@@ -228,7 +228,7 @@ class Alumno extends CI_Controller {
 
     public function llena_ciudad() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('provincia')) && ($this->input->post('provincia') != '{id}') && ($this->input->post('provincia') != 'default')) {
                 $provincia = $this->input->post('provincia');
                 $ciudades = $this->select_model->ciudad_provincia($provincia);
@@ -253,7 +253,7 @@ class Alumno extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_cursom');
         $data["tab"] = "consultar_alumno";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
         $data['estados_alumnos'] = $this->est_alumnom->listar_todas_los_estados_de_alumno();
@@ -281,4 +281,39 @@ class Alumno extends CI_Controller {
         $this->load->view("footer");
     }
 
+    public function excel() {
+        header("Content-type: application/vnd.ms-excel; name='excel'");
+        header("Content-Disposition: filename=reporte_titulares_" . date("Y-m-d") . ".xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        $lista = $this->alumnom->listar_alumnos_excel($_GET);
+        ?>
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th><?= utf8_decode("Identificación") ?></th>
+                    <th>Nombre</th>
+                    <th>Fecha de nacimiento</th>
+                    <th>Domicilio</th>
+                    <th><?= utf8_decode("Teléfonos") ?></th>
+                    <th>Email</th>
+                    <th>Sede ppal</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla">
+                <?php foreach ($lista as $row) { ?>
+                    <tr>
+                        <td><?= $row->abreviacion . $row->documento ?></td>
+                        <td><?= utf8_decode($row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2) ?></td>
+                        <td><?= $row->fecha_nacimiento ?></td>     
+                        <td><?= utf8_decode($row->pais . " / " . $row->provincia . " / " . $row->ciudad . " - " . $row->tipo_domicilio . " / " . $row->direccion . " / " . $row->barrio) ?></td>
+                        <td><?= $row->celular . " - " . $row->telefono ?></td>  
+                        <td><?= $row->email ?></td>
+                        <td><?= utf8_decode($row->sede) ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php
+    }
 }
