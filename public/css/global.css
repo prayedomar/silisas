@@ -33,3 +33,6 @@
 #paginacion li.noActive{
     cursor:pointer;
 }
+#modal-editar-empleado .modal-dialog {
+width:960px;
+}

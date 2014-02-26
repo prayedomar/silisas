@@ -40,10 +40,10 @@ class Empleadom extends CI_Model {
     }
 
     public function listar_empleados($criterios, $inicio, $filasPorPagina) {
-          $id_responsable = $_SESSION["idResponsable"];
+        $id_responsable = $_SESSION["idResponsable"];
         $dni_responsable = $_SESSION["dniResponsable"];
-        $query = "SELECT e.*,e.id documento,td.*,s.nombre sede,pa.nombre pais,pro.nombre provincia,ciu.nombre ciudad,
-                  tdom.tipo tipo_domicilio,estem.estado estado_empleado,tdepto.tipo depto,
+        $query = "SELECT e.*,e.id documento,td.*,s.nombre sede,pa.id id_pais,pa.nombre pais,pro.id id_provincia,pro.nombre provincia,ciu.id id_ciudad,ciu.nombre ciudad,
+                  tdom.tipo tipo_domicilio,estem.estado estado_empleado,tdepto.id id_depto,tdepto.tipo depto,
                   tcargo.cargo_masculino,tcargo.cargo_femenino,sl.nombre nombre_salario,
                   e2.nombre1 nombre1_jefe,e2.nombre2 nombre2_jefe,e2.apellido1 apellido1_jefe,e2.apellido2 apellido2_jefe
                   FROM empleado e
@@ -73,5 +73,8 @@ class Empleadom extends CI_Model {
         $query.=" order by e.apellido1,e.apellido2 LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }
-
+   public function actualizarEmpleado($criterios) {
+        $query = "UPDATE empleado SET id='{$criterios["id"]}', dni='{$criterios["dni"]}', nombre1='{$criterios["nombre1"]}',nombre2='{$criterios["nombre2"]}',apellido1='{$criterios["apellido1"]}',apellido2='{$criterios["apellido2"]}', fecha_nacimiento='{$criterios["fecha_nacimiento"]}',genero='{$criterios["genero"]}', est_civil='{$criterios["est_civil"]}',pais='{$criterios["pais"]}',provincia='{$criterios["provincia"]}',ciudad='{$criterios["ciudad"]}', t_domicilio='{$criterios["t_domicilio"]}', direccion='{$criterios["direccion"]}', barrio='{$criterios["barrio"]}', telefono='{$criterios["telefono"]}', celular='{$criterios["celular"]}', email='{$criterios["email"]}', cuenta='{$criterios["cuenta"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' ";
+        return $this->db->query($query);
+    }
 }

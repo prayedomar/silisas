@@ -11,7 +11,7 @@ class Empleado extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_empleado";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -96,6 +96,40 @@ class Empleado extends CI_Controller {
         }
     }
 
+    function validarParaEditar() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
+            $this->form_validation->set_rules('est_civil', 'Estado Civil', 'required|callback_select_default');
+            $this->form_validation->set_rules('pais', 'País', 'required|callback_select_default');
+            $this->form_validation->set_rules('provincia', 'Departamento', 'required|callback_select_default');
+            $this->form_validation->set_rules('ciudad', 'Ciudad', 'required|callback_select_default');
+            $this->form_validation->set_rules('t_domicilio', 'Tipo de Domicilio', 'required|callback_select_default');
+            $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
+            $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'required|trim|xss_clean|max_length[40]');
+            $this->form_validation->set_rules('telefono', 'Telefono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
+            $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
+            $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
+            $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'trim|min_length[12]|max_length[12]|integer|callback_valor_positivo');
+
+
+
+
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     function insertar() {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
@@ -141,11 +175,11 @@ class Empleado extends CI_Controller {
             }
 
             $data["tab"] = "crear_empleado";
-            $this->isLogin($data["tab"]);            
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "empleado/crear";
             $data['msn_recrear'] = "Crear otro Empleado";
-            
+
             $password = $this->encrypt->encode($id);
             $vigente = 1;
             $t_usuario = 1; //Empleado
@@ -257,7 +291,7 @@ class Empleado extends CI_Controller {
 
     public function llena_cargo_departamento() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('depto')) {
                 $depto = $this->input->post('depto');
                 $t_cargo = $this->select_model->cargo_depto($depto);
@@ -277,9 +311,31 @@ class Empleado extends CI_Controller {
         }
     }
 
+    public function llena_cargo_departamento2() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            if ($this->input->post('depto')) {
+                $depto = $this->input->post('depto');
+                $t_cargo = $this->select_model->cargo_depto($depto);
+                //Validamos que las dos consultas devuelvan algo
+                if ($t_cargo == TRUE) {
+                    foreach ($t_cargo as $fila) {
+                        echo '<option value="' . $fila->id . '">' . $fila->cargo_masculino . '</option>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     public function llena_jefe_new_empleado() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('cargo')) && ($this->input->post('sedePpal')) && ($this->input->post('depto'))) {
                 list($cargo, $perfil) = explode("-", $this->input->post('cargo'));
                 $sede_ppal = $this->input->post('sedePpal');
@@ -304,7 +360,7 @@ class Empleado extends CI_Controller {
     //Llenar elementos html dinamicamente
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $provincias = $this->select_model->provincia_pais($pais);
@@ -325,7 +381,7 @@ class Empleado extends CI_Controller {
 
     public function llena_ciudad() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('provincia')) && ($this->input->post('provincia') != '{id}') && ($this->input->post('provincia') != 'default')) {
                 $provincia = $this->input->post('provincia');
                 $ciudades = $this->select_model->ciudad_provincia($provincia);
@@ -346,7 +402,7 @@ class Empleado extends CI_Controller {
 
     public function llena_salario_departamento() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('depto')) {
                 $depto = $this->input->post('depto');
                 $salarios = $this->select_model->salario_t_salario_x_t_depto($depto);
@@ -372,11 +428,20 @@ class Empleado extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_deptom');
         $data["tab"] = "consultar_empleado";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
+        $data['est_civil'] = $this->select_model->t_est_civil();
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $data['lista_dptos'] = $this->t_deptom->listar_todas_los_deptos();
+
+        $data['id_responsable'] = $this->session->userdata('idResponsable');
+        $data['dni_responsable'] = $this->session->userdata('dniResponsable');
+        $id_responsable = $data['id_responsable'];
+        $dni_responsable = $data['dni_responsable'];
+        $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
+        $data['t_depto'] = $this->select_model->t_depto();
+        $data['t_contrato'] = $this->select_model->t_contrato_laboral();
         if (!empty($_GET["depto"])) {
             $this->load->model('t_cargom');
             $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
@@ -404,6 +469,14 @@ class Empleado extends CI_Controller {
         $this->load->model('t_cargom');
         $this->escapar($_GET);
         echo json_encode($this->t_cargom->listar_todas_los_cargos_por_depto($_GET['idDepto']));
+    }
+
+    function actualizar() {
+        $this->load->model('empleadom');
+        //  var_dump($_POST);
+        $this->empleadom->actualizarEmpleado($_POST);
+
+        redirect(base_url() . "empleado/consultar");
     }
 
 }
