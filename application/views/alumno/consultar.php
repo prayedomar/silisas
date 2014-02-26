@@ -56,7 +56,7 @@
                          <div class="col-xs-2">
                             <label>F. nacimiento (hasta)</label>
                             <div class="input-group">
-                                <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                                <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
@@ -78,6 +78,7 @@
                              <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
                         </div>
                     </div>
+                    <br>
                     <div class="row">
                         <div class="col-xs-2">
                             <label>Estado</label>
