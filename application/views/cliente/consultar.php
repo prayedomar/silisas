@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Consultar alumnos <span class="help-block pull-right">(<?= $cantidad_empleados ?> alumnos encontrados)</span></legend>
+                <legend>Consultar clientes <span class="help-block pull-right">(<?= $cantidad_empleados ?> alumnos encontrados)</span></legend>
                 <div id="divCriterios">
                     <div  class="row">
                         <div class="col-xs-2">

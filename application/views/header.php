@@ -11,8 +11,7 @@
         <!-- CSS -->
         <link  rel="stylesheet" href="<?= base_url() ?>libraries/bootstrap_3.0.2/css_cerulean/bootstrap.min.css"/>
         <link rel="stylesheet" href="<?= base_url() ?>/css/bootstrapMio.css"/>
-        <link rel="stylesheet" href="<?= base_url() ?>libraries/jqueryUI/jquery-ui.css"/>
-        <link rel="stylesheet" href="<?= base_url() ?>libraries/datepicker_bootstrap/datepicker.css"/>
+        <link rel="stylesheet" href="<?= base_url() ?>libraries/jqueryUI/jquery-ui-1.10.4.custom.min.css"/>
         <link rel="stylesheet" href="<?= base_url() ?>libraries/select_chosen/chosen.css"/>
         <link rel="stylesheet" href="<?= base_url() ?>public/css/global.css"/>
         <?php if (isset($tab) && $tab == "consultar_sede") { ?>
@@ -23,8 +22,7 @@
         <script src="<?= base_url() ?>libraries/respond/respond.min.js"></script>
         <script src="<?= base_url() ?>libraries/jquery/jquery1.7.2.min.js"></script>
         <script src="<?= base_url() ?>libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>
-        <script src="<?= base_url() ?>libraries/jqueryUI/jquery1.18-ui.min.js"></script>
-        <script src="<?= base_url() ?>libraries/datepicker_bootstrap/bootstrap-datepicker.js"></script>
+        <script src="<?= base_url() ?>libraries/jqueryUI/jquery-ui-1.10.4.custom.min.js"></script>
         <script src="<?= base_url() ?>libraries/select_chosen/chosen.jquery.js"></script>
 
 
@@ -103,7 +101,7 @@
                 $('.soloclick').validar_inputs('');
 
                 //CAlendario Datepicker jquery
-                $('.datepicker').datepicker();
+            //    $('.datepicker').datepicker();
 
                 //Select chose
                 var config = {

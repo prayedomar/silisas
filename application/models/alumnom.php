@@ -26,8 +26,8 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['segundo_nombre'])) ? "AND lower(a.nombre2) LIKE '%" . strtolower($criterios['segundo_nombre']) . "%'" : " ";
         $query.=(!empty($criterios['primer_apellido'])) ? "AND lower(a.apellido1) LIKE '%" . strtolower($criterios['primer_apellido']) . "%'" : " ";
         $query.=(!empty($criterios['segundo_apellido'])) ? "AND lower(a.apellido2) LIKE '%" . strtolower($criterios['segundo_apellido']) . "%'" : " ";
-        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND a.fecha_nacimiento >= '{$criterios['fecha_nacimiento']}'" : "";
-        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND a.fecha_nacimiento <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
@@ -54,8 +54,8 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['segundo_nombre'])) ? "AND lower(a.nombre2) LIKE '%" . strtolower($criterios['segundo_nombre']) . "%'" : " ";
         $query.=(!empty($criterios['primer_apellido'])) ? "AND lower(a.apellido1) LIKE '%" . strtolower($criterios['primer_apellido']) . "%'" : " ";
         $query.=(!empty($criterios['segundo_apellido'])) ? "AND lower(a.apellido2) LIKE '%" . strtolower($criterios['segundo_apellido']) . "%'" : " ";
-        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND a.fecha_nacimiento >= '{$criterios['fecha_nacimiento']}'" : "";
-        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND a.fecha_nacimiento <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
@@ -83,8 +83,8 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['segundo_nombre'])) ? "AND lower(a.nombre2) LIKE '%" . strtolower($criterios['segundo_nombre']) . "%'" : " ";
         $query.=(!empty($criterios['primer_apellido'])) ? "AND lower(a.apellido1) LIKE '%" . strtolower($criterios['primer_apellido']) . "%'" : " ";
         $query.=(!empty($criterios['segundo_apellido'])) ? "AND lower(a.apellido2) LIKE '%" . strtolower($criterios['segundo_apellido']) . "%'" : " ";
-        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND a.fecha_nacimiento >= '{$criterios['fecha_nacimiento']}'" : "";
-        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND a.fecha_nacimiento <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
+        $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";

@@ -34,5 +34,9 @@
     cursor:pointer;
 }
 #modal-editar-empleado .modal-dialog {
-width:960px;
+    width:960px;
+}
+.ui-datepicker-year
+{
+  //  display:none;   
 }
