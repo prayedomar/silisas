@@ -106,7 +106,7 @@
                                     <th>Teléfonos</th>
                                     <th>Email</th>
                                     <th>Sede</th>
-                                    <th>Detalles</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
@@ -119,7 +119,7 @@
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->sede ?></td>
-                                        <td><button class="btn btn-primary btn-sm" 
+                                        <td class="text-center"><button class="detalles btn btn-primary btn-xs" 
                                                     data-cuenta="<?= $row->cuenta ?>" 
                                                     data-estadoempleado="<?= $row->estado_empleado ?>" 
                                                     data-depto="<?= $row->depto ?>"
@@ -132,9 +132,32 @@
                                                     data-apellido1jefe="<?= $row->apellido1_jefe ?>"
                                                     data-apellido2jefe="<?= $row->apellido2_jefe ?>"
                                                     data-observacion="<?= $row->observacion ?>"
-                                                    >Ver detalles</button>
+                                                    >Ver detalles</button><br><br>
                                                     <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
-                                                <button class="editar btn btn-success btn-sm"
+                                                <button class="editar btn btn-success btn-xs"
+                                                        data-dni="<?= $row->dni ?>"
+                                                        data-id="<?= $row->id ?>"
+                                                        data-nombre1="<?= $row->nombre1 ?>"
+                                                        data-nombre2="<?= $row->nombre2 ?>"
+                                                        data-apellido1="<?= $row->apellido1 ?>"
+                                                        data-apellido2="<?= $row->apellido2 ?>"
+                                                        data-fecha_nacimiento="<?= $row->fecha_nacimiento ?>"
+                                                        data-genero="<?= $row->genero ?>"
+                                                        data-est_civil="<?= $row->est_civil ?>"
+                                                        data-id_pais="<?= $row->id_pais ?>"
+                                                        data-id_departamento="<?= $row->id_provincia ?>"
+                                                        data-id_ciudad="<?= $row->id_ciudad ?>"
+                                                        data-t_domicilio="<?= $row->t_domicilio ?>"
+                                                        data-direccion="<?= $row->direccion ?>"
+                                                        data-barrio="<?= $row->barrio ?>"
+                                                        data-telefono="<?= $row->telefono ?>"
+                                                        data-celular="<?= $row->celular ?>"
+                                                        data-email="<?= $row->email ?>"
+                                                        data-cuenta="<?= $row->cuenta ?>"
+                                                        data-sede_ppal="<?= $row->sede_ppal ?>"
+                                                        data-depto="<?= $row->id_depto ?>"
+                                                        data-cargo="<?= $row->cargo ?>"
+                                                        data-salario="<?= $row->salario ?>"
                                                         >Editar</button>
                                             <?php } ?></td>
                                     </tr>
@@ -277,19 +300,186 @@
         </div>
     </div>
 </div>
-<div class="modal" id="modal-editar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal" id="modal-editar-empleado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content modal-content-minimo">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="modal-title" id="myModalLabel">Editar sede</h3>
+                <h3 class="modal-title" id="myModalLabel">Editar empleado</h3>
             </div>
             <form role="form" method="post" action="actualizar" id="formulario">
                 <div  class="modal-body">
+                    <div class="row ">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Tipo de Identificación</label>
+                                            <select name="dni" id="dni-modal" class="form-control exit_caution" readonly>
+                                                <option value="default">Seleccione T.I.</option>
+
+                                                <option value="1">Cedula de Ciudadania</option>
+
+                                                <option value="2">Cedula de Extranjeria</option>
+
+                                                <option value="3">Pasaporte</option>
+
+                                                <option value="4">Tarjeta de Identidad</option>
+
+                                            </select>
+                                        </div>   
+                                    </div>
+                                    <div class="col-xs-6">  
+                                        <div class="form-group">
+                                            <label>Número de Identificación</label>
+                                            <input name="id" id="id-modal" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Primer Nombre<em class="required_asterisco">*</em></label>
+                                            <input name="nombre1" id="nombre1-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Nombre" maxlength="30">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Segundo Nombre</label>
+                                            <input name="nombre2" id="nombre2-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Nombre" maxlength="30">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Primer Apellido<em class="required_asterisco">*</em></label>
+                                            <input name="apellido1" id="apellido1-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Apellido" maxlength="30">
+                                        </div> 
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Segundo Apellido</label>
+                                            <input name="apellido2" id="apellido2-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Apellido" maxlength="30">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Fecha de Nacimiento<em class="required_asterisco">*</em></label>
+                                            <div class="input-group">
+                                                <input name="fecha_nacimiento" id="fecha_nacimiento-modal" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Género<em class="required_asterisco">*</em></label>
+                                            <select name="genero" id="genero-modal" class="form-control exit_caution">
+                                                <option value="default">Seleccione Género</option>
+                                                <option value="F">Mujer</option>
+                                                <option value="M">Hombre</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Estado Civil<em class="required_asterisco">*</em></label>
+                                    <select name="est_civil" id="est_civil-modal" class="form-control exit_caution">
+                                        <option value="default">Seleccione Estado Civil</option>
+                                        <?php foreach ($est_civil as $row) { ?>
+                                            <option value="<?= $row->id ?>"><?= $row->estado ?></option>
+                                        <?php } ?>
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>País de domicilio<em class="required_asterisco">*</em></label>
+                                    <select name="pais" id="pais-modal" class="form-control exit_caution">
+                                        <option value="default">Seleccione País</option>
+
+                                        <option value="49">Colombia</option>
+
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
+                                            <select name="provincia" id="provincia-modal" class="form-control exit_caution" readonly="">
+                                                <option value="default">Seleccione primero País</option>
+                                            </select>                                
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
+                                            <select name="ciudad" id="ciudad-modal" class="form-control exit_caution" readonly="">
+                                                <option value="default">Seleccione primero Depto</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Telefonos fijos de contacto<em class="required_asterisco">*</em></label>                                    
+                                            <input name="telefono" id="telefono-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Celular</label>
+                                            <input name="celular" id="celular-modal" type="text" class="form-control exit_caution numerico" placeholder="Celular" maxlength="10">
+                                        </div>
+                                    </div>
+                                </div>                            
+                                <div class="form-group">
+                                    <label>Correo Electrónico<em class="required_asterisco">*</em></label>
+                                    <input name="email" id="email-modal" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
+                                </div>                            
+                                <div class="form-group">
+                                    <label>Número de Cuenta Bancaria Nomina de Sili</label>
+                                    <input name="cuenta" id="cuenta-modal" type="text" class="form-control exit_caution numerico" placeholder="Cuenta Bancaria de Nómina" maxlength="12">
+                                </div>    
+                                                                <div class="form-group">
+                                    <label>Tipo de Domicilio<em class="required_asterisco">*</em></label>
+                                    <select name="t_domicilio" id="t_domicilio-modal" class="form-control exit_caution">
+                                        <option value="default">Seleccione T. de Domicilio</option>
+
+                                        <option value="1">Casa</option>
+
+                                        <option value="2">Unidad Cerrada</option>
+
+                                        <option value="3">Oficina</option>
+
+                                        <option value="4">Empresa</option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Dirección<em class="required_asterisco">*</em></label>
+                                    <input name="direccion" id="direccion-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección" maxlength="80">
+                                </div>
+                                <div class="form-group">
+                                    <label>Barrio/Sector<em class="required_asterisco">*</em></label>
+                                    <input name="barrio" id="barrio-modal" type="text" class="form-control exit_caution letras_numeros" placeholder="Barrio o Sector" maxlength="40">
+                                </div>
+                            </div>
+                        </div>
+                           <div id="validacion_alert">
+                        </div>   
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->                                    
-                    <button id="botonValidarSede" class="btn btn-success">Actualizar Sede</button>                                 
+                    <button id="botonValidarEmpleado" class="btn btn-success">Actualizar Empleado</button>                                 
                     <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                 </div>
