@@ -85,9 +85,24 @@
                             </select>
                         </div>
                         <div class="col-xs-2">
-                            <label>Fecha nacimiento</label>
+                            <br>
+                            <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <label>F. nacimiento (desde) </label>
                             <div class="input-group">
                                 <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div> 
+                        </div>
+                        <div class="col-xs-2">
+                            <label>F. nacimiento (hasta)</label>
+                            <div class="input-group">
+                                <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
@@ -120,20 +135,20 @@
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->sede ?></td>
                                         <td class="text-center"><button class="detalles btn btn-primary btn-xs" 
-                                                    data-cuenta="<?= $row->cuenta ?>" 
-                                                    data-estadoempleado="<?= $row->estado_empleado ?>" 
-                                                    data-depto="<?= $row->depto ?>"
-                                                    data-genero="<?= $row->genero ?>"
-                                                    data-cargomasculino="<?= $row->cargo_masculino ?>"
-                                                    data-cargofemenino="<?= $row->cargo_femenino ?>"
-                                                    data-salario="<?= $row->nombre_salario ?>"
-                                                    data-nombre1jefe="<?= $row->nombre1_jefe ?>"
-                                                    data-nombre2jefe="<?= $row->nombre2_jefe ?>"
-                                                    data-apellido1jefe="<?= $row->apellido1_jefe ?>"
-                                                    data-apellido2jefe="<?= $row->apellido2_jefe ?>"
-                                                    data-observacion="<?= $row->observacion ?>"
-                                                    >Ver detalles</button><br><br>
-                                                    <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
+                                                                        data-cuenta="<?= $row->cuenta ?>" 
+                                                                        data-estadoempleado="<?= $row->estado_empleado ?>" 
+                                                                        data-depto="<?= $row->depto ?>"
+                                                                        data-genero="<?= $row->genero ?>"
+                                                                        data-cargomasculino="<?= $row->cargo_masculino ?>"
+                                                                        data-cargofemenino="<?= $row->cargo_femenino ?>"
+                                                                        data-salario="<?= $row->nombre_salario ?>"
+                                                                        data-nombre1jefe="<?= $row->nombre1_jefe ?>"
+                                                                        data-nombre2jefe="<?= $row->nombre2_jefe ?>"
+                                                                        data-apellido1jefe="<?= $row->apellido1_jefe ?>"
+                                                                        data-apellido2jefe="<?= $row->apellido2_jefe ?>"
+                                                                        data-observacion="<?= $row->observacion ?>"
+                                                                        >Ver detalles</button><br><br>
+                                                                        <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
                                                 <button class="editar btn btn-success btn-xs"
                                                         data-dni="<?= $row->dni ?>"
                                                         data-id="<?= $row->id ?>"
@@ -179,7 +194,8 @@
                              data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
                              data-depto="<?= isset($_GET["depto"]) ? $_GET["depto"] : "" ?>"
                              data-cargo="<?= isset($_GET["cargo"]) ? $_GET["cargo"] : "" ?>"
-                             data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                             data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
+                             data-fechanacimientohasta="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
 
 
                             <ul class="pagination">
@@ -448,7 +464,7 @@
                                     <label>Número de Cuenta Bancaria Nomina de Sili</label>
                                     <input name="cuenta" id="cuenta-modal" type="text" class="form-control exit_caution numerico" placeholder="Cuenta Bancaria de Nómina" maxlength="12">
                                 </div>    
-                                                                <div class="form-group">
+                                <div class="form-group">
                                     <label>Tipo de Domicilio<em class="required_asterisco">*</em></label>
                                     <select name="t_domicilio" id="t_domicilio-modal" class="form-control exit_caution">
                                         <option value="default">Seleccione T. de Domicilio</option>
@@ -473,7 +489,7 @@
                                 </div>
                             </div>
                         </div>
-                           <div id="validacion_alert">
+                        <div id="validacion_alert">
                         </div>   
                     </div>
                 </div>

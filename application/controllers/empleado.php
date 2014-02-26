@@ -479,4 +479,41 @@ class Empleado extends CI_Controller {
         redirect(base_url() . "empleado/consultar");
     }
 
+    public function excel() {
+        header("Content-type: application/vnd.ms-excel; name='excel'");
+        header("Content-Disposition: filename=reporte_titulares_" . date("Y-m-d") . ".xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        $lista = $this->empleadom->listar_empleados_excel($_GET);
+        ?>
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th><?= utf8_decode("Identificación") ?></th>
+                    <th>Nombre</th>
+                    <th>Fecha de nacimiento</th>
+                    <th>Domicilio</th>
+                    <th><?= utf8_decode("Teléfonos") ?></th>
+                    <th>Email</th>
+                    <th>Sede</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla">
+                <?php foreach ($lista as $row) { ?>
+                    <tr>
+                        <td><?= $row->abreviacion . "" . $row->documento ?></td>
+                        <td><?= utf8_decode($row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2) ?></td>
+                        <td><?= $row->fecha_nacimiento ?></td>
+                        <td><?= utf8_decode($row->pais . " / " . $row->provincia . " / " . $row->ciudad . " - " . $row->tipo_domicilio . " / " . $row->direccion . " / " . $row->barrio) ?></td>
+                        <td><?= $row->celular . " - " . $row->telefono ?></td>
+                        <td><?= $row->email ?></td>
+                        <td><?= utf8_decode($row->sede) ?></td>
+                      
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php
+    }
+
 }

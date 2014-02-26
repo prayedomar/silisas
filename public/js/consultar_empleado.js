@@ -40,7 +40,9 @@ $(function() {
         if ($("#fecha_nacimiento").val() != "") {
             url += "fecha_nacimiento=" + $("#fecha_nacimiento").val() + "&";
         }
-
+        if ($("#fecha_nacimiento_hasta").val() != "") {
+            url += "fecha_nacimiento_hasta=" + $("#fecha_nacimiento_hasta").val() + "&";
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
     });
@@ -134,6 +136,9 @@ $(function() {
         if ($("#paginacion").data("fechanacimiento") != "") {
             url += "fecha_nacimiento=" + $("#paginacion").data("fechanacimiento") + "&";
         }
+        if ($("#paginacion").data("fechanacimientohasta") != "") {
+            url += "fecha_nacimiento_hasta=" + $("#paginacion").data("fechanacimientohasta") + "&";
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
 
@@ -203,7 +208,7 @@ $(function() {
 
         $("#modal-editar-empleado").modal("show");
     });
-      $('#botonValidarEmpleado').live('click', function() {
+    $('#botonValidarEmpleado').live('click', function() {
         //PAra desactivar el click al lado del modal para cerrarlo
         $(function() {
             $('#modal_loading').modal({
@@ -238,5 +243,46 @@ $(function() {
             }
         });
         return false; // Evitar ejecutar el submit del formulario
+    });
+    $("#toExcel").click(function() {
+        var url = "excel?";
+        if ($("#tipo_documento").val() != "") {
+            url += "tipo_documento=" + $("#tipo_documento").val() + "&";
+        }
+        if ($("#numero_documento").val() != "") {
+            url += "numero_documento=" + $("#numero_documento").val() + "&";
+        }
+        if ($("#primer_nombre").val() != "") {
+            url += "primer_nombre=" + $("#primer_nombre").val() + "&";
+        }
+        if ($("#segundo_nombre").val() != "") {
+            url += "segundo_nombre=" + $("#segundo_nombre").val() + "&";
+        }
+        if ($("#primer_apellido").val() != "") {
+            url += "primer_apellido=" + $("#primer_apellido").val() + "&";
+        }
+        if ($("#segundo_apellido").val() != "") {
+            url += "segundo_apellido=" + $("#segundo_apellido").val() + "&";
+        }
+        if ($("#estado").val() != "") {
+            url += "estado=" + $("#estado").val() + "&";
+        }
+        if ($("#sede").val() != "") {
+            url += "sede=" + $("#sede").val() + "&";
+        }
+        if ($("#depto").val() != "") {
+            url += "depto=" + $("#depto").val() + "&";
+        }
+        if ($("#cargo").val() != null && $("#cargo").val() != "") {
+            url += "cargo=" + $("#cargo").val() + "&";
+        }
+        if ($("#fecha_nacimiento").val() != "") {
+            url += "fecha_nacimiento=" + $("#fecha_nacimiento").val() + "&";
+        }
+        if ($("#fecha_nacimiento_hasta").val() != "") {
+            url += "fecha_nacimiento_hasta=" + $("#fecha_nacimiento_hasta").val() + "&";
+        }
+        url = url.substr(0, url.length - 1);
+        window.location.href = url;
     });
 });
