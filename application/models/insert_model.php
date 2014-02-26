@@ -166,7 +166,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function titular($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $observacion, $id_responsable, $dni_responsable) {
+    public function titular($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -186,6 +186,7 @@ class Insert_model extends CI_Model {
             'telefono' => $telefono,
             'celular' => $celular,
             'email' => $email,
+            'vigente' => $vigente,
             'observacion' => $observacion,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable

@@ -214,6 +214,8 @@ a:active.blanco {color:rgb(255, 255, 255);}
 
 .modal-content  {
     margin-top: 20%;  
+    padding-left: 20px;
+    padding-right: 20px;    
 }
 
 .modal-content-minimo  {
