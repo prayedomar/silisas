@@ -54,7 +54,7 @@ class Caja extends CI_Controller {
             $t_caja = $this->input->post('t_caja');
             list($id_encargado, $dni_encargado) = explode("-", $this->input->post('empleado'));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -64,7 +64,7 @@ class Caja extends CI_Controller {
             $data['url_recrear'] = base_url() . "caja/crear";
             $data['msn_recrear'] = "Crear otra Caja (Punto de Venta)";
 
-            $error = $this->insert_model->caja($sede, $t_caja, $id_encargado, $dni_encargado, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->caja($sede, $t_caja, $id_encargado, $dni_encargado, 1, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);

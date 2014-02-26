@@ -32,7 +32,7 @@
                                 </div>   
                             </div>
                             <div class="overflow_tabla">
-                                <label>Préstamo a Abonar<em class="required_asterisco">*</em></label>
+                                <label>Préstamo a abonar<em class="required_asterisco">*</em></label>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -56,9 +56,9 @@
                                         <tr>
                                             <th class="text-center">Escojer</th>
                                             <th class="text-center"># Cuota</th>
-                                            <th class="text-center">Abono Mínimo</th>
-                                            <th class="text-center">Abono Máximo</th>
-                                            <th class="text-center">Abono Realizado</th>                                           
+                                            <th class="text-center">Pago Mínimo</th>
+                                            <th class="text-center">Pago Máximo</th>
+                                            <th class="text-center">Pago Realizado</th>                                           
                                             <th class="text-center">Cantidad Mora</th>
                                             <th class="text-center">Int. Mora</th>
                                             <th class="text-center">Saldo Deuda</th>

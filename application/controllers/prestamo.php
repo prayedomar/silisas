@@ -120,7 +120,7 @@ class Prestamo extends CI_Controller {
                 $efectivo_retirado = NULL;
             }
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -135,12 +135,12 @@ class Prestamo extends CI_Controller {
             $data['url_recrear'] = base_url() . "prestamo/crear";
             $data['msn_recrear'] = "Crear otro Prestamo";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_prestamo, $id_prestamo, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_prestamo, $id_prestamo, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->prestamo($prefijo_prestamo, $id_prestamo, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->prestamo($prefijo_prestamo, $id_prestamo, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1;
                     $this->parser->parse('trans_error', $data);

@@ -250,11 +250,11 @@
             }, function(data) {
                 if (data == "OK") {
                     //Bloqueamos los 3 primeros campos
-                    $('#empleado').attr('readonly', 'readonly');
-                    $('#periodicidad').attr('readonly', 'readonly');
-                    $('#fecha_inicio').attr('readonly', 'readonly');
-                    $('#fecha_fin').attr('readonly', 'readonly');
-                    $('#consultar_empleado').attr('readonly', 'readonly');
+                    $('#empleado').attr('disabled', 'disabled');
+                    $('#periodicidad').attr('disabled', 'disabled');
+                    $('#fecha_inicio').attr('disabled', 'disabled');
+                    $('#fecha_fin').attr('disabled', 'disabled');
+                    $('#consultar_empleado').attr('disabled', 'disabled');
 
                     //Llenamos El contrato laboral
                     $.post('{action_llena_info_contrato_laboral}', {
@@ -395,7 +395,7 @@
             });
         } else {
             $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-            $("#div_warning").html("<p><strong>Antes de consultar, ingrese primero empleado, periodicidad, fecha inicial y fecha final.</strong></p>");
+            $("#div_warning").html("<p><strong>Antes de consultar, ingrese empleado, periodicidad, fecha inicial y fecha final.</strong></p>");
             $("#div_warning").delay(8000).fadeOut(1000);
         }
     });
@@ -459,8 +459,8 @@
                     if (obj.detalle_requerido == '0') {
                         $("#" + idDivConcepto).find("#label_detalle").html('<label>Detalles adicionales</label>');
                     }
-                } 
-                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);                
+                }
+                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);
                 if (new Number(obj.valor_unitario) == '0') {
                     $("#" + idDivConcepto).find("#valor_unitario").attr('value', 0);
                     $("#" + idDivConcepto).find("#valor_unitario").removeAttr('readonly');
@@ -549,7 +549,7 @@
             var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
             $('#efectivo_retirado').attr('value', ((total_nomina - valor_retirado).toFixed(2)));
         }
-        $('#efectivo_retirado').change();        
+        $('#efectivo_retirado').change();
     });
     //Calcula el valor contrario al modificar el efectivo retirado.
     $(".form-group").delegate("#efectivo_retirado", "blur", function() {
@@ -558,12 +558,16 @@
             var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
             $('#valor_retirado').attr('value', ((total_nomina - efectivo_retirado).toFixed(2)));
         }
-        $('#valor_retirado').change();        
+        $('#valor_retirado').change();
     });
 
 //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
+        $('#empleado').removeAttr("disabled");
+        $('#periodicidad').removeAttr("disabled");
+        $('#fecha_inicio').removeAttr("disabled");
+        $('#fecha_fin').removeAttr("disabled");
         $.ajax({
             type: "POST",
             url: $("#action_validar").attr("value"),
@@ -575,6 +579,10 @@
                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                     $("#div_alert").html(data);
                     $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                    $('#empleado').attr('disabled', 'disabled');
+                    $('#periodicidad').attr('disabled', 'disabled');
+                    $('#fecha_inicio').attr('disabled', 'disabled');
+                    $('#fecha_fin').attr('disabled', 'disabled');
                 } else {
                     $(window).unbind('beforeunload');
                     $("#btn_submit").click();
@@ -584,7 +592,10 @@
                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                 $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-
+                $('#empleado').attr('disabled', 'disabled');
+                $('#periodicidad').attr('disabled', 'disabled');
+                $('#fecha_inicio').attr('disabled', 'disabled');
+                $('#fecha_fin').attr('disabled', 'disabled');
             }
         });
         return false; // Evitar ejecutar el submit del formulario

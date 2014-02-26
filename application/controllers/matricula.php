@@ -12,7 +12,7 @@ class MAtricula extends CI_Controller {
     //Crear: Matrícula
     function crear() {
         $data["tab"] = "crear_matricula";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -33,7 +33,7 @@ class MAtricula extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('contrato', 'Número de Contrato Físico', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('dni_titular', 'Tipo de Id. del Titular', 'required|callback_select_default');
             $this->form_validation->set_rules('id_titular', 'Número de Id. del Titular', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
@@ -86,7 +86,7 @@ class MAtricula extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $contrato = $this->input->post('contrato');
             $fecha_matricula = $this->input->post('fecha_matricula');
             $id_titular = $this->input->post('id_titular');
@@ -101,18 +101,18 @@ class MAtricula extends CI_Controller {
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
             $estado = 2; //2: Activo            
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
 
             $data["tab"] = "crear_matricula";
-            $this->isLogin($data["tab"]);             
-            
-            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $this->isLogin($data["tab"]);
+
+            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $id_responsable, $dni_responsable);
 
             if (isset($error)) {
-                $data["tab"] = "crear_matricula";                 
+                $data["tab"] = "crear_matricula";
                 $this->load->view("header", $data);
                 $data['trans_error'] = $error;
                 $data['url_recrear'] = base_url() . "matricula/crear";
@@ -132,13 +132,20 @@ class MAtricula extends CI_Controller {
                     return;
                 }
                 //Sí todo salió bien, Enviamos al formulario de liquidar_matricula
-                redirect(base_url() . 'liquidar_comisiones/crear/' . $contrato);
+//                redirect(base_url() . 'liquidar_comisiones/crear/' . $contrato);
+                //Temporalemnte mejor mostraremos el ok y listo. Boorar todo el parrafo siguiente y listo
+                $data["tab"] = "crear_matricula";
+                $this->load->view("header", $data);
+                $data['trans_error'] = $error;
+                $data['url_recrear'] = base_url() . "matricula/crear";
+                $data['msn_recrear'] = "Crear otra Matrícula";
+                $this->parser->parse('trans_success', $data);
             }
         } else {
             redirect(base_url());
         }
     }
-    
+
     public function llena_plan_comercial() {
         if ($this->input->is_ajax_request()) {
             $planes = $this->select_model->t_plan_activo();
@@ -161,11 +168,11 @@ class MAtricula extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }  
-    
+    }
+
     public function llena_empleado_rrpp_sedePpal() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');

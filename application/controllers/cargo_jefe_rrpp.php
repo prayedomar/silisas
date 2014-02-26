@@ -66,14 +66,14 @@ class Cargo_jefe_rrpp extends CI_Controller {
                     $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
                     $sede = $empleado->sede_ppal;
                     $observacion = ucfirst(strtolower($this->input->post('observacion')));
-                    $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                    
                     $id_responsable = $this->input->post('id_responsable');
                     $dni_responsable = $this->input->post('dni_responsable');
                     //comprobamos si seleccionó el cheked de la placa
                     $check_placa = $this->input->post('checkbox_placa');
                     if ($check_placa == TRUE) {
                         $solicitar_placa = 1;
-                        $error1 = $this->insert_model->solicitar_placa($id_empleado, $dni_empleado, $cargo, $sede, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                        $error1 = $this->insert_model->solicitar_placa($id_empleado, $dni_empleado, $cargo, $sede, $observacion, $id_responsable, $dni_responsable);
                         if (isset($error1)) {
                             $response = array(
                                 'respuesta' => 'error',
@@ -85,7 +85,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
                     } else {
                         $solicitar_placa = 0;
                     }
-                    $this->insert_model->cambio_cargo($id_empleado, $dni_empleado, $cargo_old, $cargo, $solicitar_placa, $sede, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                    $this->insert_model->cambio_cargo($id_empleado, $dni_empleado, $cargo_old, $cargo, $solicitar_placa, $sede, $observacion, $id_responsable, $dni_responsable);
                     $response = array(
                         'respuesta' => 'OK'
                     );
@@ -126,11 +126,11 @@ class Cargo_jefe_rrpp extends CI_Controller {
                     );
                 } else {
                     $observacion = ucfirst(strtolower($this->input->post('observacion')));
-                    $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                    
                     $id_responsable = $this->input->post('id_responsable');
                     $dni_responsable = $this->input->post('dni_responsable');
 
-                    $this->insert_model->cambio_jefe($id_empleado, $dni_empleado, $id_jefe_old, $dni_jefe_old, $id_jefe_new, $dni_jefe_new, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                    $this->insert_model->cambio_jefe($id_empleado, $dni_empleado, $id_jefe_old, $dni_jefe_old, $id_jefe_new, $dni_jefe_new, $observacion, $id_responsable, $dni_responsable);
                     $response = array(
                         'respuesta' => 'OK'
                     );

@@ -49,7 +49,7 @@ class Despachar_placa extends CI_Controller {
         $this->escapar($_POST);            
             $placas_checkbox = $this->input->post('placas_checkbox');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -59,7 +59,7 @@ class Despachar_placa extends CI_Controller {
             $data['msn_recrear'] = "Despachar otra Placa";
             $bandera_error = 0;
             foreach ($placas_checkbox as $fila) {
-                $error = $this->insert_model->despachar_placa($fila, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error = $this->insert_model->despachar_placa($fila, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error)) {
                     $data['trans_error'] = $error;
                     $this->parser->parse('trans_error', $data);

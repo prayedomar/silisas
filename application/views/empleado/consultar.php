@@ -95,14 +95,14 @@
                         <div class="col-xs-2">
                             <label>Cumpleaños (desde) </label>
                             <div class="input-group">
-                                <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick cumpleanios form-control exit_caution" placeholder="mm-dd" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                                <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick cumpleanios form-control" placeholder="mm-dd" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
                         <div class="col-xs-2">
                             <label>Cumpleaños (hasta)</label>
                             <div class="input-group">
-                                <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick cumpleanios form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="mm-dd" value="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
+                                <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick cumpleanios form-control" data-date-format="yyyy-mm-dd" placeholder="mm-dd" value="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
@@ -332,7 +332,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Tipo de Identificación</label>
-                                            <select name="dni" id="dni-modal" class="form-control exit_caution" readonly>
+                                            <select name="dni" id="dni-modal" class="form-control" readonly>
                                                 <option value="default">Seleccione T.I.</option>
 
                                                 <option value="1">Cedula de Ciudadania</option>
@@ -349,7 +349,7 @@
                                     <div class="col-xs-6">  
                                         <div class="form-group">
                                             <label>Número de Identificación</label>
-                                            <input name="id" id="id-modal" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13" readonly>
+                                            <input name="id" id="id-modal" type="text" class="form-control numerico" placeholder="Número de Identificación" maxlength="13" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -357,13 +357,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Primer Nombre<em class="required_asterisco">*</em></label>
-                                            <input name="nombre1" id="nombre1-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Nombre" maxlength="30">
+                                            <input name="nombre1" id="nombre1-modal" type="text" class="form-control alfabeto" placeholder="Primer Nombre" maxlength="30">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Segundo Nombre</label>
-                                            <input name="nombre2" id="nombre2-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Nombre" maxlength="30">
+                                            <input name="nombre2" id="nombre2-modal" type="text" class="form-control alfabeto" placeholder="Segundo Nombre" maxlength="30">
                                         </div>
                                     </div>
                                 </div>
@@ -371,13 +371,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Primer Apellido<em class="required_asterisco">*</em></label>
-                                            <input name="apellido1" id="apellido1-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Apellido" maxlength="30">
+                                            <input name="apellido1" id="apellido1-modal" type="text" class="form-control alfabeto" placeholder="Primer Apellido" maxlength="30">
                                         </div> 
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Segundo Apellido</label>
-                                            <input name="apellido2" id="apellido2-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Apellido" maxlength="30">
+                                            <input name="apellido2" id="apellido2-modal" type="text" class="form-control alfabeto" placeholder="Segundo Apellido" maxlength="30">
                                         </div>
                                     </div>
                                 </div>
@@ -386,7 +386,7 @@
                                         <div class="form-group">
                                             <label>Fecha de Nacimiento<em class="required_asterisco">*</em></label>
                                             <div class="input-group">
-                                                <input name="fecha_nacimiento" id="fecha_nacimiento-modal" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
+                                                <input name="fecha_nacimiento" id="fecha_nacimiento-modal" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                             </div> 
                                         </div>
@@ -394,7 +394,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Género<em class="required_asterisco">*</em></label>
-                                            <select name="genero" id="genero-modal" class="form-control exit_caution">
+                                            <select name="genero" id="genero-modal" class="form-control">
                                                 <option value="default">Seleccione Género</option>
                                                 <option value="F">Mujer</option>
                                                 <option value="M">Hombre</option>
@@ -404,7 +404,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Estado Civil<em class="required_asterisco">*</em></label>
-                                    <select name="est_civil" id="est_civil-modal" class="form-control exit_caution">
+                                    <select name="est_civil" id="est_civil-modal" class="form-control">
                                         <option value="default">Seleccione Estado Civil</option>
                                         <?php foreach ($est_civil as $row) { ?>
                                             <option value="<?= $row->id ?>"><?= $row->estado ?></option>
@@ -414,7 +414,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>País de domicilio<em class="required_asterisco">*</em></label>
-                                    <select name="pais" id="pais-modal" class="form-control exit_caution">
+                                    <select name="pais" id="pais-modal" class="form-control">
                                         <option value="default">Seleccione País</option>
 
                                         <option value="49">Colombia</option>
@@ -425,7 +425,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
-                                            <select name="provincia" id="provincia-modal" class="form-control exit_caution" readonly="">
+                                            <select name="provincia" id="provincia-modal" class="form-control" readonly="">
                                                 <option value="default">Seleccione primero País</option>
                                             </select>                                
                                         </div>
@@ -433,7 +433,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
-                                            <select name="ciudad" id="ciudad-modal" class="form-control exit_caution" readonly="">
+                                            <select name="ciudad" id="ciudad-modal" class="form-control" readonly="">
                                                 <option value="default">Seleccione primero Depto</option>
                                             </select>
                                         </div>
@@ -446,27 +446,27 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Telefonos fijos de contacto<em class="required_asterisco">*</em></label>                                    
-                                            <input name="telefono" id="telefono-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
+                                            <input name="telefono" id="telefono-modal" type="text" class="form-control alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Celular</label>
-                                            <input name="celular" id="celular-modal" type="text" class="form-control exit_caution numerico" placeholder="Celular" maxlength="10">
+                                            <input name="celular" id="celular-modal" type="text" class="form-control numerico" placeholder="Celular" maxlength="10">
                                         </div>
                                     </div>
                                 </div>                            
                                 <div class="form-group">
                                     <label>Correo Electrónico<em class="required_asterisco">*</em></label>
-                                    <input name="email" id="email-modal" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
+                                    <input name="email" id="email-modal" type="text" class="form-control email" placeholder="Correo Electrónico" maxlength="80">
                                 </div>                            
                                 <div class="form-group">
                                     <label>Número de Cuenta Bancaria Nomina de Sili</label>
-                                    <input name="cuenta" id="cuenta-modal" type="text" class="form-control exit_caution numerico" placeholder="Cuenta Bancaria de Nómina" maxlength="12">
+                                    <input name="cuenta" id="cuenta-modal" type="text" class="form-control numerico" placeholder="Cuenta Bancaria de Nómina" maxlength="12">
                                 </div>    
                                 <div class="form-group">
                                     <label>Tipo de Domicilio<em class="required_asterisco">*</em></label>
-                                    <select name="t_domicilio" id="t_domicilio-modal" class="form-control exit_caution">
+                                    <select name="t_domicilio" id="t_domicilio-modal" class="form-control">
                                         <option value="default">Seleccione T. de Domicilio</option>
 
                                         <option value="1">Casa</option>
@@ -481,11 +481,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Dirección<em class="required_asterisco">*</em></label>
-                                    <input name="direccion" id="direccion-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección" maxlength="80">
+                                    <input name="direccion" id="direccion-modal" type="text" class="form-control alfanumerico" placeholder="Dirección" maxlength="80">
                                 </div>
                                 <div class="form-group">
                                     <label>Barrio/Sector<em class="required_asterisco">*</em></label>
-                                    <input name="barrio" id="barrio-modal" type="text" class="form-control exit_caution letras_numeros" placeholder="Barrio o Sector" maxlength="40">
+                                    <input name="barrio" id="barrio-modal" type="text" class="form-control letras_numeros" placeholder="Barrio o Sector" maxlength="40">
                                 </div>
                             </div>
                         </div>

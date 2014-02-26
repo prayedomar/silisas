@@ -101,7 +101,7 @@ class Traslado_contrato_matricula extends CI_Controller {
             $contrato_final = ucwords(strtolower($this->input->post('contrato_final')));
             $sede_actual = ucwords(strtolower($this->input->post('sede_actual')));
             $sede_destino = ucwords(strtolower($this->input->post('sede_destino')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -118,7 +118,7 @@ class Traslado_contrato_matricula extends CI_Controller {
                     $this->parser->parse('trans_error', $data);
                     return;
                 } else {
-                    $error1 = $this->insert_model->traslado_contrato($i, $sede_actual, $sede_destino, 2, $fecha_trans, $id_responsable, $dni_responsable);
+                    $error1 = $this->insert_model->traslado_contrato($i, $sede_actual, $sede_destino, 2, $id_responsable, $dni_responsable);
                     if (isset($error1)) {
                         $data['trans_error'] = $error1;
                         $this->parser->parse('trans_error', $data);

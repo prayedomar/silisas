@@ -159,7 +159,7 @@ class Egreso extends CI_Controller {
                 $efectivo_retirado = NULL;
             }
             $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -174,12 +174,12 @@ class Egreso extends CI_Controller {
             $data['url_recrear'] = base_url() . "egreso/crear";
             $data['msn_recrear'] = "Crear otro Egreso";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_egreso, $id_egreso, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_egreso, $id_egreso, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->egreso($prefijo_egreso, $id_egreso, $t_egreso, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->egreso($prefijo_egreso, $id_egreso, $t_egreso, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $descripcion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1;
                     $this->parser->parse('trans_error', $data);

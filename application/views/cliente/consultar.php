@@ -49,7 +49,7 @@
                         <div class="col-xs-2">
                             <label>Fecha nacimiento</label>
                             <div class="input-group">
-                                <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                                <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="F. nacimiento" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>

@@ -67,7 +67,7 @@ class Llamado_atencion extends CI_Controller {
             $t_falta_laboral = $this->input->post('t_falta_laboral');
             $t_sancion = $this->input->post('t_sancion');
             $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $id_llamado_atencion = ($this->select_model->nextId_llamado_atencion()->id) + 1;
@@ -78,7 +78,7 @@ class Llamado_atencion extends CI_Controller {
             $data['url_recrear'] = base_url() . "llamado_atencion/crear";
             $data['msn_recrear'] = "Crear otro llamado de atención";
             
-            $error1 = $this->insert_model->llamado_atencion($id_llamado_atencion, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error1 = $this->insert_model->llamado_atencion($id_llamado_atencion, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, 1, $descripcion, $id_responsable, $dni_responsable);
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
@@ -88,7 +88,7 @@ class Llamado_atencion extends CI_Controller {
                     $fecha_inicio = $this->input->post('fecha_inicio');
                     $fecha_fin = $this->input->post('fecha_fin');
                     $t_ausencia = 11; //Suspension laboral (No remunerada)
-                    $error2 = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
+                    $error2 = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $id_responsable, $dni_responsable);
                     if (isset($error2)) {
                         $data['trans_error'] = $error2;
                         $this->parser->parse('trans_error', $data);

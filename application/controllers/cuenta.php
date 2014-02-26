@@ -66,7 +66,7 @@ class Cuenta extends CI_Controller {
             $banco = $this->input->post('banco');
             $nombre_cuenta = ucwords(strtolower($this->input->post('nombre_cuenta')));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -76,7 +76,7 @@ class Cuenta extends CI_Controller {
             $data['url_recrear'] = base_url() . "cuenta/crear";
             $data['msn_recrear'] = "Crear otra Cuenta";
             
-            $error = $this->insert_model->cuenta($cuenta, $t_cuenta, $banco, $nombre_cuenta, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->cuenta($cuenta, $t_cuenta, $banco, $nombre_cuenta, 1, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
@@ -148,7 +148,7 @@ class Cuenta extends CI_Controller {
                 return FALSE;
             } else {
                 $cuenta = $this->input->post('cuenta');
-                $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                
                 $id_responsable = $this->input->post('id_responsable');
                 $dni_responsable = $this->input->post('dni_responsable');
 
@@ -156,7 +156,7 @@ class Cuenta extends CI_Controller {
                     list($id_encargado, $dni_encargado) = explode("-", $fila);
                     $sede = $this->select_model->empleado($id_encargado, $dni_encargado)->sede_ppal;
                     $error = $this->insert_model->cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, 1);
-                    $this->insert_model->asignar_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $fecha_trans, $id_responsable, $dni_responsable);
+                    $this->insert_model->asignar_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $id_responsable, $dni_responsable);
                     if (isset($error)) {
                         $response = array(
                             'respuesta' => 'error',
@@ -182,7 +182,7 @@ class Cuenta extends CI_Controller {
         $this->escapar($_POST);            
             list($id_encargado, $dni_encargado, $cuenta) = explode("-", $this->input->post('empleado_cuenta'));
             $sede = $this->select_model->empleado($id_encargado, $dni_encargado)->sede_ppal;
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -195,7 +195,7 @@ class Cuenta extends CI_Controller {
                 );
             } else {
                 //Para la historica no atrapo el error, si hubo error no me importa, con tal que se haya hecho la transaccion verdadera
-                $this->insert_model->anular_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $fecha_trans, $id_responsable, $dni_responsable);
+                $this->insert_model->anular_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $id_responsable, $dni_responsable);
                 $response = array(
                     'respuesta' => 'OK'
                 );
@@ -321,13 +321,13 @@ class Cuenta extends CI_Controller {
                 return FALSE;
             } else {
                 $cuenta = $this->input->post('cuenta');
-                $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                
                 $id_responsable = $this->input->post('id_responsable');
                 $dni_responsable = $this->input->post('dni_responsable');
 
                 foreach ($checkbox as $fila) {
                     $error = $this->insert_model->cuenta_x_sede($cuenta, $fila, 1);
-                    $this->insert_model->asignar_cuenta_x_sede($cuenta, $fila, $fecha_trans, $id_responsable, $dni_responsable);
+                    $this->insert_model->asignar_cuenta_x_sede($cuenta, $fila, $id_responsable, $dni_responsable);
                     if (isset($error)) {
                         $response = array(
                             'respuesta' => 'error',
@@ -352,7 +352,7 @@ class Cuenta extends CI_Controller {
         if ($this->input->is_ajax_request()) {
         $this->escapar($_POST);            
             list($sede, $cuenta) = explode("-", $this->input->post('sede_cuenta'));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -366,7 +366,7 @@ class Cuenta extends CI_Controller {
                 );
             } else {
                 //Para la historica no atrapo el error, si hubo error no me importa, con tal que se haya hecho la transaccion verdadera
-                $this->insert_model->anular_cuenta_x_sede($cuenta, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                $this->insert_model->anular_cuenta_x_sede($cuenta, $sede, $id_responsable, $dni_responsable);
                 $response = array(
                     'respuesta' => 'OK'
                 );

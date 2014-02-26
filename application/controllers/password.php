@@ -52,7 +52,7 @@ class Password extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             $password = $this->encrypt->encode($this->input->post('password_new_1'));
-            
+
             $data["tab"] = "cambiar_password";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
@@ -65,59 +65,28 @@ class Password extends CI_Controller {
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Enviamos email
-                $id = 42412423;
-                $dni = $this->select_model->t_dni_id(1)->tipo;
-                $email = "prayedomar@hotmail.com";
-                $asunto = "Bienvenido a la familia SILI S.A.S";
-                $mensaje = '<p>A partir de este momento, ústed hace parte de la familia SILI S.A.S como: Empleado Activo.<br/>'
-                        . '<br/>Para ingresar a nuestro sistema y disfrutar de todas las herramientas que hemos diseñado para facilitar sus labores cotidianas al interior de la compañía, ingrese a traves de nuestra pagina web: <a href="http://www.sili.com.co" target="_blank">www.sili.com.co</a> y seleccione la opción "Acceder".</p>'
-                        . '<ul type="disc">'
-                        . '<li><p>Sus datos para ingresar al sistema son:</p>'
+                $email = $this->session->userdata('email');
+                $genero = $this->session->userdata('genero');
+                $nombres = $this->session->userdata('nombres');
+                $asunto = "Notificación de cambio de contraseña";
+                if ($genero == 'M') {
+                    $prefijo = "Sr.";
+                } else {
+                    $prefijo = "Sra.";
+                }
+                $mensaje = '<p>' . $prefijo . ' ' . $nombres . '</p>'
+                        . '<p>Le notificamos que su contraseña de ingreso al sistema, ha sido modificada.<br/>'
                         . '<center>'
                         . '<table>'
-                            . '<tr>'
-                                . '<td style="width:230px;"><b>Tipo de usuario: </b></td>'
-                                . '<td>Empleado</td>'
-                            . '</tr>'
-                            . '<tr>'
-                                . '<td><b>Tipo de identificación: </b></td>'
-                                . '<td>' . $dni . '</td>'
-                            . '</tr>'
-                            . '<tr>'
-                                . '<td><b>Identificación de usuario: </b></td>'
-                                . '<td>' . $id . '</td>'
-                            . '</tr>'
-                            . '<tr>'
-                                . '<td><b>Contraseña: </b></td>'
-                                . '<td>' . $id . '</td>'
-                            . '</tr>'
+                        . '<tr>'
+                        . '<td style="width:170px;"><b>Nueva contraseña: </b></td>'
+                        . '<td>' . $this->input->post('password_new_1') . '</td>'
+                        . '</tr>'
                         . '</table>'
                         . '</center>'
-                        . '<br/><p>Para garantizar la seguridad de tu cuenta, una vez que ingrese por primera vez, modifique su contraseña a través de la opción: Opciones de usuario>Cambiar contraseña.</p>'
-                        . '</li>'
-                        . '<li><p>La información de su contrato laboral, es la siguiente:</p>'
-                        . '<center>'
-                        . '<table>'
-                            . '<tr>'
-                                . '<td style="width:230px;"><b>Tipo de usuario: </b></td>'
-                                . '<td>Empleado</td>'
-                            . '</tr>'
-                            . '<tr>'
-                                . '<td><b>Tipo de identificación: </b></td>'
-                                . '<td>' . $dni . '</td>'
-                            . '</tr>'
-                            . '<tr>'
-                                . '<td><b>Identificación de usuario: </b></td>'
-                                . '<td>' . $id . '</td>'
-                            . '</tr>'
-                            . '<tr>'
-                                . '<td><b>Contraseña: </b></td>'
-                                . '<td>' . $id . '</td>'
-                            . '</tr>'
-                        . '</table>'
-                        . '</li>'
-                        . '<center><br/>¡Gracias por darnos la oportunidad de contar con su gran talento!</center>';
-                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);                
+                        . '<br/><p>Para garantizar la seguridad de su cuenta, recuerde que nunca le solicitaremos datos personales a traves de correo electrónico, para que tenga cuidado y no vaya a caer en la trampa de personas malintencionadas.</p>'
+                        . '<center><br/>¡Gracias por estar con nosostros!</center>';
+                $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);
                 //mostramos mensaje ok
                 $this->parser->parse('trans_success', $data);
             }

@@ -35,7 +35,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Segundo Nombre</label>
-                                        <input name="nombre2" id="nombre2" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Nombre" maxlength="30">
+                                        <input name="nombre2" id="nombre2" type="text" class="form-control exit_caution alfabeto_espacios" placeholder="Segundo Nombre" maxlength="30">
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +137,7 @@
                                 </div>
                             </div>                            
                             <div class="form-group">
-                                <label>Correo Electrónico<em class="required_asterisco">*</em></label>
+                                <label>Correo Electrónico</label>
                                 <input name="email" id="email" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
                             </div>                 
                             <div class="form-group">
