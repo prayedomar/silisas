@@ -11,7 +11,7 @@ class Titular extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_titular";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -31,7 +31,7 @@ class Titular extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
@@ -75,7 +75,7 @@ class Titular extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');
             $nombre1 = ucwords(strtolower($this->input->post('nombre1')));
@@ -104,10 +104,10 @@ class Titular extends CI_Controller {
             $t_usuario = 2; //Titular
 
             $data["tab"] = "crear_titular";
-            $this->isLogin($data["tab"]);            
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "titular/crear";
-            $data['msn_recrear'] = "Crear otro Titular"; 
+            $data['msn_recrear'] = "Crear otro Titular";
             $nombres = $nombre1 . " " . $nombre2;
             
             $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
@@ -174,7 +174,7 @@ class Titular extends CI_Controller {
 
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('pais')) && ($this->input->post('pais') != '{id}') && ($this->input->post('pais') != 'default')) {
                 $pais = $this->input->post('pais');
                 $provincias = $this->select_model->provincia_pais($pais);
@@ -195,7 +195,7 @@ class Titular extends CI_Controller {
 
     public function llena_ciudad() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('provincia')) && ($this->input->post('provincia') != '{id}') && ($this->input->post('provincia') != 'default')) {
                 $provincia = $this->input->post('provincia');
                 $ciudades = $this->select_model->ciudad_provincia($provincia);
@@ -220,7 +220,7 @@ class Titular extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_deptom');
         $data["tab"] = "consultar_titular";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
@@ -246,6 +246,46 @@ class Titular extends CI_Controller {
         $this->load->view("header", $data);
         $this->load->view("titular/consultar");
         $this->load->view("footer");
+    }
+
+    public function excel() {
+        header("Content-type: application/vnd.ms-excel; name='excel'");
+        header("Content-Disposition: filename=reporte_titulares_" . date("Y-m-d") . ".xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        $lista = $this->titularm->listar_titulares_excel($_GET);
+        ?>
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th>Tipo documento</th>
+                    <th>Num. documento</th>
+                    <th>Nombre</th>
+                    <th>Fecha de nacimiento</th>
+                    <th>Domicilio</th>
+                    <th>Teléfonos</th>
+                    <th>Email</th>
+                    <th>Vigente</th>
+                    <th>Observacion</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTabla">
+                <?php foreach ($lista as $row) { ?>
+                    <tr>
+                        <td><?= $row->tipo ?></td>
+                        <td><?= $row->documento ?></td>
+                        <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
+                        <td><?= $row->fecha_nacimiento ?></td>
+                        <td><?= $row->pais . "/" . $row->provincia . "/" . $row->ciudad . " - " . $row->tipo_domicilio . "/" . $row->direccion . "/" . $row->barrio ?></td>
+                        <td><?= $row->celular . " - " . $row->telefono ?></td>
+                        <td><?= $row->email ?></td>
+                        <td><?= $row->vigente == "1" ? "Si" : "No" ?></td>
+                        <td><?= $row->observacion ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php
     }
 
 }
