@@ -54,7 +54,7 @@ class Salon extends CI_Controller {
             $sede = $this->input->post('sede');
             $vigente = $this->input->post('vigente');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -64,7 +64,7 @@ class Salon extends CI_Controller {
             $data['url_recrear'] = base_url() . "salon/crear";
             $data['msn_recrear'] = "Crear otro Salón";
             
-            $error = $this->insert_model->new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);

@@ -78,7 +78,7 @@ class Contrato_matricula extends CI_Controller {
             $contrato_final = ucwords(strtolower($this->input->post('contrato_final')));
             $sede_actual = ucwords(strtolower($this->input->post('sede_actual')));
             $estado = 1; //1:Vacio
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -89,7 +89,7 @@ class Contrato_matricula extends CI_Controller {
             $data['msn_recrear'] = "Crear otros Contratos Físicos";
 
             for ($i = $contrato_inicial; $i <= $contrato_final; $i++) {
-                $error = $this->insert_model->contrato_matricula($i, $sede_actual, $estado, $fecha_trans, $id_responsable, $dni_responsable);
+                $error = $this->insert_model->contrato_matricula($i, $sede_actual, $estado, $id_responsable, $dni_responsable);
                 if (isset($error)) {
                     $data['trans_error'] = $error;
                     $this->parser->parse('trans_error', $data);

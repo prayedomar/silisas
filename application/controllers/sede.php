@@ -103,7 +103,6 @@ class Sede extends CI_Controller {
             $prefijo_trans = strtoupper($this->input->post('prefijo_trans'));
             $estado = $this->input->post('estado');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -113,7 +112,7 @@ class Sede extends CI_Controller {
             $data['url_recrear'] = base_url() . "sede/crear";
             $data['msn_recrear'] = "Crear otra Sede";
 
-            $error = $this->insert_model->new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);

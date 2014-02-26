@@ -51,7 +51,7 @@ class Salario extends CI_Controller {
             $nombre = ucwords(strtolower($this->input->post('nombre')));
             $t_salario = $this->input->post('t_salario');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             //se calcula con el ultimo id
@@ -63,7 +63,7 @@ class Salario extends CI_Controller {
             $data['url_recrear'] = base_url() . "salario/crear";
             $data['msn_recrear'] = "Crear otro Salario";
             
-            $error1 = $this->insert_model->new_salario($id_salario, $nombre, $t_salario, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error1 = $this->insert_model->new_salario($id_salario, $nombre, $t_salario, 1, $observacion, $id_responsable, $dni_responsable);
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);

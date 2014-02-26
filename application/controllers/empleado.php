@@ -128,7 +128,7 @@ class Empleado extends CI_Controller {
             $t_contrato = $this->input->post('t_contrato');
             $fecha_inicio = $this->input->post('fecha_inicio');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -156,14 +156,14 @@ class Empleado extends CI_Controller {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error2 = $this->insert_model->new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $depto, $cargo, $salario, $id_jefe, $dni_jefe, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error2 = $this->insert_model->new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $depto, $cargo, $salario, $id_jefe, $dni_jefe, 1, $observacion, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
                     $data['trans_error'] = $error2;
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //Creamos el contrato laboral
-                    $error3 = $this->insert_model->contrato_laboral($id, $dni, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, 1, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                    $error3 = $this->insert_model->contrato_laboral($id, $dni, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, 1, $observacion, $id_responsable, $dni_responsable);
                     if (isset($error3)) {
                         $data['trans_error'] = $error3;
                         $this->parser->parse('trans_error', $data);

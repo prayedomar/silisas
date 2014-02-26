@@ -43,13 +43,13 @@ class Sedes_empleado extends CI_Controller {
                 return FALSE;
             } else {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-                $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                
                 $id_responsable = $this->input->post('id_responsable');
                 $dni_responsable = $this->input->post('dni_responsable');
 
                 foreach ($checkbox as $fila) {
                     $error = $this->insert_model->empleado_x_sede($id_empleado, $dni_empleado, $fila);
-                    $this->insert_model->asignar_empleado_x_sede($id_empleado, $dni_empleado, $fila, $fecha_trans, $id_responsable, $dni_responsable);
+                    $this->insert_model->asignar_empleado_x_sede($id_empleado, $dni_empleado, $fila, $id_responsable, $dni_responsable);
                     if (isset($error)) {
                         $response = array(
                             'respuesta' => 'error',
@@ -89,7 +89,7 @@ class Sedes_empleado extends CI_Controller {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $sede_ppal = $this->input->post('sede_ppal');
                 $observacion = ucfirst(strtolower($this->input->post('observacion')));
-                $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+                
                 $id_responsable = $this->input->post('id_responsable');
                 $dni_responsable = $this->input->post('dni_responsable');
 
@@ -102,7 +102,7 @@ class Sedes_empleado extends CI_Controller {
                     );
                 } else {
                     //Para la historica no atrapo el error, si hubo error no me importa, con tal que se haya hecho la transaccion verdadera
-                    $this->insert_model->cambio_sede_empleado($id_empleado, $dni_empleado, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                    $this->insert_model->cambio_sede_empleado($id_empleado, $dni_empleado, $sede_ppal, $observacion, $id_responsable, $dni_responsable);
                     $response = array(
                         'respuesta' => 'OK'
                     );
@@ -120,7 +120,7 @@ class Sedes_empleado extends CI_Controller {
         $this->escapar($_POST);            
             list($sede_secundaria, $id_empleado, $dni_empleado) = explode("-", $this->input->post('id_empleado_sede'));
             $sede_ppal = $this->input->post('sede_ppal');
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $vigente = 0;
@@ -134,7 +134,7 @@ class Sedes_empleado extends CI_Controller {
                 );
             } else {
                 //Para la historica no atrapo el error, si hubo error no me importa, con tal que se haya hecho la transaccion verdadera
-                $this->insert_model->anular_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $fecha_trans, $id_responsable, $dni_responsable);
+                $this->insert_model->anular_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $id_responsable, $dni_responsable);
                 $response = array(
                     'respuesta' => 'OK'
                 );

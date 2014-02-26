@@ -12,7 +12,7 @@ class Abono_prestamo extends CI_Controller {
 //Crear: Abono a Prestamo
     function crear() {
         $data["tab"] = "crear_abono_prestamo";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -118,7 +118,7 @@ class Abono_prestamo extends CI_Controller {
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -128,17 +128,17 @@ class Abono_prestamo extends CI_Controller {
             $credito_debito = 1; //Credito            
 
             $data["tab"] = "crear_abono_prestamo";
-            $this->isLogin($data["tab"]);               
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_prestamo/crear";
             $data['msn_recrear'] = "Crear otro Abono a Prestamo";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->abono_prestamo($prefijo_abono, $id_abono, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->abono_prestamo($prefijo_abono, $id_abono, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1;
                     $this->parser->parse('trans_error', $data);
@@ -325,6 +325,7 @@ class Abono_prestamo extends CI_Controller {
             }
             $cant_cuotas = $prestamo->cant_cuotas;
             $cuota_fija = $prestamo->cuota_fija;
+            $tasa_mora_anual = $this->select_model->interes_mora()->tasa_mora_anual;
 
             //La primera fila la hacemos manual para que la formula funciones.
             $matriz_prestamo = array();
@@ -403,7 +404,6 @@ class Abono_prestamo extends CI_Controller {
                     //Pero si es mayor a 4 la contamos completa sin descartar los 4 dias.
                     if ($dias_mora > 4) {
                         $matriz_prestamo[$i][5] = $dias_mora;
-                        $tasa_mora_anual = $this->select_model->interes_mora()->tasa_mora_anual;
                         if ($tasa_mora_anual) {
                             $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $cuota_minima), 2);
                             $matriz_prestamo[$i][6] = $Int_mora;

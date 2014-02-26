@@ -48,7 +48,8 @@ class Titular extends CI_Controller {
             $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'required|trim|xss_clean|max_length[40]');
             $this->form_validation->set_rules('telefono', 'Telefono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'required|trim|xss_clean|min_length[10]|max_length[40]');
-            $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
+            //Temporalmente el email no sera obligatorio
+            $this->form_validation->set_rules('email', 'Correo Electrónico', 'valid_email|trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             //Validamos que la clave primaria no este repetida
@@ -93,7 +94,7 @@ class Titular extends CI_Controller {
             $celular = $this->input->post('celular');
             $email = strtolower($this->input->post('email'));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -115,7 +116,7 @@ class Titular extends CI_Controller {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error2 = $this->insert_model->titular($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error2 = $this->insert_model->titular($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $observacion, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
                     $data['trans_error'] = $error2;

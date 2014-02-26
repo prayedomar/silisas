@@ -119,7 +119,7 @@ class Alumno extends CI_Controller {
             $grados = NULL;
             $cant_clases = $this->input->post('cant_clases');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -141,7 +141,7 @@ class Alumno extends CI_Controller {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error2 = $this->insert_model->alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $matricula, $velocidad_ini, $comprension_ini, $t_curso, $estado, $grados, $cant_clases, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error2 = $this->insert_model->alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $matricula, $velocidad_ini, $comprension_ini, $t_curso, $estado, $grados, $cant_clases, $sede_ppal, $observacion, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
                     $data['trans_error'] = $error2;

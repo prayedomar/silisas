@@ -9,7 +9,7 @@ class Insert_model extends CI_Model {
         parent::__construct();
     }
 
-    public function new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id_sede,
             'nombre' => $nombre,
@@ -22,35 +22,37 @@ class Insert_model extends CI_Model {
             'prefijo_trans' => $prefijo_trans,
             'estado' => $estado,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-//para devolver el error que mande la inserccion
-        $this->db->insert('sede', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        //para devolver el error que mande la inserccion
+        $this->db->insert('sede');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function new_salon($nombre, $capacidad, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'nombre' => $nombre,
             'capacidad' => $capacidad,
             'sede' => $sede,
             'vigente' => $vigente,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('salon', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->insert('salon');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $depto, $cargo, $salario, $id_jefe, $dni_jefe, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $depto, $cargo, $salario, $id_jefe, $dni_jefe, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -80,17 +82,18 @@ class Insert_model extends CI_Model {
             'dni_jefe' => $dni_jefe,
             'estado' => $estado,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('empleado', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->insert('empleado');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function cliente($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function cliente($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $sede_ppal, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -112,17 +115,18 @@ class Insert_model extends CI_Model {
             'email' => $email,
             'sede_ppal' => $sede_ppal,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('cliente', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->insert('cliente');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $matricula, $velocidad_ini, $comprension_ini, $t_curso, $estado, $grados, $cant_clases, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $matricula, $velocidad_ini, $comprension_ini, $t_curso, $estado, $grados, $cant_clases, $sede_ppal, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -151,17 +155,18 @@ class Insert_model extends CI_Model {
             'cant_clases' => $cant_clases,
             'sede_ppal' => $sede_ppal,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('alumno', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->insert('alumno');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function titular($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function titular($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -182,17 +187,18 @@ class Insert_model extends CI_Model {
             'celular' => $celular,
             'email' => $email,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('titular', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('titular');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function new_proveedor($id, $dni, $d_v, $razon_social, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $telefono, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function new_proveedor($id, $dni, $d_v, $razon_social, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $telefono, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -205,11 +211,12 @@ class Insert_model extends CI_Model {
             'direccion' => $direccion,
             'telefono' => $telefono,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('proveedor', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('proveedor');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
@@ -233,18 +240,19 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function new_salario($id_salario, $nombre, $t_salario, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function new_salario($id_salario, $nombre, $t_salario, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id_salario,
             'nombre' => $nombre,
             't_salario' => $t_salario,
             'vigente' => $vigente,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('salario', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('salario');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
@@ -262,17 +270,18 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function cambio_sede_empleado($id_empleado, $dni_empleado, $sede_ppal, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function cambio_sede_empleado($id_empleado, $dni_empleado, $sede_ppal, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             'sede_ppal' => $sede_ppal,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('cambio_sede_empleado', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('cambio_sede_empleado');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
@@ -362,97 +371,101 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function anular_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function anular_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             'sede_secundaria' => $sede_secundaria,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('anular_empleado_x_sede', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('anular_empleado_x_sede');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function asignar_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function asignar_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             'sede_secundaria' => $sede_secundaria,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('asignar_empleado_x_sede', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('asignar_empleado_x_sede');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function asignar_cuenta_x_sede($cuenta, $sede, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function asignar_cuenta_x_sede($cuenta, $sede, $id_responsable, $dni_responsable) {
         $data = array(
             'cuenta' => $cuenta,
             'sede' => $sede,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('asignar_cuenta_x_sede', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('asignar_cuenta_x_sede');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function anular_cuenta_x_sede($cuenta, $sede, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function anular_cuenta_x_sede($cuenta, $sede, $id_responsable, $dni_responsable) {
         $data = array(
             'cuenta' => $cuenta,
             'sede' => $sede,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('anular_cuenta_x_sede', $data);
+        $this->db->insert('anular_cuenta_x_sede');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function asignar_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function asignar_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $id_responsable, $dni_responsable) {
         $data = array(
             'cuenta' => $cuenta,
             'sede' => $sede,
             'id_encargado' => $id_encargado,
             'dni_encargado' => $dni_encargado,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('asignar_cuenta_x_sede_x_empleado', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('asignar_cuenta_x_sede_x_empleado');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function anular_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function anular_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $id_responsable, $dni_responsable) {
         $data = array(
             'cuenta' => $cuenta,
             'sede' => $sede,
             'id_encargado' => $id_encargado,
             'dni_encargado' => $dni_encargado,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('anular_cuenta_x_sede_x_empleado', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('anular_cuenta_x_sede_x_empleado');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function cambio_cargo($id_empleado, $dni_empleado, $cargo_old, $cargo_new, $solicitar_placa, $sede, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function cambio_cargo($id_empleado, $dni_empleado, $cargo_old, $cargo_new, $solicitar_placa, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
@@ -461,17 +474,18 @@ class Insert_model extends CI_Model {
             'solicitar_placa' => $solicitar_placa,
             'sede' => $sede,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('cambio_cargo', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('cambio_cargo');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function solicitar_placa($id_empleado, $dni_empleado, $cargo_obtenido, $sede, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function solicitar_placa($id_empleado, $dni_empleado, $cargo_obtenido, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
@@ -479,17 +493,18 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'pendiente' => 1,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('solicitud_placa', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('solicitud_placa');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function cambio_jefe($id_empleado, $dni_empleado, $id_jefe_old, $dni_jefe_old, $id_jefe_new, $dni_jefe_new, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function cambio_jefe($id_empleado, $dni_empleado, $id_jefe_old, $dni_jefe_old, $id_jefe_new, $dni_jefe_new, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
@@ -498,46 +513,49 @@ class Insert_model extends CI_Model {
             'id_jefe_new' => $id_jefe_new,
             'dni_jefe_new' => $dni_jefe_new,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('cambio_jefe', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('cambio_jefe');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function despachar_placa($solicitud_placa, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function despachar_placa($solicitud_placa, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'solicitud_placa' => $solicitud_placa,
             'pendiente' => 1,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('despachar_placa', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('despachar_placa');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function recibir_placa($despacho_placa, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function recibir_placa($despacho_placa, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'despacho_placa' => $despacho_placa,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('recibir_placa', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('recibir_placa');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, $vigente, $descripcion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, $vigente, $descripcion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
@@ -546,17 +564,18 @@ class Insert_model extends CI_Model {
             't_ausencia' => $t_ausencia,
             'vigente' => $vigente,
             'descripcion' => $descripcion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('ausencia_laboral', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('ausencia_laboral');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function llamado_atencion($id, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, $vigente, $descripcion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function llamado_atencion($id, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, $vigente, $descripcion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'id_empleado' => $id_empleado,
@@ -565,17 +584,18 @@ class Insert_model extends CI_Model {
             't_sancion' => $t_sancion,
             'vigente' => $vigente,
             'descripcion' => $descripcion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('llamado_atencion', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('llamado_atencion');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function contrato_laboral($id_empleado, $dni_empleado, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function contrato_laboral($id_empleado, $dni_empleado, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
@@ -585,17 +605,18 @@ class Insert_model extends CI_Model {
             'fecha_fin' => $fecha_fin,
             'estado' => $estado,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('contrato_laboral', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('contrato_laboral');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function caja($sede, $t_caja, $id_encargado, $dni_encargado, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function caja($sede, $t_caja, $id_encargado, $dni_encargado, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'sede' => $sede,
             't_caja' => $t_caja,
@@ -603,17 +624,18 @@ class Insert_model extends CI_Model {
             'dni_encargado' => $dni_encargado,
             'vigente' => $vigente,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('caja', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('caja');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function cuenta($cuenta, $t_cuenta, $banco, $nombre_cuenta, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function cuenta($cuenta, $t_cuenta, $banco, $nombre_cuenta, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $cuenta,
             't_cuenta' => $t_cuenta,
@@ -621,17 +643,18 @@ class Insert_model extends CI_Model {
             'nombre_cuenta' => $nombre_cuenta,
             'vigente' => $vigente,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('cuenta', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('cuenta');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function adelanto($prefijo, $id, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function adelanto($prefijo, $id, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -646,17 +669,18 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'estado' => $estado,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('adelanto', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('adelanto');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function prestamo($prefijo, $id, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function prestamo($prefijo, $id, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -676,17 +700,18 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'estado' => $estado,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('prestamo', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('prestamo');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function abono_adelanto($prefijo, $id, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function abono_adelanto($prefijo, $id, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -701,17 +726,18 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'vigente' => $vigente,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('abono_adelanto', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('abono_adelanto');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function abono_prestamo($prefijo, $id, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function abono_prestamo($prefijo, $id, $prefijo_prestamo, $id_prestamo, $subtotal, $cant_dias_mora, $int_mora, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -728,17 +754,18 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'vigente' => $vigente,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('abono_prestamo', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('abono_prestamo');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function egreso($prefijo, $id, $t_egreso, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $descripcion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function egreso($prefijo, $id, $t_egreso, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $descripcion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -757,17 +784,18 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'vigente' => $vigente,
             'descripcion' => $descripcion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('egreso', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('egreso');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function ingreso($prefijo, $id, $t_ingreso, $t_depositante, $id_depositante, $dni_depositante, $d_v, $nombre_depositante, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $descripcion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function ingreso($prefijo, $id, $t_ingreso, $t_depositante, $id_depositante, $dni_depositante, $d_v, $nombre_depositante, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $descripcion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -786,17 +814,18 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'vigente' => $vigente,
             'descripcion' => $descripcion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('ingreso', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('ingreso');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'contrato' => $contrato,
             'fecha_matricula' => $fecha_matricula,
@@ -814,48 +843,51 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'estado' => $estado,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('matricula', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('matricula');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function contrato_matricula($id, $sede_actual, $estado, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function contrato_matricula($id, $sede_actual, $estado, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'sede_actual' => $sede_actual,
             'estado' => $estado,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('contrato_matricula', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('contrato_matricula');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function traslado_contrato($contrato, $sede_actual, $sede_destino, $est_traslado, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function traslado_contrato($contrato, $sede_actual, $sede_destino, $est_traslado, $id_responsable, $dni_responsable) {
         $data = array(
             'contrato' => $contrato,
             'sede_actual' => $sede_actual,
             'sede_destino' => $sede_destino,
             'est_traslado' => $est_traslado,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('traslado_contrato', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('traslado_contrato');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_nomina, $detalle, $matricula, $plan_matricula, $escala_matricula, $cargo_ejecutivo, $cantidad, $valor_unitario, $estado, $sede, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_nomina, $detalle, $matricula, $plan_matricula, $escala_matricula, $cargo_ejecutivo, $cantidad, $valor_unitario, $estado, $sede, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
@@ -871,17 +903,18 @@ class Insert_model extends CI_Model {
             'valor_unitario' => $valor_unitario,
             'estado' => $estado,
             'sede' => $sede,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('concepto_nomina', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('concepto_nomina');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function nomina($prefijo, $id, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function nomina($prefijo, $id, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -899,34 +932,36 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'vigente' => $vigente,
             'observacion' => $observacion,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('nomina', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('nomina');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function cambio_ejecutivo_matricula($matricula, $id_ejecutivo_old, $dni_ejecutivo_old, $id_ejecutivo_new, $dni_ejecutivo_new, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function cambio_ejecutivo_matricula($matricula, $id_ejecutivo_old, $dni_ejecutivo_old, $id_ejecutivo_new, $dni_ejecutivo_new, $id_responsable, $dni_responsable) {
         $data = array(
             'matricula' => $matricula,
             'id_ejecutivo_old' => $id_ejecutivo_old,
             'dni_ejecutivo_old' => $dni_ejecutivo_old,
             'id_ejecutivo_new' => $id_ejecutivo_new,
             'dni_ejecutivo_new' => $dni_ejecutivo_new,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('cambio_ejecutivo_matricula', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('cambio_ejecutivo_matricula');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
 
-    public function movimiento_transaccion($t_trans, $prefijo, $id, $credito_debito, $total, $sede_caja, $t_caja, $efectivo_caja, $cuenta, $valor_cuenta, $vigente, $sede, $fecha_trans, $id_responsable, $dni_responsable) {
+    public function movimiento_transaccion($t_trans, $prefijo, $id, $credito_debito, $total, $sede_caja, $t_caja, $efectivo_caja, $cuenta, $valor_cuenta, $vigente, $sede, $id_responsable, $dni_responsable) {
         $data = array(
             't_trans' => $t_trans,
             'prefijo' => $prefijo,
@@ -940,11 +975,12 @@ class Insert_model extends CI_Model {
             'valor_cuenta' => $valor_cuenta,
             'vigente' => $vigente,
             'sede' => $sede,
-            'fecha_trans' => $fecha_trans,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
-        $this->db->insert('movimiento_transaccion', $data);
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('movimiento_transaccion');
         if ($error = $this->db->_error_message()) {
             return $error;
         }

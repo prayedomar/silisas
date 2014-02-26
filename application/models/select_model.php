@@ -222,7 +222,16 @@ class Select_model extends CI_Model {
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }  
+    
+    //Matriculas vigente con saldo incluido > 0
+    public function total_abonos_matricula($matricula) {
+        $SqlInfo = "SELECT ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula='" . $matricula . "') AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula='" . $matricula . "') AND (vigente=1)))) AS total";        
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
 
     public function t_caja() {
         $query = $this->db->get('t_caja');

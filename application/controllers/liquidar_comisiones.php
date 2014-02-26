@@ -67,7 +67,7 @@ class Liquidar_comisiones extends CI_Controller {
             list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("-", $this->input->post('ejecutivo_directo'));
 
             $est_concepto_nomina = 2; //2: Pendiente
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -96,11 +96,11 @@ class Liquidar_comisiones extends CI_Controller {
                     $this->parser->parse('trans_error', $data);
                     return;
                 } else {
-                    $this->insert_model->cambio_ejecutivo_matricula($id_matricula, $id_ejecutivo_original, $dni_ejecutivo_original, $id_ejecutivo_directo, $dni_ejecutivo_directo, $fecha_trans, $id_responsable, $dni_responsable);
+                    $this->insert_model->cambio_ejecutivo_matricula($id_matricula, $id_ejecutivo_original, $dni_ejecutivo_original, $id_ejecutivo_directo, $dni_ejecutivo_directo, $id_responsable, $dni_responsable);
                 }
             }
 
-            $error1 = $this->insert_model->concepto_nomina($id_ejecutivo_directo, $dni_ejecutivo_directo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_ejecutivo_directo, $cargo_ejecutivo_directo, 1, $valor_unitario, $est_concepto_nomina, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+            $error1 = $this->insert_model->concepto_nomina($id_ejecutivo_directo, $dni_ejecutivo_directo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_ejecutivo_directo, $cargo_ejecutivo_directo, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
             if (isset($error1)) {
                 $data['trans_error'] = $error1;
                 $this->parser->parse('trans_error', $data);
@@ -120,7 +120,7 @@ class Liquidar_comisiones extends CI_Controller {
                             if ($valor_unitario != TRUE) {
                                 $valor_unitario = 0.00;
                             }
-                            $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                            $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
                             if (isset($error2)) {
                                 $data['trans_error'] = $error2;
                                 $this->parser->parse('trans_error', $data);

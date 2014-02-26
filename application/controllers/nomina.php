@@ -126,7 +126,7 @@ class Nomina extends CI_Controller {
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -141,12 +141,12 @@ class Nomina extends CI_Controller {
             $data['url_recrear'] = base_url() . "nomina/crear";
             $data['msn_recrear'] = "Crear otra Nómina";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nomina, $id_nomina, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nomina, $id_nomina, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1;
                     $this->parser->parse('trans_error', $data);
@@ -176,7 +176,7 @@ class Nomina extends CI_Controller {
                                 $detalle_temp = strtolower($detalle[$i]);
                                 $cantidad_temp = $cantidad[$i];
                                 $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
-                                $error3 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                                $error3 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $id_responsable, $dni_responsable);
                                 if (isset($error3)) {
                                     $data['trans_error'] = $error3;
                                     $this->parser->parse('trans_error', $data);

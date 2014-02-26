@@ -50,7 +50,7 @@
                                     <th class="text-center">Valor Inicial</th>
                                     <th class="text-center">Saldo</th>
                                     <th class="text-center">Sede Origen</th>
-                                    <th class="text-center">Fecha del Préstamo</th>
+                                    <th class="text-center">Fecha inicial</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody_matricula_vigente">
@@ -64,14 +64,11 @@
                                 <tr>
                                     <th class="text-center">Escojer</th>
                                     <th class="text-center"># Cuota</th>
-                                    <th class="text-center">Abono Mínimo</th>
-                                    <th class="text-center">Abono Máximo</th>
-                                    <th class="text-center">Abono Realizado</th>                                           
+                                    <th class="text-center">Detalle</th>
+                                    <th class="text-center">Pago mínimo</th>
                                     <th class="text-center">Cantidad Mora</th>
                                     <th class="text-center">Int. Mora</th>
-                                    <th class="text-center">Saldo Deuda</th>
                                     <th class="text-center">Fecha Límite</th>
-                                    <th class="text-center">Fecha Pago</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody_cuotas_pdtes">
@@ -239,22 +236,20 @@
         $("#div_total_nomina").html("<h3>$ " + $('#total_nomina').val() + "</h3>");
     }
 
-    //Cargar div de valor abono y cuotas  de matricula escogida
+    //Cargar div de valor abono y cuotas  de matricula escogida     
     $("table").delegate("#matricula", "change", function() {
         matricula = $("input[name='matricula']:checked").val();
         $.post('{action_llena_cuotas_matricula}', {
             matricula: matricula
         }, function(data) {
             var obj = JSON.parse(data);
-            if (obj.respuesta == "OK")
-            {
+            if (obj.respuesta == "OK") {
                 $("#tbody_cuotas_pdtes").html(obj.filasTabla);
                 //LLenamos 3 campos ocultos para validar valores por ajax
                 $('#abono_minimo').attr('value', obj.abonoMinimo);
                 $('#abono_maximo').attr('value', obj.abonoMaximo);
                 $('#cant_dias_mora').attr('value', obj.cantMora);
-                //Llenamos los campos subtotal, int. mora y total
-                var subtotal = new Number(obj.abonoMinimo);
+                //Llenamos los campos subtotal, int. mora y total                 var subtotal = new Number(obj.abonoMinimo);
                 var intMora = new Number(obj.intMora);
                 $('#subtotal').attr('value', subtotal.toFixed(2));
                 $('#int_mora').attr('value', intMora.toFixed(2));
@@ -298,111 +293,6 @@
         }
     });
 
-    $("#div_nomina").delegate("#cantidad", "keyup", function() {
-        calcular_total();
-    });
-    $("#div_nomina").delegate("#valor_unitario", "keyup", function() {
-        calcular_total();
-    });
-
-    //Agregamos nuevos conceptos desde el boton Agregar Concepto.
-    $("#div_nomina").delegate("#agregar_concepto", "click", function() {
-        //Agregamos un concepto de nomina
-        var idUltimoConcepto = $('#contador_new_concepto').val();
-        var empleado = $('#empleado').val();
-        $.post('{action_llena_agregar_concepto}', {
-            empleado: empleado,
-            idUltimoConcepto: idUltimoConcepto
-        }, function(data) {
-            if (data != "") {
-                $("#conceptos_nuevos").append(data);
-                //Aumentamos el contador de nuevos conceptos.
-                var aumentarId = (new Number($('#contador_new_concepto').val()) + 1);
-                $('#contador_new_concepto').attr('value', aumentarId);
-            }
-        });
-    });
-
-    //Eliminamos los conceptos y preguntamos antes
-    $("#div_nomina").delegate(".drop_concepto_pdte", "click", function() {
-        if (confirm('¿Está seguro que desea eliminar el Concepto de la Nómina? \n \n Sólo cuando creé una nueva Nómina, podrá recuperarlo.')) {
-            $("#div_concepto_pdte_" + $(this).attr('id')).remove();
-            calcular_total();
-        }
-    });
-
-    //Eliminamos los conceptos y preguntamos antes
-    $("#div_nomina").delegate(".drop_concepto_new", "click", function() {
-        if (confirm('¿Está seguro que desea eliminar el Concepto de la Nómina?')) {
-            $("#div_concepto_new_" + $(this).attr('id')).remove();
-            calcular_total();
-        }
-    });
-
-    //Cargamos la informacion en el concepto segun el t_concepto
-    $("#div_nomina").delegate("#t_concepto_nomina", "change", function() {
-        var empleado = $('#empleado').val();
-        var tConceptoNomina = $(this).val();
-        var idDivConcepto = $(this).parent().parent().parent().parent().attr('id');
-        $.post('{action_llena_info_t_concepto}', {
-            empleado: empleado,
-            tConceptoNomina: tConceptoNomina
-        }, function(data) {
-            var obj = JSON.parse(data);
-            if (obj.respuesta == "OK")
-            {
-                if (obj.detalle_requerido == '1') {
-                    $("#" + idDivConcepto).find("#label_detalle").html('<label>Detalles adicionales<em class="required_asterisco">*</em></label>');
-                } else {
-                    if (obj.detalle_requerido == '0') {
-                        $("#" + idDivConcepto).find("#label_detalle").html('<label>Detalles adicionales</label>');
-                    }
-                }
-                $("#" + idDivConcepto).find("#detalle").attr('placeholder', obj.placeholder_detalle);
-                if (new Number(obj.valor_unitario) == '0') {
-                    $("#" + idDivConcepto).find("#valor_unitario").attr('value', 0);
-                    $("#" + idDivConcepto).find("#valor_unitario").removeAttr('readonly');
-                } else {
-                    $("#" + idDivConcepto).find("#valor_unitario").attr('readonly', 'readonly');
-                    $("#" + idDivConcepto).find("#valor_unitario").attr('value', obj.valor_unitario);
-                    $("#" + idDivConcepto).find("#valor_unitario").change();
-                }
-                if (obj.debito_credito == '1') {
-                    $("#" + idDivConcepto).find("#label_total_concepto").html('<label>Devengado</label>');
-                    $("#" + idDivConcepto).find("#debito_credito").attr('value', 1);
-                } else {
-                    if (obj.debito_credito == '0') {
-                        $("#" + idDivConcepto).find("#label_total_concepto").html('<label>Deducido</label>');
-                        $("#" + idDivConcepto).find("#debito_credito").attr('value', 0);
-                    }
-                }
-                if (obj.t_cantidad_dias == '1') {
-                    $("#" + idDivConcepto).find("#cantidad").attr('value', 1);
-                    $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
-                } else {
-                    if (obj.t_cantidad_dias == '2') {
-                        $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_nomina').val());
-                        $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
-                    } else {
-                        if (obj.t_cantidad_dias == '3') {
-                            $("#" + idDivConcepto).find("#cantidad").attr('value', $('#dias_remunerados').val());
-                            $("#" + idDivConcepto).find("#cantidad").attr('readonly', 'readonly');
-                        } else {
-                            if (obj.t_cantidad_dias == '4') {
-                                $("#" + idDivConcepto).find("#cantidad").attr('value', 0);
-                                $("#" + idDivConcepto).find("#cantidad").removeAttr('readonly');
-                            }
-                        }
-                    }
-                }
-                $("#" + idDivConcepto).find("#detalle").removeAttr('readonly');
-                calcular_total();
-            }
-        });
-    });
-
-
-
     //Cargamos la info de las cuentas para el pago
     $.post('{action_llena_cuenta_responsable}', {
         idResposable: '{id_responsable}',
@@ -426,7 +316,6 @@
         $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
         $('#efectivo_retirado').change();
     });
-
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',
         dniResposable: '{dni_responsable}'

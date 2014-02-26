@@ -28,7 +28,7 @@ class Factura extends CI_Controller {
 
         $data['action_validar_titular_llena_matriculas'] = base_url() . "factura/validar_titular_llena_matriculas";
         $data['action_llena_cuotas_matricula'] = base_url() . "factura/llena_cuotas_matricula";
-        
+
 
         $data['action_llena_info_contrato_laboral'] = base_url() . "factura/llena_info_contrato_laboral";
         $data['action_llena_info_ultimas_facturas'] = base_url() . "factura/llena_info_ultimas_facturas";
@@ -134,7 +134,7 @@ class Factura extends CI_Controller {
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -146,7 +146,7 @@ class Factura extends CI_Controller {
             $data['url_recrear'] = base_url() . "nomina/crear";
             $data['msn_recrear'] = "Crear otra Nómina";
 
-            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
 
             if (isset($error)) {
                 $data['trans_error'] = $error;
@@ -177,7 +177,7 @@ class Factura extends CI_Controller {
                             $detalle_temp = strtolower($detalle[$i]);
                             $cantidad_temp = $cantidad[$i];
                             $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
-                            $error2 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $fecha_trans, $id_responsable, $dni_responsable);
+                            $error2 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $id_responsable, $dni_responsable);
                             if (isset($error2)) {
                                 $data['trans_error'] = $error2;
                                 $this->parser->parse('trans_error', $data);
@@ -209,7 +209,7 @@ class Factura extends CI_Controller {
                 if ($matriculas == TRUE) {
                     $response = array(
                         'respuesta' => 'OK',
-                        'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,                        
+                        'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
                         'filasTabla' => ''
                     );
                     foreach ($matriculas as $fila) {
@@ -245,17 +245,17 @@ class Factura extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_cuotas_matricula() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            if ($this->input->post('prestamo')) {
-                list($prefijo_prestamo, $id_prestamo) = explode("-", $this->input->post('prestamo'));
-                $matriz_prestamo = $this->matriz_prestamo($prefijo_prestamo, $id_prestamo);
-                $prestamo = $this->select_model->prestamo_prefijo_id($prefijo_prestamo, $id_prestamo);
-                if ($matriz_prestamo) {
-                    $cant_cuotas = $prestamo->cant_cuotas;
-
+            if ($this->input->post('matricula')) {
+                $matricula = $this->input->post('matricula');
+                $matriz_matricula = $this->matriz_matricula($matricula);
+                if ($matriz_matricula) {
+                    $matricula = $this->select_model->matricula_id($id_matricula);
+                    $plan = $this->select_model->t_plan_id($matricula->plan);
+                    $cant_cuotas = $plan->cant_cuotas;
                     $response = array(
                         'respuesta' => 'OK',
                         'abonoMinimo' => '0.00',
@@ -265,18 +265,18 @@ class Factura extends CI_Controller {
                         'filasTabla' => ''
                     );
 
-                    //Solo abrá una cuota que tendrá radio y será la primera no cancelada con saldo = 0.
-                    $bandera_radio = 0;
-                    for ($i = 1; $i <= $cant_cuotas; $i++) {
-                        //Solo se mostraran las cuotas cuyo valor minimo sea > a cero.
-                        if ($matriz_prestamo[$i][2] > 0) {
-                            $num_cuota = $matriz_prestamo[$i][1];
-                            $abono_minimo = $matriz_prestamo[$i][2];
-                            $abono_maximo = $matriz_prestamo[$i][3];
-                            $cant_dias_mora = $matriz_prestamo[$i][5];
-                            $int_mora = $matriz_prestamo[$i][6];
+                    //Solo mostrará las cuotas pendientes de pago
+                    $bandera_pendiente = 0;
+                    for ($i = 0; $i <= $cant_cuotas; $i++) {
+                        //Solo se mostraran las cuotas que no se han cancelado
+                        if ($matriz_matricula[$i][6] == 0) {
+                            $num_cuota = $matriz_matricula[$i][1];
+                            $t_detalle = $matriz_matricula[$i][2];
+                            $pendiente = $matriz_matricula[$i][5];
+                            $cant_dias_mora = $matriz_matricula[$i][8];
+                            $int_mora = $matriz_matricula[$i][9];
 
-                            if (($matriz_prestamo[$i][12] == 0) && ($bandera_radio == 0)) {
+                            if (($matriz_matricula[$i][12] == 0) && ($bandera_pendiente == 0)) {
                                 //Enviamos datos por ajax
                                 $response['abonoMinimo'] = $abono_minimo;
                                 $response['abonoMaximo'] = $abono_maximo;
@@ -285,11 +285,11 @@ class Factura extends CI_Controller {
                                 $escojer = '<input type="radio" class="exit_caution" name="cuota" id="cuota" checked/>';
                                 $cuota_pagada = "";
                                 $saldo_deuda = "";
-                                $bandera_radio = 1;
+                                $bandera_pendiente = 1;
                             } else {
                                 $escojer = '';
-                                $cuota_pagada = "$" . number_format($matriz_prestamo[$i][4], 2, '.', ',');
-                                $saldo_deuda = "$" . number_format($matriz_prestamo[$i][9], 2, '.', ',');
+                                $cuota_pagada = "$" . number_format($matriz_matricula[$i][4], 2, '.', ',');
+                                $saldo_deuda = "$" . number_format($matriz_matricula[$i][9], 2, '.', ',');
                             }
                             $response['filasTabla'] .= '<tr>
                             <td class="text-center">' . $escojer . '</td>
@@ -300,8 +300,8 @@ class Factura extends CI_Controller {
                             <td class="text-center">' . $cant_dias_mora . '</td>                                
                             <td class="text-center">$' . number_format($int_mora, 2, '.', ',') . '</td>                                
                             <td class="text-center">' . $saldo_deuda . '</td>
-                            <td class="text-center">' . $matriz_prestamo[$i][10] . '</td>                               
-                            <td class="text-center">' . $matriz_prestamo[$i][11] . '</td>
+                            <td class="text-center">' . $matriz_matricula[$i][10] . '</td>                               
+                            <td class="text-center">' . $matriz_matricula[$i][11] . '</td>
                         </tr>';
                         }
                         //Para que no muestre mas cuotas despues de la cuota proxima a cancelar.
@@ -330,107 +330,109 @@ class Factura extends CI_Controller {
         }
     }
 
-    function matriz_prestamo($prefijo_prestamo, $id_prestamo) {
-        $prestamo = $this->select_model->prestamo_prefijo_id($prefijo_prestamo, $id_prestamo);
-        if ($prestamo == TRUE) {
-            $fecha_desembolso = $prestamo->fecha_desembolso;
-            $total_prestamo = $prestamo->total;
-            $tasa_interes = $prestamo->tasa_interes;
-            if ($prestamo->tasa_interes != 0) {
-                $tasa_interes = $prestamo->tasa_interes / 100;
+    function matriz_matricula($matricula) {
+        $id_matricula = $this->select_model->prestamo_prefijo_id($matricula);
+        if ($id_matricula == TRUE) {
+            $matricula = $this->select_model->matricula_id($id_matricula);
+            $plan = $this->select_model->t_plan_id($matricula->plan);
+            var_dump($matricula);
+            var_dump($plan);
+            $fecha_inicio = date("Y-m-d", strtotime($matricula->fecha_matricula));
+            $fecha_hoy = date('Y-m-d');
+            $valor_total = $plan->valor_total;
+            $cant_cuotas = $plan->cant_cuotas;
+            $valor_inicial = $plan->valor_inicial;
+            $valor_cuota = $plan->valor_cuota;
+            $total_abonos = $this->select_model->total_abonos_matricula($id_matricula)->total;
+            $tasa_mora_anual = $this->select_model->interes_mora()->tasa_mora_anual;
+
+            echo "plan" . $plan->nombre . "<br>";
+
+            //Llenamos la primer fila
+            $matriz_matricula = array();
+            $matriz_matricula[0][1] = 0; //Numero de cuota
+            if ($cant_cuotas == 0) { //Plan contado
+                $matriz_matricula[0][2] = 3; //T_detalle: pago total 
+            } else {
+                $matriz_matricula[0][2] = 1; //T_detalle: pago inicial
             }
-            $cant_cuotas = $prestamo->cant_cuotas;
-            $cuota_fija = $prestamo->cuota_fija;
+            $matriz_matricula[0][3] = $valor_inicial; //Valor esperado
+            //Miramos si se canceló esta cuota con el total de abonos
+            if ($total_abonos >= $valor_inicial) {
+                $total_abonos = $total_abonos - $valor_inicial; //Restamos del total de abonos esta cuota
+                $matriz_matricula[0][4] = $valor_inicial; //Abonado
+            } else {
+                $matriz_matricula[0][4] = $total_abonos; //Abonado
+                $total_abonos = 0; //Gastamos todo el total de abonados en este pago
+            }
+            $matriz_matricula[0][5] = $matriz_matricula[0][3] - $matriz_matricula[0][4]; //Valor pendiente de pago
+            if ($matriz_matricula[0][5] <= 0) { //Puede que sea negativo en el caso en que halla abonado mas de lo esperado
+                $matriz_matricula[0][6] = 1; //1: Cuota cancelada
+            } else {
+                $matriz_matricula[0][6] = 0; //0: Cuota no cancelada
+            }
+            $matriz_matricula[0][7] = $fecha_inicio; //Fecha esperada
+            $valor_esperado = $matriz_matricula[0][3];
+            $cuota_cancelada = $matriz_matricula[0][6];
+            $fecha_esperada = $matriz_matricula[0][7];
+            $matriz_matricula[0][8] = 0; //dias mora
+            $matriz_matricula[0][9] = 0; //int mora            
+            if (($cuota_cancelada == 0) && ($fecha_esperada < $fecha_hoy)) {
+                $dias_mora = $this->dias_entre_fechas($fecha_esperada, $fecha_hoy);
+                //Descartamos una mora inferior a 4 dias de gracia.   
+                //Pero si es mayor a 4 la contamos completa sin descartar los 4 dias.
+                if ($dias_mora > 4) {
+                    $matriz_matricula[0][8] = $dias_mora;
+                    if ($tasa_mora_anual) {
+                        $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $valor_esperado), 2);
+                        $matriz_matricula[0][9] = $Int_mora;
+                    }
+                }
+            }
 
-            //La primera fila la hacemos manual para que la formula funciones.
-            $matriz_prestamo = array();
-            $matriz_prestamo[0][1] = 0;
-            $matriz_prestamo[0][2] = 0;
-            $matriz_prestamo[0][3] = 0;
-            $matriz_prestamo[0][4] = 0;
-            $matriz_prestamo[0][5] = 0;
-            $matriz_prestamo[0][6] = 0;
-            $matriz_prestamo[0][7] = 0;
-            $matriz_prestamo[0][8] = 0;
-            $matriz_prestamo[0][9] = $total_prestamo;
-            $matriz_prestamo[0][10] = $fecha_desembolso;
-            $matriz_prestamo[0][11] = "";
-            $matriz_prestamo[0][12] = 0;
-
-            //Llenamos de ceros todas las columnas de ceros que seran llenadas con pagos
+            //Calculamos el resto de cuotas
             for ($i = 1; $i <= $cant_cuotas; $i++) {
-                $matriz_prestamo[$i][4] = 0;
-                $matriz_prestamo[$i][5] = 0;
-                $matriz_prestamo[$i][6] = 0;
-                $matriz_prestamo[$i][11] = "";
-                $matriz_prestamo[$i][12] = 0;
-            }
-
-            //Llenamos los pagos realizados al prestamo
-            $abonos = $this->select_model->abono_prestamo_prestamo($prefijo_prestamo, $id_prestamo);
-            if ($abonos == TRUE) {
-                $i = 1;
-                foreach ($abonos as $fila) {
-                    $matriz_prestamo[$i][4] = $fila->subtotal;
-                    $matriz_prestamo[$i][5] = $fila->cant_dias_mora;
-                    $matriz_prestamo[$i][6] = $fila->int_mora;
-                    $matriz_prestamo[$i][11] = date("Y-m-d", strtotime($fila->fecha_trans));
-                    $matriz_prestamo[$i][12] = 1;
-                    $i++;
-                }
-            }
-
-            //Llenamos las columnas que se calculan a partir de los pagos realizados
-            for ($i = 1; $i <= $cant_cuotas; $i++) {
-                $saldo_anterior = $matriz_prestamo[$i - 1][9];
-                $intereses = round($saldo_anterior * $tasa_interes, 2);
-                if (($saldo_anterior + $intereses) >= $cuota_fija) {
-                    $cuota_minima = $cuota_fija;
+                $matriz_matricula[$i][1] = $i; //Numero de cuota
+                $matriz_matricula[$i][2] = 2; //T_detalle: Abono total 
+                $matriz_matricula[$i][3] = $valor_cuota; //valor esperado
+                $valor_esperado = $matriz_matricula[$i][3];
+                if ($total_abonos >= $valor_esperado) {
+                    $total_abonos = $total_abonos - $valor_esperado; //Restamos del total de abonos esta cuota
+                    $matriz_matricula[$i][4] = $valor_esperado; //Abonado
                 } else {
-                    $cuota_minima = round($saldo_anterior + $intereses, 2);
+                    $matriz_matricula[$i][4] = $total_abonos; //Abonado
+                    $total_abonos = 0; //Gastamos todo el total de abonados en este pago
                 }
-                $cuota_maxima = round($saldo_anterior + $intereses, 2);
-                $cuota_pagada = $matriz_prestamo[$i][4];
-                if ($cuota_pagada != 0) {
-                    $abono_capital = round($cuota_pagada - $intereses, 2);
+                $valor_abonado = $matriz_matricula[$i][4];
+                $matriz_matricula[$i][5] = $valor_esperado - $valor_abonado; //valor pendiente
+                $valor_pendiente = $matriz_matricula[$i][5];
+                if ($valor_pendiente <= 0) {
+                    $matriz_matricula[$i][6] = 1; //0: Cuota cancelada
                 } else {
-                    $abono_capital = round($cuota_minima - $intereses, 2);
+                    $matriz_matricula[$i][6] = 0;  //0: Cuota no cancelada
                 }
-                $saldo_prestamo = round($saldo_anterior - $abono_capital, 2);
-                //Si el saldo es mejor a 1 pesos se perdona. Por errores de aproximacion pueden quedar saldos
-                if ($saldo_prestamo < 1) {
-                    $saldo_prestamo = 0.00;
-                }
-                $fecha_pago = date("Y-m-d", strtotime("$fecha_desembolso +$i month"));
-
-                $matriz_prestamo[$i][1] = $i;
-                $matriz_prestamo[$i][2] = $cuota_minima;
-                $matriz_prestamo[$i][3] = $cuota_maxima;
-                $matriz_prestamo[$i][7] = $abono_capital;
-                $matriz_prestamo[$i][8] = $intereses;
-                $matriz_prestamo[$i][9] = $saldo_prestamo;
-                $matriz_prestamo[$i][10] = $fecha_pago;
-
-                $cuota_cancelada = $matriz_prestamo[$i][12];
-                $fecha_hoy = date('Y-m-d');
-                if (($cuota_cancelada == 0) && ($fecha_pago < $fecha_hoy)) {
-                    $dias_mora = $this->dias_entre_fechas($fecha_pago, $fecha_hoy);
+                $matriz_matricula[$i][7] = date("Y-m-d", strtotime("$fecha_inicio +$i month")); //Fecha esperada
+                $cuota_cancelada = $matriz_matricula[$i][6];
+                $fecha_esperada = $matriz_matricula[$i][7];
+                $matriz_matricula[$i][8] = 0; //dias mora
+                $matriz_matricula[$i][9] = 0; //int mora         
+                if (($cuota_cancelada == 0) && ($fecha_esperada < $fecha_hoy)) {
+                    $dias_mora = $this->dias_entre_fechas($fecha_esperada, $fecha_hoy);
                     //Descartamos una mora inferior a 4 dias de gracia.   
                     //Pero si es mayor a 4 la contamos completa sin descartar los 4 dias.
                     if ($dias_mora > 4) {
-                        $matriz_prestamo[$i][5] = $dias_mora;
-                        $tasa_mora_anual = $this->select_model->interes_mora()->tasa_mora_anual;
+                        $matriz_matricula[$i][8] = $dias_mora;
                         if ($tasa_mora_anual) {
-                            $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $cuota_minima), 2);
-                            $matriz_prestamo[$i][6] = $Int_mora;
+                            $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $valor_esperado), 2);
+                            $matriz_matricula[$i][9] = $Int_mora;
                         }
                     }
                 }
             }
-            return $matriz_prestamo;
+            return $matriz_matricula;
         } else {
             return false;
         }
-    }    
+    }
 
 }

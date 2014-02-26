@@ -17,7 +17,7 @@
                                 <div class="col-xs-4 col-xs-offset-4">
                                     <div class="form-group" id="div_matricula">
                                         <label>Número de Matrícula<em class="required_asterisco">*</em></label>
-                                        <p class="help-block"><B>> </B>Sólo aparecerán las matrículas no liquidadas, que pertenecen a su sede principal.</p>
+                                        <p class="help-block"><B>> </B>Sólo aparecerán las matrículas no liquidadas, que tienen registrado al menos un pago y que pertenecen a su sede principal.</p>
                                         <select name="matricula" id="matricula" class="form-control exit_caution">
                                         </select>
                                     </div> 

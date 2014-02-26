@@ -61,7 +61,7 @@ class Ausencia_laboral extends CI_Controller {
             $fecha_fin = $this->input->post('fecha_fin');
             $t_ausencia = $this->input->post('t_ausencia');
             $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -71,7 +71,7 @@ class Ausencia_laboral extends CI_Controller {
             $data['url_recrear'] = base_url() . "ausencia_laboral/crear";
             $data['msn_recrear'] = "Crear otra Ausencia Laboral";
 
-            $error = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);

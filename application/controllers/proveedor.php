@@ -89,7 +89,7 @@ class Proveedor extends CI_Controller {
             $direccion = ucwords(strtolower($this->input->post('direccion')));
             $telefono = strtolower($this->input->post('telefono'));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $fecha_trans = date('Y-m-d') . " " . date("H:i:s");
+            
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -99,7 +99,7 @@ class Proveedor extends CI_Controller {
             $data['url_recrear'] = base_url() . "proveedor/crear";
             $data['msn_recrear'] = "Crear otro Proveedor";
             
-            $error = $this->insert_model->new_proveedor($id, $dni, $d_v, $razon_social, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $telefono, $observacion, $fecha_trans, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->new_proveedor($id, $dni, $d_v, $razon_social, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $telefono, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error;
                 $this->parser->parse('trans_error', $data);
