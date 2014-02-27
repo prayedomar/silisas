@@ -71,6 +71,38 @@ class Titular extends CI_Controller {
         }
     }
 
+    function validarParaEditar() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+
+            $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
+            $this->form_validation->set_rules('pais', 'País', 'required|callback_select_default');
+            $this->form_validation->set_rules('provincia', 'Departamento', 'required|callback_select_default');
+            $this->form_validation->set_rules('ciudad', 'Ciudad', 'required|callback_select_default');
+            $this->form_validation->set_rules('t_domicilio', 'Tipo de Domicilio', 'required|callback_select_default');
+            $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
+            $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'required|trim|xss_clean|max_length[40]');
+            $this->form_validation->set_rules('telefono', 'Telefono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
+            $this->form_validation->set_rules('celular', 'Celular', 'required|trim|xss_clean|min_length[10]|max_length[40]');
+            //Temporalmente el email no sera obligatorio
+            $this->form_validation->set_rules('email', 'Correo Electrónico', 'valid_email|trim|xss_clean|max_length[80]');
+            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
+
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     function insertar() {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
@@ -83,7 +115,7 @@ class Titular extends CI_Controller {
             $apellido1 = ucwords(strtolower($this->input->post('apellido1')));
             $apellido2 = ucwords(strtolower($this->input->post('apellido2')));
             $fecha_nacimiento = $this->input->post('fecha_nacimiento');
-            if($fecha_nacimiento == ""){
+            if ($fecha_nacimiento == "") {
                 $fecha_nacimiento = NULL;
             }
             $genero = $this->input->post('genero');
@@ -97,7 +129,7 @@ class Titular extends CI_Controller {
             $celular = $this->input->post('celular');
             $email = strtolower($this->input->post('email'));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
@@ -112,7 +144,7 @@ class Titular extends CI_Controller {
             $data['url_recrear'] = base_url() . "titular/crear";
             $data['msn_recrear'] = "Crear otro Titular";
             $nombres = $nombre1 . " " . $nombre2;
-            
+
             $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
@@ -251,6 +283,13 @@ class Titular extends CI_Controller {
         $this->load->view("footer");
     }
 
+    function actualizar() {
+
+        //  var_dump($_POST);
+        $this->titularm->actualizarTitular($_POST);
+        redirect(base_url() . "titular/consultar");
+    }
+
     public function excel() {
         header("Content-type: application/vnd.ms-excel; name='excel'");
         header("Content-Disposition: filename=reporte_titulares_" . date("Y-m-d") . ".xls");
@@ -266,7 +305,7 @@ class Titular extends CI_Controller {
                     <th>Nombre</th>
                     <th>Fecha de nacimiento</th>
                     <th>Domicilio</th>
-                    <th><?=  utf8_decode("Teléfonos") ?> </th>
+                    <th><?= utf8_decode("Teléfonos") ?> </th>
                     <th>Email</th>
                     <th>Vigente</th>
                     <th>Observacion</th>

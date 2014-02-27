@@ -33,10 +33,6 @@
 #paginacion li.noActive{
     cursor:pointer;
 }
-#modal-editar-empleado .modal-dialog {
+#modal-editar-empleado .modal-dialog,#modal-editar-titular .modal-dialog{ 
     width:960px;
-}
-.ui-datepicker-year
-{
-  //  display:none;   
 }

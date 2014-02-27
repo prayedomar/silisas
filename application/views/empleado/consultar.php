@@ -151,7 +151,7 @@
                                                                         <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo") { ?>
                                                 <button class="editar btn btn-success btn-xs"
                                                         data-dni="<?= $row->dni ?>"
-                                                        data-id="<?= $row->id ?>"
+                                                        data-id="<?= $row->documento ?>"
                                                         data-nombre1="<?= $row->nombre1 ?>"
                                                         data-nombre2="<?= $row->nombre2 ?>"
                                                         data-apellido1="<?= $row->apellido1 ?>"
