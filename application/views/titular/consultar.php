@@ -71,7 +71,7 @@
                         <div class="col-xs-2"></div>
                         <div class="col-xs-2">
                             <br>
-                             <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
+                            <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
                         </div>
                     </div>
                 </div>
@@ -90,6 +90,7 @@
                                     <th>Email</th>
                                     <th>Vigente</th>
                                     <th>Observacion</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
@@ -104,6 +105,28 @@
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->vigente == "1" ? "Si" : "No" ?></td>
                                         <td><?= $row->observacion ?></td>
+                                        <td class="text-center">
+                                            <button class="editar btn btn-success btn-sm"
+                                                    data-dni="<?= $row->dni ?>"
+                                                    data-id="<?= $row->documento ?>"
+                                                    data-nombre1="<?= $row->nombre1 ?>"
+                                                    data-nombre2="<?= $row->nombre2 ?>"
+                                                    data-apellido1="<?= $row->apellido1 ?>"
+                                                    data-apellido2="<?= $row->apellido2 ?>"
+                                                    data-fecha_nacimiento="<?= $row->fecha_nacimiento ?>"
+                                                    data-genero="<?= $row->genero ?>"
+                                                    data-id_pais="<?= $row->id_pais ?>"
+                                                    data-id_departamento="<?= $row->id_provincia ?>"
+                                                    data-id_ciudad="<?= $row->id_ciudad ?>"
+                                                    data-t_domicilio="<?= $row->t_domicilio ?>"
+                                                    data-direccion="<?= $row->direccion ?>"
+                                                    data-barrio="<?= $row->barrio ?>"
+                                                    data-telefono="<?= $row->telefono ?>"
+                                                    data-celular="<?= $row->celular ?>"
+                                                    data-email="<?= $row->email ?>"
+                                                    data-observacion="<?= $row->observacion ?>"
+                                                    >Editar</button>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -120,7 +143,7 @@
                              data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
                              data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
                              data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
-                               data-fechanacimientohasta="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>"
+                             data-fechanacimientohasta="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>"
                              data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>">
 
 
@@ -139,106 +162,184 @@
         </div>
     </div>
 </div>
-<div class="modal" id="modalDetalles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal" id="modal-editar-titular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content modal-content-minimo">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="modal-title" id="myModalLabel">Detalles</h3>
-            </div>
-            <div id="bodyModalDetalles" class="modal-body">
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Cuenta de nomina:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divCueta"></div></b>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="modal-title" id="myModalLabel">Editar titular</h3>
+            </div> 
+            <form role="form" method="post" action="actualizar" id="formularioEditarTitular">
+                <div id="bodyModalDetalles" class="modal-body">
+                    <div class="row">
 
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Estado:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divEstado"></div></b>
-                        </div>
-                    </div>
-                </div>
+                        <div class="col-xs-6">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
+                                        <select name="dni" id="dni-modal" class="form-control exit_caution" readonly>
+                                            <option value="default">Seleccione T.I.</option>
 
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Departamneto empresarial:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divDepto"></div></b>
-                        </div>
-                    </div>
-                </div>
+                                            <option value="1">Cedula de Ciudadania</option>
 
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Cargo:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divCargo"></div></b>
-                        </div>
-                    </div>
-                </div>
+                                            <option value="2">Cedula de Extranjeria</option>
 
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Salario:</div>   
+                                            <option value="3">Pasaporte</option>
+
+                                        </select>
+                                    </div>   
+                                </div>
+                                <div class="col-xs-6">  
+                                    <div class="form-group">
+                                        <label>Número de Identificación<em class="required_asterisco">*</em></label>
+                                        <input name="id" id="id-modal" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Primer Nombre<em class="required_asterisco">*</em></label>
+                                        <input name="nombre1" id="nombre1-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Nombre" maxlength="30">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Segundo Nombre</label>
+                                        <input name="nombre2" id="nombre2-modal" type="text" class="form-control exit_caution alfabeto_espacios" placeholder="Segundo Nombre" maxlength="30">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Primer Apellido<em class="required_asterisco">*</em></label>
+                                        <input name="apellido1" id="apellido1-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Apellido" maxlength="30">
+                                    </div> 
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Segundo Apellido</label>
+                                        <input name="apellido2" id="apellido2-modal" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Apellido" maxlength="30">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Nacimiento</label>
+                                        <div class="input-group">
+                                            <input name="fecha_nacimiento" id="fecha_nacimiento-modal" type="text" class="soloclick datepicker form-control exit_caution input_fecha hasDatepicker" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Género<em class="required_asterisco">*</em></label>
+                                        <select name="genero" id="genero_titular-modal" class="form-control exit_caution">
+                                            <option value="default">Seleccione Género</option>
+                                            <option value="F">Mujer</option>
+                                            <option value="M">Hombre</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>País de domicilio<em class="required_asterisco">*</em></label>
+                                <select name="pais" id="pais-modal" class="form-control exit_caution">
+                                    <option value="default">Seleccione País</option>
+
+                                    <option value="49">Colombia</option>
+
+                                </select>
+                            </div>                            
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
+                                        <select name="provincia" id="provincia-modal" class="form-control exit_caution" disabled="">
+                                            <option value="default">Seleccione primero País</option>
+                                        </select>                                
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
+                                        <select name="ciudad" id="ciudad-modal" class="form-control exit_caution" disabled="">
+                                            <option value="default">Seleccione primero Depto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Domicilio<em class="required_asterisco">*</em></label>
+                                <select name="t_domicilio" id="t_domicilio-modal" class="form-control exit_caution">
+                                    <option value="default">Seleccione T. de Domicilio</option>
+
+                                    <option value="1">Casa</option>
+
+                                    <option value="2">Unidad Cerrada</option>
+
+                                    <option value="3">Oficina</option>
+
+                                    <option value="4">Empresa</option>
+
+                                </select>
+                            </div>                        
+                            <div id="validacion_alert">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divSalario"></div></b>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Dirección<em class="required_asterisco">*</em></label>
+                                <input name="direccion" id="direccion-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección" maxlength="80">
+                            </div>
+                            <div class="form-group">
+                                <label>Barrio/Sector<em class="required_asterisco">*</em></label>
+                                <input name="barrio" id="barrio-modal" type="text" class="form-control exit_caution letras_numeros" placeholder="Barrio o Sector" maxlength="40">
+                            </div>      
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Telefonos fijos de contacto<em class="required_asterisco">*</em></label>     
+                                        <input name="telefono" id="telefono-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Celular<em class="required_asterisco">*</em></label>
+                                        <input name="celular" id="celular-modal" type="text" class="form-control exit_caution numerico" placeholder="Celular" maxlength="10">
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label>Correo Electrónico</label>
+                                <input name="email" id="email-modal" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
+                            </div>                 
+                            <div class="form-group">
+                                <label>Observación</label>
+                                <textarea name="observacion" id="observacion-modal" class="form-control exit_caution" rows="4" maxlength="255" placeholder="Observación..." style="max-width:100%;"></textarea>
+                            </div>
+
                         </div>
+
+
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Jefe:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divJefe"></div></b>
-                        </div>
+                <div class="modal-footer">
+                    <div class="form-group  pull-right">
+                        <center>
+                            <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
+                            <button id="botonValidarEditarTitular" class="btn btn-success">Editar titular</button> 
+                            <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </center>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Observación:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divObservacion"></div></b>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
-            </div>
+            </form>
         </div>
+
     </div>
 </div>

@@ -54,7 +54,7 @@ class Titularm extends CI_Model {
     }
 
     public function listar_titulares($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT t.*,t.id documento,td.tipo,pa.nombre,pa.nombre pais,pro.nombre provincia,ciu.nombre ciudad,tdom.tipo tipo_domicilio
+        $query = "SELECT t.*,t.id documento,td.tipo,pa.nombre,pa.id id_pais,pa.nombre pais,pro.id id_provincia,pro.nombre provincia,ciu.nombre ciudad,ciu.id id_ciudad,tdom.tipo tipo_domicilio
                   FROM titular t
                   JOIN t_dni td ON td.id=t.dni
                   JOIN pais pa ON t.pais=pa.id
@@ -94,5 +94,9 @@ class Titularm extends CI_Model {
         $query.=(isset($criterios['vigente'])) ? "AND t.vigente = '{$criterios['vigente']}'" : "";
         $query.=" order by t.apellido1,t.apellido2";
         return $this->db->query($query)->result();
+    }
+      public function actualizarTitular($criterios) {
+        $query = "UPDATE titular SET id='{$criterios["id"]}', dni='{$criterios["dni"]}', nombre1='{$criterios["nombre1"]}',nombre2='{$criterios["nombre2"]}',apellido1='{$criterios["apellido1"]}',apellido2='{$criterios["apellido2"]}', fecha_nacimiento='{$criterios["fecha_nacimiento"]}',genero='{$criterios["genero"]}',pais='{$criterios["pais"]}',provincia='{$criterios["provincia"]}',ciudad='{$criterios["ciudad"]}', t_domicilio='{$criterios["t_domicilio"]}', direccion='{$criterios["direccion"]}', barrio='{$criterios["barrio"]}', telefono='{$criterios["telefono"]}', celular='{$criterios["celular"]}', email='{$criterios["email"]}', observacion='{$criterios["observacion"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' ";
+        return $this->db->query($query);
     }
 }
