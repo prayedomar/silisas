@@ -74,6 +74,7 @@ class Titularm extends CI_Model {
         $query.=" order by t.apellido1,t.apellido2 LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }
+
     public function listar_titulares_excel($criterios) {
         $query = "SELECT t.*,t.id documento,td.tipo,pa.nombre,pa.nombre pais,pro.nombre provincia,ciu.nombre ciudad,tdom.tipo tipo_domicilio
                   FROM titular t
@@ -95,8 +96,13 @@ class Titularm extends CI_Model {
         $query.=" order by t.apellido1,t.apellido2";
         return $this->db->query($query)->result();
     }
-      public function actualizarTitular($criterios) {
+
+    public function actualizarTitular($criterios) {
         $query = "UPDATE titular SET id='{$criterios["id"]}', dni='{$criterios["dni"]}', nombre1='{$criterios["nombre1"]}',nombre2='{$criterios["nombre2"]}',apellido1='{$criterios["apellido1"]}',apellido2='{$criterios["apellido2"]}', fecha_nacimiento='{$criterios["fecha_nacimiento"]}',genero='{$criterios["genero"]}',pais='{$criterios["pais"]}',provincia='{$criterios["provincia"]}',ciudad='{$criterios["ciudad"]}', t_domicilio='{$criterios["t_domicilio"]}', direccion='{$criterios["direccion"]}', barrio='{$criterios["barrio"]}', telefono='{$criterios["telefono"]}', celular='{$criterios["celular"]}', email='{$criterios["email"]}', observacion='{$criterios["observacion"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' ";
+        $this->db->query($query);
+
+        $query = "UPDATE usuario SET nombres='" . $criterios["nombre1"] . " " . $criterios["nombre2"] . "',genero='{$criterios["genero"]}', email='{$criterios["email"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' and t_usuario=2 ";
         return $this->db->query($query);
     }
+
 }
