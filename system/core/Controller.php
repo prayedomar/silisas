@@ -77,7 +77,7 @@ class CI_Controller {
                     redirect(base_url() . 'login');
                 break; 
             case "docente":
-                $privilegios = array("cambiar_password", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno");
+                $privilegios = array("cambiar_password",  "crear_alumno", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break; 
@@ -92,7 +92,7 @@ class CI_Controller {
                     redirect(base_url() . 'login');
                 break;   
             case "secretaria":
-                $privilegios = array("cambiar_password", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno");
+                $privilegios = array("cambiar_password", "crear_alumno", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break;   

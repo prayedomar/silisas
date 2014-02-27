@@ -202,7 +202,7 @@
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>titular/crear">Titular</a></li>
                                     <?php } ?>                            
-                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "docente", "secretaria"))) { ?>                                       
                                     <li><a href="<?= base_url() ?>alumno/crear">Alumno</a></li>
                                     <?php } ?>                        
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       

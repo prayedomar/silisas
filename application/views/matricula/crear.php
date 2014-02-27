@@ -40,7 +40,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>Ejecutivo<em class="required_asterisco">*</em></label>
+                                        <label>Ejecutivo que realizó la matrícula<em class="required_asterisco">*</em></label>
                                         <p class="help-block"><B>> </B>Sólo aparecerán los empleados de RRPP activos que pertenecen a su sede ppal.</p>
                                         <select name="ejecutivo" id="ejecutivo" data-placeholder="Seleccione Ejecutivo" class="form-control exit_caution">
                                         </select>

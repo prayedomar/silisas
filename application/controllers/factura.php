@@ -268,28 +268,13 @@ class Factura extends CI_Controller {
                         if ($matriz_matricula[$i][6] == 0) {
                             $num_cuota = $matriz_matricula[$i][1];
                             $t_detalle = $this->select_model->t_detalle($matriz_matricula[$i][2])->tipo;
-                            $pendiente = $matriz_matricula[$i][5];
+                            $valor_pendiente = $matriz_matricula[$i][5];
                             $fecha_esperada = $matriz_matricula[$i][7];
                             $cant_dias_mora = $matriz_matricula[$i][8];
                             $int_mora = $matriz_matricula[$i][9];
 
-                            if (($matriz_matricula[$i][12] == 0) && ($bandera_pendiente == 0)) {
-                                //Enviamos datos por ajax
-                                $response['abonoMinimo'] = $abono_minimo;
-                                $response['abonoMaximo'] = $abono_maximo;
-                                $response['cantMora'] = $cant_dias_mora;
-                                $response['intMora'] = $int_mora;
-                                $escojer = '<input type="radio" class="exit_caution" name="cuota" id="cuota" checked/>';
-                                $cuota_pagada = "";
-                                $saldo_deuda = "";
-                                $bandera_pendiente = 1;
-                            } else {
-                                $escojer = '';
-                                $cuota_pagada = "$" . number_format($matriz_matricula[$i][4], 2, '.', ',');
-                                $saldo_deuda = "$" . number_format($matriz_matricula[$i][9], 2, '.', ',');
-                            }
                             $response['filasTabla'] .= '<tr>
-                            <td class="text-center">' . $escojer . '</td>
+                            <td class="text-center"><input type="checkbox" class="exit_caution" name="cuotas[]" id="cuotas"  value="" data-num_cuota="" data-t_detalle="" data-valor_pendiente="" data-fecha_esperada="" /></td>
                             <td class="text-center">' . $num_cuota . '</td>                                
                             <td class="text-center">$' . number_format($abono_minimo, 2, '.', ',') . '</td>                        
                             <td class="text-center">$' . number_format($abono_maximo, 2, '.', ',') . '</td>                                
