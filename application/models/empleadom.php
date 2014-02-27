@@ -114,6 +114,9 @@ class Empleadom extends CI_Model {
 
     public function actualizarEmpleado($criterios) {
         $query = "UPDATE empleado SET id='{$criterios["id"]}', dni='{$criterios["dni"]}', nombre1='{$criterios["nombre1"]}',nombre2='{$criterios["nombre2"]}',apellido1='{$criterios["apellido1"]}',apellido2='{$criterios["apellido2"]}', fecha_nacimiento='{$criterios["fecha_nacimiento"]}',genero='{$criterios["genero"]}', est_civil='{$criterios["est_civil"]}',pais='{$criterios["pais"]}',provincia='{$criterios["provincia"]}',ciudad='{$criterios["ciudad"]}', t_domicilio='{$criterios["t_domicilio"]}', direccion='{$criterios["direccion"]}', barrio='{$criterios["barrio"]}', telefono='{$criterios["telefono"]}', celular='{$criterios["celular"]}', email='{$criterios["email"]}', cuenta='{$criterios["cuenta"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' ";
+         $this->db->query($query);
+
+        $query = "UPDATE usuario SET nombres='" . $criterios["nombre1"] . " " . $criterios["nombre2"] . "',genero='{$criterios["genero"]}', email='{$criterios["email"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' and t_usuario= 1 ";
         return $this->db->query($query);
     }
 
