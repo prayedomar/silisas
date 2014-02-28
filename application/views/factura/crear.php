@@ -71,7 +71,7 @@
                                     <th class="text-center">Fecha Límite</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbody_cuotas_pdtes">
+                            <tbody id="tbody_cuotas">
                             </tbody>
                         </table>
                     </div>  
@@ -243,21 +243,21 @@
             matricula: matricula
         }, function(data) {
             var obj = JSON.parse(data);
-            if (obj.respuesta == "OK") {
-                $("#tbody_cuotas_pdtes").html(obj.filasTabla);
-                //LLenamos 3 campos ocultos para validar valores por ajax
-                $('#abono_minimo').attr('value', obj.abonoMinimo);
-                $('#abono_maximo').attr('value', obj.abonoMaximo);
-                $('#cant_dias_mora').attr('value', obj.cantMora);
-                //Llenamos los campos subtotal, int. mora y total                 var subtotal = new Number(obj.abonoMinimo);
-                var intMora = new Number(obj.intMora);
-                $('#subtotal').attr('value', subtotal.toFixed(2));
-                $('#int_mora').attr('value', intMora.toFixed(2));
-                $('#total').attr('value', subtotal + intMora);
-                $('#subtotal').change();
-                $('#int_mora').change();
-                $('#total').change();
-                $("#subtotal").removeAttr("readonly");
+            if (obj.respuesta == 'OK') {
+                $("#tbody_cuotas").html(obj.filasTabla);
+//                //LLenamos 3 campos ocultos para validar valores por ajax
+//                $('#abono_minimo').attr('value', obj.abonoMinimo);
+//                $('#abono_maximo').attr('value', obj.abonoMaximo);
+//                $('#cant_dias_mora').attr('value', obj.cantMora);
+//                //Llenamos los campos subtotal, int. mora y total                 var subtotal = new Number(obj.abonoMinimo);
+//                var intMora = new Number(obj.intMora);
+//                $('#subtotal').attr('value', subtotal.toFixed(2));
+//                $('#int_mora').attr('value', intMora.toFixed(2));
+//                $('#total').attr('value', subtotal + intMora);
+//                $('#subtotal').change();
+//                $('#int_mora').change();
+//                $('#total').change();
+//                $("#subtotal").removeAttr("readonly");
             }
         });
     });
