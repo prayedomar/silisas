@@ -20,7 +20,7 @@ class Factura extends CI_Controller {
         $id_responsable = $data['id_responsable'];
         $dni_responsable = $data['dni_responsable'];
         $data['dni'] = $this->select_model->t_dni_titular();
-
+        $data['dni_a_nombre_de'] = $this->select_model->t_dni_todos();
         $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
         $data['action_validar'] = base_url() . "factura/validar";
         $data['action_crear'] = base_url() . "factura/insertar";
@@ -28,20 +28,6 @@ class Factura extends CI_Controller {
 
         $data['action_validar_titular_llena_matriculas'] = base_url() . "factura/validar_titular_llena_matriculas";
         $data['action_llena_cuotas_matricula'] = base_url() . "factura/llena_cuotas_matricula";
-
-
-        $data['action_llena_info_contrato_laboral'] = base_url() . "factura/llena_info_contrato_laboral";
-        $data['action_llena_info_ultimas_facturas'] = base_url() . "factura/llena_info_ultimas_facturas";
-        $data['action_llena_info_adelantos'] = base_url() . "factura/llena_info_adelantos";
-        $data['action_llena_info_prestamos'] = base_url() . "factura/llena_info_prestamos";
-        $data['action_llena_info_ausencias'] = base_url() . "factura/llena_info_ausencias";
-        $data['action_llena_info_seguridad_social'] = base_url() . "factura/llena_info_seguridad_social";
-        $data['action_llena_concepto_pdtes_rrpp'] = base_url() . "factura/llena_concepto_pdtes_rrpp";
-        $data['action_llena_concepto_cotidiano'] = base_url() . "factura/llena_concepto_cotidiano";
-        $data['action_llena_agregar_concepto'] = base_url() . "factura/llena_agregar_concepto";
-        $data['action_llena_info_t_concepto'] = base_url() . "factura/llena_info_t_concepto";
-        $data['action_llena_periodicidad_factura'] = base_url() . "factura/llena_periodicidad_factura";
-        $data['action_validar_fechas_periodicidad'] = base_url() . "factura/validar_fechas_periodicidad";
 
         $data['action_llena_cuenta_responsable'] = base_url() . "factura/llena_cuenta_responsable";
         $data['action_llena_caja_responsable'] = base_url() . "factura/llena_caja_responsable";
@@ -52,55 +38,39 @@ class Factura extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
-            $this->form_validation->set_rules('periodicidad', 'Periodicidad', 'required|callback_select_default');
-            $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'required|xss_clean|callback_fecha_valida');
-            $this->form_validation->set_rules('fecha_fin', 'Fecha Fin', 'required|xss_clean|callback_fecha_valida');
-            $this->form_validation->set_rules('total', 'Total Nómina', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('matricula', 'Matricula a cancelar', 'required');
+            $this->form_validation->set_rules('dni_a_nombre_de', 'Tipo de Identificación', 'required|callback_select_default');
+            $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');            
+            $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
+            $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
-                if (!$this->input->post('valor_retirado')) {
-                    $valor_retirado = 0;
+                if (!$this->input->post('valor_consignado')) {
+                    $valor_consignado = 0;
                 } else {
-                    $valor_retirado = round(str_replace(",", "", $this->input->post('valor_retirado')), 2);
+                    $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
                 }
-                if (!$this->input->post('efectivo_retirado')) {
-                    $efectivo_retirado = 0;
+                if (!$this->input->post('efectivo_ingresado')) {
+                    $efectivo_ingresado = 0;
                 } else {
-                    $efectivo_retirado = round(str_replace(",", "", $this->input->post('efectivo_retirado')), 2);
+                    $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
                 }
-                if (round(($valor_retirado + $efectivo_retirado), 2) != $total) {
-                    $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $total . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
-                }
-            }
-            //Validamos los conceptos de nomina
-            $error_conceptos = "";
-            if (($this->input->post('t_concepto_nomina')) && ($this->input->post('detalle')) && ($this->input->post('cantidad')) && ($this->input->post('valor_unitario'))) {
-                $t_concepto_nomina = $this->input->post('t_concepto_nomina');
-                $detalle = $this->input->post('detalle');
-                $cantidad = $this->input->post('cantidad');
-                $valor_unitario = $this->input->post('valor_unitario');
-                $i = 0;
-                foreach ($t_concepto_nomina as $fila) {
-                    if ($fila == "default") {
-                        $error_conceptos .= "<p>El campo Tipo Concepto, es obligatorio.</p>";
-                    }
-                    if (($cantidad[$i] <= '0') || ($cantidad[$i] == '')) {
-                        $error_conceptos .= "<p>El campo Cantidad, debe ser mayor a cero.</p>";
-                    }
-                    if (($valor_unitario[$i] <= '0') || ($valor_unitario[$i] == '')) {
-                        $error_conceptos .= "<p>El campo Valor Unitario, debe ser mayor a cero.</p>";
-                    }
-                    $i++;
+                if (round(($valor_consignado + $efectivo_ingresado), 2) != $total) {
+                    $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
                 }
             }
 
             if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_conceptos != "")) {
-                echo form_error('empleado') . form_error('periodicidad') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_conceptos . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
+                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -112,25 +82,34 @@ class Factura extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
-            list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
-            $t_periodicidad = $this->input->post('periodicidad');
-            $fecha_inicio = $this->input->post('fecha_inicio');
-            $fecha_fin = $this->input->post('fecha_fin');
+            $dni_titular = $this->input->post('dni');
+            $id_titular = $this->input->post('id');
+            $dni_a_nombre_de = $this->input->post('dni_a_nombre_de');
+            $id_a_nombre_de = $this->input->post('id_a_nombre_de');
+            $a_nombre_de = $this->input->post('a_nombre_de');
+            $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
+            if ($dni_a_nombre_de != "6") {
+                $dni_a_nombre_de = NULL;
+            }            
+            $id_matricula = $this->input->post('matricula');
+            $cuotas_checkbox = $this->input->post('cuotas');
+            $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
+            $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
-            if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
-                $cuenta_origen = $this->input->post('cuenta');
-                $valor_retirado = round(str_replace(",", "", $this->input->post('valor_retirado')), 2);
+            if (($this->input->post('cuenta')) && ($this->input->post('valor_consignado')) && ($this->input->post('valor_consignado') != 0)) {
+                $cuenta_destino = $this->input->post('cuenta');
+                $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
             } else {
-                $cuenta_origen = NULL;
-                $valor_retirado = NULL;
+                $cuenta_destino = NULL;
+                $valor_consignado = NULL;
             }
-            if (($this->input->post('caja')) && ($this->input->post('efectivo_retirado')) && ($this->input->post('efectivo_retirado') != 0)) {
-                list($sede_caja_origen, $t_caja_origen) = explode("-", $this->input->post('caja'));
-                $efectivo_retirado = round(str_replace(",", "", $this->input->post('efectivo_retirado')), 2);
+            if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
+                list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
+                $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
             } else {
-                $sede_caja_origen = NULL;
-                $t_caja_origen = NULL;
-                $efectivo_retirado = NULL;
+                $sede_caja_destino = NULL;
+                $t_caja_destino = NULL;
+                $efectivo_ingresado = NULL;
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
@@ -138,13 +117,13 @@ class Factura extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-            $prefijo_nomina = $this->select_model->sede_id($sede)->prefijo_trans;
-            $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
+            $prefijo_factura = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_factura = ($this->select_model->nextId_factura($prefijo_factura)->id) + 1;
 
-            $data["tab"] = "crear_nomina";
+            $data["tab"] = "crear_factura";
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "nomina/crear";
-            $data['msn_recrear'] = "Crear otra Nómina";
+            $data['url_recrear'] = base_url() . "factura/crear";
+            $data['msn_recrear'] = "Crear otra factura";
 
             $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
 
@@ -273,7 +252,7 @@ class Factura extends CI_Controller {
                             $int_mora = $matriz_matricula[$i][9];
 
                             $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="checkbox" class="exit_caution" name="cuotas[]" id="cuotas"  value="" data-num_cuota="' . $num_cuota . '" data-t_detalle="' . $t_detalle . '" data-valor_pendiente="' . $valor_pendiente . '" data-fecha_esperada="' . $fecha_esperada . '" data-cant_dias_mora="' . $cant_dias_mora . '" data-int_mora="' . $int_mora . '" /></td>
+                            <td class="text-center"><input type="checkbox" class="exit_caution" name="cuotas[]" id="cuotas"  value="' . $num_cuota . "-" . $id_t_detalle . "-" . $t_detalle . "-" . $valor_pendiente . "-" . $fecha_esperada . "-" . $cant_dias_mora . "-" . $int_mora . '" data-num_cuota="' . $num_cuota . '" data-t_detalle="' . $t_detalle . '" data-valor_pendiente="' . $valor_pendiente . '" data-fecha_esperada="' . $fecha_esperada . '" data-cant_dias_mora="' . $cant_dias_mora . '" data-int_mora="' . $int_mora . '" /></td>
                             <td class="text-center">' . $num_cuota . '</td>
                             <td class="text-center">' . $t_detalle . '</td>
                             <td class="text-center">$' . number_format($valor_pendiente, 2, '.', ',') . '</td>                            
@@ -283,8 +262,9 @@ class Factura extends CI_Controller {
                         </tr>';
                         }
                     }
+//                    echo $response['filasTabla'];
                     echo json_encode($response);
-                    return true;
+                    return false;
                 } else {
                     $response = array(
                         'respuesta' => 'error'
@@ -315,8 +295,6 @@ class Factura extends CI_Controller {
         $valor_cuota = $plan->valor_cuota;
         $total_abonos = $this->select_model->total_abonos_matricula($id_matricula)->total;
         $tasa_mora_anual = $this->select_model->interes_mora()->tasa_mora_anual;
-
-        echo "plan" . $plan->nombre . "<br>";
 
         //Llenamos la primer fila
         $matriz_matricula = array();
@@ -400,6 +378,64 @@ class Factura extends CI_Controller {
             }
         }
         return $matriz_matricula;
+    }
+
+    public function llena_cuenta_responsable() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
+                $id_responsable = $this->input->post('idResposable');
+                $dni_responsable = $this->input->post('dniResposable');
+                $cuentas = $this->select_model->cuenta_banco_responsable($id_responsable, $dni_responsable);
+                if (($cuentas == TRUE)) {
+                    foreach ($cuentas as $fila) {
+                        echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="cuenta" id="cuenta" value="' . $fila->id . '"/></td>
+                            <td>' . $fila->id . '</td>
+                            <td class="text-center">' . $fila->t_cuenta . '</td>
+                            <td>' . $fila->banco . '</td>
+                            <td>' . $fila->nombre_cuenta . '</td>    
+                            <td>' . $fila->observacion . '</td>   
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
+                        </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function llena_caja_responsable() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
+                $id_responsable = $this->input->post('idResposable');
+                $dni_responsable = $this->input->post('dniResposable');
+                $cuentas = $this->select_model->caja_responsable($id_responsable, $dni_responsable);
+                if (($cuentas == TRUE)) {
+                    foreach ($cuentas as $fila) {
+                        echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="caja" id="caja" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
+                            <td class="text-center">' . $fila->name_sede . '</td>
+                            <td>' . $fila->name_t_caja . '</td>  
+                            <td>' . $fila->observacion . '</td>   
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
+                        </tr>';
+                    }
+                } else {
+                    echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
     }
 
 }

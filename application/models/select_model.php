@@ -943,6 +943,15 @@ class Select_model extends CI_Model {
         }
     }
 
+    public function nextId_factura($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('factura');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
+    
     public function empleado_sede_ppal($id, $dni) {
         $this->db->where('id', $id);
         $this->db->where('dni', $dni);

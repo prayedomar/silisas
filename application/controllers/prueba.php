@@ -396,8 +396,6 @@ class Prueba extends CI_Controller {
         $total_abonos = $this->select_model->total_abonos_matricula($id_matricula)->total;
         $tasa_mora_anual = $this->select_model->interes_mora()->tasa_mora_anual;
 
-        echo "plan" . $plan->nombre . "<br>";
-
 //Llenamos la primer fila
         $matriz_matricula = array();
         $matriz_matricula[0][1] = 0; //Numero de cuota

@@ -36,164 +36,178 @@
                     </div>
                 </div>
                 <div id="div_matriculas" style="display: none">
-                    <!--<div id="div_matriculas">-->
-                    <div class="row" id="nombre_titular">
-                    </div>                 
-                    <div class="overflow_tabla">
-                        <label>Matrículas vígentes<em class="required_asterisco">*</em></label>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Escojer</th>
-                                    <th class="text-center">Contrato</th>
-                                    <th class="text-center">Plan</th>
-                                    <th class="text-center">Valor Inicial</th>
-                                    <th class="text-center">Saldo</th>
-                                    <th class="text-center">Sede Origen</th>
-                                    <th class="text-center">Fecha inicial</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody_matricula_vigente">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="overflow_tabla">
-                        <label>Cuota a Cancelar<em class="required_asterisco">*</em></label>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Escojer</th>
-                                    <th class="text-center"># Cuota</th>
-                                    <th class="text-center">Detalle</th>
-                                    <th class="text-center">Pago mínimo</th>
-                                    <th class="text-center">Cantidad Mora</th>
-                                    <th class="text-center">Int. Mora</th>
-                                    <th class="text-center">Fecha Límite</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody_cuotas">
-                            </tbody>
-                        </table>
-                    </div>  
+                    <div class="row separar_submit" id="nombre_titular">
+                    </div>       
                     <div class="row">
-                        <div class="col-xs-6 col-xs-offset-3">
+                        <div class="col-xs-6 col-xs-offset-3 separar_div">
+                            <legend>Factura a nombre de:</legend>
+                            <p class="help-block"><B>> </B>Si el beneficiario que aparecerá en la factura es diferente al titular (Por ejemplo: una empresa, un familiar, etc.), modifíquelo a continuacion.</p>
                             <div class="form-group">
-                                <label>Valor del Abono<em class="required_asterisco">*</em></label>   
-                                <p class="help-block"><B>> </B>Con un abono superior al abono mínimo, disminuirán cuotas e intereses al final del préstamo.</p>
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <input type="text" name="subtotal" id="subtotal" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12"  readonly="readonly">
-                                </div>
+                                <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
+                                <select name="dni_a_nombre_de" id="dni_a_nombre_de" class="form-control exit_caution">
+                                    <option value="default">Seleccione T.I.</option>
+                                    {dni_a_nombre_de}
+                                    <option value="{id}">{tipo}</option>
+                                    {/dni_a_nombre_de}
+                                </select>
                             </div>
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Intereses de Mora</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input type="text" name="int_mora" id="int_mora" class="form-control decimal decimal2 miles" value="0.00" maxlength="12"  readonly="readonly">
-                                        </div>
+                                        <label>Número de Identificación<em class="required_asterisco">*</em></label>
+                                        <input name="id_a_nombre_de" id="id_a_nombre_de" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
                                     </div>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-6"  id="div_dv" style="display:none;">
                                     <div class="form-group">
-                                        <label>Total a Pagar</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input type="text" name="total" id="total" class="form-control decimal decimal2 miles" value="0.00" maxlength="12"  readonly="readonly">
-                                        </div>
+                                        <label>Dígito de Verificación</label>
+                                        <input name="d_v_a_nombre_de" id="d_v_a_nombre_de" class="form-control exit_caution soloclick" size="1" maxlength="1" type="text" value="0" readonly="readonly">
                                     </div>    
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="overflow_tabla">
-                        <label>Caja de Efectivo Destino (Punto de Venta)</label>
-                        <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>                                    
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Escojer</th>  
-                                    <th class="text-center">Sede</th>                                            
-                                    <th class="text-center">Tipo de Caja</th>
-                                    <th class="text-center">Observación</th>
-                                    <th class="text-center">Fecha de Creación</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody_caja_efectivo">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6 col-xs-offset-3 ">
                             <div class="form-group">
-                                <label>Valor Ingresado a la Caja de Efectivo</label>                            
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <input type="text" name="efectivo_ingresado" id="efectivo_ingresado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
-                                </div>
-                            </div>
-                        </div>
-                    </div>                         
-                    <hr>                            
-                    <div class="overflow_tabla">
-                        <label>Cuenta Bancaria Destino</label>
-                        <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla consignado dinero en ella con el dinero recibido (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Escojer</th>                                            
-                                    <th class="text-center"># Cuenta</th>
-                                    <th class="text-center">Tipo Cuenta</th>
-                                    <th class="text-center">Banco</th>
-                                    <th class="text-center">Nombre</th>
-                                    <th class="text-center">Observación</th>
-                                    <th class="text-center">Fecha Creación</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody_cuenta_bancaria">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6 col-xs-offset-3 ">
-                            <div class="form-group">
-                                <label>Valor Consignado a la Cuenta Bancaria</label>                            
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <input type="text" name="valor_consignado" id="valor_consignado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
-                                </div>
+                                <label>Nombre completo / Razón Social<em class="required_asterisco">*</em></label>
+                                <input name="a_nombre_de" id="a_nombre_de" type="text" class="form-control exit_caution letras_numeros" placeholder="Razón Social" maxlength="100">
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="form-group">
-                        <label>Observación</label>
-                        <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
-                    </div>
+                    <div class="row">
+                        <legend>Información de matrícula y cuotas</legend>
+                        <div class="overflow_tabla">
+                            <label>Matrícula a cancelar<em class="required_asterisco">*</em></label>
+                            <table class="table table-hover tabla-matriculas">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Escojer</th>
+                                        <th class="text-center">Contrato</th>
+                                        <th class="text-center">Plan</th>
+                                        <th class="text-center">Valor Inicial</th>
+                                        <th class="text-center">Saldo</th>
+                                        <th class="text-center">Sede Origen</th>
+                                        <th class="text-center">Fecha inicial</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_matricula_vigente">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="overflow_tabla">
+                            <label>Cuotas a cancelar<em class="required_asterisco">*</em></label>
+                            <table class="table table-hover tabla-cuotas">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Escojer</th>
+                                        <th class="text-center"># Cuota</th>
+                                        <th class="text-center">Detalle</th>
+                                        <th class="text-center">Abono pendiente</th>
+                                        <th class="text-center">Fecha esperada</th>
+                                        <th class="text-center">Cantidad Mora</th>
+                                        <th class="text-center">Int. Mora</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_cuotas">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-xs-offset-4">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <p><h4>Total abonos</h4></p>
+                                        <p><h4>Total intereses</h4></p>
+                                        <p><h3>Pago total</h3></p>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div id="div_subtotal"><h4>$ 0.00</h4></div>
+                                        <div id="div_intereses"><h4>$ 0.00</h4></div>
+                                        <div id="div_total"><h3>$ 0.00</h3></div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="overflow_tabla">
+                            <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                            <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>                                    
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Escojer</th>  
+                                        <th class="text-center">Sede</th>                                            
+                                        <th class="text-center">Tipo de Caja</th>
+                                        <th class="text-center">Observación</th>
+                                        <th class="text-center">Fecha de Creación</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_caja_efectivo">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-xs-offset-3 ">
+                                <div class="form-group">
+                                    <label>Valor Ingresado a la Caja de Efectivo</label>                            
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="text" name="efectivo_ingresado" id="efectivo_ingresado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                         
+                        <hr>                            
+                        <div class="overflow_tabla">
+                            <label>Cuenta Bancaria Destino</label>
+                            <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla consignado dinero en ella con el dinero recibido (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Escojer</th>                                            
+                                        <th class="text-center"># Cuenta</th>
+                                        <th class="text-center">Tipo Cuenta</th>
+                                        <th class="text-center">Banco</th>
+                                        <th class="text-center">Nombre</th>
+                                        <th class="text-center">Observación</th>
+                                        <th class="text-center">Fecha Creación</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_cuenta_bancaria">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-xs-offset-3 ">
+                                <div class="form-group">
+                                    <label>Valor Consignado a la Cuenta Bancaria</label>                            
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="text" name="valor_consignado" id="valor_consignado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label>Observación</label>
+                            <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                        </div>
 
-                    <div class="form-group separar_submit">
-                        <input type="hidden" id="action_validar" value={action_validar} />
-                        <input type="hidden" name="id_responsable" value={id_responsable} />
-                        <input type="hidden" name="dni_responsable" value={dni_responsable} />
-                        <!--calculamos la cantidad de dias de la nomina y la cantidad de dias laborados (dias_nomina - ausencias)-->
-                        <input type="hidden" name="dias_nomina" id="dias_nomina"/>
-                        <input type="hidden" name="dias_remunerados" id="dias_remunerados"/>
-                        <!--Aqui almacenamos el total devengado de la nomina-->
-                        <input type="hidden" name="total_devengado" class="miles decimal2" id="total_devengado"/>
-                        <input type="hidden" name="total_deducido" class="miles decimal2" id="total_deducido"/>
-                        <input type="hidden" name="total_nomina" class="miles decimal2" id="total_nomina"/>
-                        <!--para controlar el id de los nuevos conceptos agregados-->
-                        <input type="hidden" name="contador_new_concepto" class="miles decimal2" id="contador_new_concepto"/>
-                        <center>
-                            <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                            <button id="btn_validar" class="btn btn-success">Crear Nómina</button>  
-                            <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
-                            <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
-                        </center>
-                    </div>   
-                    <div id="validacion_alert">
+                        <div class="form-group separar_submit">
+                            <input type="hidden" id="action_validar" value={action_validar} />
+                            <input type="hidden" name="id_responsable" value={id_responsable} />
+                            <input type="hidden" name="dni_responsable" value={dni_responsable} />
+                            <!--Datos adicionales para ocultar del formulario-->
+                            <input type="hidden" name="subtotal" id="subtotal" class="decimal decimal2 miles">
+                            <input type="hidden" name="int_mora" id="int_mora" class="decimal decimal2 miles">
+                            <input type="hidden" name="total" id="total" class="decimal decimal2 miles">
+                            <center>
+                                <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
+                                <button id="btn_validar" class="btn btn-success">Crear Nómina</button>  
+                                <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
+                                <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
+                            </center>
+                        </div>   
+                        <div id="validacion_alert">
+                        </div>
                     </div>
                 </div>
             </form>
@@ -201,43 +215,90 @@
     </div>
 </div>
 <script type="text/javascript">
-    //Colocamos el contador de nuevos conceptos en 1
-    $('#contador_new_concepto').attr('value', '1');
+
+    $(".form-group").delegate("#id_a_nombre_de", "blur", function() {
+        var vpri, x, y, z, i, nit1, dv1;
+        nit1 = $(this).val();
+        if (isNaN(nit1))
+        {
+            $("#d_v_a_nombre_de").attr('value', 'Error de Nit');
+        } else {
+            vpri = new Array(16);
+            x = 0;
+            y = 0;
+            z = nit1.length;
+            vpri[1] = 3;
+            vpri[2] = 7;
+            vpri[3] = 13;
+            vpri[4] = 17;
+            vpri[5] = 19;
+            vpri[6] = 23;
+            vpri[7] = 29;
+            vpri[8] = 37;
+            vpri[9] = 41;
+            vpri[10] = 43;
+            vpri[11] = 47;
+            vpri[12] = 53;
+            vpri[13] = 59;
+            vpri[14] = 67;
+            vpri[15] = 71;
+            for (i = 0; i < z; i++)
+            {
+                y = (nit1.substr(i, 1));
+                //document.write(y+"x"+ vpri[z-i] +":");
+                x += (y * vpri[z - i]);
+                //document.write(x+"<br>");		
+            }
+            y = x % 11
+            //document.write(y+"<br>");
+            if (y > 1)
+            {
+                dv1 = 11 - y;
+            } else {
+                dv1 = y;
+            }
+            $("#d_v_a_nombre_de").attr('value', dv1);
+        }
+    });
+
+    //Cargar div de d.v segun t_dni
+    $(".form-group").delegate("#dni_a_nombre_de", "change", function() {
+        dni = $(this).val();
+        if (dni == '6') {
+            $("#div_dv").css("display", "block");
+        } else {
+            $("#div_dv").css("display", "none");
+        }
+    });
 
     //Calculamos total devengado, deducido y total nomina
     function calcular_total() {
-        var total_devengado = 0;
-        var total_deducido = 0;
-        var cantidad = 0;
-        var valor_unitario = 0;
-        $(".renglon_concepto").each(function() {
-            cantidad = new Number($(this).find("#cantidad").val());
-            valor_unitario = new Number($(this).find("#valor_unitario").val().split(",").join(""));
-            debito_credito = new Number($(this).find("#debito_credito").val());
-            if (debito_credito == 1) {
-                total_devengado = total_devengado + (cantidad * valor_unitario);
-                $(this).find("#total_concepto").attr('value', (cantidad * valor_unitario).toFixed(2));
-                $(this).find("#total_concepto").change();
-            } else {
-                total_deducido = total_deducido + (cantidad * valor_unitario);
-                $(this).find("#total_concepto").attr('value', (cantidad * valor_unitario).toFixed(2));
-                $(this).find("#total_concepto").change();
-            }
-
+        var valor_pendiente = 0;
+        var int_mora = 0;
+        var total_valor_pendiente = 0;
+        var total_int_mora = 0;
+        var total = 0;
+        $("input:checkbox:checked").each(function() {
+            valor_pendiente = new Number($(this).data('valor_pendiente'));
+            int_mora = new Number($(this).data('int_mora'));
+            total_valor_pendiente = total_valor_pendiente + valor_pendiente;
+            total_int_mora = total_int_mora + int_mora;
+            total = total_valor_pendiente + total_int_mora;
+//            alert($(this).data('valor_pendiente') + " - " + $(this).data('int_mora'));
         });
-        $('#total_devengado').attr('value', ((total_devengado).toFixed(2)));
-        $('#total_devengado').change();
-        $("#div_total_devengado").html("<h4>$ " + $('#total_devengado').val() + "</h4>");
-        $('#total_deducido').attr('value', ((total_deducido).toFixed(2)));
-        $('#total_deducido').change();
-        $("#div_total_deducido").html("<h4>$ " + $('#total_deducido').val() + "</h4>");
-        $('#total_nomina').attr('value', ((total_devengado - total_deducido).toFixed(2)));
-        $('#total_nomina').change();
-        $("#div_total_nomina").html("<h3>$ " + $('#total_nomina').val() + "</h3>");
+        $('#subtotal').attr('value', ((total_valor_pendiente).toFixed(2)));
+        $('#subtotal').change();
+        $('#int_mora').attr('value', ((total_int_mora).toFixed(2)));
+        $('#int_mora').change();
+        $('#total').attr('value', ((total).toFixed(2)));
+        $('#total').change();//        //        
+        $("#div_subtotal").html("<h4>$ " + $('#subtotal').val() + "</h4>");
+        $("#div_intereses").html("<h4>$ " + $('#int_mora').val() + "</h4>");
+        $("#div_total").html("<h3>$ " + $('#total').val() + "</h3>");
     }
 
     //Cargar div de valor abono y cuotas  de matricula escogida     
-    $("table").delegate("#matricula", "change", function() {
+    $(".tabla-matriculas").delegate("#matricula", "click", function() {
         matricula = $("input[name='matricula']:checked").val();
         $.post('{action_llena_cuotas_matricula}', {
             matricula: matricula
@@ -245,21 +306,15 @@
             var obj = JSON.parse(data);
             if (obj.respuesta == 'OK') {
                 $("#tbody_cuotas").html(obj.filasTabla);
-//                //LLenamos 3 campos ocultos para validar valores por ajax
-//                $('#abono_minimo').attr('value', obj.abonoMinimo);
-//                $('#abono_maximo').attr('value', obj.abonoMaximo);
-//                $('#cant_dias_mora').attr('value', obj.cantMora);
-//                //Llenamos los campos subtotal, int. mora y total                 var subtotal = new Number(obj.abonoMinimo);
-//                var intMora = new Number(obj.intMora);
-//                $('#subtotal').attr('value', subtotal.toFixed(2));
-//                $('#int_mora').attr('value', intMora.toFixed(2));
-//                $('#total').attr('value', subtotal + intMora);
-//                $('#subtotal').change();
-//                $('#int_mora').change();
-//                $('#total').change();
-//                $("#subtotal").removeAttr("readonly");
+                calcular_total();
             }
         });
+    });
+
+
+    //Cargar div de valor abono y cuotas  de matricula escogida     
+    $(".tabla-cuotas").delegate("#cuotas", "click", function() {
+        calcular_total();
     });
 
     //Llenamos la informacion de las matriculas y los pagos.
@@ -280,6 +335,10 @@
                     $('#dni').attr('disabled', 'disabled');
                     $('#id').attr('readonly', 'readonly');
                     $('#consultar_titular').attr('disabled', 'disabled');
+                    //Actualizamo la informacion del titular en a nombre de 
+                    $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
+                    $("#id_a_nombre_de").attr("value", $('#id').val());
+                    $("#a_nombre_de").attr("value", obj.nombreTitular);
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);
@@ -293,29 +352,7 @@
         }
     });
 
-    //Cargamos la info de las cuentas para el pago
-    $.post('{action_llena_cuenta_responsable}', {
-        idResposable: '{id_responsable}',
-        dniResposable: '{dni_responsable}'
-    }, function(data) {
-        $("#tbody_cuenta_bancaria").html(data);
-    });
-
-    //Habilita las cajas y las cuentas
-    $("table").delegate("#cuenta", "change", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-        $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
-        $('#valor_retirado').change();
-        $("#valor_retirado").removeAttr("readonly");
-    });
-
-    $(".form-group").delegate("#valor_retirado", "blur", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-        $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
-        $('#efectivo_retirado').change();
-    });
+    //Llenamos la cajas del responsable
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',
         dniResposable: '{dni_responsable}'
@@ -323,27 +360,66 @@
         $("#tbody_caja_efectivo").html(data);
     });
 
-    //Cargar div de valor retirado cuenta bancaria
-    $("table").delegate("#caja", "change", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-        $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
-        $('#efectivo_retirado').change();
-        $("#efectivo_retirado").removeAttr("readonly");
+    //Llenamos las cajas del responsable
+    $.post('{action_llena_cuenta_responsable}', {
+        idResposable: '{id_responsable}',
+        dniResposable: '{dni_responsable}'
+    }, function(data) {
+        $("#tbody_cuenta_bancaria").html(data);
     });
 
-    $(".form-group").delegate("#efectivo_retirado", "blur", function() {
-        var total = new Number($('#total_nomina').val().split(",").join(""));
-        var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-        $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
-        $('#valor_retirado').change();
-    }
-    );
+    //Habilitamos input de efectivo retirado de las cajas
+    $("table").delegate("#caja", "change", function() {
+        var total = new Number($('#total').val().split(",").join(""));
+        if ($('#valor_consignado').is('[readonly]')) {
+            $('#efectivo_ingresado').attr('value', ((total).toFixed(2)));
+        } else {
+            var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
+            $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
+        }
+        $('#efectivo_ingresado').change();
+        $("#efectivo_ingresado").removeAttr("readonly");
+    });
+
+    //Habilitamos inputde valor retirado de las cuentas
+    $("table").delegate("#cuenta", "change", function() {
+        var total = new Number($('#total').val().split(",").join(""));
+        if ($('#efectivo_ingresado').is('[readonly]')) {
+            $('#valor_consignado').attr('value', ((total).toFixed(2)));
+        } else {
+            var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
+            $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
+        }
+        $('#valor_consignado').change();
+        $("#valor_consignado").removeAttr("readonly");
+    });
+
+    //Calcula el valor contrario al modificar el valor retirado.
+    $(".form-group").delegate("#valor_consignado", "blur", function() {
+        //Preguntamos si el valor retirado es readonly
+        if (!($('#efectivo_ingresado').is('[readonly]'))) {
+            var total = new Number($('#total').val().split(",").join(""));
+            var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
+            $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
+        }
+        $('#efectivo_ingresado').change();
+    });
+
+    //Calcula el valor contrario al modificar el efectivo retirado.
+    $(".form-group").delegate("#efectivo_ingresado", "blur", function() {
+        if (!($('#valor_consignado').is('[readonly]'))) {
+            var total = new Number($('#total').val().split(",").join(""));
+            var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
+            $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
+        }
+        $('#valor_consignado').change();
+    });
 
 
     //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
+        $('#dni').removeAttr("disabled");
         $.ajax({
             type: "POST",
             url: $("#action_validar").attr("value"),
@@ -352,6 +428,7 @@
             success: function(data)
             {
                 if (data != "OK") {
+                    $('#dni').attr('disabled', 'disabled');
                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                     $("#div_alert").html(data);
                     $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
@@ -361,6 +438,7 @@
                 }
             },
             error: function(data) {
+                $('#dni').attr('disabled', 'disabled');
                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                 $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');

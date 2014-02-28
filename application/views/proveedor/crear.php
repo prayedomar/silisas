@@ -150,7 +150,7 @@
         }
     });
 
-    //Cargar div de d.v segun t_sancion
+    //Cargar div de d.v segun t_dni
     $(".form-group").delegate("#dni", "change", function() {
         dni = $('#dni').val();
         if (dni == '6') {
