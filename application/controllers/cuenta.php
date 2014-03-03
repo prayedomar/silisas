@@ -78,7 +78,7 @@ class Cuenta extends CI_Controller {
             
             $error = $this->insert_model->cuenta($cuenta, $t_cuenta, $banco, $nombre_cuenta, 1, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Cuando cree una cuenta, automaticamente se la debe asignar al sistema, para que tenga acceso a todo.

@@ -518,7 +518,7 @@
         $("#tbody_cuenta_bancaria").html(data);
     });
     //Habilitamos input de efectivo retirado de las cajas
-    $("table").delegate("#caja", "change", function() {
+    $("table").delegate("#caja", "click", function() {
         var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
         if ($('#valor_retirado').is('[readonly]')) {
             $('#efectivo_retirado').attr('value', ((total_nomina).toFixed(2)));
@@ -530,7 +530,7 @@
         $("#efectivo_retirado").removeAttr("readonly");
     });
     //Habilitamos inputde valor retirado de las cuentas
-    $("table").delegate("#cuenta", "change", function() {
+    $("table").delegate("#cuenta", "click", function() {
         var total_nomina = new Number($('#total_nomina').val().split(",").join(""));
         if ($('#efectivo_retirado').is('[readonly]')) {
             $('#valor_retirado').attr('value', ((total_nomina).toFixed(2)));

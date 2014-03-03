@@ -114,13 +114,13 @@ class Traslado_contrato_matricula extends CI_Controller {
             for ($i = $contrato_inicial; $i <= $contrato_final; $i++) {
                 $error = $this->update_model->contrato_matricula_sede_actual($i, $sede_destino);
                 if (isset($error)) {
-                    $data['trans_error'] = $error;
+                    $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                     return;
                 } else {
                     $error1 = $this->insert_model->traslado_contrato($i, $sede_actual, $sede_destino, 2, $id_responsable, $dni_responsable);
                     if (isset($error1)) {
-                        $data['trans_error'] = $error1;
+                        $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
                         return;
                     }

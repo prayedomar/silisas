@@ -179,12 +179,12 @@ class Ingreso extends CI_Controller {
 
             $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_ingreso, $id_ingreso, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $error1 = $this->insert_model->ingreso($prefijo_ingreso, $id_ingreso, $t_ingreso, $t_depositante, $id_depositante, $dni_depositante, $d_v, $nombre_depositante, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $descripcion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
-                    $data['trans_error'] = $error1;
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     $this->parser->parse('trans_success', $data);

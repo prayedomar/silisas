@@ -112,13 +112,13 @@ class Cliente extends CI_Controller {
             $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
-                $data['trans_error'] = $error1;
+                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $error2 = $this->insert_model->cliente($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $sede_ppal, $observacion, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
-                    $data['trans_error'] = $error2;
+                    $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     $this->parser->parse('trans_success', $data);

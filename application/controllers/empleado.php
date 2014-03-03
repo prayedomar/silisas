@@ -187,19 +187,19 @@ class Empleado extends CI_Controller {
             $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
-                $data['trans_error'] = $error1;
+                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $error2 = $this->insert_model->new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $depto, $cargo, $salario, $id_jefe, $dni_jefe, 1, $observacion, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
-                    $data['trans_error'] = $error2;
+                    $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //Creamos el contrato laboral
                     $error3 = $this->insert_model->contrato_laboral($id, $dni, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, 1, $observacion, $id_responsable, $dni_responsable);
                     if (isset($error3)) {
-                        $data['trans_error'] = $error3;
+                        $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
                     } else {
 //                        //Enviamos el correo al usuario con 

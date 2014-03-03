@@ -143,12 +143,12 @@ class Nomina extends CI_Controller {
 
             $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nomina, $id_nomina, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $error1 = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
-                    $data['trans_error'] = $error1;
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //traemos los campos de los conceptos
@@ -166,7 +166,7 @@ class Nomina extends CI_Controller {
                                 //ACtualizamos los conceptos de rrpp a 1: OK y actualizamos el prefid de la nomina
                                 $error2 = $this->update_model->concepto_nomina_rrpp_ok($id_concepto[$i], $prefijo_nomina, $id_nomina);
                                 if (isset($error2)) {
-                                    $data['trans_error'] = $error2;
+                                    $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                                     $this->parser->parse('trans_error', $data);
                                     return;
                                 }
@@ -178,7 +178,7 @@ class Nomina extends CI_Controller {
                                 $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
                                 $error3 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $id_responsable, $dni_responsable);
                                 if (isset($error3)) {
-                                    $data['trans_error'] = $error3;
+                                    $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                                     $this->parser->parse('trans_error', $data);
                                     return;
                                 }

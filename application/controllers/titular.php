@@ -148,13 +148,13 @@ class Titular extends CI_Controller {
             $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
-                $data['trans_error'] = $error1;
+                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $error2 = $this->insert_model->titular($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $vigente, $observacion, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
-                    $data['trans_error'] = $error2;
+                    $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
 //                    //Enviamos Correo de Bienvenida

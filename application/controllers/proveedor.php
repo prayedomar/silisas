@@ -101,7 +101,7 @@ class Proveedor extends CI_Controller {
             
             $error = $this->insert_model->new_proveedor($id, $dni, $d_v, $razon_social, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $telefono, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $this->parser->parse('trans_success', $data);

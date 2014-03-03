@@ -65,7 +65,7 @@ class Salario extends CI_Controller {
             
             $error1 = $this->insert_model->new_salario($id_salario, $nombre, $t_salario, 1, $observacion, $id_responsable, $dni_responsable);
             if (isset($error1)) {
-                $data['trans_error'] = $error1;
+                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 //los siguientes son arrays de los inputs dinamicos
@@ -76,7 +76,7 @@ class Salario extends CI_Controller {
                     foreach ($conceptos as $fila) {
                         $error2 = $this->insert_model->new_concepto_base($id_salario, $values_conceptos[$i], round(str_replace(",", "", $fila), 2));
                         if (isset($error2)) {
-                            $data['trans_error'] = $error2;
+                            $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                             $this->parser->parse('trans_error', $data);
                             $this->parser->parse('welcome', $data);
                             $this->load->view('footer');

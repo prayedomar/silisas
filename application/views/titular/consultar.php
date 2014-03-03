@@ -89,7 +89,6 @@
                                     <th>Teléfonos</th>
                                     <th>Email</th>
                                     <th>Vigente</th>
-                                    <th>Observacion</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -104,7 +103,6 @@
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->vigente == "1" ? "Si" : "No" ?></td>
-                                        <td><?= $row->observacion ?></td>
                                         <td class="text-center">
                                             <button class="editar btn btn-success btn-sm"
                                                     data-dni="<?= $row->dni ?>"

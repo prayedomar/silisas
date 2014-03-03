@@ -104,12 +104,12 @@ class Adelanto extends CI_Controller {
             
             $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_adelanto, $id_adelanto, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);            
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $error1 = $this->insert_model->adelanto($prefijo_adelanto, $id_adelanto, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
-                    $data['trans_error'] = $error1;
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     $this->parser->parse('trans_success', $data);

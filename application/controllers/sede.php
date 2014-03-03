@@ -114,7 +114,7 @@ class Sede extends CI_Controller {
 
             $error = $this->insert_model->new_sede($id_sede, $nombre, $pais, $provincia, $ciudad, $direccion, $tel1, $tel2, $prefijo_trans, $estado, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Hay que autorizar las sedes que se creen al sistema para que las pueda autorizar

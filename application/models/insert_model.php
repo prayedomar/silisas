@@ -45,7 +45,7 @@ class Insert_model extends CI_Model {
             'dni_responsable' => $dni_responsable
         );
         $this->db->set($data);
-        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
         $this->db->insert('salon');
         if ($error = $this->db->_error_message()) {
             return $error;
@@ -86,7 +86,7 @@ class Insert_model extends CI_Model {
             'dni_responsable' => $dni_responsable
         );
         $this->db->set($data);
-        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
         $this->db->insert('empleado');
         if ($error = $this->db->_error_message()) {
             return $error;
@@ -119,7 +119,7 @@ class Insert_model extends CI_Model {
             'dni_responsable' => $dni_responsable
         );
         $this->db->set($data);
-        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
         $this->db->insert('cliente');
         if ($error = $this->db->_error_message()) {
             return $error;
@@ -159,7 +159,7 @@ class Insert_model extends CI_Model {
             'dni_responsable' => $dni_responsable
         );
         $this->db->set($data);
-        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);        
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
         $this->db->insert('alumno');
         if ($error = $this->db->_error_message()) {
             return $error;
@@ -659,6 +659,8 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
+            't_trans' => '1',
+            'credito_debito' => '0',
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             'total' => $total,
@@ -685,6 +687,8 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
+            't_trans' => '2',
+            'credito_debito' => '0',
             't_beneficiario' => $t_beneficiario,
             'id_beneficiario' => $id_beneficiario,
             'dni_beneficiario' => $dni_beneficiario,
@@ -716,6 +720,8 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
+            't_trans' => '3',
+            'credito_debito' => '1',
             'prefijo_adelanto' => $prefijo_adelanto,
             'id_adelanto' => $id_adelanto,
             'total' => $total,
@@ -742,6 +748,8 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
+            't_trans' => '4',
+            'credito_debito' => '1',
             'prefijo_prestamo' => $prefijo_prestamo,
             'id_prestamo' => $id_prestamo,
             'subtotal' => $subtotal,
@@ -770,6 +778,8 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
+            't_trans' => '6',
+            'credito_debito' => '0',
             't_egreso' => $t_egreso,
             't_beneficiario' => $t_beneficiario,
             'id_beneficiario' => $id_beneficiario,
@@ -800,6 +810,8 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
+            't_trans' => '5',
+            'credito_debito' => '1',
             't_ingreso' => $t_ingreso,
             't_depositante' => $t_depositante,
             'id_depositante' => $id_depositante,
@@ -919,6 +931,8 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
+            't_trans' => '9',
+            'credito_debito' => '0',
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             't_periodicidad' => $t_periodicidad,
@@ -943,23 +957,25 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
-    public function factura($prefijo, $id, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
-        //Terminar de crear
+
+    public function factura($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
-            'id_empleado' => $id_empleado,
-            'dni_empleado' => $dni_empleado,
-            't_periodicidad' => $t_periodicidad,
-            'fecha_inicio' => $fecha_inicio,
-            'fecha_fin' => $fecha_fin,
-            'total' => $total,
-            'cuenta_origen' => $cuenta_origen,
-            'valor_retirado' => $valor_retirado,
-            'sede_caja_origen' => $sede_caja_origen,
-            't_caja_origen' => $t_caja_origen,
-            'efectivo_retirado' => $efectivo_retirado,
+            't_trans' => '7',
+            'credito_debito' => '1',
+            'matricula' => $matricula,
+            'id_a_nombre_de' => $id_a_nombre_de,
+            'dni_a_nombre_de' => $dni_a_nombre_de,
+            'd_v_a_nombre_de' => $d_v_a_nombre_de,
+            'a_nombre_de' => $a_nombre_de,
+            'subtotal' => $subtotal,
+            'int_mora' => $int_mora,
+            'sede_caja_destino' => $sede_caja_destino,
+            't_caja_destino' => $t_caja_destino,
+            'efectivo_ingresado' => $efectivo_ingresado,
+            'cuenta_destino' => $cuenta_destino,
+            'valor_consignado' => $valor_consignado,
             'sede' => $sede,
             'vigente' => $vigente,
             'observacion' => $observacion,
@@ -968,11 +984,28 @@ class Insert_model extends CI_Model {
         );
         $this->db->set($data);
         $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
-        $this->db->insert('nomina');
+        $this->db->insert('factura');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
+
+    public function detalle_factura($prefijo_factura, $id_factura, $matricula, $t_detalle, $num_cuota, $subtotal, $cant_dias_mora, $int_mora) {
+        $data = array(
+            'prefijo_factura' => $prefijo_factura,
+            'id_factura' => $id_factura,
+            'matricula' => $matricula,
+            't_detalle' => $t_detalle,
+            'num_cuota' => $num_cuota,
+            'subtotal' => $subtotal,
+            'cant_dias_mora' => $cant_dias_mora,
+            'int_mora' => $int_mora
+        );
+        $this->db->insert('detalle_factura', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
 
     public function cambio_ejecutivo_matricula($matricula, $id_ejecutivo_old, $dni_ejecutivo_old, $id_ejecutivo_new, $dni_ejecutivo_new, $id_responsable, $dni_responsable) {
         $data = array(

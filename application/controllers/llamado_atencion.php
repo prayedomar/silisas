@@ -80,7 +80,7 @@ class Llamado_atencion extends CI_Controller {
             
             $error1 = $this->insert_model->llamado_atencion($id_llamado_atencion, $id_empleado, $dni_empleado, $t_falta_laboral, $t_sancion, 1, $descripcion, $id_responsable, $dni_responsable);
             if (isset($error1)) {
-                $data['trans_error'] = $error1;
+                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Si se va a realizar una suspension laboral.
@@ -90,7 +90,7 @@ class Llamado_atencion extends CI_Controller {
                     $t_ausencia = 11; //Suspension laboral (No remunerada)
                     $error2 = $this->insert_model->ausencia_laboral($id_empleado, $dni_empleado, $fecha_inicio, $fecha_fin, $t_ausencia, 1, $descripcion, $id_responsable, $dni_responsable);
                     if (isset($error2)) {
-                        $data['trans_error'] = $error2;
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
                         return;
                     } else {
@@ -135,7 +135,7 @@ class Llamado_atencion extends CI_Controller {
                     if ($t_sancion == '3') {
                         $error3 = $this->update_model->contrato_laboral_estado($id_empleado, $dni_empleado, 2);
                         if (isset($error3)) {
-                            $data['trans_error'] = $error3;
+                            $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                             $this->parser->parse('trans_error', $data);
                             return;
                         } else {

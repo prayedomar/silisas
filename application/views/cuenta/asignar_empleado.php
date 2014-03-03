@@ -143,7 +143,7 @@
             });
 
     //Cargar Empleados autorizados de una cuenta
-    $("table").delegate("#cuenta", "change", function() {
+    $("table").delegate("#cuenta", "click", function() {
         cuenta = $("input[name='cuenta']:checked").val();
         $.post('{action_llena_empleados_cuenta}', {
             cuenta: cuenta

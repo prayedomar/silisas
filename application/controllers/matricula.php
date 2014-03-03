@@ -114,7 +114,7 @@ class MAtricula extends CI_Controller {
             if (isset($error)) {
                 $data["tab"] = "crear_matricula";
                 $this->load->view("header", $data);
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $data['url_recrear'] = base_url() . "matricula/crear";
                 $data['msn_recrear'] = "Crear otra Matrícula";
                 $this->parser->parse('trans_error', $data);
@@ -125,7 +125,7 @@ class MAtricula extends CI_Controller {
                 if (isset($error1)) {
                     $data["tab"] = "crear_matricula";
                     $this->load->view("header", $data);
-                    $data['trans_error'] = $error1;
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $data['url_recrear'] = base_url() . "matricula/crear";
                     $data['msn_recrear'] = "Crear otra Matrícula";
                     $this->parser->parse('trans_error', $data);
@@ -136,7 +136,7 @@ class MAtricula extends CI_Controller {
                 //Temporalemnte mejor mostraremos el ok y listo. Boorar todo el parrafo siguiente y listo
                 $data["tab"] = "crear_matricula";
                 $this->load->view("header", $data);
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $data['url_recrear'] = base_url() . "matricula/crear";
                 $data['msn_recrear'] = "Crear otra Matrícula";
                 $this->parser->parse('trans_success', $data);

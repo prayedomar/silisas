@@ -91,7 +91,7 @@ class Contrato_matricula extends CI_Controller {
             for ($i = $contrato_inicial; $i <= $contrato_final; $i++) {
                 $error = $this->insert_model->contrato_matricula($i, $sede_actual, $estado, $id_responsable, $dni_responsable);
                 if (isset($error)) {
-                    $data['trans_error'] = $error;
+                    $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                     $this->parser->parse('welcome', $data);
                     $this->load->view('footer');

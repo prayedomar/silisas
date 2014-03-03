@@ -61,7 +61,7 @@ class Password extends CI_Controller {
 
             $error = $this->update_model->cambiar_contraseña($_SESSION["idResponsable"], $_SESSION["dniResponsable"], $_SESSION["t_usuario"], $password);
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Enviamos email

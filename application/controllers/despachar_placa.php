@@ -61,7 +61,7 @@ class Despachar_placa extends CI_Controller {
             foreach ($placas_checkbox as $fila) {
                 $error = $this->insert_model->despachar_placa($fila, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error)) {
-                    $data['trans_error'] = $error;
+                    $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                     $bandera_error = 1;
                 } else {

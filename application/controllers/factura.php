@@ -43,7 +43,7 @@ class Factura extends CI_Controller {
             $this->form_validation->set_rules('matricula', 'Matricula a cancelar', 'required');
             $this->form_validation->set_rules('dni_a_nombre_de', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
-            $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');            
+            $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');
             $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
             $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
@@ -69,7 +69,7 @@ class Factura extends CI_Controller {
                 }
             }
 
-            if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_conceptos != "")) {
+            if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
                 echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
@@ -82,27 +82,16 @@ class Factura extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
-            $dni_titular = $this->input->post('dni');
-            $id_titular = $this->input->post('id');
-            $dni_a_nombre_de = $this->input->post('dni_a_nombre_de');
+            $matricula = $this->input->post('matricula');
             $id_a_nombre_de = $this->input->post('id_a_nombre_de');
-            $a_nombre_de = $this->input->post('a_nombre_de');
+            $dni_a_nombre_de = $this->input->post('dni_a_nombre_de');
             $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
-            if ($dni_a_nombre_de != "6") {
-                $dni_a_nombre_de = NULL;
-            }            
-            $id_matricula = $this->input->post('matricula');
-            $cuotas_checkbox = $this->input->post('cuotas');
+            if ($d_v_a_nombre_de != "6") {
+                $d_v_a_nombre_de = NULL;
+            }
+            $a_nombre_de = $this->input->post('a_nombre_de');
             $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
             $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
-            $total = round(str_replace(",", "", $this->input->post('total')), 2);
-            if (($this->input->post('cuenta')) && ($this->input->post('valor_consignado')) && ($this->input->post('valor_consignado') != 0)) {
-                $cuenta_destino = $this->input->post('cuenta');
-                $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
-            } else {
-                $cuenta_destino = NULL;
-                $valor_consignado = NULL;
-            }
             if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
                 list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
                 $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
@@ -111,65 +100,56 @@ class Factura extends CI_Controller {
                 $t_caja_destino = NULL;
                 $efectivo_ingresado = NULL;
             }
+            if (($this->input->post('cuenta')) && ($this->input->post('valor_consignado')) && ($this->input->post('valor_consignado') != 0)) {
+                $cuenta_destino = $this->input->post('cuenta');
+                $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+            } else {
+                $cuenta_destino = NULL;
+                $valor_consignado = NULL;
+            }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_factura = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_factura = ($this->select_model->nextId_factura($prefijo_factura)->id) + 1;
+            $t_trans = 7; //Factura
+            $credito_debito = 1; //Credito            
 
             $data["tab"] = "crear_factura";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "factura/crear";
             $data['msn_recrear'] = "Crear otra factura";
 
-            $error = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
-
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_factura, $id_factura, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
-                $data['trans_error'] = $error;
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                //traemos los campos de los conceptos
-                $rrpp_nuevo = $this->input->post('rrpp_nuevo');
-                $id_concepto = $this->input->post('id_concepto');
-                $t_concepto_nomina = $this->input->post('t_concepto_nomina');
-                $detalle = $this->input->post('detalle');
-                $cantidad = $this->input->post('cantidad');
-                $valor_unitario = $this->input->post('valor_unitario');
-                if (($rrpp_nuevo == TRUE) && ($id_concepto == TRUE) && ($t_concepto_nomina == TRUE) && ($detalle == TRUE) && ($cantidad == TRUE) && ($valor_unitario == TRUE)) {
-                    $i = 0;
-                    foreach ($rrpp_nuevo as $fila) {
-                        //En el caso que sean conceptos pendiente de nomina por ser actualizados a OK
-                        if ($fila == '1') {
-                            //ACtualizamos los conceptos de rrpp a 1: OK
-                            $error1 = $this->update_model->concepto_nomina_estado($id_concepto[$i], 1);
-                            if (isset($error1)) {
-                                $data['trans_error'] = $error1;
+                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    //traemos los checxbox de las cuotas canceladas
+                    $checkbox_cuotas = $this->input->post('cuotas');
+                    if ($checkbox_cuotas == TRUE) {
+                        foreach ($checkbox as $fila) {
+                            list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora) = explode("-", $fila);
+                            $error3 = $this->insert_model->detalle_factura($prefijo_factura, $id_factura, $matricula, $t_detalle, $num_cuota, $subtotal, $cant_dias_mora, $int_mora);
+                            if (isset($error3)) {
+                                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                                 $this->parser->parse('trans_error', $data);
-                                return;
-                            }
-                            //en el caso en que hayan que crear los conceptos
-                        } else {
-                            $t_concepto_temp = $t_concepto_nomina[$i];
-                            $detalle_temp = strtolower($detalle[$i]);
-                            $cantidad_temp = $cantidad[$i];
-                            $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
-                            $error2 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $id_responsable, $dni_responsable);
-                            if (isset($error2)) {
-                                $data['trans_error'] = $error2;
-                                $this->parser->parse('trans_error', $data);
-                                return;
+                                return FALSE;
                             }
                         }
-                        $i++;
+                        $this->parser->parse('trans_success', $data);
+                    } else {
+                        $data['trans_error'] = "<p>No llegaron correctamente las cuotas al servidor. Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                        return;
                     }
-                    $this->parser->parse('trans_success', $data);
-                } else {
-                    $data['trans_error'] = "<p>No llegaron correctamente los conceptos al servidor. Comuníquele este error a soporte de sistemas.</p>";
-                    $this->parser->parse('trans_error', $data);
-                    return;
                 }
             }
         } else {

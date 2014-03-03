@@ -92,7 +92,7 @@ class Liquidar_comisiones extends CI_Controller {
             if ($id_ejecutivo_original != $id_ejecutivo_directo) {
                 $error = $this->update_model->ejecutivo_matricula($id_matricula, $id_ejecutivo_directo, $dni_ejecutivo_directo);
                 if (isset($error)) {
-                    $data['trans_error'] = $error;
+                    $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                     return;
                 } else {
@@ -102,7 +102,7 @@ class Liquidar_comisiones extends CI_Controller {
 
             $error1 = $this->insert_model->concepto_nomina($id_ejecutivo_directo, $dni_ejecutivo_directo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_ejecutivo_directo, $cargo_ejecutivo_directo, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
             if (isset($error1)) {
-                $data['trans_error'] = $error1;
+                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
                 $cargos_escalas = $this->input->post('cargos_escalas');
@@ -122,7 +122,7 @@ class Liquidar_comisiones extends CI_Controller {
                             }
                             $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
                             if (isset($error2)) {
-                                $data['trans_error'] = $error2;
+                                $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                                 $this->parser->parse('trans_error', $data);
                                 return;
                             }
@@ -133,7 +133,7 @@ class Liquidar_comisiones extends CI_Controller {
                 //ACtualizamos el estado de la matricula a liquidada.
                 $error2 = $this->update_model->matricula_liquidacion_escalas($id_matricula, 1);
                 if (isset($error2)) {
-                    $data['trans_error'] = $error2;
+                    $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     $this->parser->parse('trans_success', $data);
