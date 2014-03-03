@@ -136,8 +136,8 @@ class Factura extends CI_Controller {
                     $checkbox_cuotas = $this->input->post('cuotas');
                     if ($checkbox_cuotas == TRUE) {
                         foreach ($checkbox as $fila) {
-                            list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora) = explode("-", $fila);
-                            $error3 = $this->insert_model->detalle_factura($prefijo_factura, $id_factura, $matricula, $t_detalle, $num_cuota, $subtotal, $cant_dias_mora, $int_mora);
+                            list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("-", $fila);
+                            $error3 = $this->insert_model->detalle_factura($prefijo_factura, $id_factura, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
                             if (isset($error3)) {
                                 $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                                 $this->parser->parse('trans_error', $data);

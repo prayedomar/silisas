@@ -990,7 +990,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function detalle_factura($prefijo_factura, $id_factura, $matricula, $t_detalle, $num_cuota, $subtotal, $cant_dias_mora, $int_mora) {
+    public function detalle_factura($prefijo_factura, $id_factura, $matricula, $t_detalle, $num_cuota, $subtotal, $fecha_esperada, $cant_dias_mora, $int_mora) {
         $data = array(
             'prefijo_factura' => $prefijo_factura,
             'id_factura' => $id_factura,
@@ -998,6 +998,7 @@ class Insert_model extends CI_Model {
             't_detalle' => $t_detalle,
             'num_cuota' => $num_cuota,
             'subtotal' => $subtotal,
+            'fecha_esperada' => $fecha_esperada,
             'cant_dias_mora' => $cant_dias_mora,
             'int_mora' => $int_mora
         );
