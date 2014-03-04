@@ -1,6 +1,6 @@
 <?php
 
-class Factura extends CI_Controller {
+class Recibo_caja extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -11,7 +11,7 @@ class Factura extends CI_Controller {
 
 //Crear: Nomina
     function crear() {
-        $data["tab"] = "crear_factura";
+        $data["tab"] = "crear_recibo_caja";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
@@ -22,16 +22,16 @@ class Factura extends CI_Controller {
         $data['dni'] = $this->select_model->t_dni_titular();
         $data['dni_a_nombre_de'] = $this->select_model->t_dni_todos();
         $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
-        $data['action_validar'] = base_url() . "factura/validar";
-        $data['action_crear'] = base_url() . "factura/insertar";
-        $data['action_recargar'] = base_url() . "factura/crear";
+        $data['action_validar'] = base_url() . "recibo_caja/validar";
+        $data['action_crear'] = base_url() . "recibo_caja/insertar";
+        $data['action_recargar'] = base_url() . "recibo_caja/crear";
 
-        $data['action_validar_titular_llena_matriculas'] = base_url() . "factura/validar_titular_llena_matriculas";
-        $data['action_llena_cuotas_matricula'] = base_url() . "factura/llena_cuotas_matricula";
+        $data['action_validar_titular_llena_matriculas'] = base_url() . "recibo_caja/validar_titular_llena_matriculas";
+        $data['action_llena_cuotas_matricula'] = base_url() . "recibo_caja/llena_cuotas_matricula";
 
-        $data['action_llena_cuenta_responsable'] = base_url() . "factura/llena_cuenta_responsable";
-        $data['action_llena_caja_responsable'] = base_url() . "factura/llena_caja_responsable";
-        $this->parser->parse('factura/crear', $data);
+        $data['action_llena_cuenta_responsable'] = base_url() . "recibo_caja/llena_cuenta_responsable";
+        $data['action_llena_caja_responsable'] = base_url() . "recibo_caja/llena_caja_responsable";
+        $this->parser->parse('recibo_caja/crear', $data);
         $this->load->view('footer');
     }
 
@@ -112,22 +112,22 @@ class Factura extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-            $prefijo_factura = $this->select_model->sede_id($sede)->prefijo_trans;
-            $id_factura = ($this->select_model->nextId_factura($prefijo_factura)->id) + 1;
+            $prefijo_recibo_caja = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_recibo_caja = ($this->select_model->nextId_recibo_caja($prefijo_recibo_caja)->id) + 1;
             $t_trans = 7; //Factura
             $credito_debito = 1; //Credito            
 
-            $data["tab"] = "crear_factura";
+            $data["tab"] = "crear_recibo_caja";
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "factura/crear";
-            $data['msn_recrear'] = "Crear otra factura";
+            $data['url_recrear'] = base_url() . "recibo_caja/crear";
+            $data['msn_recrear'] = "Crear otra recibo_caja";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_factura, $id_factura, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_recibo_caja, $id_recibo_caja, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -137,7 +137,7 @@ class Factura extends CI_Controller {
                     if ($checkbox_cuotas == TRUE) {
                         foreach ($checkbox_cuotas as $fila) {
                             list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("-", $fila);
-                            $error3 = $this->insert_model->detalle_factura($prefijo_factura, $id_factura, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
+                            $error3 = $this->insert_model->detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
                             if (isset($error3)) {
                                 $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                                 $this->parser->parse('trans_error', $data);

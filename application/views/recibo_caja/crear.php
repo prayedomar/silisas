@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
-                    <legend>Crear factura de venta</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Crear recibo de caja</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Titular</legend>
@@ -40,8 +40,8 @@
                     </div>       
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3 separar_div">
-                            <legend>Factura a nombre de:</legend>
-                            <p class="help-block"><B>> </B>Si el beneficiario que aparecerá en la factura es diferente al titular (Por ejemplo: una empresa, un familiar, etc.), modifíquelo a continuacion.</p>
+                            <legend>Recibo de caja a nombre de:</legend>
+                            <p class="help-block"><B>> </B>Si el beneficiario que aparecerá en el recibo de caja es diferente al titular (Por ejemplo: una empresa, un familiar, etc.), modifíquelo a continuacion.</p>
                             <div class="form-group">
                                 <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                 <select name="dni_a_nombre_de" id="dni_a_nombre_de" class="form-control exit_caution">
@@ -201,7 +201,7 @@
                             <input type="hidden" name="total" id="total" class="decimal decimal2 miles">
                             <center>
                                 <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                                <button id="btn_validar" class="btn btn-success">Crear factura</button>  
+                                <button id="btn_validar" class="btn btn-success">Crear recibo de caja</button>  
                                 <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                 <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                             </center>
