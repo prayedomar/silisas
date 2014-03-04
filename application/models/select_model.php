@@ -233,6 +233,15 @@ class Select_model extends CI_Model {
     }  
     
     //Matriculas vigente con saldo incluido > 0
+    public function saldo_matricula($id_matricula) {
+        $SqlInfo = "SELECT (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p  where ((ma.contrato = '" . $id_matricula . "') AND (ma.plan = t_p.id))";        
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
+    
+    //Matriculas vigente con saldo incluido > 0
     public function total_abonos_matricula($matricula) {
         $SqlInfo = "SELECT ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula='" . $matricula . "') AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula='" . $matricula . "') AND (vigente=1)))) AS total";        
         $query = $this->db->query($SqlInfo);
@@ -950,7 +959,16 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }   
+    
+    public function nextId_recibo_caja($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('recibo_caja');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }      
     
     public function empleado_sede_ppal($id, $dni) {
         $this->db->where('id', $id);

@@ -1007,6 +1007,56 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function recibo_caja($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
+            't_trans' => '7',
+            'credito_debito' => '1',
+            'matricula' => $matricula,
+            'id_a_nombre_de' => $id_a_nombre_de,
+            'dni_a_nombre_de' => $dni_a_nombre_de,
+            'd_v_a_nombre_de' => $d_v_a_nombre_de,
+            'a_nombre_de' => $a_nombre_de,
+            'subtotal' => $subtotal,
+            'int_mora' => $int_mora,
+            'sede_caja_destino' => $sede_caja_destino,
+            't_caja_destino' => $t_caja_destino,
+            'efectivo_ingresado' => $efectivo_ingresado,
+            'cuenta_destino' => $cuenta_destino,
+            'valor_consignado' => $valor_consignado,
+            'sede' => $sede,
+            'vigente' => $vigente,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('recibo_caja');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $t_detalle, $num_cuota, $subtotal, $fecha_esperada, $cant_dias_mora, $int_mora) {
+        $data = array(
+            'prefijo_recibo_caja' => $prefijo_recibo_caja,
+            'id_recibo_caja' => $id_recibo_caja,
+            'matricula' => $matricula,
+            't_detalle' => $t_detalle,
+            'num_cuota' => $num_cuota,
+            'subtotal' => $subtotal,
+            'fecha_esperada' => $fecha_esperada,
+            'cant_dias_mora' => $cant_dias_mora,
+            'int_mora' => $int_mora
+        );
+        $this->db->insert('detalle_recibo_caja', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function cambio_ejecutivo_matricula($matricula, $id_ejecutivo_old, $dni_ejecutivo_old, $id_ejecutivo_new, $dni_ejecutivo_new, $id_responsable, $dni_responsable) {
         $data = array(
