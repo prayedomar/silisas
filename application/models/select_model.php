@@ -654,7 +654,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados de RRPPque pertenecen a la sede principal de un responsable.
     public function empleado_RRPP_sede_ppal($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "')) AND (dni='" . $dni_responsable . "')) AND ( NOT(id='1' AND dni='1')) AND (estado!='3'))";
+        $where = "(sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $where2 = "cargo IN (SELECT id FROM t_cargo WHERE depto=3)";
         $this->db->where($where2);
@@ -667,7 +667,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados de RRPPque pertenecen a la sede principal de un responsable.
     public function empleado_RRPP_sedes_responsable($id_responsable, $dni_responsable) {
-        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "')) AND (dni='" . $dni_responsable . "')) AND ( NOT(id='1' AND dni='1')) AND (estado!='3'))";
+        $where = "(sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $where2 = "cargo IN (SELECT id FROM t_cargo WHERE depto=3)";
         $this->db->where($where2);
@@ -1016,15 +1016,16 @@ class Select_model extends CI_Model {
     }
 
     //necesitamos los empleados activos.
+    //Solo puede autorizar a empleados que esten en las sedes del responsable
     //empleados cuya sede principal conincida con las sedes autorizadas para dicha cuenta.
     //empleados cuya sede principal o secundaria coinciden con la sede del responsable.
     //Empleados que no esten autorizados para esa sede, porq no tendria sentido volverlos a autorizar.
     public function empleado_faltante_cuenta_bancaria_responsable($cuenta, $id_responsable, $dni_responsable) {
-        $where1 = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))";
+        $where1 = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where1);
-        $where2 = "sede_ppal IN (SELECT sede FROM cuenta_x_sede WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))";
+        $where2 = "sede_ppal IN(SELECT sede FROM cuenta_x_sede WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))";
         $this->db->where($where2);
-        $where3 = "not((id IN (SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))))";
+        $where3 = "not((id IN(SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))))";
         $this->db->where($where3);
         $where4 = '(NOT(id=1 AND dni=1))';
         $this->db->where($where4);
