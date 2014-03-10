@@ -330,9 +330,9 @@
                     </li>
                     <li class="dropdown dropdown-large">
                         <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar / Anular<b class="caret"></b></a>-->
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar<b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Actualizar / Modificar<b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 310px;">
-                            <li class="col-sm-12">
+                            <li class="col-sm-6">
                                 <ul>
                                     <!--                                    <li class="dropdown-header">Sedes</li>
                                                                         <li><a href="#">Sede</a></li>
@@ -398,9 +398,9 @@
                                                                 <li><a href="#">Código de Autorización</a></li>                                    
                                                             </ul>
                                                         </li>
-                                                        <li class="col-sm-3">
+-->                                                        <li class="col-sm-6">
                                                             <ul>
-                                                                <li class="dropdown-header">Traslados</li>
+<!--                                                                <li class="dropdown-header">Traslados</li>
                                                                 <li><a href="#">Contratos Físicos</a></li>
                                                                 <li><a href="#">Material de Estudio</a></li>
                                                                 <li><a href="#">Articulo de Inventario</a></li>                                   
@@ -411,17 +411,19 @@
                                                                 <li><a href="#">Reporte de Alumno</a></li>
                                                                 <li><a href="#">Grados</a></li>
                                                                 <li><a href="#">Descargar Certificado</a></li>                                
-                                                                <li class="divider"></li>
+                                                                <li class="divider"></li>-->
                                                                 <li class="dropdown-header">Clientes</li>
-                                                                <li><a href="#">Titular</a></li>
-                                                                <li><a href="#">Alumno</a></li>                                    
-                                                                <li class="divider"></li>
+                                                                <!--<li><a href="#">Titular</a></li>-->
+                                                                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "docente", "secretaria"))) { ?>                                       
+                                                                    <li><a href="<?= base_url() ?>alumno/actualizar">Alumno</a></li>
+                                                                <?php } ?>                                   
+<!--                                                                <li class="divider"></li>
                                                                 <li class="dropdown-header">Servicio al cliente</li>
                                                                 <li><a href="#">Acuerdo de Pago</a></li>
                                                                 <li><a href="#">Registro PQR</a></li>
-                                                                <li><a href="#">Respuesta PQR</a></li>
+                                                                <li><a href="#">Respuesta PQR</a></li>-->
                                                             </ul>
-                                                        </li>-->
+                                                        </li>
                         </ul>
                     </li>
                     <li class="dropdown dropdown-large">
