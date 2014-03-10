@@ -40,7 +40,7 @@ class Proveedor extends CI_Controller {
             $this->form_validation->set_rules('razon_social', 'Razón Social', 'required|trim|xss_clean|max_length[100]');
             $this->form_validation->set_rules('pais', 'País', 'required|callback_select_default');
             $this->form_validation->set_rules('direccion', 'Direccion', 'trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('telefono', 'Telefono', 'trim|xss_clean|min_length[7]|max_length[40]');
+            $this->form_validation->set_rules('telefono', 'Teléfono', 'trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             //Validamos que la clave primaria no este repetida

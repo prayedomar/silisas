@@ -33,7 +33,7 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
-            $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');            
+            $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
             $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
@@ -98,7 +98,7 @@ class Alumno extends CI_Controller {
             $grados = NULL;
             $cant_clases = NULL;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -106,14 +106,14 @@ class Alumno extends CI_Controller {
             $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion            
             $perfil = 'alumno';
             $vigente = 1;
-            $nombres = $nombre1 . " " . $nombre2;            
+            $nombres = $nombre1 . " " . $nombre2;
 
             $data["tab"] = "crear_alumno";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "alumno/crear";
             $data['msn_recrear'] = "Crear otro Alumno";
-            
+
             $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
@@ -182,7 +182,7 @@ class Alumno extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     function actualizar() {
         $data["tab"] = "actualizar_alumno";
         $this->isLogin($data["tab"]);
@@ -198,8 +198,8 @@ class Alumno extends CI_Controller {
         $data['t_curso'] = $this->select_model->t_curso();
         $data['action_validar'] = base_url() . "alumno/validar_actualizar";
         $data['action_crear'] = base_url() . "alumno/insertar_actualizar";
-        $data['action_recargar'] = base_url() . "abono_matricula/actualizar"; 
-        $data['action_validar_alumno'] = base_url() . "abono_matricula/validar_alumno";        
+        $data['action_recargar'] = base_url() . "alumno/actualizar";
+        $data['action_validar_alumno'] = base_url() . "alumno/validar_alumno";
         $data['action_llena_provincia'] = base_url() . "alumno/llena_provincia";
         $data['action_llena_ciudad'] = base_url() . "alumno/llena_ciudad";
         $this->parser->parse('alumno/actualizar', $data);
@@ -223,7 +223,7 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('t_domicilio', 'Tipo de Domicilio', 'required|callback_select_default');
             $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'required|trim|xss_clean|max_length[40]');
-            $this->form_validation->set_rules('telefono', 'Telefono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
+            $this->form_validation->set_rules('telefono', 'Teléfono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
@@ -232,16 +232,6 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('t_curso', 'Tipo de Curso', 'required|callback_select_default');
             $this->form_validation->set_rules('cant_clases', 'Cantidad de Clases', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-
-            //Validamos que la clave primaria no este repetida
-            $duplicate_key = "";
-            if (($this->input->post('id')) && ($this->input->post('dni'))) {
-                $t_usuario = 3; //3: Alumno
-                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
-                if ($check_usuario == TRUE) {
-                    $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
-                }
-            }
             //Validamos que la matrícula insertada si exista y tenga disponibilidad de alumnos
             $error_matricula = "";
             if ($this->input->post('matricula')) {
@@ -255,8 +245,8 @@ class Alumno extends CI_Controller {
                     }
                 }
             }
-            if (($this->form_validation->run() == FALSE) || ($duplicate_key != "") || ($error_matricula != "")) {
-                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('matricula') . $error_matricula . form_error('velocidad_ini') . form_error('comprension_ini') . form_error('t_curso') . form_error('cant_clases') . form_error('observacion');
+            if (($this->form_validation->run() == FALSE) || ($error_matricula != "")) {
+                echo form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('matricula') . $error_matricula . form_error('velocidad_ini') . form_error('comprension_ini') . form_error('t_curso') . form_error('cant_clases') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -294,7 +284,7 @@ class Alumno extends CI_Controller {
             $grados = NULL;
             $cant_clases = $this->input->post('cant_clases');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -302,14 +292,14 @@ class Alumno extends CI_Controller {
             $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion            
             $perfil = 'alumno';
             $vigente = 1;
-            $nombres = $nombre1 . " " . $nombre2;            
+            $nombres = $nombre1 . " " . $nombre2;
 
             $data["tab"] = "actualizar_alumno";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "alumno/actualizar";
             $data['msn_recrear'] = "Actualizar otro Alumno";
-            
+
             $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
@@ -377,47 +367,44 @@ class Alumno extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    } 
-    
+    }
+
     public function validar_alumno() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $dni_titular = $this->input->post('dni');
-            $id_titular = $this->input->post('id');
-            $titular = $this->select_model->titular($id_titular, $dni_titular);
-            if ($titular == TRUE) {
-                $matriculas = $this->select_model->matricula_vigente_titular($id_titular, $dni_titular);
-                if ($matriculas == TRUE) {
-                    $response = array(
-                        'respuesta' => 'OK',
-                        'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
-                        'filasTabla' => ''
-                    );
-                    foreach ($matriculas as $fila) {
-                        $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
-                            <td class="text-center">' . $fila->contrato . '</td>
-                            <td>' . $fila->nombre_plan . '</td>
-                            <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
-                            <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                             
-                            <td class="text-center">' . $fila->sede . '</td>                         
-                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>  
-                        </tr>';
-                    }
-                    echo json_encode($response);
-                    return false;
-                } else {
-                    $response = array(
-                        'respuesta' => 'error',
-                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
-                    );
-                    echo json_encode($response);
-                    return false;
-                }
+            $dni_alumno = $this->input->post('dni');
+            $id_alumno = $this->input->post('id');
+            $alumno = $this->select_model->alumno($id_alumno, $dni_alumno);
+            if ($alumno == TRUE) {
+                $response = array(
+                    'respuesta' => 'OK',
+                    'nombre1' => $alumno->nombre1,
+                    'nombre2' => $alumno->nombre2,
+                    'apellido1' => $alumno->apellido1,
+                    'apellido2' => $alumno->apellido2,
+                    'fecha_nacimiento' => $alumno->fecha_nacimiento,
+                    'pais' => $alumno->pais,
+                    'provincia' => $alumno->provincia,
+                    'ciudad' => $alumno->ciudad,
+                    't_domicilio' => $alumno->t_domicilio,
+                    'direccion' => $alumno->direccion,
+                    'barrio' => $alumno->barrio,
+                    'telefono' => $alumno->telefono,
+                    'celular' => $alumno->celular,
+                    'email' => $alumno->email,
+                    'matricula' => $alumno->matricula,
+                    'velocidad_ini' => $alumno->velocidad_ini,
+                    'comprension_ini' => $alumno->comprension_ini,
+                    't_curso' => $alumno->t_curso,
+                    'cant_clases' => $alumno->cant_clases,
+                    'observacion' => $alumno->observacion
+                );
+                echo json_encode($response);
+                return false;
             } else {
                 $response = array(
                     'respuesta' => 'error',
-                    'mensaje' => '<p>El titular no existe en la base de datos.</p>'
+                    'mensaje' => '<p>El alumno no existe en la base de datos.</p>'
                 );
                 echo json_encode($response);
                 return false;
@@ -425,7 +412,7 @@ class Alumno extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }
 
     public function llena_provincia() {
         if ($this->input->is_ajax_request()) {
@@ -538,4 +525,5 @@ class Alumno extends CI_Controller {
         </table>
         <?php
     }
+
 }
