@@ -18,15 +18,8 @@ class Alumno extends CI_Controller {
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_alumno();
-        $data['pais'] = $this->select_model->pais();
-        $data['provincia'] = $this->select_model->provincia();
-        $data['ciudad'] = $this->select_model->ciudad();
-        $data['t_domicilio'] = $this->select_model->t_domicilio();
-        $data['t_curso'] = $this->select_model->t_curso();
         $data['action_validar'] = base_url() . "alumno/validar_crear";
         $data['action_crear'] = base_url() . "alumno/insertar_crear";
-        $data['action_llena_provincia'] = base_url() . "alumno/llena_provincia";
-        $data['action_llena_ciudad'] = base_url() . "alumno/llena_ciudad";
         $this->parser->parse('alumno/crear', $data);
         $this->load->view('footer');
     }
@@ -40,22 +33,8 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
-            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'required|xss_clean|callback_fecha_valida');
-            $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
-            $this->form_validation->set_rules('pais', 'País', 'required|callback_select_default');
-            $this->form_validation->set_rules('provincia', 'Departamento', 'required|callback_select_default');
-            $this->form_validation->set_rules('ciudad', 'Ciudad', 'required|callback_select_default');
-            $this->form_validation->set_rules('t_domicilio', 'Tipo de Domicilio', 'required|callback_select_default');
-            $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'required|trim|xss_clean|max_length[40]');
-            $this->form_validation->set_rules('telefono', 'Telefono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
-            $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
-            $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
+            $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');            
             $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
-            $this->form_validation->set_rules('velocidad_ini', 'Velocidad Inicial', 'required|trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('comprension_ini', 'Comprensión Inicial', 'required|trim|xss_clean|callback_miles_numeric|callback_porcentaje');
-            $this->form_validation->set_rules('t_curso', 'Tipo de Curso', 'required|callback_select_default');
-            $this->form_validation->set_rules('cant_clases', 'Cantidad de Clases', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             //Validamos que la clave primaria no este repetida
@@ -81,7 +60,7 @@ class Alumno extends CI_Controller {
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($duplicate_key != "") || ($error_matricula != "")) {
-                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('matricula') . $error_matricula . form_error('velocidad_ini') . form_error('comprension_ini') . form_error('t_curso') . form_error('cant_clases') . form_error('observacion');
+                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('genero') . form_error('matricula') . $error_matricula . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -100,24 +79,24 @@ class Alumno extends CI_Controller {
             $nombre2 = ucwords(strtolower($this->input->post('nombre2')));
             $apellido1 = ucwords(strtolower($this->input->post('apellido1')));
             $apellido2 = ucwords(strtolower($this->input->post('apellido2')));
-            $fecha_nacimiento = $this->input->post('fecha_nacimiento');
+            $fecha_nacimiento = NULL;
             $genero = $this->input->post('genero');
-            $pais = $this->input->post('pais');
-            $provincia = $this->input->post('provincia');
-            $ciudad = $this->input->post('ciudad');
-            $t_domicilio = $this->input->post('t_domicilio');
-            $direccion = ucwords(strtolower($this->input->post('direccion')));
-            $barrio = ucwords(strtolower($this->input->post('barrio')));
-            $telefono = strtolower($this->input->post('telefono'));
-            $celular = $this->input->post('celular');
-            $email = strtolower($this->input->post('email'));
+            $pais = NULL;
+            $provincia = NULL;
+            $ciudad = NULL;
+            $t_domicilio = NULL;
+            $direccion = NULL;
+            $barrio = NULL;
+            $telefono = NULL;
+            $celular = NULL;
+            $email = NULL;
             $matricula = $this->input->post('matricula');
-            $velocidad_ini = str_replace(",", "", $this->input->post('velocidad_ini')); //No siempre es necesario redondear.
-            $comprension_ini = round(str_replace(",", "", $this->input->post('comprension_ini')), 2); //Redondeamos cuando es decimal lo que viene
-            $t_curso = $this->input->post('t_curso');
+            $velocidad_ini = NULL;
+            $comprension_ini = NULL;
+            $t_curso = NULL;
             $estado = 1; //Activo
             $grados = NULL;
-            $cant_clases = $this->input->post('cant_clases');
+            $cant_clases = NULL;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
             $id_responsable = $this->input->post('id_responsable');
@@ -219,6 +198,8 @@ class Alumno extends CI_Controller {
         $data['t_curso'] = $this->select_model->t_curso();
         $data['action_validar'] = base_url() . "alumno/validar_actualizar";
         $data['action_crear'] = base_url() . "alumno/insertar_actualizar";
+        $data['action_recargar'] = base_url() . "abono_matricula/actualizar"; 
+        $data['action_validar_alumno'] = base_url() . "abono_matricula/validar_alumno";        
         $data['action_llena_provincia'] = base_url() . "alumno/llena_provincia";
         $data['action_llena_ciudad'] = base_url() . "alumno/llena_ciudad";
         $this->parser->parse('alumno/actualizar', $data);
@@ -392,6 +373,54 @@ class Alumno extends CI_Controller {
                         $this->parser->parse('trans_success', $data);
                     }
                 }
+            }
+        } else {
+            redirect(base_url());
+        }
+    } 
+    
+    public function validar_alumno() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $dni_titular = $this->input->post('dni');
+            $id_titular = $this->input->post('id');
+            $titular = $this->select_model->titular($id_titular, $dni_titular);
+            if ($titular == TRUE) {
+                $matriculas = $this->select_model->matricula_vigente_titular($id_titular, $dni_titular);
+                if ($matriculas == TRUE) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
+                        'filasTabla' => ''
+                    );
+                    foreach ($matriculas as $fila) {
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center">' . $fila->contrato . '</td>
+                            <td>' . $fila->nombre_plan . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                             
+                            <td class="text-center">' . $fila->sede . '</td>                         
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>  
+                        </tr>';
+                    }
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>El titular no existe en la base de datos.</p>'
+                );
+                echo json_encode($response);
+                return false;
             }
         } else {
             redirect(base_url());

@@ -79,14 +79,14 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function t_detalle($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('t_detalle');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     public function t_cuenta() {
         $query = $this->db->get('t_cuenta');
@@ -222,28 +222,28 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     //Matriculas vigente con saldo incluido > 0
     public function matricula_vigente_titular($id_titular, $dni_titular) {
-        $SqlInfo = "SELECT DISTINCT ma.contrato, ma.fecha_trans, t_p.nombre as nombre_plan, t_p.valor_total,  s.nombre AS sede, (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p, sede AS s  where ((ma.id_titular = '" . $id_titular . "') AND (ma.dni_titular = '" . $dni_titular . "') AND ((ma.estado=1)||(ma.estado=2)) AND (ma.plan = t_p.id) AND (ma.sede=s.id))";        
+        $SqlInfo = "SELECT DISTINCT ma.contrato, ma.fecha_trans, t_p.nombre as nombre_plan, t_p.valor_total,  s.nombre AS sede, (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p, sede AS s  where ((ma.id_titular = '" . $id_titular . "') AND (ma.dni_titular = '" . $dni_titular . "') AND ((ma.estado=1)||(ma.estado=2)) AND (ma.plan = t_p.id) AND (ma.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }  
-    
+    }
+
     //Matriculas vigente con saldo incluido > 0
     public function saldo_matricula($id_matricula) {
-        $SqlInfo = "SELECT (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p  where ((ma.contrato = '" . $id_matricula . "') AND (ma.plan = t_p.id))";        
+        $SqlInfo = "SELECT (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p  where ((ma.contrato = '" . $id_matricula . "') AND (ma.plan = t_p.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
-    
+    }
+
     //Matriculas vigente con saldo incluido > 0
     public function total_abonos_matricula($matricula) {
-        $SqlInfo = "SELECT ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula='" . $matricula . "') AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula='" . $matricula . "') AND (vigente=1)))) AS total";        
+        $SqlInfo = "SELECT ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula='" . $matricula . "') AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula='" . $matricula . "') AND (vigente=1)))) AS total";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -609,7 +609,7 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function titular($id, $dni) {
         $this->db->where('id', $id);
         $this->db->where('dni', $dni);
@@ -617,7 +617,16 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
+
+    public function alumno($id, $dni) {
+        $this->db->where('id', $id);
+        $this->db->where('dni', $dni);
+        $query = $this->db->get('alumno');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
 
     //excluimos al empleado 1 1 porq es el sistema y nadie lo debería ver.
     public function empleado_activo() {
@@ -808,14 +817,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function total_concepto_nomina_matricula($matricula) {
         $SqlInfo = "SELECT COALESCE(SUM(valor_unitario), 0) total from concepto_nomina where ((matricula = '" . $matricula . "') AND (estado = 1))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     public function t_concepto_nomina_depto_empleado($id_empleado, $dni_empleado) {
         $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "')))))))";
@@ -959,8 +968,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }   
-    
+    }
+
     public function nextId_recibo_caja($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
@@ -968,8 +977,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }      
-    
+    }
+
     public function empleado_sede_ppal($id, $dni) {
         $this->db->where('id', $id);
         $this->db->where('dni', $dni);
