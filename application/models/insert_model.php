@@ -1012,7 +1012,7 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
-            't_trans' => '7',
+            't_trans' => '8',
             'credito_debito' => '1',
             'matricula' => $matricula,
             'id_a_nombre_de' => $id_a_nombre_de,
