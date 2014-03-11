@@ -332,7 +332,7 @@
                         <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Modificar / Anular<b class="caret"></b></a>-->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Actualizar / Modificar<b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 310px;">
-                            <li class="col-sm-6">
+                            <li class="col-sm-4">
                                 <ul>
                                     <!--                                    <li class="dropdown-header">Sedes</li>
                                                                         <li><a href="#">Sede</a></li>
@@ -376,29 +376,31 @@
                                                                 <li><a href="#">Caja Efectivo</a></li>
                                                             </ul>
                                                         </li>
-                                                        <li class="col-sm-3">
+-->                                                        <li class="col-sm-4">
                                                             <ul>
-                                                                <li class="dropdown-header">Inventario</li>
+<!--                                                                <li class="dropdown-header">Inventario</li>
                                                                 <li><a href="#">Articulo Inventario</a></li>
                                                                 <li><a href="#">Articulo Insumo</a></li>
                                                                 <li><a href="#">Linea Celular</a></li>
                                                                 <li><a href="#">Pedido de Insumos</a></li>
-                                                                <li class="divider"></li>                                    
-                                                                <li class="dropdown-header">Matriculas</li>
-                                                                <li><a href="#">Matricula</a></li>
-                                                                <li><a href="#">Referido</a></li>
+                                                                <li class="divider"></li>                                    -->
+                                                                <li class="dropdown-header">Matrículas</li>
+                                                                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                                                                    <li><a href="<?= base_url() ?>matricula/editar_plan">Cambio de plan</a></li>  
+                                                                <?php } ?>                                                                 
+<!--                                                                <li><a href="#">Referido</a></li>
                                                                 <li><a href="#">Consolidar Referido</a></li>
                                                                 <li><a href="#">Contrato de Matrícula</a></li>
                                                                 <li><a href="#">Material de Estudio</a></li>
                                                                 <li><a href="#">Entrega de Material</a></li>
                                                                 <li><a href="#">Comisión de Escala</a></li>
-                                                                <li><a href="#">Comisión de Matrícula</a></li>
-                                                                <li class="divider"></li>
+                                                                <li><a href="#">Comisión de Matrícula</a></li>-->
+<!--                                                                <li class="divider"></li>
                                                                 <li class="dropdown-header">Permisos</li>
-                                                                <li><a href="#">Código de Autorización</a></li>                                    
+                                                                <li><a href="#">Código de Autorización</a></li>                                    -->
                                                             </ul>
-                                                        </li>
--->                                                        <li class="col-sm-6">
+                                                        </li><!--
+-->                                                        <li class="col-sm-4">
                                                             <ul>
 <!--                                                                <li class="dropdown-header">Traslados</li>
                                                                 <li><a href="#">Contratos Físicos</a></li>
