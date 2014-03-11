@@ -235,5 +235,41 @@ class Update_model extends CI_Model {
             return $error;
         }
     }     
+    
+    public function alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            't_usuario' => $t_usuario,
+            'nombre1' => $nombre1,
+            'nombre2' => $nombre2,
+            'apellido1' => $apellido1,
+            'apellido2' => $apellido2,
+            'fecha_nacimiento' => $fecha_nacimiento,
+            'genero' => $genero,
+            'pais' => $pais,
+            'provincia' => $provincia,
+            'ciudad' => $ciudad,
+            't_domicilio' => $t_domicilio,
+            'direccion' => $direccion,
+            'barrio' => $barrio,
+            'telefono' => $telefono,
+            'celular' => $celular,
+            'email' => $email,
+            'velocidad_ini' => $velocidad_ini,
+            'comprension_ini' => $comprension_ini,
+            't_curso' => $t_curso,
+            'cant_clases' => $cant_clases,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->where('id', $id);
+        $this->db->where('dni', $dni);        
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->update('alumno');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
 }

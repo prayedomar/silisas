@@ -100,7 +100,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
-                                        <select name="provincia" id="provincia" class="form-control exit_caution" disabled>
+                                        <select name="provincia" id="provincia" class="form-control exit_caution">
                                             <option value="default">Seleccione primero País</option>
                                         </select>                                
                                     </div>
@@ -108,7 +108,7 @@
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
-                                        <select name="ciudad" id="ciudad" class="form-control exit_caution" disabled>
+                                        <select name="ciudad" id="ciudad" class="form-control exit_caution">
                                             <option value="default">Seleccione primero Depto</option>
                                         </select>
                                     </div>
@@ -153,7 +153,7 @@
                             </div>                            
                             <div class="form-group">
                                 <label>Número de Matrícula<em class="required_asterisco">*</em></label>
-                                <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" placeholder="Número de Matrícula" maxlength="13">
+                                <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Velocidad Inicial<em class="required_asterisco">*</em></label>                                
@@ -260,10 +260,25 @@
                     $("#nombre2").attr("value", obj.nombre2);
                     $("#apellido1").attr("value", obj.apellido1);
                     $("#apellido2").attr("value", obj.apellido2);
+                    $("#genero").attr("value", obj.genero);
                     $("#fecha_nacimiento").attr("value", obj.fecha_nacimiento);
                     $("#pais").attr("value", obj.pais);
-                    $("#provincia").attr("value", obj.provincia);
-                    $("#ciudad").attr("value", obj.ciudad);
+                    $.post('{action_llena_provincia}', {
+                        pais: obj.pais
+                    }, function(data) {
+                        $("#provincia").removeAttr("disabled");
+                        $("#provincia").html(data);
+                        $("#provincia").prepend('<option value="default" selected>Seleccione Departamento</option>');
+                        $("#provincia").attr("value", obj.provincia);
+                        $.post('{action_llena_ciudad}', {
+                            provincia: obj.provincia
+                        }, function(data) {
+                            $("#ciudad").removeAttr("disabled")
+                            $("#ciudad").html(data);
+                            $("#ciudad").prepend('<option value="default" selected>Seleccione Ciudad</option>');
+                            $("#ciudad").attr("value", obj.ciudad);
+                        });
+                    });
                     $("#t_domicilio").attr("value", obj.t_domicilio);
                     $("#direccion").attr("value", obj.direccion);
                     $("#barrio").attr("value", obj.barrio);

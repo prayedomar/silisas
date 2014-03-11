@@ -280,19 +280,10 @@ class Alumno extends CI_Controller {
             $velocidad_ini = str_replace(",", "", $this->input->post('velocidad_ini')); //No siempre es necesario redondear.
             $comprension_ini = round(str_replace(",", "", $this->input->post('comprension_ini')), 2); //Redondeamos cuando es decimal lo que viene
             $t_curso = $this->input->post('t_curso');
-            $estado = 1; //Activo
-            $grados = NULL;
             $cant_clases = $this->input->post('cant_clases');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
-            $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-
-            $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion            
-            $perfil = 'alumno';
-            $vigente = 1;
-            $nombres = $nombre1 . " " . $nombre2;
 
             $data["tab"] = "actualizar_alumno";
             $this->isLogin($data["tab"]);
@@ -300,24 +291,18 @@ class Alumno extends CI_Controller {
             $data['url_recrear'] = base_url() . "alumno/actualizar";
             $data['msn_recrear'] = "Actualizar otro Alumno";
 
-            $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
-            //No se pudo crear el usuario
-            if (isset($error1)) {
-                $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+            $error2 = $this->insert_model->alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $sede_ppal, $observacion, $id_responsable, $dni_responsable);
+            //No se pudo crear el empleado
+            if (isset($error2)) {
+                $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error2 = $this->insert_model->alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $matricula, $velocidad_ini, $comprension_ini, $t_curso, $estado, $grados, $cant_clases, $sede_ppal, $observacion, $id_responsable, $dni_responsable);
-                //No se pudo crear el empleado
-                if (isset($error2)) {
-                    $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                //Si se crea el alumno, entonces merma la cantidad de alumnos disponibles para esa matrícula
+                $error3 = $this->update_model->matricula_cant_alumnos_mermar($matricula);
+                if (isset($error3)) {
+                    $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    //Si se crea el alumno, entonces merma la cantidad de alumnos disponibles para esa matrícula
-                    $error3 = $this->update_model->matricula_cant_alumnos_mermar($matricula);
-                    if (isset($error3)) {
-                        $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                        $this->parser->parse('trans_error', $data);
-                    } else {
 //                    //Enviamos Correo de Bienvenida
 //                        $t_dni = $this->select_model->t_dni_id($dni)->tipo;
 //                        if($genero == 'M'){
@@ -360,8 +345,7 @@ class Alumno extends CI_Controller {
 //                                . '<center><br/>¡Gracias por elegirnos y darnos la oportunidad de servirle!</center>';
 //                        $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);               
 //                        //Cargamos mensaje de Ok                        
-                        $this->parser->parse('trans_success', $data);
-                    }
+                    $this->parser->parse('trans_success', $data);
                 }
             }
         } else {
@@ -382,6 +366,7 @@ class Alumno extends CI_Controller {
                     'nombre2' => $alumno->nombre2,
                     'apellido1' => $alumno->apellido1,
                     'apellido2' => $alumno->apellido2,
+                    'genero' => $alumno->genero,
                     'fecha_nacimiento' => $alumno->fecha_nacimiento,
                     'pais' => $alumno->pais,
                     'provincia' => $alumno->provincia,
