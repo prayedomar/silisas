@@ -225,7 +225,7 @@ class Select_model extends CI_Model {
 
     //Matriculas vigente con saldo incluido > 0
     public function matricula_vigente_titular($id_titular, $dni_titular) {
-        $SqlInfo = "SELECT DISTINCT ma.contrato, ma.fecha_trans, t_p.nombre as nombre_plan, t_p.valor_total,  s.nombre AS sede, (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p, sede AS s  where ((ma.id_titular = '" . $id_titular . "') AND (ma.dni_titular = '" . $dni_titular . "') AND ((ma.estado=1)||(ma.estado=2)) AND (ma.plan = t_p.id) AND (ma.sede=s.id))";
+        $SqlInfo = "SELECT DISTINCT ma.contrato, ma.fecha_matricula, t_p.nombre as nombre_plan, t_p.valor_total,  s.nombre AS sede, (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))) AS saldo  from matricula AS ma, t_plan as t_p, sede AS s  where ((ma.id_titular = '" . $id_titular . "') AND (ma.dni_titular = '" . $dni_titular . "') AND ((ma.estado=1)||(ma.estado=2)) AND (ma.plan = t_p.id) AND (ma.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
