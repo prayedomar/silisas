@@ -414,7 +414,7 @@
                                                                 <li class="divider"></li>-->
                                                                 <li class="dropdown-header">Clientes</li>
                                                                 <!--<li><a href="#">Titular</a></li>-->
-                                                                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "docente", "secretaria"))) { ?>                                       
+                                                                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "docente", "secretaria"))) { ?>                                       
                                                                     <li><a href="<?= base_url() ?>alumno/actualizar">Alumno</a></li>
                                                                 <?php } ?>                                   
 <!--                                                                <li class="divider"></li>

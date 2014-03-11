@@ -184,7 +184,7 @@ class Alumno extends CI_Controller {
     }
 
     function actualizar() {
-        $data["tab"] = "actualizar_alumno";
+        $data["tab"] = "editar_alumno";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
@@ -226,27 +226,14 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('telefono', 'Teléfono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('velocidad_ini', 'Velocidad Inicial', 'required|trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('comprension_ini', 'Comprensión Inicial', 'required|trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('t_curso', 'Tipo de Curso', 'required|callback_select_default');
             $this->form_validation->set_rules('cant_clases', 'Cantidad de Clases', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-            //Validamos que la matrícula insertada si exista y tenga disponibilidad de alumnos
-            $error_matricula = "";
-            if ($this->input->post('matricula')) {
-                $matricula = $this->select_model->matricula_id($this->input->post('matricula'));
-                if ($matricula != TRUE) {
-                    $error_matricula = "<p>El Número de Matrícula, no existe en la base de datos.</p>";
-                } else {
-                    $cant_alumnos_disponibles = $matricula->cant_alumnos_disponibles;
-                    if ($cant_alumnos_disponibles <= 0) {
-                        $error_matricula = "<p>Ya se registró la cantidad de alumnos disponibles para la matrícula.</p>";
-                    }
-                }
-            }
-            if (($this->form_validation->run() == FALSE) || ($error_matricula != "")) {
-                echo form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('matricula') . $error_matricula . form_error('velocidad_ini') . form_error('comprension_ini') . form_error('t_curso') . form_error('cant_clases') . form_error('observacion');
+
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('velocidad_ini') . form_error('comprension_ini') . form_error('t_curso') . form_error('cant_clases') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -260,7 +247,6 @@ class Alumno extends CI_Controller {
             $this->escapar($_POST);
             $dni = $this->input->post('dni');
             $id = $this->input->post('id');
-            $t_usuario = 3; //Alumno
             $nombre1 = ucwords(strtolower($this->input->post('nombre1')));
             $nombre2 = ucwords(strtolower($this->input->post('nombre2')));
             $apellido1 = ucwords(strtolower($this->input->post('apellido1')));
@@ -276,7 +262,6 @@ class Alumno extends CI_Controller {
             $telefono = strtolower($this->input->post('telefono'));
             $celular = $this->input->post('celular');
             $email = strtolower($this->input->post('email'));
-            $matricula = $this->input->post('matricula');
             $velocidad_ini = str_replace(",", "", $this->input->post('velocidad_ini')); //No siempre es necesario redondear.
             $comprension_ini = round(str_replace(",", "", $this->input->post('comprension_ini')), 2); //Redondeamos cuando es decimal lo que viene
             $t_curso = $this->input->post('t_curso');
@@ -285,25 +270,19 @@ class Alumno extends CI_Controller {
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
 
-            $data["tab"] = "actualizar_alumno";
+            $data["tab"] = "editar_alumno";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "alumno/actualizar";
             $data['msn_recrear'] = "Actualizar otro Alumno";
 
-            $error2 = $this->insert_model->alumno($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $sede_ppal, $observacion, $id_responsable, $dni_responsable);
+            $error2 = $this->update_model->alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $observacion, $id_responsable, $dni_responsable);
             //No se pudo crear el empleado
             if (isset($error2)) {
                 $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                //Si se crea el alumno, entonces merma la cantidad de alumnos disponibles para esa matrícula
-                $error3 = $this->update_model->matricula_cant_alumnos_mermar($matricula);
-                if (isset($error3)) {
-                    $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                    $this->parser->parse('trans_error', $data);
-                } else {
-//                    //Enviamos Correo de Bienvenida
+//                    //Enviamos Correo de actualizacion de datos
 //                        $t_dni = $this->select_model->t_dni_id($dni)->tipo;
 //                        if($genero == 'M'){
 //                            $prefijo = "Sr.";
@@ -345,8 +324,7 @@ class Alumno extends CI_Controller {
 //                                . '<center><br/>¡Gracias por elegirnos y darnos la oportunidad de servirle!</center>';
 //                        $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);               
 //                        //Cargamos mensaje de Ok                        
-                    $this->parser->parse('trans_success', $data);
-                }
+                $this->parser->parse('trans_success', $data);
             }
         } else {
             redirect(base_url());
