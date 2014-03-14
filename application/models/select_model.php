@@ -71,6 +71,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function t_plan_igual_cantAlumnos($id_matricula) {
+        $SqlInfo = "SELECT * FROM t_plan WHERE (cant_alumnos=(SELECT cant_alumnos from t_plan where (id=(SELECT plan FROM matricula WHERE (contrato='" . $id_matricula . "')))))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function t_plan_id($id) {
         $this->db->where('id', $id);

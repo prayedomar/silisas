@@ -52,6 +52,7 @@
                     </div>
                     <div class="overflow_tabla">
                         <label>Nuevo tipo de plan<em class="required_asterisco">*</em></label>
+                        <p class="help-block"><B>> </B>Sólo aparecen los tipos de planes con la misma cantidad de alumnos.</p>
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -106,7 +107,8 @@
                 if (obj.respuesta == "OK")
                 {
                     $("#nombre_titular").html('<center><table><th><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.nombreTitular + '</h4></td></th></table></center>');
-                    $("#tbody_plan_old").html(obj.filasTabla);
+                    $("#tbody_plan_old").html(obj.filasTablaOld);
+                    $("#tbody_plan_new").html(obj.filasTablaNew);
                     $("#plan_old").attr('value', obj.plan_old);
                     $("#id_matricula").attr('value', matricula);
                     $("#div_planes").css("display", "block");
@@ -125,10 +127,4 @@
             $("#div_warning").delay(8000).fadeOut(1000);
         }
     });
-
-    //Cargamos los planes comerciales de matricula vigentes
-    $.post('{action_llena_plan_comercial}', {},
-            function(data) {
-                $("#tbody_plan_new").html(data);
-            });
 </script>

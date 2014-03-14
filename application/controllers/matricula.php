@@ -233,9 +233,10 @@ class MAtricula extends CI_Controller {
                         'respuesta' => 'OK',
                         'nombreTitular' => $matricula->titular,
                         'plan_old' => $matricula->id,
-                        'filasTabla' => ''
+                        'filasTablaOld' => '',
+                        'filasTablaNew' => ''
                     );
-                    $response['filasTabla'] .= '<tr>
+                    $response['filasTablaOld'] = '<tr>
                             <td class="text-center">' . $matricula->nombre . '</td>
                             <td class="text-center">' . $matricula->anio . '</td>                                
                             <td class="text-center">' . $matricula->cant_alumnos . '</td>
@@ -244,6 +245,24 @@ class MAtricula extends CI_Controller {
                             <td class="text-center">$' . number_format($matricula->valor_cuota, 0, '.', ',') . '</td>                                
                             <td class="text-center">' . $matricula->cant_cuotas . '</td>                              
                         </tr>';
+                    //Llenamos los nuevos planes que tengan el mismo numero de alumnos
+                    $planes = $this->select_model->t_plan_igual_cantAlumnos($id_matricula);
+                    if ($planes == TRUE) {
+                        foreach ($planes as $fila) {
+                            $response['filasTablaNew'] .= '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="plan_new" id="plan_new" value="' . $fila->id . '"/></td>
+                            <td class="text-center">' . $fila->nombre . '</td>
+                            <td class="text-center">' . $fila->anio . '</td>                                
+                            <td class="text-center">' . $fila->cant_alumnos . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_total, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_inicial, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_cuota, 0, '.', ',') . '</td>                                
+                            <td class="text-center">' . $fila->cant_cuotas . '</td>
+                        </tr>';
+                        }
+                    } else {
+                        $response['filasTablaNew'] = "";
+                    }
                     echo json_encode($response);
                     return false;
                 } else {
@@ -261,30 +280,6 @@ class MAtricula extends CI_Controller {
                 );
                 echo json_encode($response);
                 return false;
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-    public function llena_plan_comercial() {
-        if ($this->input->is_ajax_request()) {
-            $planes = $this->select_model->t_plan_activo();
-            if ($planes == TRUE) {
-                foreach ($planes as $fila) {
-                    echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="plan_new" id="plan_new" value="' . $fila->id . '"/></td>
-                            <td class="text-center">' . $fila->nombre . '</td>
-                            <td class="text-center">' . $fila->anio . '</td>                                
-                            <td class="text-center">' . $fila->cant_alumnos . '</td>
-                            <td class="text-center">$' . number_format($fila->valor_total, 0, '.', ',') . '</td>
-                            <td class="text-center">$' . number_format($fila->valor_inicial, 0, '.', ',') . '</td>
-                            <td class="text-center">$' . number_format($fila->valor_cuota, 0, '.', ',') . '</td>                                
-                            <td class="text-center">' . $fila->cant_cuotas . '</td>
-                        </tr>';
-                }
-            } else {
-                echo "";
             }
         } else {
             redirect(base_url());
