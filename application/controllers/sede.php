@@ -103,8 +103,8 @@ class Sede extends CI_Controller {
             $prefijo_trans = strtoupper($this->input->post('prefijo_trans'));
             $estado = $this->input->post('estado');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $data["tab"] = "crear_sede";
             $this->isLogin($data["tab"]);

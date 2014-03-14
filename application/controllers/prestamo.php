@@ -16,8 +16,8 @@ class Prestamo extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
         $data['t_beneficiario'] = $this->select_model->t_usuario_prestamo();
         $data['fecha_actual'] = date('Y-m-d');
@@ -121,8 +121,8 @@ class Prestamo extends CI_Controller {
             }
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_prestamo = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_prestamo = ($this->select_model->nextId_prestamo($prefijo_prestamo)->id) + 1;

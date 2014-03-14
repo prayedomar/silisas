@@ -17,8 +17,8 @@ class Abono_matricula extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_titular();
         $data['dni_a_nombre_de'] = $this->select_model->t_dni_todos();
         $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
@@ -111,8 +111,8 @@ class Abono_matricula extends CI_Controller {
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_recibo_caja = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_recibo_caja = ($this->select_model->nextId_recibo_caja($prefijo_recibo_caja)->id) + 1;

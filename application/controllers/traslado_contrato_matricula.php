@@ -16,8 +16,8 @@ class Traslado_contrato_matricula extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['sede_actual'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['sede_destino'] = $this->select_model->sede_activa();
         $data['action_validar'] = base_url() . "traslado_contrato_matricula/validar";
@@ -102,8 +102,8 @@ class Traslado_contrato_matricula extends CI_Controller {
             $sede_actual = ucwords(strtolower($this->input->post('sede_actual')));
             $sede_destino = ucwords(strtolower($this->input->post('sede_destino')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $data["tab"] = "crear_traslado_contrato_matricula";
             $this->isLogin($data["tab"]);              

@@ -40,8 +40,8 @@ class Sede_secundaria extends CI_Controller {
             } else {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 
-                $id_responsable = $this->input->post('id_responsable');
-                $dni_responsable = $this->input->post('dni_responsable');
+                $id_responsable = $this->session->userdata('idResponsable');
+                $dni_responsable = $this->session->userdata('dniResponsable');
 
                 foreach ($checkbox as $fila) {
                     $error = $this->insert_model->empleado_x_sede($id_empleado, $dni_empleado, $fila);
@@ -72,8 +72,8 @@ class Sede_secundaria extends CI_Controller {
             list($sede_secundaria, $id_empleado, $dni_empleado) = explode("-", $this->input->post('id_empleado_sede'));
             $sede_ppal = $this->input->post('sede_ppal');
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $vigente = 0;
 
             $error = $this->update_model->empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $vigente);

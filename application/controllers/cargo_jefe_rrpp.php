@@ -17,8 +17,8 @@ class Cargo_jefe_rrpp extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['empleado'] = $this->select_model->empleado_RRPP_sedes_responsable($id_responsable, $dni_responsable);
         $data['cargo'] = $this->select_model->t_cargo();
 
@@ -67,8 +67,8 @@ class Cargo_jefe_rrpp extends CI_Controller {
                     $sede = $empleado->sede_ppal;
                     $observacion = ucfirst(strtolower($this->input->post('observacion')));
                     
-                    $id_responsable = $this->input->post('id_responsable');
-                    $dni_responsable = $this->input->post('dni_responsable');
+                    $id_responsable = $this->session->userdata('idResponsable');
+                    $dni_responsable = $this->session->userdata('dniResponsable');
                     //comprobamos si seleccionó el cheked de la placa
                     $check_placa = $this->input->post('checkbox_placa');
                     if ($check_placa == TRUE) {
@@ -127,8 +127,8 @@ class Cargo_jefe_rrpp extends CI_Controller {
                 } else {
                     $observacion = ucfirst(strtolower($this->input->post('observacion')));
                     
-                    $id_responsable = $this->input->post('id_responsable');
-                    $dni_responsable = $this->input->post('dni_responsable');
+                    $id_responsable = $this->session->userdata('idResponsable');
+                    $dni_responsable = $this->session->userdata('dniResponsable');
 
                     $this->insert_model->cambio_jefe($id_empleado, $dni_empleado, $id_jefe_old, $dni_jefe_old, $id_jefe_new, $dni_jefe_new, $observacion, $id_responsable, $dni_responsable);
                     $response = array(

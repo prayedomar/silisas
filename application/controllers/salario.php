@@ -52,8 +52,8 @@ class Salario extends CI_Controller {
             $t_salario = $this->input->post('t_salario');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             //se calcula con el ultimo id
             $id_salario = ($this->select_model->nextId_salario()->id) + 1;
 

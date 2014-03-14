@@ -23,8 +23,8 @@ class Empleado extends CI_Controller {
         $data['ciudad'] = $this->select_model->ciudad();
         $data['t_domicilio'] = $this->select_model->t_domicilio();
         $data['jefe'] = $this->select_model->empleado_activo();
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['t_depto'] = $this->select_model->t_depto();
         $data['t_contrato'] = $this->select_model->t_contrato_laboral();
@@ -163,8 +163,8 @@ class Empleado extends CI_Controller {
             $fecha_inicio = $this->input->post('fecha_inicio');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             if ($this->input->post('t_contrato') != "1") {
                 $cant_meses = $this->input->post('cant_meses');
@@ -437,8 +437,8 @@ class Empleado extends CI_Controller {
 
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['t_depto'] = $this->select_model->t_depto();
         $data['t_contrato'] = $this->select_model->t_contrato_laboral();

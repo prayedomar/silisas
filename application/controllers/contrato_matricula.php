@@ -16,8 +16,8 @@ class Contrato_matricula extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['sede'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['action_validar'] = base_url() . "contrato_matricula/validar";
         $data['action_crear'] = base_url() . "contrato_matricula/insertar";
@@ -79,8 +79,8 @@ class Contrato_matricula extends CI_Controller {
             $sede_actual = ucwords(strtolower($this->input->post('sede_actual')));
             $estado = 1; //1:Vacio
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $data["tab"] = "crear_contrato_matricula";
             $this->isLogin($data["tab"]);               

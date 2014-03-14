@@ -62,6 +62,7 @@
                 } else {
                     $("#tbody_detalle_matricula").html(data);
                     $("#div_detalle_matricula").css("display", "block");
+                    $("#div_info_comisiones").remove();                    
                 }
             });
         } else {

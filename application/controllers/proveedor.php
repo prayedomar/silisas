@@ -90,8 +90,8 @@ class Proveedor extends CI_Controller {
             $telefono = strtolower($this->input->post('telefono'));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $data["tab"] = "crear_proveedor";
             $this->isLogin($data["tab"]);              

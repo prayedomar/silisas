@@ -221,7 +221,6 @@ class Select_model extends CI_Model {
         }
     }
 
-    //Estado 1: Vacío
     public function contrato_matricula_id_sede($contrato, $sede) {
         $this->db->where('id', $contrato);
         $this->db->where('sede_actual', $sede);
@@ -230,6 +229,15 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function matricula_id_sede($contrato, $sede) {
+        $this->db->where('contrato', $contrato);
+        $this->db->where('sede', $sede);
+        $query = $this->db->get('matricula');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     //Matriculas vigente con saldo incluido > 0
     public function matricula_vigente_titular($id_titular, $dni_titular) {

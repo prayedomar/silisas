@@ -130,8 +130,8 @@ class Titular extends CI_Controller {
             $email = strtolower($this->input->post('email'));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
 
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $perfil = 'titular';
             $password = $this->encrypt->encode($id);

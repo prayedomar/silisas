@@ -1100,5 +1100,22 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function cambio_plan_matricula($matricula, $plan_old, $plan_new, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'matricula' => $matricula,
+            'plan_old' => $plan_old,
+            'plan_new' => $plan_new,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('cambio_plan_matricula');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
 }

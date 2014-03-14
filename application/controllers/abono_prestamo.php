@@ -17,8 +17,8 @@ class Abono_prestamo extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['t_beneficiario'] = $this->select_model->t_usuario_prestamo();
         $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
         $data['dni'] = $this->select_model->t_dni_cliente();
@@ -119,8 +119,8 @@ class Abono_prestamo extends CI_Controller {
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_abono = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_abono = ($this->select_model->nextId_abono_prestamo($prefijo_abono)->id) + 1;

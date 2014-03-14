@@ -16,8 +16,8 @@ class Cuenta extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
         $data['sede'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['t_cuenta'] = $this->select_model->t_cuenta();
@@ -67,8 +67,8 @@ class Cuenta extends CI_Controller {
             $nombre_cuenta = ucwords(strtolower($this->input->post('nombre_cuenta')));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $data["tab"] = "crear_cuenta";
             $this->isLogin($data["tab"]);                
@@ -149,8 +149,8 @@ class Cuenta extends CI_Controller {
             } else {
                 $cuenta = $this->input->post('cuenta');
                 
-                $id_responsable = $this->input->post('id_responsable');
-                $dni_responsable = $this->input->post('dni_responsable');
+                $id_responsable = $this->session->userdata('idResponsable');
+                $dni_responsable = $this->session->userdata('dniResponsable');
 
                 foreach ($checkbox as $fila) {
                     list($id_encargado, $dni_encargado) = explode("-", $fila);
@@ -183,8 +183,8 @@ class Cuenta extends CI_Controller {
             list($id_encargado, $dni_encargado, $cuenta) = explode("-", $this->input->post('empleado_cuenta'));
             $sede = $this->select_model->empleado($id_encargado, $dni_encargado)->sede_ppal;
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $error = $this->update_model->cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, 0);
 
@@ -322,8 +322,8 @@ class Cuenta extends CI_Controller {
             } else {
                 $cuenta = $this->input->post('cuenta');
                 
-                $id_responsable = $this->input->post('id_responsable');
-                $dni_responsable = $this->input->post('dni_responsable');
+                $id_responsable = $this->session->userdata('idResponsable');
+                $dni_responsable = $this->session->userdata('dniResponsable');
 
                 foreach ($checkbox as $fila) {
                     $error = $this->insert_model->cuenta_x_sede($cuenta, $fila, 1);
@@ -353,8 +353,8 @@ class Cuenta extends CI_Controller {
         $this->escapar($_POST);            
             list($sede, $cuenta) = explode("-", $this->input->post('sede_cuenta'));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
 
             $error = $this->update_model->cuenta_x_sede($cuenta, $sede, 0);
             $error = $this->update_model->cuenta_x_sede_x_empleado_todos($cuenta, $sede, 0);

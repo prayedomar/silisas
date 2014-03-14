@@ -93,11 +93,11 @@ class Cliente extends CI_Controller {
             $email = strtolower($this->input->post('email'));
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;            
 
             $perfil = 'cliente';

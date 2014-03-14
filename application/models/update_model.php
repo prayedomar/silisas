@@ -269,6 +269,17 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    } 
+    
+    public function cambio_plan_matricula($id_matricula, $plan_new) {
+        $data = array(
+            'plan' => $plan_new
+        );
+        $this->db->where('contrato', $id_matricula);
+        $this->db->update('matricula', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }      
 
 }

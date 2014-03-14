@@ -16,8 +16,8 @@ class Egreso extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $data['id_responsable'];
-        $dni_responsable = $data['dni_responsable'];
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['t_egreso'] = $this->select_model->t_egreso();
         $data['t_beneficiario'] = $this->select_model->t_usuario_ingreso_egreso();
         $data['dni'] = $this->select_model->t_dni_todos();
@@ -160,8 +160,8 @@ class Egreso extends CI_Controller {
             }
             $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
             $prefijo_egreso = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_egreso = ($this->select_model->nextId_egreso($prefijo_egreso)->id) + 1;

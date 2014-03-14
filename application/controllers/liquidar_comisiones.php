@@ -68,8 +68,8 @@ class Liquidar_comisiones extends CI_Controller {
 
             $est_concepto_nomina = 2; //2: Pendiente
             
-            $id_responsable = $this->input->post('id_responsable');
-            $dni_responsable = $this->input->post('dni_responsable');
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
 
             $matricula = $this->select_model->matricula_id($id_matricula);
