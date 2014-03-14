@@ -189,7 +189,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
     //Cargar div de valor abono y cuotas  de matricula escogida     
     $(".tabla-matriculas").delegate("#matricula", "change", function() {
         matricula = $("input[name='matricula']:checked").val();
@@ -237,7 +236,7 @@
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);
-                    $("#div_warning").delay(5000).fadeOut(1000);
+                    $("#div_warning").delay(8000).fadeOut(1000);
                 }
             });
         } else {

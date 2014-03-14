@@ -119,7 +119,7 @@
             $("#div_validacion_success").html('<div class="alert alert-success" id="div_success"></div>');
             $("#div_success").html("<p><strong>¡La Matrícula se creó correctamente!</strong> Ahora, cree la liquidación de Comisiones.</p>");
             //Cerramos el div automaticamente
-            $("#div_success").delay(5000).fadeOut(1000);
+            $("#div_success").delay(8000).fadeOut(1000);
         }
 
         //Llenamos la informacion al cargar, por si ya hay una matricula seleccionada por post.

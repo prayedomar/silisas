@@ -101,7 +101,7 @@ class MAtricula extends CI_Controller {
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
             $estado = 2; //2: Activo            
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -145,7 +145,7 @@ class MAtricula extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     //Crear: Matrícula
     function editar_plan() {
         $data["tab"] = "editar_plan_matricula";
@@ -158,7 +158,8 @@ class MAtricula extends CI_Controller {
         $id_responsable = $data['id_responsable'];
         $dni_responsable = $data['dni_responsable'];
         $data['empleado'] = $this->select_model->empleado_RRPP_sede_ppal($id_responsable, $dni_responsable);
-
+        $data['action_recargar'] = base_url() . "matricula/editar_plan";
+        $data['action_llena_t_plan_old'] = base_url() . "matricula/llena_t_plan_old";
         $data['action_llena_plan_comercial'] = base_url() . "matricula/llena_plan_comercial";
         $data['action_llena_ejecutivo'] = base_url() . "matricula/llena_empleado_rrpp_sedePpal";
         $data['action_validar'] = base_url() . "matricula/validar";
@@ -171,12 +172,9 @@ class MAtricula extends CI_Controller {
     function validar_editar_plan() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $this->form_validation->set_rules('contrato', 'Número de Contrato Físico', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
-            $this->form_validation->set_rules('dni_titular', 'Tipo de Id. del Titular', 'required|callback_select_default');
-            $this->form_validation->set_rules('id_titular', 'Número de Id. del Titular', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
-            $this->form_validation->set_rules('fecha_matricula', 'Fecha de Inicio', 'required|xss_clean|callback_fecha_valida');
-            $this->form_validation->set_rules('ejecutivo', 'Ejecutivo', 'required|callback_select_default');
-            $this->form_validation->set_rules('plan', 'Plan Comercial', 'required');
+            $this->form_validation->set_rules('matricula', 'Número de matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('plan_old', 'Tipo de plan actual', 'required');
+            $this->form_validation->set_rules('plan_new', 'Nuevo tipo de plan', 'required');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             //Validamos que el número de contrato físico exista en dicha sede
@@ -238,7 +236,7 @@ class MAtricula extends CI_Controller {
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
             $estado = 2; //2: Activo            
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->input->post('id_responsable');
             $dni_responsable = $this->input->post('dni_responsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -281,7 +279,43 @@ class MAtricula extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }
+
+    public function llena_t_plan_old() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $id_matricula = $this->input->post('matricula');
+            $matricula = $this->select_model->matricula_titular_idMatricula($id_matricula);
+            if ($matricula == TRUE) {
+                $response = array(
+                    'respuesta' => 'OK',
+                    'nombreTitular' => $matricula->titular,
+                    'plan_old' => $matricula->id,
+                    'filasTabla' => ''
+                );
+                $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $matricula->nombre . '</td>
+                            <td class="text-center">' . $matricula->anio . '</td>                                
+                            <td class="text-center">' . $matricula->cant_alumnos . '</td>
+                            <td class="text-center">$' . number_format($matricula->valor_total, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($matricula->valor_inicial, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($matricula->valor_cuota, 0, '.', ',') . '</td>                                
+                            <td class="text-center">' . $matricula->cant_cuotas . '</td>                              
+                        </tr>';
+                echo json_encode($response);
+                return false;
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong>La matrícula no existe en la base de datos.</strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
 
     public function llena_plan_comercial() {
         if ($this->input->is_ajax_request()) {
@@ -289,7 +323,7 @@ class MAtricula extends CI_Controller {
             if ($planes == TRUE) {
                 foreach ($planes as $fila) {
                     echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="plan" id="plan" value="' . $fila->id . '"/></td>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="plan_new" id="plan_new" value="' . $fila->id . '"/></td>
                             <td class="text-center">' . $fila->nombre . '</td>
                             <td class="text-center">' . $fila->anio . '</td>                                
                             <td class="text-center">' . $fila->cant_alumnos . '</td>

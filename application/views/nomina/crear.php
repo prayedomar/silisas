@@ -390,7 +390,7 @@
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(data);
-                    $("#div_warning").delay(5000).fadeOut(1000);
+                    $("#div_warning").delay(8000).fadeOut(1000);
                 }
             });
         } else {

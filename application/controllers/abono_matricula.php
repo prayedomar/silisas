@@ -171,7 +171,7 @@ class Abono_matricula extends CI_Controller {
                 } else {
                     $response = array(
                         'respuesta' => 'error',
-                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
+                        'mensaje' => '<p><strong>El titular no tiene matrículas vigentes.</strong></p>'
                     );
                     echo json_encode($response);
                     return false;
@@ -179,7 +179,7 @@ class Abono_matricula extends CI_Controller {
             } else {
                 $response = array(
                     'respuesta' => 'error',
-                    'mensaje' => '<p>El titular no existe en la base de datos.</p>'
+                    'mensaje' => '<p><strong>El titular no existe en la base de datos.</strong></p>'
                 );
                 echo json_encode($response);
                 return false;

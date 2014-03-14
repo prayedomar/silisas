@@ -186,6 +186,14 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function matricula_titular_idMatricula($id) {
+        $SqlInfo = "SELECT CONCAT(t.nombre1, ' ', t.nombre2, ' ', t.apellido1, ' ', t.apellido2) AS titular, t_p.* FROM matricula AS m, titular AS t, t_plan AS t_p WHERE ((m.contrato='" . $id . "') AND (m.id_titular=t.id) AND (m.dni_titular=t.dni) AND (m.plan=t_p.id))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function detalle_matricula_liquidar($contrato) {
         $SqlInfo = "SELECT CONCAT(t.nombre1, ' ', t.nombre2, ' ', t.apellido1, ' ', t.apellido2) AS titular, CONCAT(t_p.nombre, ' - ', t_p.anio) AS plan, m.observacion, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) AS ejecutivo, e.id, e.dni, e.cargo, CASE e.genero WHEN 'F' THEN t_c.cargo_femenino ELSE t_c.cargo_masculino END AS name_cargo, m.fecha_matricula FROM matricula AS m, titular AS t, empleado AS e, t_cargo AS t_c, t_plan AS t_p WHERE ((m.contrato='" . $contrato . "') AND (m.id_titular=t.id) AND (m.dni_titular=t.dni) AND (m.id_ejecutivo=e.id) AND (m.dni_ejecutivo=e.dni) AND (e.cargo=t_c.id) AND (m.plan=t_p.id))";

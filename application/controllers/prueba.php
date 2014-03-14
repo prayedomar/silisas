@@ -13,43 +13,34 @@ class Prueba extends CI_Controller {
 //        $data['base_url'] = base_url();
 //        $this->load->view('testV');
         $id_matricula = '10000';
-        $matriz_matricula = $this->matriz_matricula($id_matricula);
-        if ($matriz_matricula) {
-            $matricula = $this->select_model->matricula_id($id_matricula);
-            $plan = $this->select_model->t_plan_id($matricula->plan);
-            $cant_cuotas = $plan->cant_cuotas;
+        $matricula = $this->select_model->matricula_titular_idMatricula($id_matricula);
+        if ($matricula == TRUE) {
             $response = array(
                 'respuesta' => 'OK',
+                'nombreTitular' => $matricula->titular,
                 'filasTabla' => ''
             );
-
-//Solo mostrará las cuotas pendientes de pago
-            $bandera_pendiente = 0;
-            for ($i = 0; $i <= $cant_cuotas; $i++) {
-//Solo se mostraran las cuotas que no se han cancelado
-                if ($matriz_matricula[$i][6] == 0) {
-                    $num_cuota = $matriz_matricula[$i][1];
-                    $id_t_detalle = $matriz_matricula[$i][2];
-                    $t_detalle = $this->select_model->t_detalle($id_t_detalle)->tipo;
-                    $valor_pendiente = $matriz_matricula[$i][5];
-                    $fecha_esperada = $matriz_matricula[$i][7];
-                    $cant_dias_mora = $matriz_matricula[$i][8];
-                    $int_mora = $matriz_matricula[$i][9];
-
-                    $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="checkbox" class="exit_caution" name="cuotas[]" id="cuotas"  value="" data-num_cuota="' . $num_cuota . '" data-t_detalle="' . $t_detalle . '" data-valor_pendiente="' . $valor_pendiente . '" data-fecha_esperada="' . $fecha_esperada . '" data-cant_dias_mora="' . $cant_dias_mora . '" data-int_mora="' . $int_mora . '" /></td>
-                            <td class="text-center">' . $num_cuota . '</td>
-                            <td class="text-center">' . $t_detalle . '</td>
-                            <td class="text-center">$' . number_format($valor_pendiente, 2, '.', ',') . '</td>                            
-                            <td class="text-center">' . $fecha_esperada . '</td> 
-                            <td class="text-center">' . $cant_dias_mora . '</td>                                
-                            <td class="text-center">$' . number_format($int_mora, 2, '.', ',') . '</td>
+            $response['filasTabla'] .= '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="plan_old" id="plan_old" value="' . $matricula->id . '"/></td>
+                            <td class="text-center">' . $matricula->nombre . '</td>
+                            <td class="text-center">' . $matricula->anio . '</td>                                
+                            <td class="text-center">' . $matricula->cant_alumnos . '</td>
+                            <td class="text-center">$' . number_format($matricula->valor_total, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($matricula->valor_inicial, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($matricula->valor_cuota, 0, '.', ',') . '</td>                                
+                            <td class="text-center">' . $matricula->cant_cuotas . '</td>
                         </tr>';
-                }
-            }
+            echo json_encode($response);
+            return false;
+        } else {
+            $response = array(
+                'respuesta' => 'error',
+                'mensaje' => '<p><strong>La matrícula no existe en la base de datos.</strong></p>'
+            );
+            echo json_encode($response);
+            return false;
         }
-
-        echo $response['filasTabla'];
+        var_dump($response);
 //        echo $matriz_matricula[0][1] . "<br>"
 //                . $matriz_matricula[0][2] . "<br>"
 //                . $matriz_matricula[0][3] . "<br>"

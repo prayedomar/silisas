@@ -13,8 +13,8 @@
                         </div>
                         <div class="form-group separar_submit">
                             <center>
-                                <button id="consultar" class="btn btn-success">Consultar comisiones de matrícula</button>
-                                <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
+                                <button id="consultar" type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Consultar</button>
+                                <a href="{base_url}" class="btn btn-default" role="button"> Cancelar </a>
                             </center>
                         </div>
                         <div class="row">
@@ -40,8 +40,8 @@
                                 <tbody id="tbody_detalle_matricula">
                                 </tbody>
                             </table>
-                        </div>                            
-                    </div> 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
