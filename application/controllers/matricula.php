@@ -286,6 +286,30 @@ class MAtricula extends CI_Controller {
         }
     }
 
+    public function llena_plan_comercial() {
+        if ($this->input->is_ajax_request()) {
+            $planes = $this->select_model->t_plan_activo();
+            if ($planes == TRUE) {
+                foreach ($planes as $fila) {
+                    echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="plan" id="plan" value="' . $fila->id . '"/></td>
+                            <td class="text-center">' . $fila->nombre . '</td>
+                            <td class="text-center">' . $fila->anio . '</td>                                
+                            <td class="text-center">' . $fila->cant_alumnos . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_total, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_inicial, 0, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_cuota, 0, '.', ',') . '</td>                                
+                            <td class="text-center">' . $fila->cant_cuotas . '</td>
+                        </tr>';
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }    
+    
     public function llena_empleado_rrpp_sedePpal() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
