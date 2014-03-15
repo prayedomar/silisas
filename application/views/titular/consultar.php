@@ -88,7 +88,7 @@
                                     <th>Domicilio</th>
                                     <th>Teléfonos</th>
                                     <th>Email</th>
-                                    <th>Vigente</th>
+                                    <!--<th>Vigente</th>-->
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -102,7 +102,7 @@
                                         <td><?= $row->pais . " / " . $row->provincia . " / " . $row->ciudad . " - " . $row->tipo_domicilio . " / " . $row->direccion . " / " . $row->barrio ?></td>
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
-                                        <td><?= $row->vigente == "1" ? "Si" : "No" ?></td>
+                                        <!--<td><?= $row->vigente == "1" ? "Si" : "No" ?></td>-->
                                         <td class="text-center">
                                             <button class="editar btn btn-success btn-sm"
                                                     data-dni="<?= $row->dni ?>"

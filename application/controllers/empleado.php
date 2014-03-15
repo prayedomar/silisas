@@ -202,84 +202,84 @@ class Empleado extends CI_Controller {
                         $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
                     } else {
-//                        //Enviamos el correo al usuario con 
-//                        $t_dni = $this->select_model->t_dni_id($dni)->tipo;
-//                        $tipo_contrato = $this->select_model->t_contrato_laboral_id($t_contrato)->contrato;
-//                        if($cant_meses == NULL){
-//                            $cant_meses = " -- ";
-//                            $fecha_fin = " -- ";
-//                        }
-//                        if($genero == 'M'){
-//                            $prefijo = "Sr.";
-//                            $nombre_cargo = $this->select_model->t_cargo_id($cargo)->cargo_masculino;
-//                            $asunto = "Bienvenido a la familia SILI S.A.S";                            
-//                        }else{
-//                            $prefijo = "Sra.";
-//                            $nombre_cargo = $this->select_model->t_cargo_id($cargo)->cargo_femenino;
-//                            $asunto = "Bienvenida a la familia SILI S.A.S";                                                        
-//                        }
-//                        $nombre_salario = $this->select_model->t_salario_id($salario)->tipo;
-//                        $mensaje = '<p>' . $prefijo . ' ' . $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2 . '</p>'
-//                                . '<p>Reciba la más cordial bienvenida.</p>'
-//                                . '<p>A partir de este momento, usted hace parte de la familia de trabajadores, que conforma nuestra empresa SILI S.A.S.<br/>'
-//                                . '<br/>Para ingresar a nuestro sistema y disfrutar de todas las herramientas que hemos diseñado para facilitar sus labores cotidianas al interior de la compañía, ingrese a traves de nuestra pagina web: <a href="http://www.sili.com.co" target="_blank">www.sili.com.co</a> y seleccione la opción "Acceder".</p>'
-//                                . '<ul type="disc">'
-//                                    . '<li><p>Sus datos para ingresar al sistema son:</p>'
-//                                        . '<center>'
-//                                        . '<table>'
-//                                            . '<tr>'
-//                                                . '<td style="width:230px;"><b>Tipo de usuario: </b></td>'
-//                                                . '<td>Empleado</td>'
-//                                            . '</tr>'
-//                                            . '<tr>'
-//                                                . '<td><b>Tipo de identificación: </b></td>'
-//                                                . '<td>' . $t_dni . '</td>'
-//                                            . '</tr>'
-//                                            . '<tr>'
-//                                                . '<td><b>Identificación de usuario: </b></td>'
-//                                                . '<td>' . $id . '</td>'
-//                                            . '</tr>'
-//                                            . '<tr>'
-//                                                . '<td><b>Contraseña: </b></td>'
-//                                                . '<td>' . $id . '</td>'
-//                                            . '</tr>'
-//                                        . '</table>'
-//                                        . '</center>'
-//                                        . '<br/><p>Para garantizar la seguridad de su cuenta, una vez que ingrese por primera vez, modifique su contraseña a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
-//                                    . '</li>'
-//                                    . '<li><p>La información de su contrato laboral, es la siguiente:</p>'
-//                                        . '<center>'
-//                                        . '<table>'
-//                                            . '<tr>'
-//                                                . '<td style="width:230px;"><b>Tipo de contrato laboral: </b></td>'
-//                                                . '<td>' . $tipo_contrato . '</td>'
-//                                            . '</tr>'
-//                                            . '<tr>'
-//                                                . '<td><b>Duración (en meses): </b></td>'
-//                                                . '<td>' . $cant_meses . '</td>'
-//                                            . '</tr>'
-//                                            . '<tr>'
-//                                                . '<td><b>Fecha Inicial: </b></td>'
-//                                                . '<td>' . $fecha_inicio . '</td>'
-//                                            . '</tr>'
-//                                            . '<tr>'
-//                                                . '<td><b>Fecha Final: </b></td>'
-//                                                . '<td>' . $fecha_fin . '</td>'
-//                                            . '</tr>'
-//                                            . '<tr>'
-//                                                . '<td><b>Cargo: </b></td>'
-//                                                . '<td>' . $nombre_cargo . '</td>'
-//                                            . '</tr>'                                 
-//                                            . '<tr>'
-//                                                . '<td><b>Salario: </b></td>'
-//                                                . '<td>' . $nombre_salario . '</td>'
-//                                            . '</tr>'                                
-//                                        . '</table>'
-//                                    . '</li>'
-//                                . '</ul>'
-//                                . '<center><br/>¡Gracias por darnos la oportunidad de contar con su gran talento!</center>';
-//                        $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);
-                        //Mostramos mensaje de notificación
+                        //Enviamos el correo al usuario con 
+                        $t_dni = $this->select_model->t_dni_id($dni)->tipo;
+                        $tipo_contrato = $this->select_model->t_contrato_laboral_id($t_contrato)->contrato;
+                        if($cant_meses == NULL){
+                            $cant_meses = " -- ";
+                            $fecha_fin = " -- ";
+                        }
+                        if($genero == 'M'){
+                            $prefijo = "Sr.";
+                            $nombre_cargo = $this->select_model->t_cargo_id($cargo)->cargo_masculino;
+                            $asunto = "Bienvenido a la familia SILI S.A.S";                            
+                        }else{
+                            $prefijo = "Sra.";
+                            $nombre_cargo = $this->select_model->t_cargo_id($cargo)->cargo_femenino;
+                            $asunto = "Bienvenida a la familia SILI S.A.S";                                                        
+                        }
+                        $nombre_salario = $this->select_model->t_salario_id($salario)->tipo;
+                        $mensaje = '<p>' . $prefijo . ' ' . $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2 . '</p>'
+                                . '<p>Reciba la más cordial bienvenida.</p>'
+                                . '<p>A partir de este momento, usted hace parte de la familia de trabajadores, que conforma nuestra empresa SILI S.A.S.<br/>'
+                                . '<br/>Para ingresar a nuestro sistema y disfrutar de todas las herramientas que hemos diseñado para facilitar sus labores cotidianas al interior de la compañía, ingrese a traves de nuestra pagina web: <a href="http://www.sili.com.co" target="_blank">www.sili.com.co</a> y seleccione la opción "Acceder".</p>'
+                                . '<ul type="disc">'
+                                    . '<li><p>Sus datos para ingresar al sistema son:</p>'
+                                        . '<center>'
+                                        . '<table>'
+                                            . '<tr>'
+                                                . '<td style="width:230px;"><b>Tipo de usuario: </b></td>'
+                                                . '<td>Empleado</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Tipo de identificación: </b></td>'
+                                                . '<td>' . $t_dni . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Identificación de usuario: </b></td>'
+                                                . '<td>' . $id . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Contraseña: </b></td>'
+                                                . '<td>' . $id . '</td>'
+                                            . '</tr>'
+                                        . '</table>'
+                                        . '</center>'
+                                        . '<br/><p>Para garantizar la seguridad de su cuenta, una vez que ingrese por primera vez, modifique su contraseña a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
+                                    . '</li>'
+                                    . '<li><p>La información de su contrato laboral, es la siguiente:</p>'
+                                        . '<center>'
+                                        . '<table>'
+                                            . '<tr>'
+                                                . '<td style="width:230px;"><b>Tipo de contrato laboral: </b></td>'
+                                                . '<td>' . $tipo_contrato . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Duración (en meses): </b></td>'
+                                                . '<td>' . $cant_meses . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Fecha Inicial: </b></td>'
+                                                . '<td>' . $fecha_inicio . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Fecha Final: </b></td>'
+                                                . '<td>' . $fecha_fin . '</td>'
+                                            . '</tr>'
+                                            . '<tr>'
+                                                . '<td><b>Cargo: </b></td>'
+                                                . '<td>' . $nombre_cargo . '</td>'
+                                            . '</tr>'                                 
+                                            . '<tr>'
+                                                . '<td><b>Salario: </b></td>'
+                                                . '<td>' . $nombre_salario . '</td>'
+                                            . '</tr>'                                
+                                        . '</table>'
+                                    . '</li>'
+                                . '</ul>'
+                                . '<center><br/>¡Gracias por darnos la oportunidad de contar con su gran talento!</center>';
+                        $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);
+//                        Mostramos mensaje de notificación
                         $this->parser->parse('trans_success', $data);
                     }
                 }
