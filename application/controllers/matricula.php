@@ -308,8 +308,8 @@ class MAtricula extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_empleado_rrpp_sedePpal() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
@@ -331,6 +331,44 @@ class MAtricula extends CI_Controller {
         } else {
             redirect(base_url());
         }
+    }
+
+    public function consultar() {
+        $this->load->model('matriculam');
+        $this->load->model('t_cargom');
+          $this->load->model('t_planm');
+        $this->load->model('est_alumnom');
+        $this->load->model('sedem');
+        $this->load->model('t_cursom');
+        $this->load->model('alumnom');
+        $data["tab"] = "consultar_matricula";
+       // $this->isLogin($data["tab"]);
+        $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos();
+            $data['lista_planes'] = $this->t_planm->listar_todas_los_planes();
+        $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
+        $data['estados_alumnos'] = $this->est_alumnom->listar_todas_los_estados_de_alumno();
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        if (!empty($_GET["depto"])) {
+            $this->load->model('t_cargom');
+            $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
+        }
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad = $this->matriculam->cantidad_matriculas($_GET, $inicio, $filasPorPagina);
+        $cantidad = $cantidad[0]->cantidad;
+        $data['cantidad'] = $cantidad;
+        $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);
+        $data["lista"] = $this->matriculam->listar_matriculas($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("matricula/consultar");
+        $this->load->view("footer");
     }
 
 }
