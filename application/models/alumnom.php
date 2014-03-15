@@ -13,10 +13,10 @@ class Alumnom extends CI_Model {
         $query = "SELECT count(*) cantidad
                   FROM alumno a
                   JOIN t_dni td ON a.dni=td.id
-                  JOIN pais pa ON a.pais=pa.id
-                  JOIN provincia pro ON a.provincia=pro.id
-                  JOIN ciudad ciu ON a.ciudad=ciu.id
-                  JOIN t_domicilio tdom ON a.t_domicilio=tdom.id
+                  LEFT JOIN  pais pa ON a.pais=pa.id
+                  LEFT JOIN  provincia pro ON a.provincia=pro.id
+                  LEFT JOIN  ciudad ciu ON a.ciudad=ciu.id
+                  LEFT JOIN  t_domicilio tdom ON a.t_domicilio=tdom.id
                   JOIN est_alumno ealum ON a.estado=ealum.id
                   JOIN sede s ON a.sede_ppal=s.id
                   where true ";
@@ -39,13 +39,13 @@ class Alumnom extends CI_Model {
                   tdom.tipo tipo_domicilio,ealum.estado estado_alumno,s.nombre sede,tc.tipo nombre_curso,gr.fecha_grados
                   FROM alumno a
                   JOIN t_dni td ON a.dni=td.id
-                  JOIN pais pa ON a.pais=pa.id
-                  JOIN provincia pro ON a.provincia=pro.id
-                  JOIN ciudad ciu ON a.ciudad=ciu.id
-                  JOIN t_domicilio tdom ON a.t_domicilio=tdom.id
-                  JOIN est_alumno ealum ON a.estado=ealum.id
+                 LEFT JOIN pais pa ON a.pais=pa.id
+                 LEFT JOIN provincia pro ON a.provincia=pro.id
+                 LEFT JOIN ciudad ciu ON a.ciudad=ciu.id
+                 LEFT JOIN t_domicilio tdom ON a.t_domicilio=tdom.id
+                LEFT  JOIN est_alumno ealum ON a.estado=ealum.id
                   JOIN sede s ON a.sede_ppal=s.id
-                  JOIN t_curso tc ON a.t_curso=tc.id
+                 LEFT JOIN t_curso tc ON a.t_curso=tc.id
                   LEFT JOIN grados gr ON a.grados=gr.id
                   where true ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND a.dni = '{$criterios['tipo_documento']}'" : "";
@@ -68,10 +68,10 @@ class Alumnom extends CI_Model {
                   tdom.tipo tipo_domicilio,ealum.estado estado_alumno,s.nombre sede,tc.tipo nombre_curso,gr.fecha_grados
                   FROM alumno a
                   JOIN t_dni td ON a.dni=td.id
-                  JOIN pais pa ON a.pais=pa.id
-                  JOIN provincia pro ON a.provincia=pro.id
-                  JOIN ciudad ciu ON a.ciudad=ciu.id
-                  JOIN t_domicilio tdom ON a.t_domicilio=tdom.id
+                LEFT  JOIN pais pa ON a.pais=pa.id
+                 LEFT JOIN provincia pro ON a.provincia=pro.id
+                 LEFT JOIN ciudad ciu ON a.ciudad=ciu.id
+                  LEFTJOIN t_domicilio tdom ON a.t_domicilio=tdom.id
                   JOIN est_alumno ealum ON a.estado=ealum.id
                   JOIN sede s ON a.sede_ppal=s.id
                   JOIN t_curso tc ON a.t_curso=tc.id
