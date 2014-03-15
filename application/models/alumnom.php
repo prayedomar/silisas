@@ -71,10 +71,10 @@ class Alumnom extends CI_Model {
                 LEFT  JOIN pais pa ON a.pais=pa.id
                  LEFT JOIN provincia pro ON a.provincia=pro.id
                  LEFT JOIN ciudad ciu ON a.ciudad=ciu.id
-                  LEFTJOIN t_domicilio tdom ON a.t_domicilio=tdom.id
+                  LEFT JOIN t_domicilio tdom ON a.t_domicilio=tdom.id
                   JOIN est_alumno ealum ON a.estado=ealum.id
                   JOIN sede s ON a.sede_ppal=s.id
-                  JOIN t_curso tc ON a.t_curso=tc.id
+                 LEFT JOIN t_curso tc ON a.t_curso=tc.id
                   LEFT JOIN grados gr ON a.grados=gr.id
                   where true ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND a.dni = '{$criterios['tipo_documento']}'" : "";
