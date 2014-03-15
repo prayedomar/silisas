@@ -376,62 +376,62 @@
                                                                 <li><a href="#">Caja Efectivo</a></li>
                                                             </ul>
                                                         </li>
--->                                                        <li class="col-sm-4">
-                                                            <ul>
-<!--                                                                <li class="dropdown-header">Inventario</li>
-                                                                <li><a href="#">Articulo Inventario</a></li>
-                                                                <li><a href="#">Articulo Insumo</a></li>
-                                                                <li><a href="#">Linea Celular</a></li>
-                                                                <li><a href="#">Pedido de Insumos</a></li>
-                                                                <li class="divider"></li>                                    -->
-                                                                <li class="dropdown-header">Matrículas</li>
-                                                                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
-                                                                    <li><a href="<?= base_url() ?>matricula/editar_plan">Cambio de plan</a></li>  
-                                                                <?php } ?>                                                                 
-<!--                                                                <li><a href="#">Referido</a></li>
-                                                                <li><a href="#">Consolidar Referido</a></li>
-                                                                <li><a href="#">Contrato de Matrícula</a></li>
-                                                                <li><a href="#">Material de Estudio</a></li>
-                                                                <li><a href="#">Entrega de Material</a></li>
-                                                                <li><a href="#">Comisión de Escala</a></li>
-                                                                <li><a href="#">Comisión de Matrícula</a></li>-->
-<!--                                                                <li class="divider"></li>
-                                                                <li class="dropdown-header">Permisos</li>
-                                                                <li><a href="#">Código de Autorización</a></li>                                    -->
-                                                            </ul>
-                                                        </li><!--
--->                                                        <li class="col-sm-4">
-                                                            <ul>
-<!--                                                                <li class="dropdown-header">Traslados</li>
-                                                                <li><a href="#">Contratos Físicos</a></li>
-                                                                <li><a href="#">Material de Estudio</a></li>
-                                                                <li><a href="#">Articulo de Inventario</a></li>                                   
-                                                                <li class="divider"></li>
-                                                                <li class="dropdown-header">Enseñanza</li>
-                                                                <li><a href="#">Horario de Clase</a></li>
-                                                                <li><a href="#">Reserva de Clase</a></li>
-                                                                <li><a href="#">Reporte de Alumno</a></li>
-                                                                <li><a href="#">Grados</a></li>
-                                                                <li><a href="#">Descargar Certificado</a></li>                                
-                                                                <li class="divider"></li>-->
-                                                                <li class="dropdown-header">Clientes</li>
-                                                                <!--<li><a href="#">Titular</a></li>-->
-                                                                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "docente", "secretaria"))) { ?>                                       
-                                                                    <li><a href="<?= base_url() ?>alumno/actualizar">Alumno</a></li>
-                                                                <?php } ?>                                   
-<!--                                                                <li class="divider"></li>
-                                                                <li class="dropdown-header">Servicio al cliente</li>
-                                                                <li><a href="#">Acuerdo de Pago</a></li>
-                                                                <li><a href="#">Registro PQR</a></li>
-                                                                <li><a href="#">Respuesta PQR</a></li>-->
-                                                            </ul>
-                                                        </li>
+                            -->                                                        <li class="col-sm-4">
+                                <ul>
+                                    <!--                                                                <li class="dropdown-header">Inventario</li>
+                                                                                                    <li><a href="#">Articulo Inventario</a></li>
+                                                                                                    <li><a href="#">Articulo Insumo</a></li>
+                                                                                                    <li><a href="#">Linea Celular</a></li>
+                                                                                                    <li><a href="#">Pedido de Insumos</a></li>
+                                                                                                    <li class="divider"></li>                                    -->
+                                    <li class="dropdown-header">Matrículas</li>
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                                        <li><a href="<?= base_url() ?>matricula/editar_plan">Cambio de plan</a></li>  
+                                    <?php } ?>                                                                 
+                                    <!--                                                                <li><a href="#">Referido</a></li>
+                                                                                                    <li><a href="#">Consolidar Referido</a></li>
+                                                                                                    <li><a href="#">Contrato de Matrícula</a></li>
+                                                                                                    <li><a href="#">Material de Estudio</a></li>
+                                                                                                    <li><a href="#">Entrega de Material</a></li>
+                                                                                                    <li><a href="#">Comisión de Escala</a></li>
+                                                                                                    <li><a href="#">Comisión de Matrícula</a></li>-->
+                                    <!--                                                                <li class="divider"></li>
+                                                                                                    <li class="dropdown-header">Permisos</li>
+                                                                                                    <li><a href="#">Código de Autorización</a></li>                                    -->
+                                </ul>
+                            </li><!--
+                            -->                                                        <li class="col-sm-4">
+                                <ul>
+                                    <!--                                                                <li class="dropdown-header">Traslados</li>
+                                                                                                    <li><a href="#">Contratos Físicos</a></li>
+                                                                                                    <li><a href="#">Material de Estudio</a></li>
+                                                                                                    <li><a href="#">Articulo de Inventario</a></li>                                   
+                                                                                                    <li class="divider"></li>
+                                                                                                    <li class="dropdown-header">Enseñanza</li>
+                                                                                                    <li><a href="#">Horario de Clase</a></li>
+                                                                                                    <li><a href="#">Reserva de Clase</a></li>
+                                                                                                    <li><a href="#">Reporte de Alumno</a></li>
+                                                                                                    <li><a href="#">Grados</a></li>
+                                                                                                    <li><a href="#">Descargar Certificado</a></li>                                
+                                                                                                    <li class="divider"></li>-->
+                                    <li class="dropdown-header">Clientes</li>
+                                    <!--<li><a href="#">Titular</a></li>-->
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "docente", "secretaria"))) { ?>                                       
+                                        <li><a href="<?= base_url() ?>alumno/actualizar">Alumno</a></li>
+                                    <?php } ?>                                   
+                                    <!--                                                                <li class="divider"></li>
+                                                                                                    <li class="dropdown-header">Servicio al cliente</li>
+                                                                                                    <li><a href="#">Acuerdo de Pago</a></li>
+                                                                                                    <li><a href="#">Registro PQR</a></li>
+                                                                                                    <li><a href="#">Respuesta PQR</a></li>-->
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Consultar <b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large row"  style="margin-left: 432px;">
-                            <li class="col-sm-6">
+                            <li class="col-sm-4">
                                 <ul>
                                     <li class="dropdown-header">Sedes</li>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
@@ -475,7 +475,7 @@
                                     <?php } ?>                                    
                                 </ul>
                             </li>
-                            <li class="col-sm-6">
+                            <li class="col-sm-4">
                                 <ul>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>  
                                         <li class="dropdown-header">Cajas y Bancos</li>
@@ -496,57 +496,56 @@
                                     <li class="dropdown-header">Transacciones</li>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>transacciones/consultar">Transacciones</a></li>
-                                    <?php } ?>       
-                                    <li class="divider"></li>                                    
+                                    <?php } ?>                                   
+                                </ul>
+                            </li>
+                            <li class="col-sm-4">
+                                <ul>
+<!--                                    <li class="dropdown-header">Inventario</li>
+                                    <li><a href="#">Articulo Inventario</a></li>
+                                    <li><a href="#">Articulo Insumo</a></li>
+                                    <li><a href="#">Linea Celular</a></li>
+                                    <li><a href="#">Pedido de Insumos</a></li>
+                                    <li class="divider"></li>                                    -->
                                     <li class="dropdown-header">Matrículas</li>
+                                    <!--<li><a href="#">Contratos Físicos</a></li>--> 
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "secretaria"))) { ?>                                       
+                                    <li><a href="<?= base_url() ?>matricula/consultar">Matrícula</a></li>
+                                    <?php } ?> 
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>liquidar_comisiones/consultar">Liquidación de comisiones</a></li>
-                                    <?php } ?>                                    
+                                    <?php } ?>    
+<!--                                    <li><a href="#">Referido</a></li>
+                                    <li><a href="#">Consolidar Referido</a></li>
+                                    <li><a href="#">Material de Estudio</a></li>
+                                    <li><a href="#">Entrega de Material</a></li>
+                                    <li><a href="#">Comisión de Escala</a></li>
+                                    <li><a href="#">Comisión de Matrícula</a></li>
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Permisos</li>
+                                    <li><a href="#">Código de Autorización</a></li>                                    -->
                                 </ul>
                             </li>
                             <!--                            <li class="col-sm-3">
-                                                            <ul>
-                                                                <li class="dropdown-header">Inventario</li>
-                                                                <li><a href="#">Articulo Inventario</a></li>
-                                                                <li><a href="#">Articulo Insumo</a></li>
-                                                                <li><a href="#">Linea Celular</a></li>
-                                                                <li><a href="#">Pedido de Insumos</a></li>
-                                                                <li class="divider"></li>                                    
-                                                                <li class="dropdown-header">Matrículas</li>
-                                                                <li><a href="#">Contratos Físicos</a></li>                                
-                                                                <li><a href="#">Matrícula</a></li>
-                                                                <li><a href="#">Liquidar Matrícula</a></li>
-                                                                <li><a href="#">Referido</a></li>
-                                                                <li><a href="#">Consolidar Referido</a></li>
-                                                                <li><a href="#">Material de Estudio</a></li>
-                                                                <li><a href="#">Entrega de Material</a></li>
-                                                                <li><a href="#">Comisión de Escala</a></li>
-                                                                <li><a href="#">Comisión de Matrícula</a></li>
-                                                                <li class="divider"></li>
-                                                                <li class="dropdown-header">Permisos</li>
-                                                                <li><a href="#">Código de Autorización</a></li>                                    
-                                                            </ul>
-                                                        </li>
-                                                        <li class="col-sm-3">
-                                                            <ul>
-                                                                <li class="dropdown-header">Traslados</li>
-                                                                <li><a href="#">Contratos Físicos</a></li>
-                                                                <li><a href="#">Material de Estudio</a></li>
-                                                                <li><a href="#">Articulo de Inventario</a></li>                                   
-                                                                <li class="divider"></li>
-                                                                <li class="dropdown-header">Enseñanza</li>
-                                                                <li><a href="#">Horario de Clase</a></li>
-                                                                <li><a href="#">Reserva de Clase</a></li>
-                                                                <li><a href="#">Reporte de Alumno</a></li>
-                                                                <li><a href="#">Grados</a></li>                                  
-                                                                <li><a href="#">Descargar Certificado</a></li>
-                                                                <li class="divider"></li>
-                                                                <li class="dropdown-header">Servicio al cliente</li>
-                                                                <li><a href="#">Acuerdo de Pago</a></li>
-                                                                <li><a href="#">Registro PQR</a></li>
-                                                                <li><a href="#">Respuesta PQR</a></li>
-                                                            </ul>
-                                                        </li>-->
+                                                           <ul>
+                                                               <li class="dropdown-header">Traslados</li>
+                                                               <li><a href="#">Contratos Físicos</a></li>
+                                                               <li><a href="#">Material de Estudio</a></li>
+                                                               <li><a href="#">Articulo de Inventario</a></li>                                   
+                                                               <li class="divider"></li>
+                                                               <li class="dropdown-header">Enseñanza</li>
+                                                               <li><a href="#">Horario de Clase</a></li>
+                                                               <li><a href="#">Reserva de Clase</a></li>
+                                                               <li><a href="#">Reporte de Alumno</a></li>
+                                                               <li><a href="#">Grados</a></li>                                  
+                                                               <li><a href="#">Descargar Certificado</a></li>
+                                                               <li class="divider"></li>
+                                                               <li class="dropdown-header">Servicio al cliente</li>
+                                                               <li><a href="#">Acuerdo de Pago</a></li>
+                                                               <li><a href="#">Registro PQR</a></li>
+                                                               <li><a href="#">Respuesta PQR</a></li>
+                                                           </ul>
+                                                       </li>-->
                         </ul>
                     </li>                    
                 </ul>

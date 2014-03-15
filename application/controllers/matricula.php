@@ -342,7 +342,7 @@ class MAtricula extends CI_Controller {
         $this->load->model('t_cursom');
         $this->load->model('alumnom');
         $data["tab"] = "consultar_matricula";
-       // $this->isLogin($data["tab"]);
+        $this->isLogin($data["tab"]);
         $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos();
             $data['lista_planes'] = $this->t_planm->listar_todas_los_planes();
         $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
