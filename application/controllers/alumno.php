@@ -429,7 +429,7 @@ class Alumno extends CI_Controller {
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
         $data['estados_alumnos'] = $this->est_alumnom->listar_todas_los_estados_de_alumno();
-        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes_sin_resposanble();
         if (!empty($_GET["depto"])) {
             $this->load->model('t_cargom');
             $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);

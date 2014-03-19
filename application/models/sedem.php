@@ -16,6 +16,11 @@ class Sedem extends CI_Model {
         return $this->db->query($query)->result();
     }
 
+    public function listar_todas_las_sedes_sin_resposanble() {
+        $query = "SELECT * FROM sede";
+        return $this->db->query($query)->result();
+    }
+
     public function cantidadSedes($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT count(*) cantidad
                   FROM sede s
