@@ -65,16 +65,16 @@
                             <label>DataCrédito</label>
                             <select id="datacredito" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <option value="si" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "si" ? "selected" : "" ?>>Si</option>
-                                <option value="no" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "no" ? "selected" : "" ?>>No</option>
+                                <option value="1" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "1" ? "selected" : "" ?>>Si</option>
+                                <option value="0" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "0" ? "selected" : "" ?>>No</option>
                             </select>
                         </div>
                         <div class="col-xs-2">
                             <label>Jurídico</label>
                             <select id="juridico" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <option value="si" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "si" ? "selected" : "" ?>>Si</option>
-                                <option value="no" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "no" ? "selected" : "" ?>>No</option>
+                                <option value="1" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "1" ? "selected" : "" ?>>Si</option>
+                                <option value="0" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "0" ? "selected" : "" ?>>No</option>
                             </select>
                         </div>
                         <div class="col-xs-2">
