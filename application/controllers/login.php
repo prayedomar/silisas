@@ -133,7 +133,7 @@ class Login extends CI_Controller {
                     $textoBienvenida = "A través de éste aplicación web, usted podrá disfrutar de todas las herramientas diseñadas para que usted interactúe con nuestra empresa desde cualquier lugar del mundo."
                             . "<br><br>Así que... ¡Siéntase como en casa!";
                 } else {
-                    $textoBienvenida = "Esta aplicación web es uno de los muhos símbolos, que demuestran el crecimiento exponencial que SILI S.A.S ha mantenido desde sus inicios."
+                    $textoBienvenida = "Esta aplicación web es uno de los muchos símbolos, que demuestran el crecimiento exponencial que SILI S.A.S ha mantenido desde sus inicios."
                             . "<br>Ha sido desarrollada con el único fin de facilitar sus funciones laborales al interior de nuestra compañía, por medio de la creación de un ambiente laboral más cómodo y eficiente para usted."
                             . "<br><br>Así que... ¡Siéntase como en casa!";
                 }
