@@ -10,10 +10,26 @@ class Matriculam extends CI_Model {
     }
 
     public function cantidad_matriculas($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT count(*) cantidad
+              $query = "SELECT count(*) cantidad
                   FROM matricula ma
+                  JOIN titular t ON ma.dni_titular=t.dni AND ma.id_titular=t.id
+                  JOIN t_plan p ON ma.plan=p.id
+                  JOIN t_dni tdni ON ma.dni_titular=tdni.id
+                  JOIN sede s ON ma.sede=s.id
+                  LEFT JOIN  alumno al ON ma.contrato=al.matricula
                   where true ";
-        $query.=(!empty($criterios['tipo_documento'])) ? "AND a.dni = '{$criterios['tipo_documento']}'" : "";
+        $query.=(!empty($criterios['contrato'])) ? "AND ma.contrato = '{$criterios['contrato']}'" : "";
+        $query.=(!empty($criterios['fecha_matricula_desde'])) ? "AND ma.fecha_matricula >= '{$criterios['fecha_matricula_desde']}'" : "";
+        $query.=(!empty($criterios['fecha_matricula_hasta'])) ? "AND ma.fecha_matricula <= '{$criterios['fecha_matricula_hasta']}'" : "";
+        $query.=(!empty($criterios['id_titular'])) ? "AND ma.id_titular = '{$criterios['id_titular']}'" : "";
+        $query.=(!empty($criterios['id_ejecutivo'])) ? "AND ma.id_ejecutivo = '{$criterios['id_ejecutivo']}'" : "";
+        $query.=(!empty($criterios['cargo_ejecutivo'])) ? "AND ma.cargo_ejecutivo = '{$criterios['cargo_ejecutivo']}'" : "";
+        $query.=(!empty($criterios['plan'])) ? "AND ma.plan = '{$criterios['plan']}'" : "";
+        $query.=(!empty($criterios['datacredito'])) ? "AND ma.datacredito = '{$criterios['datacredito']}'" : "";
+        $query.=(!empty($criterios['juridico'])) ? "AND ma.juridico = '{$criterios['juridico']}'" : "";
+        $query.=(!empty($criterios['sede'])) ? "AND ma.sede = '{$criterios['sede']}'" : "";
+        $query.=(!empty($criterios['estado'])) ? "AND ma.estado = '{$criterios['estado']}'" : "";
+        $query.=(!empty($criterios['id_alumno'])) ? "AND al.id = '{$criterios['id_alumno']}'" : "";
         return $this->db->query($query)->result();
     }
 
@@ -22,12 +38,24 @@ class Matriculam extends CI_Model {
                   FROM matricula ma
                   JOIN titular t ON ma.dni_titular=t.dni AND ma.id_titular=t.id
                   JOIN t_plan p ON ma.plan=p.id
-                    JOIN t_dni tdni ON ma.dni_titular=tdni.id
-                    JOIN sede s ON ma.sede=s.id
+                  JOIN t_dni tdni ON ma.dni_titular=tdni.id
+                  JOIN sede s ON ma.sede=s.id
+                  LEFT JOIN  alumno al ON ma.contrato=al.matricula
                   where true ";
-        $query.=(!empty($criterios['tipo_documento'])) ? "AND a.dni = '{$criterios['tipo_documento']}'" : "";
+        $query.=(!empty($criterios['contrato'])) ? "AND ma.contrato = '{$criterios['contrato']}'" : "";
+        $query.=(!empty($criterios['fecha_matricula_desde'])) ? "AND ma.fecha_matricula >= '{$criterios['fecha_matricula_desde']}'" : "";
+        $query.=(!empty($criterios['fecha_matricula_hasta'])) ? "AND ma.fecha_matricula <= '{$criterios['fecha_matricula_hasta']}'" : "";
+        $query.=(!empty($criterios['id_titular'])) ? "AND ma.id_titular = '{$criterios['id_titular']}'" : "";
+        $query.=(!empty($criterios['id_ejecutivo'])) ? "AND ma.id_ejecutivo = '{$criterios['id_ejecutivo']}'" : "";
+        $query.=(!empty($criterios['cargo_ejecutivo'])) ? "AND ma.cargo_ejecutivo = '{$criterios['cargo_ejecutivo']}'" : "";
+        $query.=(!empty($criterios['plan'])) ? "AND ma.plan = '{$criterios['plan']}'" : "";
+        $query.=(!empty($criterios['datacredito'])) ? "AND ma.datacredito = '{$criterios['datacredito']}'" : "";
+        $query.=(!empty($criterios['juridico'])) ? "AND ma.juridico = '{$criterios['juridico']}'" : "";
+        $query.=(!empty($criterios['sede'])) ? "AND ma.sede = '{$criterios['sede']}'" : "";
+        $query.=(!empty($criterios['estado'])) ? "AND ma.estado = '{$criterios['estado']}'" : "";
+        $query.=(!empty($criterios['id_alumno'])) ? "AND al.id = '{$criterios['id_alumno']}'" : "";
         $query.=" LIMIT $inicio,$filasPorPagina";
-       // echo $query;
+        // echo $query;
         return $this->db->query($query)->result();
     }
 

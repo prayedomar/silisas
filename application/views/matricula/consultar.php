@@ -12,14 +12,14 @@
                         <div class="col-xs-2">
                             <label>Fecha matr. (desde)</label>
                             <div class="input-group">
-                                <input name="fecha_matricula_desde" id="fecha_matricula_desde" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>">
+                                <input name="fecha_matricula_desde" id="fecha_matricula_desde" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="<?= isset($_GET["fecha_matricula_desde"]) ? $_GET["fecha_matricula_desde"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
                         <div class="col-xs-2">
                             <label>Fecha matr. (hasta)</label>
                             <div class="input-group">
-                                <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="mm-dd" value="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
+                                <input name="fecha_matricula_hasta" id="fecha_matricula_hasta" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="mm-dd" value="<?= isset($_GET["fecha_matricula_hasta"]) ? $_GET["fecha_matricula_hasta"] : "" ?>">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="col-xs-2">
                             <label>Plan</label>
-                            <select id="cargo_ejecutivo" class="form-control">
+                            <select id="plan" class="form-control">
                                 <option value="">Seleccionar...</option>
                                 <?php foreach ($lista_planes as $row) { ?>
                                     <option value="<?= $row->id ?>" <?= isset($_GET["plan"]) && $_GET["plan"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
@@ -65,21 +65,21 @@
                             <label>DataCrédito</label>
                             <select id="datacredito" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <option valie="si" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "si" ? "selected" : "" ?>>Si</option>
-                                <option valie="no" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "no" ? "selected" : "" ?>>No</option>
+                                <option value="si" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "si" ? "selected" : "" ?>>Si</option>
+                                <option value="no" <?= isset($_GET["datacredito"]) && $_GET["datacredito"] == "no" ? "selected" : "" ?>>No</option>
                             </select>
                         </div>
                         <div class="col-xs-2">
                             <label>Jurídico</label>
                             <select id="juridico" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <option valie="si" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "si" ? "selected" : "" ?>>Si</option>
-                                <option valie="no" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "no" ? "selected" : "" ?>>No</option>
+                                <option value="si" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "si" ? "selected" : "" ?>>Si</option>
+                                <option value="no" <?= isset($_GET["juridico"]) && $_GET["juridico"] == "no" ? "selected" : "" ?>>No</option>
                             </select>
                         </div>
                         <div class="col-xs-2">
                             <label>Sede</label>
-                            <select id="cargo_ejecutivo" class="form-control">
+                            <select id="sede" class="form-control">
                                 <option value="">Seleccionar...</option>
                                 <?php foreach ($lista_sedes as $row) { ?>
                                     <option value="<?= $row->id ?>" <?= isset($_GET["sede"]) && $_GET["sede"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
@@ -97,6 +97,13 @@
                         </div>
                     </div>
                     <br>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-2">
+                        <label>ID alumno</label>
+                        <input type='text' id="id_alumno" class='form-control' placeholder="id_alumno" value="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>">
+                    </div>
                 </div>
                 <hr>
                 <div class="row">
@@ -133,18 +140,18 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div id="paginacion" class=" pull-right"
-                             data-tipodocumento="<?= isset($_GET["tipo_documento"]) ? $_GET["tipo_documento"] : "" ?>"
-                             data-numerodocumento="<?= isset($_GET["numero_documento"]) ? $_GET["numero_documento"] : "" ?>"
-                             data-primernombre="<?= isset($_GET["primer_nombre"]) ? $_GET["primer_nombre"] : "" ?>"
-                             data-segundonombre="<?= isset($_GET["segundo_nombre"]) ? $_GET["segundo_nombre"] : "" ?>"
-                             data-primerapellido="<?= isset($_GET["primer_apellido"]) ? $_GET["primer_apellido"] : "" ?>"
-                             data-segundoapellido="<?= isset($_GET["segundo_apellido"]) ? $_GET["segundo_apellido"] : "" ?>"
-                             data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
-                             data-fechanacimientohasta="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>"
-                             data-matricula="<?= isset($_GET["matricula"]) ? $_GET["matricula"] : "" ?>"
-                             data-curso="<?= isset($_GET["curso"]) ? $_GET["curso"] : "" ?>"
+                             data-contrato="<?= isset($_GET["contrato"]) ? $_GET["contrato"] : "" ?>"
+                             data-fecha_matricula_desde="<?= isset($_GET["fecha_matricula_desde"]) ? $_GET["fecha_matricula_desde"] : "" ?>"
+                             data-fecha_matricula_hasta="<?= isset($_GET["fecha_matricula_hasta"]) ? $_GET["fecha_matricula_hasta"] : "" ?>"
+                             data-id_titular="<?= isset($_GET["id_titular"]) ? $_GET["id_titular"] : "" ?>"
+                             data-id_ejecutivo="<?= isset($_GET["id_ejecutivo"]) ? $_GET["id_ejecutivo"] : "" ?>"
+                             data-cargo_ejecutivo="<?= isset($_GET["cargo_ejecutivo"]) ? $_GET["cargo_ejecutivo"] : "" ?>"
+                             data-plan="<?= isset($_GET["plan"]) ? $_GET["plan"] : "" ?>"
+                             data-datacredito="<?= isset($_GET["datacredito"]) ? $_GET["datacredito"] : "" ?>"
+                             data-juridico="<?= isset($_GET["juridico"]) ? $_GET["juridico"] : "" ?>"
+                             data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
                              data-estado="<?= isset($_GET["estado"]) ? $_GET["estado"] : "" ?>"
-                             data-sedeppal="<?= isset($_GET["sede_ppal"]) ? $_GET["sede_ppal"] : "" ?>">
+                             data-id_alumno="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>">
 
 
                             <ul class="pagination">

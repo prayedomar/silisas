@@ -336,7 +336,7 @@ class MAtricula extends CI_Controller {
     public function consultar() {
         $this->load->model('matriculam');
         $this->load->model('t_cargom');
-          $this->load->model('t_planm');
+        $this->load->model('t_planm');
         $this->load->model('est_alumnom');
         $this->load->model('sedem');
         $this->load->model('t_cursom');
@@ -344,10 +344,10 @@ class MAtricula extends CI_Controller {
         $data["tab"] = "consultar_matricula";
         $this->isLogin($data["tab"]);
         $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos();
-            $data['lista_planes'] = $this->t_planm->listar_todas_los_planes();
+        $data['lista_planes'] = $this->t_planm->listar_todas_los_planes();
         $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
         $data['estados_alumnos'] = $this->est_alumnom->listar_todas_los_estados_de_alumno();
-        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes_sin_resposanble();
         if (!empty($_GET["depto"])) {
             $this->load->model('t_cargom');
             $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
