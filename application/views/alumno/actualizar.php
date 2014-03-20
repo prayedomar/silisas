@@ -189,7 +189,16 @@
                                     <option value="5">5</option>
                                     <option value="6">6</option>
                                 </select>
-                            </div>                           
+                            </div> 
+                            <div class="form-group">
+                                <label>Estado del alumno<em class="required_asterisco">*</em></label>
+                                <select name="est_alumno" id="est_alumno" class="form-control exit_caution">
+                                    <option value="default">Seleccione estado del alumno</option>
+                                    {est_alumno}
+                                    <option value="{id}">{estado}</option>
+                                    {/est_alumno}
+                                </select>
+                            </div>                             
                             <div class="form-group">
                                 <label>Observación</label>
                                 <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="255" placeholder="Observación..."style="max-width:100%;"></textarea>
@@ -290,6 +299,7 @@
                     $("#comprension_ini").attr("value", obj.comprension_ini);
                     $("#t_curso").attr("value", obj.t_curso);
                     $("#cant_clases").attr("value", obj.cant_clases);
+                    $("#est_alumno").attr("value", obj.estado);
                     $("#observacion").attr("value", obj.observacion);
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');

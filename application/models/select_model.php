@@ -492,6 +492,13 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function est_alumno() {
+        $query = $this->db->get('est_alumno');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function est_empleado() {
         $query = $this->db->get('est_empleado');

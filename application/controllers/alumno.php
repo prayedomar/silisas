@@ -196,6 +196,7 @@ class Alumno extends CI_Controller {
         $data['ciudad'] = $this->select_model->ciudad();
         $data['t_domicilio'] = $this->select_model->t_domicilio();
         $data['t_curso'] = $this->select_model->t_curso();
+        $data['est_alumno'] = $this->select_model->est_alumno();
         $data['action_validar'] = base_url() . "alumno/validar_actualizar";
         $data['action_crear'] = base_url() . "alumno/insertar_actualizar";
         $data['action_recargar'] = base_url() . "alumno/actualizar";
@@ -230,6 +231,7 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('comprension_ini', 'Comprensión Inicial', 'required|trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('t_curso', 'Tipo de Curso', 'required|callback_select_default');
             $this->form_validation->set_rules('cant_clases', 'Cantidad de Clases', 'required|callback_select_default');
+            $this->form_validation->set_rules('est_alumno', 'Estado del alumno', 'required|callback_select_default');            
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             if ($this->form_validation->run() == FALSE) {
@@ -266,6 +268,7 @@ class Alumno extends CI_Controller {
             $comprension_ini = round(str_replace(",", "", $this->input->post('comprension_ini')), 2); //Redondeamos cuando es decimal lo que viene
             $t_curso = $this->input->post('t_curso');
             $cant_clases = $this->input->post('cant_clases');
+            $est_alumno = $this->input->post('est_alumno');
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
@@ -276,7 +279,7 @@ class Alumno extends CI_Controller {
             $data['url_recrear'] = base_url() . "alumno/actualizar";
             $data['msn_recrear'] = "Actualizar otro Alumno";
 
-            $error2 = $this->update_model->alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $observacion, $id_responsable, $dni_responsable);
+            $error2 = $this->update_model->alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $est_alumno, $observacion, $id_responsable, $dni_responsable);
             //No se pudo crear el empleado
             if (isset($error2)) {
                 $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
@@ -360,6 +363,7 @@ class Alumno extends CI_Controller {
                     'comprension_ini' => $alumno->comprension_ini,
                     't_curso' => $alumno->t_curso,
                     'cant_clases' => $alumno->cant_clases,
+                    'estado' => $alumno->estado,
                     'observacion' => $alumno->observacion
                 );
                 echo json_encode($response);

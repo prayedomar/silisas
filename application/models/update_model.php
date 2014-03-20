@@ -236,7 +236,7 @@ class Update_model extends CI_Model {
         }
     }     
     
-    public function alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $observacion, $id_responsable, $dni_responsable) {
+    public function alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $est_alumno, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'nombre1' => $nombre1,
             'nombre2' => $nombre2,
@@ -257,6 +257,7 @@ class Update_model extends CI_Model {
             'comprension_ini' => $comprension_ini,
             't_curso' => $t_curso,
             'cant_clases' => $cant_clases,
+            'estado' => $est_alumno,
             'observacion' => $observacion,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
