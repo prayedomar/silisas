@@ -45,6 +45,16 @@
                                         <select name="ejecutivo" id="ejecutivo" data-placeholder="Seleccione Ejecutivo" class="form-control exit_caution">
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Sede Principal<em class="required_asterisco">*</em></label>
+                                        <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes encargadas.</p>                                
+                                        <select name="sede_ppal" id="sede_ppal" class="form-control exit_caution">
+                                            <option value="default">Seleccione Sede Principal</option>
+                                            {sede_ppal}
+                                            <option value="{id}">{nombre}</option>
+                                            {/sede_ppal}
+                                        </select>
+                                    </div>                                    
                                 </div> 
                             </div>
                             <div class="overflow_tabla">

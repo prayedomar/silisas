@@ -21,7 +21,7 @@ class MAtricula extends CI_Controller {
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');
         $data['empleado'] = $this->select_model->empleado_RRPP_sede_ppal($id_responsable, $dni_responsable);
-
+        $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['action_llena_plan_comercial'] = base_url() . "matricula/llena_plan_comercial";
         $data['action_llena_ejecutivo'] = base_url() . "matricula/llena_empleado_rrpp_sedePpal";
         $data['action_validar'] = base_url() . "matricula/validar";
@@ -39,6 +39,7 @@ class MAtricula extends CI_Controller {
             $this->form_validation->set_rules('id_titular', 'Número de Id. del Titular', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('fecha_matricula', 'Fecha de Inicio', 'required|xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('ejecutivo', 'Ejecutivo', 'required|callback_select_default');
+            $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
             $this->form_validation->set_rules('plan', 'Plan Comercial', 'required');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
@@ -75,7 +76,7 @@ class MAtricula extends CI_Controller {
             }
 
             if (($this->form_validation->run() == FALSE) || ($error_contrato != "") || ($error_titular != "")) {
-                echo form_error('contrato') . $error_contrato . form_error('fecha_matricula') . form_error('dni_titular') . form_error('id_titular') . $error_titular . form_error('ejecutivo') . form_error('plan') . form_error('observacion');
+                echo form_error('contrato') . $error_contrato . form_error('fecha_matricula') . form_error('dni_titular') . form_error('id_titular') . $error_titular . form_error('ejecutivo') . form_error('sede_ppal') . form_error('plan') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -104,7 +105,7 @@ class MAtricula extends CI_Controller {
 
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
-            $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+            $sede = $this->input->post('sede_ppal');
 
             $data["tab"] = "crear_matricula";
             $this->isLogin($data["tab"]);
