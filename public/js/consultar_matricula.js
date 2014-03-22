@@ -100,5 +100,32 @@ $(function() {
         window.location.href = url;
 
     });
+    $("#tabla-matriculas .ver-detalles").click(function(e) {
+        $("#modalDetalles").modal();
+        $("#divIdAlumnos").html($(this).data("alumnos"));
+        $("#divIdEjecutivo").html($(this).data("id-ejecutivo"));
+        $("#divNombreEjecutivo").html($(this).data("nombre-ejecutivo"));
+        $("#divCargoEjecutivo").html($(this).data("cargo-ejecutivo"));
+        $("#divCantidadMateriales").html($(this).data("cant-materiales"));
+        if ($(this).data("datacredito") == "1") {
+            $("#divDatacredito").html("Si");
+        } else {
+            $("#divDatacredito").html("No");
+        }
+        if ($(this).data("juridico") == "1") {
+            $("#divJuridico").html("Si");
+        } else {
+            $("#divJuridico").html("No");
+        }
+        if ($(this).data("liquidacion-escalas") == "1") {
+            $("#divLiquidacionEscalas").html("Si");
+        } else {
+            $("#divLiquidacionEscalas").html("No");
+        }
+        $("#divEstado").html($(this).data("estado"));
+        $("#divObservacion").html($(this).data("observacion"));
+        $("#divFechaCreacion").html($(this).data("fecha-creacion"));
+        $("#divResposable").html($(this).data("resposable"));
+    });
 });
 
