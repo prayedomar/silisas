@@ -371,7 +371,7 @@ class MAtricula extends CI_Controller {
             $alumnos = $this->alumnom->obtenerAlumnosPorMatricula($row->contrato);
             $lista = "";
             foreach ($alumnos as $row2) {
-                $lista .= $row2->dni . " " . $row2->id . " " . $row2->nombre1 . " " . $row2->nombre2 . " " . $row2->apellido1 . " " . $row2->apellido2 . " <br>";
+                $lista .= $row2->dni_alumno . " " . $row2->id . " " . $row2->nombre1 . " " . $row2->nombre2 . " " . $row2->apellido1 . " " . $row2->apellido2 . " <br>";
             }
             $row->lista_alumnos=$lista;
         }

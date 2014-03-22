@@ -93,7 +93,7 @@ class Alumnom extends CI_Model {
     }
 
     public function obtenerAlumnosPorMatricula($idMatricula) {
-        $query = "SELECT *,td.abreviacion dni  FROM  alumno a JOIN t_dni td ON a.dni=td.id  WHERE a.matricula='$idMatricula'";
+        $query = "SELECT *,td.abreviacion dni_alumno  FROM  alumno a JOIN t_dni td ON a.dni=td.id  WHERE a.matricula='$idMatricula'";
         return $this->db->query($query)->result();
     }
 
