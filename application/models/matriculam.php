@@ -36,7 +36,8 @@ class Matriculam extends CI_Model {
     public function listar_matriculas($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT *,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
                     tc.cargo_masculino,em.nombre1 nom1res,em.nombre2 nom2res,em.apellido1 apell1res,em.apellido2 apell2res,
-                    ea.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_titular
+                    ea.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_titular,
+                    em2.nombre1 nombre1ejecutivo,em2.nombre2 nombre2ejecutivo,em2.apellido1 apellido1ejecutivo,em2.apellido2 apellido2ejecutivo
                   FROM matricula ma
                   JOIN titular t ON ma.dni_titular=t.dni AND ma.id_titular=t.id
                   JOIN t_plan p ON ma.plan=p.id
@@ -46,7 +47,8 @@ class Matriculam extends CI_Model {
                   JOIN  t_cargo tc ON ma.cargo_ejecutivo=tc.id
                    JOIN empleado em ON ma.dni_responsable=em.dni AND ma.id_responsable=em.id
                     JOIN  est_alumno ea ON ma.estado=ea.id
-                     JOIN  t_dni td ON ma.dni_titular=td.id
+                       JOIN empleado em2 ON ma.dni_ejecutivo=em2.dni AND ma.id_ejecutivo=em2.id
+                         JOIN  t_dni td ON ma.dni_ejecutivo=td.id
                   where true ";
         $query.=(!empty($criterios['contrato'])) ? "AND ma.contrato = '{$criterios['contrato']}'" : "";
         $query.=(!empty($criterios['fecha_matricula_desde'])) ? "AND ma.fecha_matricula >= '{$criterios['fecha_matricula_desde']}'" : "";
