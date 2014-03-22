@@ -18,6 +18,7 @@ class Alumno extends CI_Controller {
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_alumno();
+        $data['sede_ppal'] = $this->select_model->sede_activa_responsable($data['id_responsable'], $data['dni_responsable']);        
         $data['action_validar'] = base_url() . "alumno/validar_crear";
         $data['action_crear'] = base_url() . "alumno/insertar_crear";
         $this->parser->parse('alumno/crear', $data);
@@ -35,6 +36,7 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
             $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             //Validamos que la clave primaria no este repetida
@@ -60,7 +62,7 @@ class Alumno extends CI_Controller {
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($duplicate_key != "") || ($error_matricula != "")) {
-                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('genero') . form_error('matricula') . $error_matricula . form_error('observacion');
+                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('genero') . form_error('matricula') . $error_matricula . form_error('sede_ppal') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -98,10 +100,7 @@ class Alumno extends CI_Controller {
             $grados = NULL;
             $cant_clases = NULL;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-
-            $id_responsable = $this->session->userdata('idResponsable');
-            $dni_responsable = $this->session->userdata('dniResponsable');
-            $sede_ppal = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+            $sede_ppal = $this->input->post('sede_ppal');
 
             $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion            
             $perfil = 'alumno';

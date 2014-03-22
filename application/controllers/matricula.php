@@ -100,7 +100,7 @@ class MAtricula extends CI_Controller {
             $datacredito = 1;
             $juridico = 0;
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
-            $estado = 2; //2: Activo            
+            $estado = 1; //1: Vigente Pago Voluntario            
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
 
             $id_responsable = $this->session->userdata('idResponsable');

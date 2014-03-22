@@ -70,7 +70,17 @@
                                         <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" placeholder="Número de Matrícula" maxlength="13">
                                     </div>  
                                 </div>
-                            </div>                                    
+                            </div> 
+                            <div class="form-group">
+                                <label>Sede Principal<em class="required_asterisco">*</em></label>
+                                <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes encargadas.</p>                                
+                                <select name="sede_ppal" id="sede_ppal" class="form-control exit_caution">
+                                    <option value="default">Seleccione Sede Principal</option>
+                                    {sede_ppal}
+                                    <option value="{id}">{nombre}</option>
+                                    {/sede_ppal}
+                                </select>
+                            </div>                              
                             <div class="form-group">
                                 <label>Observación</label>
                                 <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="255" placeholder="Observación..."style="max-width:100%;"></textarea>
