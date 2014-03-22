@@ -36,7 +36,7 @@ class Matriculam extends CI_Model {
     public function listar_matriculas($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT *,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
                     tc.cargo_masculino,em.nombre1 nom1res,em.nombre2 nom2res,em.apellido1 apell1res,em.apellido2 apell2res,
-                    ea.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_titular,
+                    ea.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_ejecutivo,
                     em2.nombre1 nombre1ejecutivo,em2.nombre2 nombre2ejecutivo,em2.apellido1 apellido1ejecutivo,em2.apellido2 apellido2ejecutivo
                   FROM matricula ma
                   JOIN titular t ON ma.dni_titular=t.dni AND ma.id_titular=t.id
