@@ -102,13 +102,13 @@
                 <div class="row">
                     <div class="col-xs-2">
                         <label>ID alumno</label>
-                        <input type='text' id="id_alumno" class='form-control' placeholder="id_alumno" value="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>">
+                        <input type='text' id="id_alumno" class='form-control' placeholder="ID alumno" value="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>">
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-xs-12">
-                        <table class='table table-hover'>
+                        <table id="tabla-matriculas" class='table table-hover'>
                             <thead>
                                 <tr>
                                     <th>Contrato</th>
@@ -117,7 +117,7 @@
                                     <th>Nombre titular</th>
                                     <th>Plan</th>
                                     <th>Sede</th>
-                                    <th class="hide">Detalles</th>
+                                    <th >Detalles</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
@@ -129,8 +129,20 @@
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                         <td><?= $row->nombre_plan ?></td>
                                         <td><?= $row->nombre_sede ?></td>
-                                        <td class="hide"><button class="btn btn-primary btn-sm" 
-                                                                 >Ver detalles</button></td>
+                                        <td><button class="ver-detalles btn  btn-primary btn-sm" 
+                                                     data-alumnos="<?= $row->lista_alumnos ?>"
+                                                    data-id-ejecutivo="<?= $row->dni_titular . " " . $row->id_titular ?>"
+                                                    data-nombre-ejecutivo="<?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?>"
+                                                    data-cargo-ejecutivo="<?= $row->cargo_masculino ?>"
+                                                    data-cant-materiales="<?= $row->cant_materiales_disponibles ?>"
+                                                    data-datacredito="<?= $row->datacredito ?>"
+                                                    data-juridico="<?= $row->juridico ?>"
+                                                    data-liquidacion-escalas="<?= $row->liquidacion_escalas ?>"
+                                                    data-estado="<?= $row->nombre_estado ?>"
+                                                    data-observacion="<?= $row->observacion_matricula ?>"
+                                                    data-fecha-creacion="<?= $row->fecha_trans ?>"
+                                                    data-resposable="<?= $row->nom1res . " " . $row->nom2res . " " . $row->apell1res . " " . $row->apell2res ?>"
+                                                    >Ver detalles</button></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -180,12 +192,36 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Matrícula:</div>   
+                            <div class="text-right">Alumnos:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divMatricula"></div></b>
+                            <b><div id="divIdAlumnos"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Id ejecutivo:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divIdEjecutivo"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Nombre ejecutivo:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divNombreEjecutivo"></div></b>
                         </div>
                     </div>
                 </div>
@@ -193,12 +229,12 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Velocidad inicial:</div>   
+                            <div class="text-right">Cargo ejecutivo:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divVelocidadInicial"></div></b>
+                            <b><div id="divCargoEjecutivo"></div></b>
                         </div>
                     </div>
                 </div>
@@ -206,12 +242,26 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Comprensión inicial:</div>   
+                            <div class="text-right">Cantidad materiales disponibles:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divComprensionInicial"></div></b>
+                            <b><div id="divCantidadMateriales"></div></b>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Datacrédito:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divDatacredito"></div></b>
                         </div>
                     </div>
                 </div>
@@ -219,15 +269,31 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Curso:</div>   
+                            <div class="text-right">Jurídico:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divCurso"></div></b>
+                            <b><div id="divJuridico"></div></b>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right"> Liquidacion escalas:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divLiquidacionEscalas"></div></b>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
@@ -244,18 +310,6 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Fecha grados:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divFechaGrados"></div></b>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
                             <div class="text-right">Observación:</div>   
                         </div>
                     </div>
@@ -265,6 +319,37 @@
                         </div>
                     </div>
                 </div>
+
+
+
+
+
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Fecha creación:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divFechaCreacion"></div></b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Resonsable:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divResposable"></div></b>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>

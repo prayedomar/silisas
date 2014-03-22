@@ -367,6 +367,14 @@ class MAtricula extends CI_Controller {
         $data['cantidad'] = $cantidad;
         $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);
         $data["lista"] = $this->matriculam->listar_matriculas($_GET, $inicio, $filasPorPagina);
+        foreach ($data["lista"] as $row) {
+            $alumnos = $this->alumnom->obtenerAlumnosPorMatricula($row->contrato);
+            $lista = "";
+            foreach ($alumnos as $row2) {
+                $lista .= $row2->dni . " " . $row2->id . " " . $row2->nombre1 . " " . $row2->nombre2 . " " . $row2->apellido1 . " " . $row2->apellido2 . " <br>";
+            }
+            $row->lista_alumnos=$lista;
+        }
         $this->load->view("header", $data);
         $this->load->view("matricula/consultar");
         $this->load->view("footer");
