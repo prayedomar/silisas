@@ -131,8 +131,7 @@
                                         <td><?= $row->nombre_sede ?></td>
                                         <td><button class="ver-detalles btn  btn-primary btn-sm" 
                                                      data-alumnos="<?= $row->lista_alumnos ?>"
-                                                    data-id-ejecutivo="<?= $row->dni_titular . " " . $row->id_titular ?>"
-                                                    data-nombre-ejecutivo="<?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?>"
+                                                    data-ejecutivo="<?= $row->dni_ejecutivo . " " . $row->id_ejecutivo." ".$row->nombre1ejecutivo . " " . $row->nombre2ejecutivo . " " . $row->apellido1ejecutivo . " " . $row->apellido2ejecutivo ?>"
                                                     data-cargo-ejecutivo="<?= $row->cargo_masculino ?>"
                                                     data-cant-materiales="<?= $row->cant_materiales_disponibles ?>"
                                                     data-datacredito="<?= $row->datacredito ?>"
@@ -201,27 +200,16 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Id ejecutivo:</div>   
+                            <div class="text-right">Ejecutivo:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divIdEjecutivo"></div></b>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Nombre ejecutivo:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divNombreEjecutivo"></div></b>
+                            <b><div id="divEjecutivo"></div></b>
                         </div>
                     </div>
                 </div>

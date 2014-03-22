@@ -103,8 +103,7 @@ $(function() {
     $("#tabla-matriculas .ver-detalles").click(function(e) {
         $("#modalDetalles").modal();
         $("#divIdAlumnos").html($(this).data("alumnos"));
-        $("#divIdEjecutivo").html($(this).data("id-ejecutivo"));
-        $("#divNombreEjecutivo").html($(this).data("nombre-ejecutivo"));
+        $("#divEjecutivo").html($(this).data("ejecutivo"));
         $("#divCargoEjecutivo").html($(this).data("cargo-ejecutivo"));
         $("#divCantidadMateriales").html($(this).data("cant-materiales"));
         if ($(this).data("datacredito") == "1") {
