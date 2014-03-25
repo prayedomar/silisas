@@ -561,6 +561,9 @@
                             <li class="col-sm-8">
                                 <ul>
                                     <!--<li><a href="#">Ver Perfil</a></li>-->
+                                    <li><p><b>Usuario: </b><em><?= $_SESSION["nombres"] ?></em></p></li>
+                                    <li><p><b>Perfil: </b><em><?= $_SESSION["perfil"] ?></em></p></li>
+                                    <li class="divider"></li>
                                     <li><a href="<?= base_url() ?>password/cambiar">Cambiar Contraseña</a></li>
                                     <li class="divider"></li>
                                     <li><a href="<?= base_url() ?>login/logout_ci">Cerrar Sesión &raquo;</a></li>

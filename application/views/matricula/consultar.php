@@ -129,7 +129,7 @@
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                         <td><?= $row->nombre_plan ?></td>
                                         <td><?= $row->nombre_sede ?></td>
-                                        <td><button class="ver-detalles btn  btn-primary btn-sm" 
+                                        <td class="text-center"><button class="ver-detalles btn  btn-primary btn-sm" 
                                                      data-alumnos="<?= $row->lista_alumnos ?>"
                                                     data-ejecutivo="<?= $row->dni_ejecutivo . " " . $row->id_ejecutivo." ".$row->nombre1ejecutivo . " " . $row->nombre2ejecutivo . " " . $row->apellido1ejecutivo . " " . $row->apellido2ejecutivo ?>"
                                                     data-cargo-ejecutivo="<?= $row->cargo_masculino ?>"

@@ -100,6 +100,8 @@ class Alumno extends CI_Controller {
             $grados = NULL;
             $cant_clases = NULL;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
             $sede_ppal = $this->input->post('sede_ppal');
 
             $password = $this->encrypt->encode($id); //Encriptamos el numero de identificacion            
