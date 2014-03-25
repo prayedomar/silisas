@@ -245,6 +245,14 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
+    } 
+    
+    public function matricula_id_sedes_responsable($contrato, $id_responsable, $dni_responsable) {
+        $SqlInfo = "SELECT * FROM matricula where ((contrato='" . $contrato . "') AND ((sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
     }    
 
     //Matriculas vigente con saldo incluido > 0

@@ -45,11 +45,11 @@ class MAtricula extends CI_Controller {
 
             //Validamos que el número de contrato físico exista en dicha sede
             $error_contrato = "";
-            if ($this->input->post('contrato')) {
+            if (($this->input->post('contrato'))&&($this->input->post('sede_ppal')!="default")) {
                 $contrato = $this->input->post('contrato');
                 $id_responsable = $this->session->userdata('idResponsable');
                 $dni_responsable = $this->session->userdata('dniResponsable');
-                $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+                $sede = $this->input->post('sede_ppal');
 
                 $check_contrato = $this->select_model->contrato_matricula_id($contrato);
                 if ($check_contrato != TRUE) {
@@ -57,7 +57,7 @@ class MAtricula extends CI_Controller {
                 } else {
                     $check_contrato = $this->select_model->contrato_matricula_id_sede($contrato, $sede);
                     if ($check_contrato != TRUE) {
-                        $error_contrato = "<p>El contrato físico ingresado, no se encuentra en su sede principal.</p>";
+                        $error_contrato = "<p>El contrato físico ingresado, no se encuentra en la sede principal escogida.</p>";
                     } else {
                         $check_contrato = $this->select_model->contrato_matricula_vacio_id($contrato);
                         if ($check_contrato != TRUE) {
@@ -228,7 +228,8 @@ class MAtricula extends CI_Controller {
                 $id_responsable = $this->session->userdata('idResponsable');
                 $dni_responsable = $this->session->userdata('dniResponsable');
                 $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-                $check_matricula_sede = $this->select_model->matricula_id_sede($id_matricula, $sede);
+                $check_matricula_sede = $this->select_model->matricula_id_sedes_responsable($id_matricula, $id_responsable, $dni_responsable);
+//                $check_matricula_sede = TRUE; //Por el momento colocamos que puedan editar matriculas de cualquier sede.
                 if ($check_matricula_sede == TRUE) {
                     $response = array(
                         'respuesta' => 'OK',
@@ -269,7 +270,7 @@ class MAtricula extends CI_Controller {
                 } else {
                     $response = array(
                         'respuesta' => 'error',
-                        'mensaje' => '<p><strong>La matrícula no pertenece a su sede principal.</strong></p>'
+                        'mensaje' => '<p><strong>La matrícula no pertenece a sus sedes autorizadas.</strong></p>'
                     );
                     echo json_encode($response);
                     return false;
