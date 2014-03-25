@@ -104,6 +104,10 @@
                         <label>ID alumno</label>
                         <input type='text' id="id_alumno" class='form-control' placeholder="ID alumno" value="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>">
                     </div>
+                    <div class="col-xs-2">
+                        <br>
+                        <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
+                    </div>
                 </div>
                 <hr>
                 <div class="row">
@@ -129,9 +133,9 @@
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
                                         <td><?= $row->nombre_plan ?></td>
                                         <td><?= $row->nombre_sede ?></td>
-                                        <td class="text-center"><button class="ver-detalles btn  btn-primary btn-sm" 
-                                                     data-alumnos="<?= $row->lista_alumnos ?>"
-                                                    data-ejecutivo="<?= $row->dni_ejecutivo . " " . $row->id_ejecutivo." ".$row->nombre1ejecutivo . " " . $row->nombre2ejecutivo . " " . $row->apellido1ejecutivo . " " . $row->apellido2ejecutivo ?>"
+                                        <td><button class="ver-detalles btn  btn-primary btn-sm" 
+                                                    data-alumnos="<?= $row->lista_alumnos ?>"
+                                                    data-ejecutivo="<?= $row->dni_ejecutivo . " " . $row->id_ejecutivo . " " . $row->nombre1ejecutivo . " " . $row->nombre2ejecutivo . " " . $row->apellido1ejecutivo . " " . $row->apellido2ejecutivo ?>"
                                                     data-cargo-ejecutivo="<?= $row->cargo_masculino ?>"
                                                     data-cant-materiales="<?= $row->cant_materiales_disponibles ?>"
                                                     data-datacredito="<?= $row->datacredito ?>"
@@ -182,7 +186,7 @@
 </div>
 <div class="modal" id="modalDetalles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
-        <div class="modal-content modal-content-minimo">
+        <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="modal-title" id="myModalLabel">Detalles</h3>

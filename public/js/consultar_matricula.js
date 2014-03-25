@@ -126,5 +126,47 @@ $(function() {
         $("#divFechaCreacion").html($(this).data("fecha-creacion"));
         $("#divResposable").html($(this).data("resposable"));
     });
+    $("#toExcel").click(function() {
+        var url = "excel?";
+        if ($("#paginacion").data("contrato") != "") {
+            url += "contrato=" + $("#paginacion").data("contrato") + "&";
+        }
+        if ($("#paginacion").data("fecha_matricula_desde") != "") {
+            url += "fecha_matricula_desde=" + $("#paginacion").data("fecha_matricula_desde") + "&";
+        }
+        if ($("#paginacion").data("fecha_matricula_hasta") != "") {
+            url += "fecha_matricula_hasta=" + $("#paginacion").data("fecha_matricula_hasta") + "&";
+        }
+        if ($("#paginacion").data("id_titular") != "") {
+            url += "id_titular=" + $("#paginacion").data("id_titular") + "&";
+        }
+        if ($("#paginacion").data("id_ejecutivo") != "") {
+            url += "id_ejecutivo=" + $("#paginacion").data("id_ejecutivo") + "&";
+        }
+        if ($("#paginacion").data("cargo_ejecutivo") != "") {
+            url += "cargo_ejecutivo=" + $("#paginacion").data("cargo_ejecutivo") + "&";
+        }
+        if ($("#paginacion").data("plan") != "") {
+            url += "plan=" + $("#paginacion").data("plan") + "&";
+        }
+        if ($("#paginacion").data("datacredito") != "") {
+            url += "datacredito=" + $("#paginacion").data("datacredito") + "&";
+        }
+        if ($("#paginacion").data("juridico") != "") {
+            url += "juridico=" + $("#paginacion").data("juridico") + "&";
+        }
+        if ($("#paginacion").data("sede") != "") {
+            url += "sede=" + $("#paginacion").data("sede") + "&";
+        }
+        if ($("#paginacion").data("estado") != "") {
+            url += "estado=" + $("#paginacion").data("estado") + "&";
+        }
+        if ($("#paginacion").data("id_alumno") != "") {
+            url += "id_alumno=" + $("#paginacion").data("id_alumno") + "&";
+        }
+
+        url = url.substr(0, url.length - 1);
+        window.location.href = url;
+    });
 });
 

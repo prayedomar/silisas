@@ -19,7 +19,7 @@ class Pdfs extends CI_Controller {
  
     public function generar() {
         $this->load->library('Pdf');
-        $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf = new Pdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Israel Parra');
         $pdf->SetTitle('Ejemplo de provincías con TCPDF');
@@ -59,6 +59,9 @@ class Pdfs extends CI_Controller {
 // Helvetica para reducir el tamaño del archivo.
         $pdf->SetFont('freemono', '', 14, '', true);
  
+$pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
+$tcpdf->setPrintFooter(false); //no imprime el pie ni la linea        
+        
 // Añadir una página
 // Este método tiene varias opciones, consulta la documentación para más información.
         $pdf->AddPage();

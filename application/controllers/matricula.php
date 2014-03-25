@@ -100,7 +100,7 @@ class MAtricula extends CI_Controller {
             $datacredito = 1;
             $juridico = 0;
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
-            $estado = 1; //1: Vigente Pago Voluntario            
+            $estado = 2; //2: Activo            
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
 
             $id_responsable = $this->session->userdata('idResponsable');
@@ -373,11 +373,42 @@ class MAtricula extends CI_Controller {
             foreach ($alumnos as $row2) {
                 $lista .= $row2->dni_alumno . " " . $row2->id . " " . $row2->nombre1 . " " . $row2->nombre2 . " " . $row2->apellido1 . " " . $row2->apellido2 . " <br>";
             }
-            $row->lista_alumnos=$lista;
+            $row->lista_alumnos = $lista;
         }
         $this->load->view("header", $data);
         $this->load->view("matricula/consultar");
         $this->load->view("footer");
+    }
+
+    public function excel() {
+           $this->load->model('matriculam');
+        header("Content-type: application/vnd.ms-excel; name='excel'");
+        header("Content-Disposition: filename=reporte_matricula_" . date("Y-m-d") . ".xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        $lista = $this->matriculam->listar_matriculas_excel($_GET);
+        ?>
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
+            <tr>
+                <th>Contrato</th>
+                <th>Fecha matricula</th>
+                <th>ID titular</th>
+                <th>Nombre titular</th>
+                <th>Plan</th>
+                <th>Sede</th>
+            </tr>
+            <?php foreach ($lista as $row) { ?>
+                <tr>
+                    <td><?= $row->contrato ?></td>
+                    <td><?= $row->fecha_matricula ?></td>
+                    <td><?= $row->nombre_dni . " " . $row->id_titular ?></td>
+                    <td><?= utf8_decode($row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2) ?></td>
+                    <td><?= utf8_decode($row->nombre_plan) ?></td>
+                    <td><?= utf8_decode($row->nombre_sede) ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+        <?php
     }
 
 }
