@@ -60,7 +60,7 @@ class Pdfs extends CI_Controller {
         $pdf->SetFont('freemono', '', 14, '', true);
  
 $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
-$tcpdf->setPrintFooter(false); //no imprime el pie ni la linea        
+$pdf->setPrintFooter(false); //no imprime el pie ni la linea        
         
 // Añadir una página
 // Este método tiene varias opciones, consulta la documentación para más información.
