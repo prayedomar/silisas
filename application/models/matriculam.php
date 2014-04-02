@@ -43,7 +43,7 @@ class Matriculam extends CI_Model {
                   JOIN t_plan p ON ma.plan=p.id
                   JOIN t_dni tdni ON ma.dni_titular=tdni.id
                   JOIN sede s ON ma.sede=s.id
-                  LEFT JOIN  alumno al ON ma.contrato=al.matricula
+                  LEFT JOIN  alumno al ON ma.contrato=al.matricula AND al.matricula is null
                   JOIN  t_cargo tc ON ma.cargo_ejecutivo=tc.id
                    JOIN empleado em ON ma.dni_responsable=em.dni AND ma.id_responsable=em.id
                     JOIN  est_alumno ea ON ma.estado=ea.id
@@ -63,7 +63,7 @@ class Matriculam extends CI_Model {
         $query.=(!empty($criterios['estado'])) ? "AND ma.estado = '{$criterios['estado']}'" : "";
         $query.=(!empty($criterios['id_alumno'])) ? "AND al.id = '{$criterios['id_alumno']}'" : "";
         $query.=" LIMIT $inicio,$filasPorPagina";
-        // echo $query;
+        echo $query;
         return $this->db->query($query)->result();
     }
 
@@ -77,7 +77,7 @@ class Matriculam extends CI_Model {
                   JOIN t_plan p ON ma.plan=p.id
                   JOIN t_dni tdni ON ma.dni_titular=tdni.id
                   JOIN sede s ON ma.sede=s.id
-                  LEFT JOIN  alumno al ON ma.contrato=al.matricula
+                 LEFT JOIN  alumno al ON ma.contrato=al.matricula AND al.matricula is null
                   JOIN  t_cargo tc ON ma.cargo_ejecutivo=tc.id
                    JOIN empleado em ON ma.dni_responsable=em.dni AND ma.id_responsable=em.id
                     JOIN  est_alumno ea ON ma.estado=ea.id
