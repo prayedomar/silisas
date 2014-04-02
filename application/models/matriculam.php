@@ -63,7 +63,7 @@ class Matriculam extends CI_Model {
         $query.=(!empty($criterios['estado'])) ? "AND ma.estado = '{$criterios['estado']}'" : "";
         $query.=(!empty($criterios['id_alumno'])) ? "AND al.id = '{$criterios['id_alumno']}'" : "";
         $query.=" LIMIT $inicio,$filasPorPagina";
-        echo $query;
+     //   echo $query;
         return $this->db->query($query)->result();
     }
 
