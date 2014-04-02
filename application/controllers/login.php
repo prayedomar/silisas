@@ -134,7 +134,7 @@ class Login extends CI_Controller {
                             . "<br><br>Así que... ¡Siéntase como en casa!";
                 } else {
                     $textoBienvenida = "Esta aplicación es uno de los muchos símbolos, que demuestran el crecimiento exponencial que SILI S.A.S ha mantenido desde sus inicios."
-                            . "<br>Ha sido desarrollada con el único fin de facilitar sus funciones laborales al interior de nuestra compañía, por medio de la creación de un ambiente laboral más cómodo y eficiente para usted."
+                            . "<br>Ha sido desarrollada con el fin de facilitar sus funciones laborales al interior de nuestra compañía, por medio de la creación de un ambiente laboral más cómodo y eficiente para usted."
                             . "<br><br>Así que... ¡Siéntase como en casa!";
                 }
                 $data = array(
