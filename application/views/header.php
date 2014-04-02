@@ -495,7 +495,7 @@
                                     <li class="divider"></li>                                
                                     <li class="dropdown-header">Transacciones</li>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador"))) { ?>                                       
-                                        <li><a href="<?= base_url() ?>transacciones/consultar">Transacciones</a></li>
+                                        <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
                                     <?php } ?>                                   
                                 </ul>
                             </li>
