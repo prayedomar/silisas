@@ -12,35 +12,46 @@ class Prueba extends CI_Controller {
     function index() {
 //        $data['base_url'] = base_url();
 //        $this->load->view('testV');
-        $id_matricula = '10000';
-        $matricula = $this->select_model->matricula_titular_idMatricula($id_matricula);
-        if ($matricula == TRUE) {
-            $response = array(
-                'respuesta' => 'OK',
-                'nombreTitular' => $matricula->titular,
-                'filasTabla' => ''
-            );
-            $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="plan_old" id="plan_old" value="' . $matricula->id . '"/></td>
-                            <td class="text-center">' . $matricula->nombre . '</td>
-                            <td class="text-center">' . $matricula->anio . '</td>                                
-                            <td class="text-center">' . $matricula->cant_alumnos . '</td>
-                            <td class="text-center">$' . number_format($matricula->valor_total, 0, '.', ',') . '</td>
-                            <td class="text-center">$' . number_format($matricula->valor_inicial, 0, '.', ',') . '</td>
-                            <td class="text-center">$' . number_format($matricula->valor_cuota, 0, '.', ',') . '</td>                                
-                            <td class="text-center">' . $matricula->cant_cuotas . '</td>
+            $dni_titular = 1;
+            $id_titular = 66996121;
+            $titular = $this->select_model->titular($id_titular, $dni_titular);
+            if ($titular == TRUE) {
+                $matriculas = $this->select_model->matricula_vigente_titular($id_titular, $dni_titular);
+                if ($matriculas == TRUE) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
+                        'filasTabla' => ''
+                    );
+                    foreach ($matriculas as $fila) {
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center">' . $fila->contrato . '</td>
+                            <td>' . $fila->nombre_plan . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                             
+                            <td class="text-center">' . $fila->sede . '</td>                         
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_matricula)) . '</td>  
                         </tr>';
-            echo json_encode($response);
-            return false;
-        } else {
-            $response = array(
-                'respuesta' => 'error',
-                'mensaje' => '<p><strong>La matrícula no existe en la base de datos.</strong></p>'
-            );
-            echo json_encode($response);
-            return false;
-        }
-        var_dump($response);
+                    }
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>El titular no existe en la base de datos.</p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
 //        echo $matriz_matricula[0][1] . "<br>"
 //                . $matriz_matricula[0][2] . "<br>"
 //                . $matriz_matricula[0][3] . "<br>"
