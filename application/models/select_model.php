@@ -1030,6 +1030,15 @@ class Select_model extends CI_Model {
             }
         }
     }
+    
+    public function factura_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('factura');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function empleado_sede_secundaria($id, $dni) {
         $SqlInfo = "SELECT * FROM empleado_x_sede AS a, sede AS b WHERE (a.sede_secundaria=b.id) AND (a.dni_empleado='" . $dni . "')AND (a.id_empleado='" . $id . "')AND (a.vigente=1)";

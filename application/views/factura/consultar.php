@@ -3,34 +3,19 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
-                    <legend>Crear recibo de caja</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Consultar factura de venta</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
-                        <div class="col-xs-6 col-xs-offset-3">
-                            <legend>Titular</legend>
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="form-group">
-                                        <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
-                                        <select name="dni" id="dni" class="form-control exit_caution">
-                                            <option value="default">Seleccione T.I.</option>
-                                            {dni}
-                                            <option value="{id}">{tipo}</option>
-                                            {/dni}
-                                        </select>
-                                    </div>   
-                                </div>
-                                <div class="col-xs-6">  
-                                    <div class="form-group">
-                                        <label>Número de Identificación<em class="required_asterisco">*</em></label>
-                                        <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-xs-4 col-xs-offset-4">
+                            <legend>Consecutivo de factura</legend>
+                            <label><B>> </B>Prefijo + Espacio + Id. Númerico: (FLST 3765)</label>    
+                            <div class="form-group">
+                            <input name="id" id="id" type="text" class="form-control exit_caution letras_numeros" placeholder="Código de Factura" maxlength="18" onkeyup="aMays(event, this)" onblur="aMays(event, this)">
+                             </div>
                             <div id="validacion_inicial">
                             </div>                            
                             <div class="row text-center separar_submit">
-                                <button type="button" class="btn btn-default" id="consultar_titular"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Titular </a>
+                                <button type="button" class="btn btn-default" id="consultar"><span class="glyphicon glyphicon-search"></span> Consultar </button>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Factura </a>
                             </div>
                         </div>
                     </div>
@@ -40,8 +25,8 @@
                     </div>       
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3 separar_div">
-                            <legend>Recibo de caja a nombre de:</legend>
-                            <p class="help-block"><B>> </B>Si el beneficiario que aparecerá en el recibo de caja es diferente al titular (Por ejemplo: una empresa, un familiar, etc.), modifíquelo a continuacion.</p>
+                            <legend>Factura a nombre de:</legend>
+                            <p class="help-block"><B>> </B>Si el beneficiario que aparecerá en la factura es diferente al titular (Por ejemplo: una empresa, un familiar, etc.), modifíquelo a continuacion.</p>
                             <div class="form-group">
                                 <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                 <select name="dni_a_nombre_de" id="dni_a_nombre_de" class="form-control exit_caution">
@@ -69,10 +54,6 @@
                                 <label>Nombre completo / Razón Social<em class="required_asterisco">*</em></label>
                                 <input name="a_nombre_de" id="a_nombre_de" type="text" class="form-control exit_caution letras_numeros" placeholder="Razón Social" maxlength="100">
                             </div>
-                            <div class="form-group">
-                                <label>Dirección<em class="required_asterisco">*</em></label>
-                                <input name="direccion_a_nombre_de" id="direccion_a_nombre_de" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección" maxlength="80">
-                            </div>                             
                         </div>
                     </div>
                     <div class="row">
@@ -205,7 +186,7 @@
                             <input type="hidden" name="total" id="total" class="decimal decimal2 miles">
                             <center>
                                 <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                                <button id="btn_validar" class="btn btn-success">Crear recibo de caja</button>  
+                                <button id="btn_validar" class="btn btn-success">Crear factura</button>  
                                 <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                 <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                             </center>
@@ -220,122 +201,16 @@
 </div>
 <script type="text/javascript">
 
-    $(".form-group").delegate("#id_a_nombre_de", "blur", function() {
-        var vpri, x, y, z, i, nit1, dv1;
-        nit1 = $(this).val();
-        if (isNaN(nit1))
-        {
-            $("#d_v_a_nombre_de").attr('value', 'Error de Nit');
-        } else {
-            vpri = new Array(16);
-            x = 0;
-            y = 0;
-            z = nit1.length;
-            vpri[1] = 3;
-            vpri[2] = 7;
-            vpri[3] = 13;
-            vpri[4] = 17;
-            vpri[5] = 19;
-            vpri[6] = 23;
-            vpri[7] = 29;
-            vpri[8] = 37;
-            vpri[9] = 41;
-            vpri[10] = 43;
-            vpri[11] = 47;
-            vpri[12] = 53;
-            vpri[13] = 59;
-            vpri[14] = 67;
-            vpri[15] = 71;
-            for (i = 0; i < z; i++)
-            {
-                y = (nit1.substr(i, 1));
-                //document.write(y+"x"+ vpri[z-i] +":");
-                x += (y * vpri[z - i]);
-                //document.write(x+"<br>");		
-            }
-            y = x % 11
-            //document.write(y+"<br>");
-            if (y > 1)
-            {
-                dv1 = 11 - y;
-            } else {
-                dv1 = y;
-            }
-            $("#d_v_a_nombre_de").attr('value', dv1);
-        }
-    });
-
-    //Cargar div de d.v segun t_dni
-    $(".form-group").delegate("#dni_a_nombre_de", "change", function() {
-        dni = $(this).val();
-        if (dni == '6') {
-            $("#div_dv").css("display", "block");
-        } else {
-            $("#div_dv").css("display", "none");
-        }
-    });
-
-    //Calculamos total devengado, deducido y total nomina
-    function calcular_total() {
-        var valor_pendiente = 0;
-        var int_mora = 0;
-        var total_valor_pendiente = 0;
-        var total_int_mora = 0;
-        var total = 0;
-        $("input:checkbox:checked").each(function() {
-            valor_pendiente = new Number($(this).data('valor_pendiente'));
-            int_mora = new Number($(this).data('int_mora'));
-            total_valor_pendiente = total_valor_pendiente + valor_pendiente;
-            total_int_mora = total_int_mora + int_mora;
-            total = total_valor_pendiente + total_int_mora;
-//            alert($(this).data('valor_pendiente') + " - " + $(this).data('int_mora'));
-        });
-        $('#subtotal').attr('value', ((total_valor_pendiente).toFixed(2)));
-        $('#subtotal').change();
-        $('#int_mora').attr('value', ((total_int_mora).toFixed(2)));
-        $('#int_mora').change();
-        $('#total').attr('value', ((total).toFixed(2)));
-        $('#total').change();//        //        
-        $("#div_subtotal").html("<h4>$ " + $('#subtotal').val() + "</h4>");
-        $("#div_intereses").html("<h4>$ " + $('#int_mora').val() + "</h4>");
-        $("#div_total").html("<h3>$ " + $('#total').val() + "</h3>");
+    //Convertir a mayuscula
+    function aMays(e, elemento) {
+        tecla = (document.all) ? e.keyCode : e.which;
+        elemento.value = elemento.value.toUpperCase();
     }
 
-    //Cargar div de valor abono y cuotas  de matricula escogida     
-    $(".tabla-matriculas").delegate("#matricula", "click", function() {
-        matricula = $("input[name='matricula']:checked").val();
-        $.post('{action_llena_cuotas_matricula}', {
-            matricula: matricula
-        }, function(data) {
-            var obj = JSON.parse(data);
-            if (obj.respuesta == 'OK') {
-                $("#tbody_cuotas").html(obj.filasTabla);
-                calcular_total();
-            }
-        });
-    });
-
-
-    //Cargar div de valor abono y cuotas  de matricula escogida 
-    //Cuando seleccione una cuota debo verificar que lo haga en orden de arriba hacia abajo. No permite que salte cuotas.     
-    $(".tabla-cuotas").delegate("#cuotas", "change", function() {
-        $("input:checkbox:checked").each(function() {
-            if ($(this).parent().parent().index() != 0) {
-                if (!($(this).parent().parent().prev().find("#cuotas").is(':checked'))) {
-                    $(this).attr('checked', false);
-                }
-            }
-        });
-        calcular_total();
-    });
-
-    //Llenamos la informacion de las matriculas y los pagos.
-    $("form").delegate("#consultar_titular", "click", function() {
-        var dni = $('#dni').val();
+    $("form").delegate("#consultar", "click", function() {
         var id = $('#id').val();
-        if ((dni != "default") && (id != "")) {
-            $.post('{action_validar_titular_llena_matriculas}', {
-                dni: dni,
+        if (id != "") {
+            $.post('{action_consultar_codigo_matricula}', {
                 id: id
             }, function(data) {
                 var obj = JSON.parse(data);
@@ -346,12 +221,11 @@
                     $("#div_matriculas").css("display", "block");
                     $('#dni').attr('disabled', 'disabled');
                     $('#id').attr('readonly', 'readonly');
-                    $('#consultar_titular').attr('disabled', 'disabled');
+                    $('#consultar').attr('disabled', 'disabled');
                     //Actualizamo la informacion del titular en a nombre de 
                     $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
                     $("#id_a_nombre_de").attr("value", $('#id').val());
                     $("#a_nombre_de").attr("value", obj.nombreTitular);
-                    $("#direccion_a_nombre_de").attr("value", obj.direccion);                    
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);
@@ -360,7 +234,7 @@
             });
         } else {
             $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-            $("#div_warning").html("<p><strong>Antes de consultar, ingrese el tipo y número de identificación del titular.</strong></p>");
+            $("#div_warning").html("<p><strong>Antes de consultar, ingrese el consecutivo de la matrícula.</strong></p>");
             $("#div_warning").delay(8000).fadeOut(1000);
         }
     });

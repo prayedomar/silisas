@@ -69,6 +69,10 @@
                                 <label>Nombre completo / Razón Social<em class="required_asterisco">*</em></label>
                                 <input name="a_nombre_de" id="a_nombre_de" type="text" class="form-control exit_caution letras_numeros" placeholder="Razón Social" maxlength="100">
                             </div>
+                            <div class="form-group">
+                                <label>Dirección<em class="required_asterisco">*</em></label>
+                                <input name="direccion_a_nombre_de" id="direccion_a_nombre_de" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección" maxlength="80">
+                            </div>                             
                         </div>
                     </div>
                     <div class="row">
@@ -233,6 +237,7 @@
                     $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
                     $("#id_a_nombre_de").attr("value", $('#id').val());
                     $("#a_nombre_de").attr("value", obj.nombreTitular);
+                    $("#direccion_a_nombre_de").attr("value", obj.direccion);                    
                     $("#div_warning").remove();                    
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');

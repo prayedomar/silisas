@@ -958,7 +958,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function factura($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
+    public function factura($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -969,6 +969,7 @@ class Insert_model extends CI_Model {
             'dni_a_nombre_de' => $dni_a_nombre_de,
             'd_v_a_nombre_de' => $d_v_a_nombre_de,
             'a_nombre_de' => $a_nombre_de,
+            'direccion_a_nombre_de' => $direccion_a_nombre_de,
             'subtotal' => $subtotal,
             'int_mora' => $int_mora,
             'sede_caja_destino' => $sede_caja_destino,
@@ -1008,7 +1009,7 @@ class Insert_model extends CI_Model {
         }
     }
     
-    public function recibo_caja($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
+    public function recibo_caja($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -1019,6 +1020,7 @@ class Insert_model extends CI_Model {
             'dni_a_nombre_de' => $dni_a_nombre_de,
             'd_v_a_nombre_de' => $d_v_a_nombre_de,
             'a_nombre_de' => $a_nombre_de,
+            'direccion_a_nombre_de' => $direccion_a_nombre_de,            
             'subtotal' => $subtotal,
             'int_mora' => $int_mora,
             'sede_caja_destino' => $sede_caja_destino,

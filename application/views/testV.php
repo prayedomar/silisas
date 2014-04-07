@@ -10,7 +10,7 @@
         <br/>
         <table align='center' width='700' cellspacing='0' cellpadding='8' border='0' style='font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 16px;line-height:1.428571429; color:white; border-radius:6px 6px 6px 6px; background-color:#1990D5; border:1px solid #0272bc;'>
             <tr style='color:#e7cba3;'> 
-                <td> <a href='http://sili.com.co/' target='_blank' style='color:white;font-size: 17px;text-decoration:none'>SILI S.A.S</a></td>
+                <td> <a href='http://sili.com.co/' target='_blank' style='color:white;font-size: 17px;text-decoration:none'><em>SILI S.A.S</em></a></td>
                 <td align='right'><a href='https://www.facebook.com/sililtda' target='_blank' style='color:white;'>Siguenos en Facebook</a></td>
             </tr>
             <tr style="background: white;"> 
@@ -22,7 +22,6 @@
             <tr> 
                 <td colspan='2' align='' style='padding: 20px; background-color:white; color:#222;'>
                     <hr style="margin:0 0 20px 0; border: 0; border-top: 1px solid #eee; border-bottom: 1px solid #fff;"/>
-                    <?= $contenido ?> 
                     <hr style="margin:20px 0 5px 0; border: 0; border-top: 1px solid #eee; border-bottom: 1px solid #fff;"/>
                 </td>
             </tr>

@@ -44,6 +44,7 @@ class Recibo_caja extends CI_Controller {
             $this->form_validation->set_rules('dni_a_nombre_de', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');
+            $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');            
             $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
             $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
@@ -70,7 +71,7 @@ class Recibo_caja extends CI_Controller {
             }
 
             if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
+                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -85,11 +86,13 @@ class Recibo_caja extends CI_Controller {
             $matricula = $this->input->post('matricula');
             $id_a_nombre_de = $this->input->post('id_a_nombre_de');
             $dni_a_nombre_de = $this->input->post('dni_a_nombre_de');
-            $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
-            if ($d_v_a_nombre_de != "6") {
+            if ($dni_a_nombre_de != "6") {
                 $d_v_a_nombre_de = NULL;
+            } else {
+                $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
             }
             $a_nombre_de = $this->input->post('a_nombre_de');
+            $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');            
             $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
             $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
             if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
@@ -127,7 +130,7 @@ class Recibo_caja extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -169,6 +172,7 @@ class Recibo_caja extends CI_Controller {
                     $response = array(
                         'respuesta' => 'OK',
                         'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
+                        'direccion' => $titular->direccion,                        
                         'filasTabla' => ''
                     );
                     foreach ($matriculas as $fila) {

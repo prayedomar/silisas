@@ -496,7 +496,10 @@
                                     <li class="dropdown-header">Transacciones</li>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
-                                    <?php } ?>                                   
+                                    <?php } ?>       
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
+                                        <li><a href="<?= base_url() ?>factura/consultar">Factura</a></li>
+                                    <?php } ?>                                             
                                 </ul>
                             </li>
                             <li class="col-sm-4">

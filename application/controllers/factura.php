@@ -9,7 +9,6 @@ class Factura extends CI_Controller {
         $this->load->model('update_model');
     }
 
-//Crear: Nomina
     function crear() {
         $data["tab"] = "crear_factura";
         $this->isLogin($data["tab"]);
@@ -44,6 +43,7 @@ class Factura extends CI_Controller {
             $this->form_validation->set_rules('dni_a_nombre_de', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');
+            $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
             $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
@@ -70,7 +70,7 @@ class Factura extends CI_Controller {
             }
 
             if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
+                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -85,11 +85,13 @@ class Factura extends CI_Controller {
             $matricula = $this->input->post('matricula');
             $id_a_nombre_de = $this->input->post('id_a_nombre_de');
             $dni_a_nombre_de = $this->input->post('dni_a_nombre_de');
-            $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
-            if ($d_v_a_nombre_de != "6") {
+            if ($dni_a_nombre_de != "6") {
                 $d_v_a_nombre_de = NULL;
+            } else {
+                $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
             }
             $a_nombre_de = $this->input->post('a_nombre_de');
+            $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');
             $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
             $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
             if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
@@ -127,7 +129,7 @@ class Factura extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -169,6 +171,7 @@ class Factura extends CI_Controller {
                     $response = array(
                         'respuesta' => 'OK',
                         'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
+                        'direccion' => $titular->direccion,
                         'filasTabla' => ''
                     );
                     foreach ($matriculas as $fila) {
@@ -412,6 +415,78 @@ class Factura extends CI_Controller {
                 }
             } else {
                 echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function consultar() {
+        $data["tab"] = "consultar_factura";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['base_url'] = base_url();
+        $data['id_responsable'] = $this->session->userdata('idResponsable');
+        $data['dni_responsable'] = $this->session->userdata('dniResponsable');
+        $id_responsable = $this->session->userdata('idResponsable');
+        $dni_responsable = $this->session->userdata('dniResponsable');
+        $data['dni'] = $this->select_model->t_dni_titular();
+        $data['dni_a_nombre_de'] = $this->select_model->t_dni_todos();
+        $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
+        $data['action_validar'] = base_url() . "factura/validar";
+        $data['action_crear'] = base_url() . "factura/insertar";
+        $data['action_recargar'] = base_url() . "factura/crear";
+
+        $data['action_consultar_codigo_matricula'] = base_url() . "factura/consultar_codigo_matricula";
+        $data['action_llena_cuotas_matricula'] = base_url() . "factura/llena_cuotas_matricula";
+
+        $data['action_llena_cuenta_responsable'] = base_url() . "factura/llena_cuenta_responsable";
+        $data['action_llena_caja_responsable'] = base_url() . "factura/llena_caja_responsable";
+        $this->parser->parse('factura/consultar', $data);
+        $this->load->view('footer');
+    }
+
+    public function consultar_codigo_matricula() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            list($prefijo, $id) = explode(" ", $this->input->post('id'));
+            $factura = $this->select_model->factura_prefijo_id($prefijo, $id);
+            if ($factura == TRUE) {
+                $matriculas = $this->select_model->matricula_vigente_titular($id_titular, $dni_titular);
+                if ($matriculas == TRUE) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
+                        'filasTabla' => ''
+                    );
+                    foreach ($matriculas as $fila) {
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center">' . $fila->contrato . '</td>
+                            <td>' . $fila->nombre_plan . '</td>
+                            <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                             
+                            <td class="text-center">' . $fila->sede . '</td>                         
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_matricula)) . '</td>  
+                        </tr>';
+                    }
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>El titular no existe en la base de datos.</p>'
+                );
+                echo json_encode($response);
+                return false;
             }
         } else {
             redirect(base_url());

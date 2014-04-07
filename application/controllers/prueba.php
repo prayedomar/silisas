@@ -12,345 +12,115 @@ class Prueba extends CI_Controller {
     function index() {
 //        $data['base_url'] = base_url();
 //        $this->load->view('testV');
-            $dni_titular = 1;
-            $id_titular = 66996121;
-            $titular = $this->select_model->titular($id_titular, $dni_titular);
-            if ($titular == TRUE) {
-                $matriculas = $this->select_model->matricula_vigente_titular($id_titular, $dni_titular);
-                if ($matriculas == TRUE) {
-                    $response = array(
-                        'respuesta' => 'OK',
-                        'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
-                        'filasTabla' => ''
-                    );
-                    foreach ($matriculas as $fila) {
-                        $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
-                            <td class="text-center">' . $fila->contrato . '</td>
-                            <td>' . $fila->nombre_plan . '</td>
-                            <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
-                            <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                             
-                            <td class="text-center">' . $fila->sede . '</td>                         
-                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_matricula)) . '</td>  
-                        </tr>';
-                    }
-                    echo json_encode($response);
-                    return false;
-                } else {
-                    $response = array(
-                        'respuesta' => 'error',
-                        'mensaje' => '<p>El titular no tiene matrículas vigentes.</p>'
-                    );
-                    echo json_encode($response);
-                    return false;
-                }
-            } else {
-                $response = array(
-                    'respuesta' => 'error',
-                    'mensaje' => '<p>El titular no existe en la base de datos.</p>'
-                );
-                echo json_encode($response);
-                return false;
-            }
-//        echo $matriz_matricula[0][1] . "<br>"
-//                . $matriz_matricula[0][2] . "<br>"
-//                . $matriz_matricula[0][3] . "<br>"
-//                . $matriz_matricula[0][4] . "<br>"
-//                . $matriz_matricula[0][5] . "<br>"
-//                . $matriz_matricula[0][6] . "<br>"
-//                . $matriz_matricula[0][7] . "<br>"
-//                . $matriz_matricula[0][8] . "<br>"
-//                . $matriz_matricula[0][9] . "<br>"
-//                . $matriz_matricula[0][10] . "<br>"
-//                . $matriz_matricula[0][11] . "<br>";
-//                
+
+
+        list($prefijo, $id) = explode(" ", "FLST 1");
+        $factura = $this->select_model->factura_prefijo_id($prefijo, $id);
+        if ($factura == TRUE) {
+            $this->load->library('Pdf');
+            $pdf = new Pdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Sili S.A.S');
+            $pdf->SetTitle('Factura de Venta Sili S.A.S');
+            $pdf->SetSubject('Factura de Venta Sili S.A.S');
+            $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config_alt.php de libraries/config
+////        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0, 64, 255), array(0, 64, 128));
+//            $pdf->setHeaderData('', 0, '', '', array(0, 0, 0), array(255, 255, 255));
+//            $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
 //
-//        //Llenamos los pagos realizados al prestamo
-//        $abonos = $this->select_model->abono_prestamo_prestamo($prefijo_prestamo, $id_prestamo);
-//        if ($abonos == TRUE) {
-//            $i = 1;
-//            foreach ($abonos as $fila) {
-//                $matriz_matricula[$i][4] = $fila->subtotal;
-//                $matriz_matricula[$i][5] = $fila->cant_dias_mora;
-//                $matriz_matricula[$i][6] = $fila->int_mora;
-//                $matriz_matricula[$i][11] = date("Y-m-d", strtotime($fila->fecha_trans));
-//                $matriz_matricula[$i][12] = 1;
-//                $i++;
-//            }
-//        }
+//// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
+//            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 //
-//        //Llenamos las columnas que se calculan a partir de los pagos realizados
-//        for ($i = 1; $i <= $cant_cuotas; $i++) {
-//            $saldo_anterior = $matriz_matricula[$i - 1][9];
-//            $intereses = round($saldo_anterior * $tasa_interes, 2);
-//            if (($saldo_anterior + $intereses) >= $cuota_fija) {
-//                $cuota_minima = $cuota_fija;
-//            } else {
-//                $cuota_minima = round($saldo_anterior + $intereses, 2);
-//            }
-//            $cuota_maxima = round($saldo_anterior + $intereses, 2);
-//            $cuota_pagada = $matriz_matricula[$i][4];
-//            if ($cuota_pagada != 0) {
-//                $abono_capital = round($cuota_pagada - $intereses, 2);
-//            } else {
-//                $abono_capital = round($cuota_minima - $intereses, 2);
-//            }
-//            $saldo_prestamo = round($saldo_anterior - $abono_capital, 2);
-//            //Si el saldo es mejor a 1 pesos se perdona. Por errores de aproximacion pueden quedar saldos
-//            if ($saldo_prestamo < 1) {
-//                $saldo_prestamo = 0.00;
-//            }
-//            $fecha_pago = date("Y-m-d", strtotime("$fecha_desembolso +$i month"));
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+//            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 //
-//            $matriz_matricula[$i][1] = $i;
-//            $matriz_matricula[$i][2] = $cuota_minima;
-//            $matriz_matricula[$i][3] = $cuota_maxima;
-//            $matriz_matricula[$i][7] = $abono_capital;
-//            $matriz_matricula[$i][8] = $intereses;
-//            $matriz_matricula[$i][9] = $saldo_prestamo;
-//            $matriz_matricula[$i][10] = $fecha_pago;
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+//            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 //
-//            $cuota_cancelada = $matriz_matricula[$i][12];
-//            $fecha_hoy = date('Y-m-d');
-//            if (($cuota_cancelada == 0) && ($fecha_pago < $fecha_hoy)) {
-//                $dias_mora = $this->dias_entre_fechas($fecha_pago, $fecha_hoy);
-//                //Descartamos una mora inferior a 4 dias de gracia.   
-//                //Pero si es mayor a 4 la contamos completa sin descartar los 4 dias.
-//                if ($dias_mora > 4) {
-//                    $matriz_matricula[$i][5] = $dias_mora;
-//                    $tasa_mora_anual = $this->select_model->interes_mora()->tasa_mora_anual;
-//                    if ($tasa_mora_anual) {
-//                        $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $cuota_minima), 2);
-//                        $matriz_matricula[$i][6] = $Int_mora;
-//                    }
-//                }
-//            }
-//        }
-//        echo ($this->select_model->nextId_salario()->id) + 1;
-//        $SqlInfo = 'select * from empleado_x_sede AS a, sede AS b where (a.sede_secundaria = b.id) AND (a.dni_empleado=' . 1 . ')AND (a.id_empleado=' . 1 . ')AND (a.vigente=1)';
-//        $query = $this->db->query($SqlInfo);
-//        var_dump($query->result());
-//        foreach ($query as $fila) {
-//            echo $fila->sede_secundaria . " - " . $fila->nombre . "<br>";
-//        }       
-//        $where = "( NOT(id='1' AND dni='1')) AND estado!='3'";
-//        $this->db->where($where);
-//        $this->db->order_by('nombre1', 'asc');
-//        $query = $this->db->get('empleado');
-//        if ($query->num_rows() > 0) {
-//            foreach ($query->result() as $fila){
-//                echo $fila->nombre1 . "<br>";
-//            }
-//        }
-//        $id_empleado =1;
-//        $dni_empleado = 1;
-//        $id_jefe = 98667633;
-//        $dni_jefe = 1;
-//        $where = "(NOT(id=' . $id_empleado . ' AND dni=' . $dni_empleado . ')) AND (estado!='3') AND (NOT(id=' . $id_jefe . ' AND dni=' . $dni_jefe . '))";
-//        $this->db->where('$where');
-//        $this->db->order_by('nombre1', 'asc');
-//        $query = $this->db->get('empleado');
-//        if ($query->num_rows() > 0) {
-//            return $query->result();
-//        }        
-//        $where = "((sede_ppal IN(select sede_ppal from empleado where (id = 1128478351) and (dni = 1))) or (sede_ppal IN(select sede_secundaria from empleado_x_sede where (id_empleado = 1128478351) and (dni_empleado = 1) and (vigente = 1)))) and ( NOT(id='1' AND dni='1')) AND (estado!='3')";
-//        $this->db->where($where);
-//        $this->db->order_by('nombre1', 'asc');
-//        $query = $this->db->get('empleado');
-//        if ($query->num_rows() > 0) {
-//            foreach ($query->result() as $fila){
-//                echo $fila->nombre1 . "<br>";
-//            }
-//        }
-//Cantidad de dias entre dos fechas
-//        $SqlInfo = "SELECT DATEDIFF('1997-12-31 23:59:59','1997-12-30') as cant_dias";
-//        $query = $this->db->query($SqlInfo);
-//        echo $query->row()->cant_dias;
-//        echo $this->diasEntreFechas("2011-05-02", "2012-05-31");
-//        try {
-//            list($anyoStart, $mesStart, $diaStart) = explode("-", "2013-05-89");
-//            echo $anyoStart . " - " . $mesStart . " - " . $diaStart;
-//        } catch (Exception $e) {
-//             echo $e->getMessage();
-//            echo "El campo %s es inválido.";
-////        }
-//        
-//        list($anyoStart, $mesStart, $diaStart) = explode("-", "2013-05-89");
-//            echo $anyoStart . " - " . $mesStart . " - " . $diaStart;
-//        
-//Sumar meses a una fecha
-//        
-//        $fecha = "2013-05-06";
-//        $cantidad = 4;
-//        echo date("Y-m-d", strtotime("$fecha +$cantidad month"));
-//            $abonos = $this->select_model->adelanto_vigente_empleado(1128478351, 1);
-//            if ($abonos == TRUE) {
-//                foreach ($abonos as $fila) {
-//                    echo '<tr>
-//                            <td class="text-center"><input type="radio" class="exit_caution" name="cuenta" id="cuenta" value="' . $fila->id_adelanto . '"/></td>
-//                            <td>' . $fila->total . '</td>
-//                            <td class="text-center">' . $fila->saldo . '</td>
-//                            <td>' . $fila->sede . '</td>
-//                            <td>' . $fila->observacion . '</td>                                
-//                            <td>' . $fila->fecha_trans . '</td>       
-//                            <td class="text-center">' . $fila->fecha_trans . '</td>    
-//                        </tr>';
-//                }
-//            } else {
-//                echo "";
-//            }
-//Variables que deben ser ingresadas por el usuario desde un formulario
-//$valor = 6000000;
-//$plazo = 36;
-////Valor de la tasa de interes, debe ser ingresada por el administrador
-//$tasa = 22.5;
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+//            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 //
-//
-//$anual = $tasa/100;
-//$mes = round(($anual/12), 6);
-//
-//$cuota = $valor / ((pow((1+$mes), $plazo)-1)/($mes*pow((1+$mes), $plazo))); 
-//
-//$cpm = ($cuota/($valor/1000000));
-//$cuota = number_format($cuota, 0, '.', ',');
-//
-//
-//print '
-//Valor: $' .$valor. '<br/>
-//Tasa Anual: ' .$tasa. '%<br/>
-//Tasa Mensual: ' .round(($tasa/12), 2). '%<br/>
-//Cuota: $'.$cuota. '<br />
-//Cuota por Millon: $'.number_format($cpm, 0, '.', ',');
-//$total = 5000000;
-//$cant_cuotas = 36;
-//$tasa_interes = 0.025;
-//echo round($total / ((1 - (pow((1 + 0.025), -$cant_cuotas))) / $tasa_interes),2);
-//        Matriz de plan de pagos sistema frances
-//        $id_prestamo = 1;
-//        $prestamo = $this->select_model->prestamo_id($id_prestamo);
-//        $fecha_prestamo = $prestamo->fecha_trans;
-//        $total_prestamo = $prestamo->total;
-//        $tasa_interes = $prestamo->tasa_interes / 100;
-//        $cant_cuotas = $prestamo->cant_cuotas;
-//        $cuota_fija = $prestamo->cuota_fija;
-//
-//        //La primera fila la hacemos manual para que la formula funciones.
-//        $matriz_prestamo = array();
-//        $matriz_prestamo[0][1] = 0;
-//        $matriz_prestamo[0][2] = 0;
-//        $matriz_prestamo[0][3] = 0;
-//        $matriz_prestamo[0][4] = 0;
-//        $matriz_prestamo[0][5] = 0;
-//        $matriz_prestamo[0][6] = 0;
-//        $matriz_prestamo[0][7] = 0;
-//        $matriz_prestamo[0][8] = 0;
-//        $matriz_prestamo[0][9] = $total_prestamo;
-//        $matriz_prestamo[0][10] = $fecha_prestamo;
-//        $matriz_prestamo[0][11] = "";
-//        $matriz_prestamo[0][12] = 0;
-//
-//        //Llenamos de ceros todas las columnas de ceros que seran llenadas con pagos
-//        for ($i = 1; $i <= $cant_cuotas; $i++) {
-//            $matriz_prestamo[$i][4] = 0;
-//            $matriz_prestamo[$i][5] = 0;
-//            $matriz_prestamo[$i][6] = 0;
-//            $matriz_prestamo[$i][11] = "";
-//            $matriz_prestamo[$i][12] = 0;
-//        }
-//
-//        //Llenamos los pagos realizados al prestamo
-//        $abonos = $this->select_model->abono_prestamo_prestamo($id_prestamo);
-//        if ($abonos == TRUE) {
-//            $i = 1;
-//            foreach ($abonos as $fila) {
-//                $matriz_prestamo[$i][4] = $fila->subtotal;
-//                $matriz_prestamo[$i][5] = $fila->cant_dias_mora;
-//                $matriz_prestamo[$i][6] = $fila->int_mora;
-//                $matriz_prestamo[$i][11] = date("Y-m-d", strtotime($fila->fecha_trans));
-//                $matriz_prestamo[$i][12] = 1;
-//                $i++;
-//            }
-//        }
-//
-//        //Llenamos las columnas que se calculan a partir de los pagos realizados
-//        for ($i = 1; $i <= $cant_cuotas; $i++) {
-//            $saldo_anterior = $matriz_prestamo[$i - 1][9];
-//            $intereses = round($saldo_anterior * $tasa_interes, 2);
-//            if (($saldo_anterior + $intereses) >= $cuota_fija) {
-//                $cuota_minima = $cuota_fija;
-//            } else {
-//                $cuota_minima = round($saldo_anterior + $intereses, 2);
-//            }
-//            $cuota_maxima = round($saldo_anterior + $intereses, 2);
-//            $cuota_pagada = $matriz_prestamo[$i][4];
-//            if ($cuota_pagada != 0) {
-//                $abono_capital = round($cuota_pagada - $intereses, 2);
-//            } else {
-//                $abono_capital = round($cuota_minima - $intereses, 2);
-//            }
-//            $saldo_prestamo = round($saldo_anterior - $abono_capital, 2);
-//            //Si el saldo es mejor a 1 pesos se perdona. Por errores de aproximacion pueden quedar saldos
-//            if ($saldo_prestamo < 1) {
-//                $saldo_prestamo = 0.00;
-//            }
-//            $fecha_pago = date("Y-m-d", strtotime("$fecha_prestamo +$i month"));
-//
-//            $matriz_prestamo[$i][1] = $i;
-//            $matriz_prestamo[$i][2] = $cuota_minima;
-//            $matriz_prestamo[$i][3] = $cuota_maxima;
-//            $matriz_prestamo[$i][7] = $abono_capital;
-//            $matriz_prestamo[$i][8] = $intereses;
-//            $matriz_prestamo[$i][9] = $saldo_prestamo;
-//            $matriz_prestamo[$i][10] = $fecha_pago;
-//
-//            echo $matriz_prestamo[$i][1] . " - ";
-//            echo $matriz_prestamo[$i][2] . " - ";
-//            echo $matriz_prestamo[$i][3] . " - ";
-//            echo $matriz_prestamo[$i][4] . " - ";
-//            echo $matriz_prestamo[$i][5] . " - ";
-//            echo $matriz_prestamo[$i][6] . " - ";
-//            echo $matriz_prestamo[$i][7] . " - ";
-//            echo $matriz_prestamo[$i][8] . " - ";
-//            echo $matriz_prestamo[$i][9] . " - ";
-//            echo $matriz_prestamo[$i][10] . " - ";
-//            echo $matriz_prestamo[$i][11] . " - ";
-//            echo $matriz_prestamo[$i][12];
-//            echo "<br>";
-//        }
-//        //Recorrer matriz con foreach
-//        $a = array();
-//        $a[0][0] = "a";
-//        $a[0][1] = "b";
-//        $a[1][0] = "y";
-//        $a[1][1] = "z";
-//        foreach ($a as $v1) {
-//            foreach ($v1 as $v2) {
-//                echo "$v2\n";
-//            }
-//        }
-//        $tasa_mora_anual = 72;
-//        $dias_mora = 10;
-//        $cuota_minima = 409.09;
-//        echo ((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $cuota_minima);
-//        
-//        $response = array(
-//                            "respuesta" => 'OK',
-//                            'mensaje' => ''
-//                        );
-//        $response['mensaje'] .= " joder";
-//        $response['calor'] = "lobo";
-//        
-//        echo $response['mensaje'] . $response['calor'];
-//        $data = array(
-//            'cant_alumnos_disponibles' => '+1'
-//        );
-//        $this->db->set('cant_alumnos_disponibles', 'cant_alumnos_disponibles-1', FALSE);
-//        $this->db->where('contrato', 12345);
-////        $this->db->insert('mitabla');
-//        $this->db->update('matricula');
-////        $this->db->update('matricula', $data);
-//        echo "ok";
-//        echo date("d",strtotime("2013-02-3"));
+//relación utilizada para ajustar la conversión de los píxeles
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+
+// ---------------------------------------------------------
+// establecer el modo de fuente por defecto            
+            $pdf->setFontSubsetting(true);
+
+            $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
+            $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
+// Añadir una página
+// Este método tiene varias opciones, consulta la documentación para más información.
+            $pdf->AddPage();
+
+            //preparamos y maquetamos el contenido a crear
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size: 24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;}';            
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;}';
+            $html .= 'p.b4{font-family: helvetica, sans-serif;font-size:18px;font-weight: bold;}';
+            $html .= 'td.c1{width:390px;text-align:center;}';
+            $html .= 'td.c2{width:310px;text-align:center;}';            
+            $html .= 'table{border-collapse: collapse;}';
+            $html .= 'table.t1{text-align:left;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT:900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png">'
+                    . '<P class="b3">FACTURA DE VENTA</P>'
+                    . '<table border="1" width="100%" class="t1"><tr>'
+                    . '<td><b>Número:</b></td><td>FLST 23433</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td><b>Fecha de emisión:</b></td><td>2014/08/30</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td><b>Responsable:</b></td><td>Omar Rivera</td>'
+                    . '</tr></table>'                    
+                    . '</td>'
+                    . '</tr></table>'
+                    . '<br>'
+                    . '<table border="1" width="697px" class="t1"><tr>'
+                    . '<td><b>A nombre de:</b></td><td>FLST 23433</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td><b>Documento:</b></td><td>FLST 23433</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td><b>Número de matrícula:</b></td><td>23423</td>'                    
+                    . '</tr>'
+                    . '</table>'                    ;
+
+// Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+
+// ---------------------------------------------------------
+// Cerrar el documento PDF y preparamos la salida
+// Este método tiene varias opciones, consulte la documentación para más información.
+            $nombre_archivo = utf8_decode("factura de venta.pdf");
+            $pdf->Output($nombre_archivo, 'I');
+        } else {
+            echo "factura no encontrada";
+        }
     }
 
     function prueba_ajax() {
