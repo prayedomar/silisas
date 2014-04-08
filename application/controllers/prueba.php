@@ -12,11 +12,12 @@ class Prueba extends CI_Controller {
     function index() {
 //        $data['base_url'] = base_url();
 //        $this->load->view('testV');
-
-
-        list($prefijo, $id) = explode(" ", "FLST 1");
+        $factura_prefijo_id = "FLST 7";
+        list($prefijo, $id) = explode(" ", $factura_prefijo_id);
         $factura = $this->select_model->factura_prefijo_id($prefijo, $id);
         if ($factura == TRUE) {
+            $reponsable = $this->select_model->empleado($factura->id_responsable, $factura->dni_responsable);
+            $dni_abreviado = $this->select_model->t_dni_id($factura->dni_a_nombre_de)->abreviacion;
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'LETTER', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -25,34 +26,14 @@ class Prueba extends CI_Controller {
             $pdf->SetSubject('Factura de Venta Sili S.A.S');
             $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
-// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config_alt.php de libraries/config
-////        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0, 64, 255), array(0, 64, 128));
-//            $pdf->setHeaderData('', 0, '', '', array(0, 0, 0), array(255, 255, 255));
-//            $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
-//
-//// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
-//            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-//            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-//
-//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
-//            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-//
+
 //// se pueden modificar en el archivo tcpdf_config.php de libraries/config
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-//            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-//            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-//
-//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
-//            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-//
 //relación utilizada para ajustar la conversión de los píxeles
             $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-
 // ---------------------------------------------------------
 // establecer el modo de fuente por defecto            
             $pdf->setFontSubsetting(true);
-
             $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
             $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
 // Añadir una página
@@ -63,17 +44,20 @@ class Prueba extends CI_Controller {
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size: 24px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;}';            
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;}';
             $html .= 'p.b4{font-family: helvetica, sans-serif;font-size:18px;font-weight: bold;}';
             $html .= 'td.c1{width:390px;text-align:center;}';
-            $html .= 'td.c2{width:310px;text-align:center;}';            
+            $html .= 'td.c2{width:310px;text-align:center;}';  
+            $html .= 'td.c3{width:110px;}';
+            $html .= 'td.c4{width:282px;}';             
+            $html .= 'td.c5{width:128px;}'; 
             $html .= 'table{border-collapse: collapse;}';
             $html .= 'table.t1{text-align:left;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT:900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -88,25 +72,24 @@ class Prueba extends CI_Controller {
                     . '<td class="c2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png">'
                     . '<P class="b3">FACTURA DE VENTA</P>'
                     . '<table border="1" width="100%" class="t1"><tr>'
-                    . '<td><b>Número:</b></td><td>FLST 23433</td>'
+                    . '<td><b>Número:</b></td><td>' . $factura_prefijo_id . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td><b>Fecha de emisión:</b></td><td>2014/08/30</td>'
+                    . '<td><b>Fecha de emisión:</b></td><td>' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td><b>Responsable:</b></td><td>Omar Rivera</td>'
+                    . '<td><b>Responsable:</b></td><td>' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
                     . '</tr></table>'                    
                     . '</td>'
                     . '</tr></table>'
-                    . '<br>'
+                    . '<br><br>'
                     . '<table border="1" width="697px" class="t1"><tr>'
-                    . '<td><b>A nombre de:</b></td><td>FLST 23433</td>'
+                    . '<td class="c3"><b>A nombre de:</b></td><td class="c4">' . $factura->a_nombre_de . '</td>'
+                    . '<td><b>Documento:</b></td><td class="c5">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td><b>Documento:</b></td><td>FLST 23433</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td><b>Número de matrícula:</b></td><td>23423</td>'                    
+                    . '<td><b>Dirección:</b></td><td>' . $factura->direccion_a_nombre_de . '</td>'
+                    . '<td><b>Número de matrícula:</b></td><td>' . $factura->matricula . '</td>'                    
                     . '</tr>'
                     . '</table>'                    ;
 
