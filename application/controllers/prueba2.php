@@ -10,8 +10,7 @@ class Prueba2 extends CI_Controller {
     }
 
     function index() {
-        $data['base_url'] = base_url();
-        $this->load->view('testV');
+        echo urlencode("FLST 7");
     }
 
 }

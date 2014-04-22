@@ -44,14 +44,23 @@ class Recibo_caja extends CI_Controller {
             $this->form_validation->set_rules('dni_a_nombre_de', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');
-            $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');            
+            $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
             $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('descuento', 'Descuento', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
+            $error_descuento = "";
+            if (($this->input->post('int_mora')) && ($this->input->post('descuento'))) {
+                $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
+                $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
+                if ($descuento > $int_mora) {
+                    $error_descuento = "<p>El descuento ingresado, no puede ser mayor al total de los intereses.</p>";
+                }
+            }
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
@@ -70,8 +79,8 @@ class Recibo_caja extends CI_Controller {
                 }
             }
 
-            if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
+            if (($this->form_validation->run() == FALSE) || ($error_valores != "" || ($error_descuento != ""))) {
+                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . $error_descuento . form_error('descuento') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -92,9 +101,10 @@ class Recibo_caja extends CI_Controller {
                 $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
             }
             $a_nombre_de = $this->input->post('a_nombre_de');
-            $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');            
+            $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');
             $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
             $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
+            $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
             if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
                 list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
                 $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
@@ -124,13 +134,14 @@ class Recibo_caja extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "recibo_caja/crear";
             $data['msn_recrear'] = "Crear otro recibo de caja";
+            $data['url_imprimir'] = base_url() . "recibo_caja/consultar_pdf/" . $prefijo_recibo_caja . "_" . $id_recibo_caja . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_recibo_caja, $id_recibo_caja, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_recibo_caja, $id_recibo_caja, $credito_debito, (($subtotal + $int_mora) - $descuento), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -139,7 +150,7 @@ class Recibo_caja extends CI_Controller {
                     $checkbox_cuotas = $this->input->post('cuotas');
                     if ($checkbox_cuotas == TRUE) {
                         foreach ($checkbox_cuotas as $fila) {
-                            list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("-", $fila);
+                            list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("_", $fila);
                             $error3 = $this->insert_model->detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
                             if (isset($error3)) {
                                 $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
@@ -147,7 +158,7 @@ class Recibo_caja extends CI_Controller {
                                 return FALSE;
                             }
                         }
-                        $this->parser->parse('trans_success', $data);
+                        $this->parser->parse('trans_success_print', $data);
                     } else {
                         $data['trans_error'] = "<p>No llegaron correctamente las cuotas al servidor. Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
@@ -172,7 +183,7 @@ class Recibo_caja extends CI_Controller {
                     $response = array(
                         'respuesta' => 'OK',
                         'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
-                        'direccion' => $titular->direccion,                        
+                        'direccion' => $titular->direccion,
                         'filasTabla' => ''
                     );
                     foreach ($matriculas as $fila) {
@@ -236,7 +247,7 @@ class Recibo_caja extends CI_Controller {
                             $int_mora = $matriz_matricula[$i][9];
 
                             $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="checkbox" class="exit_caution" name="cuotas[]" id="cuotas"  value="' . $num_cuota . "-" . $id_t_detalle . "-" . $t_detalle . "-" . $valor_pendiente . "-" . $fecha_esperada . "-" . $cant_dias_mora . "-" . $int_mora . '" data-num_cuota="' . $num_cuota . '" data-t_detalle="' . $t_detalle . '" data-valor_pendiente="' . $valor_pendiente . '" data-fecha_esperada="' . $fecha_esperada . '" data-cant_dias_mora="' . $cant_dias_mora . '" data-int_mora="' . $int_mora . '" /></td>
+                            <td class="text-center"><input type="checkbox" class="exit_caution" name="cuotas[]" id="cuotas"  value="' . $num_cuota . "_" . $id_t_detalle . "_" . $t_detalle . "_" . $valor_pendiente . "_" . $fecha_esperada . "_" . $cant_dias_mora . "_" . $int_mora . '" data-num_cuota="' . $num_cuota . '" data-t_detalle="' . $t_detalle . '" data-valor_pendiente="' . $valor_pendiente . '" data-fecha_esperada="' . $fecha_esperada . '" data-cant_dias_mora="' . $cant_dias_mora . '" data-int_mora="' . $int_mora . '" /></td>
                             <td class="text-center">' . $num_cuota . '</td>
                             <td class="text-center">' . $t_detalle . '</td>
                             <td class="text-center">$' . number_format($valor_pendiente, 2, '.', ',') . '</td>                            
@@ -316,7 +327,7 @@ class Recibo_caja extends CI_Controller {
             if ($dias_mora > 4) {
                 $matriz_matricula[0][8] = $dias_mora;
                 if ($tasa_mora_anual) {
-                    $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $valor_esperado), 2);
+                    $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $matriz_matricula[0][5]), 2);
                     $matriz_matricula[0][9] = $Int_mora;
                 }
             }
@@ -355,7 +366,7 @@ class Recibo_caja extends CI_Controller {
                 if ($dias_mora > 4) {
                     $matriz_matricula[$i][8] = $dias_mora;
                     if ($tasa_mora_anual) {
-                        $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $valor_esperado), 2);
+                        $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $matriz_matricula[$i][5]), 2);
                         $matriz_matricula[$i][9] = $Int_mora;
                     }
                 }
@@ -419,6 +430,342 @@ class Recibo_caja extends CI_Controller {
             }
         } else {
             redirect(base_url());
+        }
+    }
+
+    function consultar() {
+        $data["tab"] = "consultar_recibo_caja";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['action_crear'] = base_url() . "recibo_caja/consultar_validar";
+        $data['action_recargar'] = base_url() . "recibo_caja/consultar";
+        $this->parser->parse('recibo_caja/consultar', $data);
+        $this->load->view('footer');
+    }
+
+    public function consultar_validar() {
+        $this->escapar($_POST);
+        $recibo_caja_prefijo_id = $this->input->post('prefijo_id_recibo_caja');
+        if (!empty($recibo_caja_prefijo_id)) {
+            try {
+                list($prefijo, $id) = explode(" ", $recibo_caja_prefijo_id);
+                $recibo_caja = $this->select_model->recibo_caja_prefijo_id($prefijo, $id);
+                $detalles_recibo_caja = $this->select_model->detalle_recibo_caja_prefijo_id($prefijo, $id);
+                if (($recibo_caja == TRUE) && ($detalles_recibo_caja == TRUE)) {
+//                    $this->consultar_pdf($prefijo . "_" . $id, "I");
+                    redirect(base_url() . "recibo_caja/consultar_pdf/" . $prefijo . "_" . $id . "/I");
+                } else {
+                    $data["tab"] = "consultar_recibo_caja";
+                    $this->isLogin($data["tab"]);
+                    $data["error_consulta"] = "Recibo de caja no encontrado.";
+                    $this->load->view("header", $data);
+                    $data['action_crear'] = base_url() . "recibo_caja/consultar_validar";
+                    $this->parser->parse('recibo_caja/consultar', $data);
+                    $this->load->view('footer');
+                }
+            } catch (Exception $e) {
+                $data["tab"] = "consultar_recibo_caja";
+                $this->isLogin($data["tab"]);
+                $data["error_consulta"] = "Error en el formato ingresado del recibo de caja: Prefijo + Espacio + Consecutivo.";
+                $this->load->view("header", $data);
+                $data['action_crear'] = base_url() . "recibo_caja/consultar_validar";
+                $this->parser->parse('recibo_caja/consultar', $data);
+                $this->load->view('footer');
+            }
+        } else {
+            $data["tab"] = "consultar_recibo_caja";
+            $this->isLogin($data["tab"]);
+            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo de la matrícula.";
+            $this->load->view("header", $data);
+            $data['action_crear'] = base_url() . "recibo_caja/consultar_validar";
+            $this->parser->parse('recibo_caja/consultar', $data);
+            $this->load->view('footer');
+        }
+    }
+
+    function consultar_pdf($id_recibo_caja, $salida_pdf) {
+        $recibo_caja_prefijo_id = $id_recibo_caja;
+        $id_recibo_caja_limpio = str_replace("_", " ", $recibo_caja_prefijo_id);
+        list($prefijo, $id) = explode("_", $recibo_caja_prefijo_id);
+        $recibo_caja = $this->select_model->recibo_caja_prefijo_id($prefijo, $id);
+        $detalles_recibo_caja = $this->select_model->detalle_recibo_caja_prefijo_id($prefijo, $id);
+        if (($recibo_caja == TRUE) && ($detalles_recibo_caja == TRUE)) {
+            $reponsable = $this->select_model->empleado($recibo_caja->id_responsable, $recibo_caja->dni_responsable);
+            $dni_abreviado = $this->select_model->t_dni_id($recibo_caja->dni_a_nombre_de)->abreviacion;
+            $this->load->library('Pdf');
+            $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Sili S.A.S');
+            $pdf->SetTitle('Recibo de caja Sili S.A.S');
+            $pdf->SetSubject('Recibo de caja Sili S.A.S');
+            $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+//relación utilizada para ajustar la conversión de los píxeles
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+// ---------------------------------------------------------
+// establecer el modo de fuente por defecto            
+            $pdf->setFontSubsetting(true);
+            $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
+            $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
+// Añadir una página
+// Este método tiene varias opciones, consulta la documentación para más información.
+            $pdf->AddPage();
+
+            //preparamos y maquetamos el contenido a crear
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'td.c1{width:418px;}';
+            $html .= 'td.c2{width:310px;}';
+            $html .= 'td.c3{width:112px;}';
+            $html .= 'td.c4{width:306px;}';
+            $html .= 'td.c9{width:177px;}';
+            $html .= 'td.c5{width:128px;}';
+            $html .= 'td.c6{height:200px;}';
+            $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+            $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+            $html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
+            $html .= 'td.c21{width:190px;height:20px;line-height:20px;font-weight: bold;}';
+            $html .= 'td.c22{width:120px;height:20px;line-height:20px;font-weight: bold;}';
+            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
+            $html .= 'td.c26{background-color:#E8E8E8;}';
+            $html .= 'td.a1{text-align:left;}';
+            $html .= 'td.a2{text-align:center;}';
+            $html .= 'th.c26{background-color:#E8E8E8;}';
+            $html .= 'th.a1{text-align:left;}';
+            $html .= 'th.a2{text-align:center;}';
+            $html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d2{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d3{width:85px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d4{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d5{width:120px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d6{width:50px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'table{border-spacing: 0;}';
+            $html .= 'table.t1{text-align:left;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2 a2"  colspan="2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png"></td>'
+                    . '<br>'
+                    . '</tr><tr>'
+                    . '<td class="c24 a2" colspan="2">RECIBO DE CAJA</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_recibo_caja_limpio . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($recibo_caja->fecha_trans)) . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $recibo_caja->a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $recibo_caja->id_a_nombre_de . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $recibo_caja->direccion_a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $recibo_caja->matricula . '</td>'
+                    . '</tr>'
+                    . '</table><br>'
+                    . '<table border="1" class="t1">'
+                    . '<tr>'
+                    . '<th class="d1 c23 a2 c26">Detalle</th>'
+                    . '<th class="d6 c23 a2 c26">Cuota</th>'
+                    . '<th class="d2 c23 a2 c26">Abono</th>'
+                    . '<th class="d3 c23 a2 c26">Dias Mora</th>'
+                    . '<th class="d4 c23 a2 c26">Int. Mora</th>'
+                    . '<th class="d5 c23 a2 c26">Subtotal</th>'
+                    . '</tr>';
+            $cont_filas = 0;
+            foreach ($detalles_recibo_caja as $fila) {
+                $cont_filas ++;
+                $html .= '<tr>'
+                        . '<td class="c7">' . $this->select_model->t_detalle($fila->t_detalle)->tipo . '</td>'
+                        . '<td class="c8 a2">' . $fila->num_cuota . '</td>'
+                        . '<td class="c8 a2">$' . number_format($fila->subtotal, 1, '.', ',') . '</td>'
+                        . '<td class="c8 a2">' . $fila->cant_dias_mora . '</td>'
+                        . '<td class="c8 a2">$' . number_format($fila->int_mora, 1, '.', ',') . '</td>'
+                        . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
+                        . '</tr>';
+            }
+            for ($i = $cont_filas; $i < 13; $i++) {
+                $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
+            }
+            $html .= '</table>'
+                    . '<table border="1" class="t1">'
+                    . '<tr>'
+                    . '<td class="c20" rowspan="4"><br><br><br><br>Firma y sello: _____________________________________</td>'
+                    . '<td class="c21 c23 c26">Total Abonos (+)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format($recibo_caja->subtotal, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c23 c26">Total Int. Mora (+)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format($recibo_caja->int_mora, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c23 c26">Total Descuento (-)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format($recibo_caja->descuento, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c23 c26">Total a Pagar (=)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format((($recibo_caja->subtotal + $recibo_caja->int_mora) - ($recibo_caja->descuento)), 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '</table><p class="b3">- Copia para el cliente -</p>';
+
+            // Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            // reset pointer to the last page
+            $pdf->lastPage();
+
+            $pdf->AddPage();
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'td.c1{width:418px;}';
+            $html .= 'td.c2{width:310px;}';
+            $html .= 'td.c3{width:112px;}';
+            $html .= 'td.c4{width:306px;}';
+            $html .= 'td.c9{width:177px;}';
+            $html .= 'td.c5{width:128px;}';
+            $html .= 'td.c6{height:200px;}';
+            $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+            $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+            $html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
+            $html .= 'td.c21{width:190px;height:20px;line-height:20px;font-weight: bold;}';
+            $html .= 'td.c22{width:120px;height:20px;line-height:20px;font-weight: bold;}';
+            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
+            $html .= 'td.c26{background-color:#E8E8E8;}';
+            $html .= 'td.a1{text-align:left;}';
+            $html .= 'td.a2{text-align:center;}';
+            $html .= 'th.c26{background-color:#E8E8E8;}';
+            $html .= 'th.a1{text-align:left;}';
+            $html .= 'th.a2{text-align:center;}';
+            $html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d2{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d3{width:85px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d4{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d5{width:120px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d6{width:50px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'table{border-spacing: 0;}';
+            $html .= 'table.t1{text-align:left;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2 a2"  colspan="2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png"></td>'
+                    . '<br>'
+                    . '</tr><tr>'
+                    . '<td class="c24 a2" colspan="2">RECIBO DE CAJA</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_recibo_caja_limpio . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($recibo_caja->fecha_trans)) . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $recibo_caja->a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $recibo_caja->id_a_nombre_de . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $recibo_caja->direccion_a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $recibo_caja->matricula . '</td>'
+                    . '</tr>'
+                    . '</table><br>'
+                    . '<table border="1" class="t1">'
+                    . '<tr>'
+                    . '<th class="d1 c23 a2 c26">Detalle</th>'
+                    . '<th class="d6 c23 a2 c26">Cuota</th>'
+                    . '<th class="d2 c23 a2 c26">Abono</th>'
+                    . '<th class="d3 c23 a2 c26">Dias Mora</th>'
+                    . '<th class="d4 c23 a2 c26">Int. Mora</th>'
+                    . '<th class="d5 c23 a2 c26">Subtotal</th>'
+                    . '</tr>';
+            $cont_filas = 0;
+            foreach ($detalles_recibo_caja as $fila) {
+                $cont_filas ++;
+                $html .= '<tr>'
+                        . '<td class="c7">' . $this->select_model->t_detalle($fila->t_detalle)->tipo . '</td>'
+                        . '<td class="c8 a2">' . $fila->num_cuota . '</td>'
+                        . '<td class="c8 a2">$' . number_format($fila->subtotal, 1, '.', ',') . '</td>'
+                        . '<td class="c8 a2">' . $fila->cant_dias_mora . '</td>'
+                        . '<td class="c8 a2">$' . number_format($fila->int_mora, 1, '.', ',') . '</td>'
+                        . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
+                        . '</tr>';
+            }
+            for ($i = $cont_filas; $i < 13; $i++) {
+                $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
+            }
+            $html .= '</table>'
+                    . '<table border="1" class="t1">'
+                    . '<tr>'
+                    . '<td class="c20" rowspan="4"><br><br><br><br>Firma y sello: _____________________________________</td>'
+                    . '<td class="c21 c23 c26">Total Abonos (+)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format($recibo_caja->subtotal, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c23 c26">Total Int. Mora (+)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format($recibo_caja->int_mora, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c23 c26">Total Descuento (-)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format($recibo_caja->descuento, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c23 c26">Total a Pagar (=)</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format((($recibo_caja->subtotal + $recibo_caja->int_mora) - ($recibo_caja->descuento)), 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '</table><p class="b3">- Copia para la empresa -</p>';
+
+// Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+// ---------------------------------------------------------
+// Cerrar el documento PDF y preparamos la salida
+// Este método tiene varias opciones, consulte la documentación para más información.
+            $nombre_archivo = utf8_decode("Recibo de caja.pdf");
+            $pdf->Output($nombre_archivo, $salida_pdf);
+        } else {
+            redirect(base_url() . 'recibo_caja/consultar/');
         }
     }
 

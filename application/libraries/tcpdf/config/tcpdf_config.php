@@ -134,22 +134,22 @@ define ('PDF_MARGIN_FOOTER', 10);
 /**
  * Top margin.
  */
-define ('PDF_MARGIN_TOP', 5);
+define ('PDF_MARGIN_TOP', 2);
 
 /**
  * Bottom margin.
  */
-define ('PDF_MARGIN_BOTTOM', 5);
+define ('PDF_MARGIN_BOTTOM', 2);
 
 /**
  * Left margin.
  */
-define ('PDF_MARGIN_LEFT', 5);
+define ('PDF_MARGIN_LEFT', 2);
 
 /**
  * Right margin.
  */
-define ('PDF_MARGIN_RIGHT', 5);
+define ('PDF_MARGIN_RIGHT', 2);
 
 /**
  * Default main font name.

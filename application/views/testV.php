@@ -22,6 +22,7 @@
             <tr> 
                 <td colspan='2' align='' style='padding: 20px; background-color:white; color:#222;'>
                     <hr style="margin:0 0 20px 0; border: 0; border-top: 1px solid #eee; border-bottom: 1px solid #fff;"/>
+                    <?= $contenido ?>                     
                     <hr style="margin:20px 0 5px 0; border: 0; border-top: 1px solid #eee; border-bottom: 1px solid #fff;"/>
                 </td>
             </tr>

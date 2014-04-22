@@ -71,14 +71,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function t_plan_igual_cantAlumnos($id_matricula) {
         $SqlInfo = "SELECT * FROM t_plan WHERE (cant_alumnos=(SELECT cant_alumnos from t_plan where (id=(SELECT plan FROM matricula WHERE (contrato='" . $id_matricula . "')))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function t_plan_id($id) {
         $this->db->where('id', $id);
@@ -194,14 +194,14 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function matricula_titular_idMatricula($id) {
         $SqlInfo = "SELECT CONCAT(t.nombre1, ' ', t.nombre2, ' ', t.apellido1, ' ', t.apellido2) AS titular, t_p.* FROM matricula AS m, titular AS t, t_plan AS t_p WHERE ((m.contrato='" . $id . "') AND (m.id_titular=t.id) AND (m.dni_titular=t.dni) AND (m.plan=t_p.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     public function detalle_matricula_liquidar($contrato) {
         $SqlInfo = "SELECT CONCAT(t.nombre1, ' ', t.nombre2, ' ', t.apellido1, ' ', t.apellido2) AS titular, CONCAT(t_p.nombre, ' - ', t_p.anio) AS plan, m.observacion, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) AS ejecutivo, e.id, e.dni, e.cargo, CASE e.genero WHEN 'F' THEN t_c.cargo_femenino ELSE t_c.cargo_masculino END AS name_cargo, m.fecha_matricula FROM matricula AS m, titular AS t, empleado AS e, t_cargo AS t_c, t_plan AS t_p WHERE ((m.contrato='" . $contrato . "') AND (m.id_titular=t.id) AND (m.dni_titular=t.dni) AND (m.id_ejecutivo=e.id) AND (m.dni_ejecutivo=e.dni) AND (e.cargo=t_c.id) AND (m.plan=t_p.id))";
@@ -237,7 +237,7 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function matricula_id_sede($contrato, $sede) {
         $this->db->where('contrato', $contrato);
         $this->db->where('sede', $sede);
@@ -245,15 +245,15 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    } 
-    
+    }
+
     public function matricula_id_sedes_responsable($contrato, $id_responsable, $dni_responsable) {
         $SqlInfo = "SELECT * FROM matricula where ((contrato='" . $contrato . "') AND ((sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     //Matriculas vigente con saldo incluido > 0
     public function matricula_vigente_titular($id_titular, $dni_titular) {
@@ -500,13 +500,13 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function est_alumno() {
         $query = $this->db->get('est_alumno');
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function est_empleado() {
         $query = $this->db->get('est_empleado');
@@ -1030,13 +1030,40 @@ class Select_model extends CI_Model {
             }
         }
     }
-    
+
     public function factura_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
         $query = $this->db->get('factura');
         if ($query->num_rows() == 1) {
             return $query->row();
+        }
+    }
+
+    public function detalle_factura_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo_factura', $prefijo);
+        $this->db->where('id_factura', $id);
+        $query = $this->db->get('detalle_factura');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }
+    
+    public function recibo_caja_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('recibo_caja');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
+    public function detalle_recibo_caja_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo_recibo_caja', $prefijo);
+        $this->db->where('id_recibo_caja', $id);
+        $query = $this->db->get('detalle_recibo_caja');
+        if ($query->num_rows() > 0) {
+            return $query->result();
         }
     }    
 

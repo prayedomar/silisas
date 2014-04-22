@@ -13,6 +13,7 @@
             <div class="modal-footer">
                 <center>
                     <a href="<?= base_url() ?>" class="btn btn-default" role="button"><span class="glyphicon glyphicon-ok"></span> Aceptar</a>
+                    <a href="{url_imprimir}" class="btn btn-default" role="button" target="_blank"><span class="glyphicon glyphicon-print"></span> Imprimir comprobante</a>                
                     <a href="{url_recrear}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-repeat"></span> {msn_recrear}</a>
                 </center>
             </div>

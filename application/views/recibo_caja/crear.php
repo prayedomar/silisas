@@ -114,16 +114,30 @@
                             </table>
                         </div>
                         <div class="row">
+                            <div class="col-xs-4 col-xs-offset-4">
+                                <div class="form-group">
+                                    <label>Descuento</label>    
+                                    <p class="help-block"><B>> </B>Para descontar sólo intereses de mora.</p>                                    
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="text" name="descuento" id="descuento" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                          
+                        <div class="row">
                             <div class="col-xs-6 col-xs-offset-4">
                                 <div class="row">
                                     <div class="col-xs-4">
-                                        <p><h4>Total abonos</h4></p>
-                                        <p><h4>Total intereses</h4></p>
+                                        <p><h4>Total abonos (+)</h4></p>
+                                        <p><h4>Total intereses (+)</h4></p>
+                                        <p><h4>Total descuento (-)</h4></p>
                                         <p><h3>Pago total</h3></p>
                                     </div>
                                     <div class="col-xs-8">
                                         <div id="div_subtotal"><h4>$ 0.00</h4></div>
                                         <div id="div_intereses"><h4>$ 0.00</h4></div>
+                                        <div id="div_descuento"><h4>$ 0.00</h4></div>
                                         <div id="div_total"><h3>$ 0.00</h3></div>
                                     </div>
                                 </div>   
@@ -203,6 +217,7 @@
                             <input type="hidden" name="subtotal" id="subtotal" class="decimal decimal2 miles">
                             <input type="hidden" name="int_mora" id="int_mora" class="decimal decimal2 miles">
                             <input type="hidden" name="total" id="total" class="decimal decimal2 miles">
+                            <input type="hidden" name="descuento_hidden" id="descuento_hidden" class="decimal decimal2 miles"/>                            
                             <center>
                                 <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
                                 <button id="btn_validar" class="btn btn-success">Crear recibo de caja</button>  
@@ -274,6 +289,17 @@
             $("#div_dv").css("display", "none");
         }
     });
+    
+    $(".input-group").delegate("#descuento", "blur", function() {
+        var descuento = new Number($('#descuento').val().split(",").join(""));
+        $('#descuento_hidden').attr('value', ((descuento).toFixed(2)));
+        $('#descuento_hidden').change();
+        $("#div_descuento").html("<h4>$ " + $('#descuento_hidden').val() + "</h4>");
+        if ($('#descuento').val() == '') {
+            $('#descuento').attr('value', '0.00');
+        }        
+        calcular_total();
+    });    
 
     //Calculamos total devengado, deducido y total nomina
     function calcular_total() {
@@ -288,8 +314,9 @@
             total_valor_pendiente = total_valor_pendiente + valor_pendiente;
             total_int_mora = total_int_mora + int_mora;
             total = total_valor_pendiente + total_int_mora;
-//            alert($(this).data('valor_pendiente') + " - " + $(this).data('int_mora'));
         });
+        var descuento = new Number($('#descuento').val().split(",").join(""));
+        total = total - descuento;
         $('#subtotal').attr('value', ((total_valor_pendiente).toFixed(2)));
         $('#subtotal').change();
         $('#int_mora').attr('value', ((total_int_mora).toFixed(2)));
@@ -327,6 +354,8 @@
             }
         });
         calcular_total();
+        $("#descuento").removeAttr("readonly", "readonly");
+        $('#descuento').attr('value', '0.00');        
     });
 
     //Llenamos la informacion de las matriculas y los pagos.

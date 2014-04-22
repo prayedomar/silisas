@@ -498,8 +498,11 @@
                                         <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
                                     <?php } ?>       
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
-                                        <li><a href="<?= base_url() ?>factura/consultar">Factura</a></li>
-                                    <?php } ?>                                             
+                                        <li><a href="<?= base_url() ?>factura/consultar">Factura de Venta</a></li>
+                                    <?php } ?>   
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
+                                        <li><a href="<?= base_url() ?>recibo_caja/consultar">Recibo de caja</a></li>
+                                    <?php } ?>                                        
                                 </ul>
                             </li>
                             <li class="col-sm-4">
