@@ -655,7 +655,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function adelanto($prefijo, $id, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
+    public function adelanto($prefijo, $id, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $autoriza, $motivo, $forma_descuento, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -671,7 +671,9 @@ class Insert_model extends CI_Model {
             'efectivo_retirado' => $efectivo_retirado,
             'sede' => $sede,
             'estado' => $estado,
-            'observacion' => $observacion,
+            'autoriza' => $autoriza,
+            'motivo' => $motivo,
+            'forma_descuento' => $forma_descuento,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );

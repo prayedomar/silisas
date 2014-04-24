@@ -475,7 +475,7 @@ class Recibo_caja extends CI_Controller {
         } else {
             $data["tab"] = "consultar_recibo_caja";
             $this->isLogin($data["tab"]);
-            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo de la matrícula.";
+            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo del recibo de caja.";
             $this->load->view("header", $data);
             $data['action_crear'] = base_url() . "recibo_caja/consultar_validar";
             $this->parser->parse('recibo_caja/consultar', $data);
@@ -493,12 +493,12 @@ class Recibo_caja extends CI_Controller {
             $reponsable = $this->select_model->empleado($recibo_caja->id_responsable, $recibo_caja->dni_responsable);
             $dni_abreviado = $this->select_model->t_dni_id($recibo_caja->dni_a_nombre_de)->abreviacion;
             $this->load->library('Pdf');
-            $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+            $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
             $pdf->SetTitle('Recibo de caja Sili S.A.S');
             $pdf->SetSubject('Recibo de caja Sili S.A.S');
-            $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+            $pdf->SetKeywords('sili, sili sas');
 
 
 //// se pueden modificar en el archivo tcpdf_config.php de libraries/config

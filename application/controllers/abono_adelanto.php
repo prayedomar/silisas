@@ -171,7 +171,9 @@ class Abono_adelanto extends CI_Controller {
                             <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>
                             <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>
                             <td class="text-center">' . $fila->sede . '</td>
-                            <td>' . $fila->observacion . '</td>                                
+                            <td class="text-center">' . $fila->autoriza . '</td>
+                            <td class="text-center">' . $fila->motivo . '</td>
+                            <td>' . $fila->forma_descuento . '</td>                                
                             <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>  
                         </tr>';
                     }

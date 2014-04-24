@@ -473,7 +473,7 @@ class Factura extends CI_Controller {
         } else {
             $data["tab"] = "consultar_factura";
             $this->isLogin($data["tab"]);
-            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo de la matrícula.";
+            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo de la factura.";
             $this->load->view("header", $data);
             $data['action_crear'] = base_url() . "factura/consultar_validar";
             $this->parser->parse('factura/consultar', $data);
@@ -491,12 +491,12 @@ class Factura extends CI_Controller {
             $reponsable = $this->select_model->empleado($factura->id_responsable, $factura->dni_responsable);
             $dni_abreviado = $this->select_model->t_dni_id($factura->dni_a_nombre_de)->abreviacion;
             $this->load->library('Pdf');
-            $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+            $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
             $pdf->SetTitle('Factura de Venta Sili S.A.S');
             $pdf->SetSubject('Factura de Venta Sili S.A.S');
-            $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+            $pdf->SetKeywords('sili, sili sas');
 
 
 //// se pueden modificar en el archivo tcpdf_config.php de libraries/config

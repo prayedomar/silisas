@@ -1030,6 +1030,15 @@ class Select_model extends CI_Model {
             }
         }
     }
+    
+    public function adelanto_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('adelanto');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function factura_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
@@ -1190,7 +1199,7 @@ class Select_model extends CI_Model {
 
     //adelantos vigente con saldo incluido > 0
     public function adelanto_vigente_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.observacion, ad.fecha_trans, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad, sede AS s WHERE ((ad.id_empleado='" . $id_empleado . "') AND (ad.dni_empleado='" . $dni_empleado . "') AND ((ad.estado=1)||(ad.estado=2)) AND (ad.sede=s.id))";
+        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.autoriza, ad.motivo, ad.forma_descuento, ad.fecha_trans, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad, sede AS s WHERE ((ad.id_empleado='" . $id_empleado . "') AND (ad.dni_empleado='" . $dni_empleado . "') AND ((ad.estado=1)||(ad.estado=2)) AND (ad.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

@@ -498,7 +498,10 @@
                                         <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
                                     <?php } ?>       
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
-                                        <li><a href="<?= base_url() ?>factura/consultar">Factura de Venta</a></li>
+                                        <li><a href="<?= base_url() ?>adelanto/consultar">Adelanto de nómina</a></li>
+                                    <?php } ?>                                          
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
+                                        <li><a href="<?= base_url() ?>factura/consultar">Factura de venta</a></li>
                                     <?php } ?>   
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
                                         <li><a href="<?= base_url() ?>recibo_caja/consultar">Recibo de caja</a></li>

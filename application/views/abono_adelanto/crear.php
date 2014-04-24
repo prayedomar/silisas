@@ -25,7 +25,9 @@
                                             <th class="text-center">Valor</th>
                                             <th class="text-center">Saldo</th>
                                             <th class="text-center">Sede</th>
-                                            <th class="text-center">Observación</th>
+                                            <th class="text-center">Autorizó</th>
+                                            <th class="text-center">Motivo</th>
+                                            <th class="text-center">Forma de descuento</th>
                                             <th class="text-center">Fecha del Adelanto</th>
                                         </tr>
                                     </thead>

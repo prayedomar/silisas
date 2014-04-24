@@ -82,10 +82,17 @@
                             </div>
                             <hr>
                             <div class="form-group">
-                                <label>Observación<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Motivo, Quién lo Autorizó, Forma de Pago, etc.</p>
-                                <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                                <label>Quién autoriza<em class="required_asterisco">*</em></label>
+                                <input name="autoriza" id="autoriza" type="text" class="form-control exit_caution alfanumerico" placeholder="Quién autoriza..." maxlength="50">
                             </div>
+                            <div class="form-group">
+                                <label>Motivo del adelanto<em class="required_asterisco">*</em></label>
+                                <textarea name="motivo" id="motivo" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Motivo del adelanto..."  style="max-width:100%;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Forma de descuento<em class="required_asterisco">*</em></label>
+                                <textarea name="forma_descuento" id="forma_descuento" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Forma de descuento..."  style="max-width:100%;"></textarea>
+                            </div>                            
                             <div class="form-group separar_submit">
                                 <input type="hidden" id="action_validar" value={action_validar} />
                                 <input type="hidden" name="id_responsable" value={id_responsable} />
