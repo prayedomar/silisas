@@ -104,6 +104,7 @@ class Adelanto extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "adelanto/crear";
             $data['msn_recrear'] = "Crear otro Adelanto";
+            $data['url_imprimir'] = base_url() . "adelanto/consultar_pdf/" . $prefijo_adelanto . "_" . $id_adelanto . "/I";
             
             $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_adelanto, $id_adelanto, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);            
             if (isset($error)) {
@@ -115,7 +116,7 @@ class Adelanto extends CI_Controller {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    $this->parser->parse('trans_success', $data);
+                    $this->parser->parse('trans_success_print', $data);
                 }
             }
         } else {
@@ -269,6 +270,9 @@ class Adelanto extends CI_Controller {
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'p.b4{line-height:23px;}';
+            $html .= 'p.b5{font-size:14px;}';
+            $html .= 'p.b6{line-height:26px;}';
             $html .= 'td.c1{width:420px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:170px;}';
@@ -276,10 +280,11 @@ class Adelanto extends CI_Controller {
             $html .= 'td.c5{width:170px;}';
             $html .= 'td.c6{width:140px;}';
             $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:30px;}';
+            $html .= 'td.c8{line-height:40px;}';
             $html .= 'td.c9{background-color:#E8E8E8;}';
             $html .= 'td.c10{font-size:4px;line-height:5px;}';            
-            $html .= 'td.c11{font-size:12px;}';  
+            $html .= 'td.c11{font-size:12px;}';
+            $html .= 'td.c12{line-height:20px;}';
             $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
             $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
             $html .= 'td.c25{border-top-color:#000000;}';
@@ -288,6 +293,7 @@ class Adelanto extends CI_Controller {
             $html .= 'td.c28{border-right-color:#000000;}';
             $html .= 'td.a1{text-align:left;}';
             $html .= 'td.a2{text-align:center;}';
+            $html .= 'td.a3{text-align:justify;}';
             $html .= 'th.a1{text-align:left;}';
             $html .= 'th.a2{text-align:center;}';
             $html .= 'table{border-spacing: 0;}';
@@ -308,7 +314,100 @@ class Adelanto extends CI_Controller {
                     . '<td class="c2 a2"  colspan="2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE ANTICIPO SOBRE NÓMINA</td>'
+                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE ADELANTO DE NÓMINA</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpia . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '</tr></table><br><br>'
+                    . '<table width="100%" border="1">'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12"><b>Empleado beneficiario:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1 . '</td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8" rowspan="2"><b> Valor del adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td colspan="4" class="c9 a2 c8"><b>DETALLES DEL ADELANTO</b></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td colspan="4" class="c23">'
+                    . '<table>'
+                    . '<tr><td class="c10"> </td></tr><tr>'
+                    . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr><tr>'
+                    . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr><tr>'                    
+                    . '<td><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr>'
+                    . '</table>'
+                    . '</td>'
+                    . '</tr>'
+                    . '<tr><td colspan="2" class="c11 a3">Recibí éste dinero de la empresa SILI S.A.S en calidad de anticipo, autorizando que me sea descontado de la forma especificada. Así mismo, autorizo a la empresa SILI S.A.S, para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo pendiente de éste adelanto.<p class="b4 b5">Firma empleado: ______________________________________</p></td>'
+                    . '<td colspan="2"><br><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'                    
+                    . '</table><p class="b3">- Copia para el empleado -</p>';
+
+            // Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            $pdf->lastPage();
+            $pdf->AddPage();
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'p.b4{line-height:23px;}';
+            $html .= 'p.b5{font-size:14px;}';
+            $html .= 'p.b6{line-height:26px;}';
+            $html .= 'td.c1{width:420px;}';
+            $html .= 'td.c2{width:310px;}';
+            $html .= 'td.c3{width:170px;}';
+            $html .= 'td.c4{width:250px;}';
+            $html .= 'td.c5{width:170px;}';
+            $html .= 'td.c6{width:140px;}';
+            $html .= 'td.c7{font-size:16px;}';
+            $html .= 'td.c8{line-height:30px;}';
+            $html .= 'td.c9{background-color:#E8E8E8;}';
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';            
+            $html .= 'td.c11{font-size:12px;}';
+            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $html .= 'td.c25{border-top-color:#000000;}';
+            $html .= 'td.c26{border-bottom-color:#000000;}';
+            $html .= 'td.c27{border-left-color:#000000;}';
+            $html .= 'td.c28{border-right-color:#000000;}';
+            $html .= 'td.a1{text-align:left;}';
+            $html .= 'td.a2{text-align:center;}';
+            $html .= 'td.a3{text-align:justify;}';
+            $html .= 'th.a1{text-align:left;}';
+            $html .= 'th.a2{text-align:center;}';
+            $html .= 'table{border-spacing: 0;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2 a2"  colspan="2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png"></td>'
+                    . '<br>'
+                    . '</tr><tr>'
+                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE ADELANTO DE NÓMINA</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpia . '</td>'
@@ -322,7 +421,7 @@ class Adelanto extends CI_Controller {
                     . '<table width="100%" border="1">'
                     . '<tr>'
                     . '<td class="c3 c23"><b>Empleado beneficiario:</b></td><td class="c4 c23 c25 c26  c27 c28">' . $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1 . '</td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8" rowspan="2"><b>Valor del adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8" rowspan="2"><b> Valor del adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 "><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'
@@ -343,21 +442,12 @@ class Adelanto extends CI_Controller {
                     . '</table>'
                     . '</td>'
                     . '</tr>'
-                    . '<tr><td colspan="2" class="c11">Recibí éste dinero de la empresa SILI S.A.S en calidad de anticipo, autorizando que me sea descontado de la forma especificada. Así mismo, autorizo a la empresa SILI S.A.S para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo vigente de éste adelanto .</td>'
-                    . '<td colspan="2"></td></tr>'                    
-                    . '</table>';
-
-            // Imprimimos el texto con writeHTMLCell()
+                    . '<tr><td colspan="2" class="c11 a3">Recibí éste dinero de la empresa SILI S.A.S en calidad de anticipo, autorizando que me sea descontado de la forma especificada. Así mismo, autorizo a la empresa SILI S.A.S, para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo pendiente de éste adelanto.<p class="b4 b5">Firma empleado: ______________________________________</p></td>'
+                    . '<td colspan="2"><br><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'                    
+                    . '</table><p class="b3">- Copia para la empresa -</p>';
+//
+// Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
-
-//            // reset pointer to the last page
-//            $pdf->lastPage();
-//
-//            $pdf->AddPage();
-//            $html = '';
-//
-//// Imprimimos el texto con writeHTMLCell()
-//            $pdf->writeHTML($html, true, false, true, false, '');
 
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida

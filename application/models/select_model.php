@@ -1032,13 +1032,21 @@ class Select_model extends CI_Model {
     }
     
     public function adelanto_prefijo_id($prefijo, $id) {
-        $this->db->where('prefijo', $prefijo);
-        $this->db->where('id', $id);
-        $query = $this->db->get('adelanto');
+        $SqlInfo = "SELECT DISTINCT ad.*, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad WHERE ((ad.prefijo='" . $prefijo . "') AND (ad.id='" . $id . "'))";
+        $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    } 
+    
+    public function abono_adelanto_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('abono_adelanto');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }     
 
     public function factura_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
