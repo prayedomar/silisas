@@ -252,5 +252,196 @@ class Ingreso extends CI_Controller {
             redirect(base_url());
         }
     }
+    
+    function consultar() {
+        $data["tab"] = "consultar_ingreso";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['action_crear'] = base_url() . "ingreso/consultar_validar";
+        $data['action_recargar'] = base_url() . "ingreso/consultar";
+        $this->parser->parse('ingreso/consultar', $data);
+        $this->load->view('footer');
+    }
+
+    public function consultar_validar() {
+        $this->escapar($_POST);
+        $ingreso_prefijo_id = $this->input->post('prefijo_id_ingreso');
+        if (!empty($ingreso_prefijo_id)) {
+            try {
+                list($prefijo, $id) = explode(" ", $ingreso_prefijo_id);
+                $ingreso = $this->select_model->ingreso_prefijo_id($prefijo, $id);
+                if ($ingreso == TRUE) {
+//                    $this->consultar_pdf($prefijo . "_" . $id, "I");
+                    redirect(base_url() . "ingreso/consultar_pdf/" . $prefijo . "_" . $id . "/I");                    
+                } else {
+                    $data["tab"] = "consultar_ingreso";
+                    $this->isLogin($data["tab"]);
+                    $data["error_consulta"] = "Ingreso no encontrado.";
+                    $this->load->view("header", $data);
+                    $data['action_crear'] = base_url() . "ingreso/consultar_validar";
+                    $this->parser->parse('ingreso/consultar', $data);
+                    $this->load->view('footer');
+                }
+            } catch (Exception $e) {
+                $data["tab"] = "consultar_adelanto";
+                $this->isLogin($data["tab"]);
+                $data["error_consulta"] = "Error en el formato ingresado del ingreso: Prefijo + Espacio + Consecutivo.";
+                $this->load->view("header", $data);
+                $data['action_crear'] = base_url() . "ingreso/consultar_validar";
+                $this->parser->parse('ingreso/consultar', $data);
+                $this->load->view('footer');
+            }
+        } else {
+            $data["tab"] = "consultar_ingreso";
+            $this->isLogin($data["tab"]);
+            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo del ingreso.";
+            $this->load->view("header", $data);
+            $data['action_crear'] = base_url() . "ingreso/consultar_validar";
+            $this->parser->parse('ingreso/consultar', $data);
+            $this->load->view('footer');
+        }
+    }
+
+    function consultar_pdf($id_ingreso, $salida_pdf) {
+        $ingreso_prefijo_id = $id_ingreso;
+        $id_ingreso_limpio = str_replace("_", " ", $ingreso_prefijo_id);
+        list($prefijo, $id) = explode("_", $ingreso_prefijo_id);
+        $ingreso = $this->select_model->ingreso_prefijo_id($prefijo, $id);
+        if ($ingreso == TRUE) {
+            $empleado = $this->select_model->empleado($ingreso->id_empleado, $ingreso->dni_empleado);
+            $dni_abreviado_empleado = $this->select_model->t_dni_id($ingreso->dni_empleado)->abreviacion;            
+            $reponsable = $this->select_model->empleado($ingreso->id_responsable, $ingreso->dni_responsable);
+            
+            $this->load->library('Pdf');
+            $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Sili S.A.S');
+            $pdf->SetTitle('Comprobante de ingreso ' . $id_ingreso_limpio . ' - Sili S.A.S');
+            $pdf->SetSubject('Comprobante de ingreso ' . $id_ingreso_limpio . ' - Sili S.A.S');
+            $pdf->SetKeywords('sili, sili sas');
+
+
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+//relación utilizada para ajustar la conversión de los píxeles
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+// ---------------------------------------------------------
+// establecer el modo de fuente por defecto            
+            $pdf->setFontSubsetting(true);
+            $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
+            $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
+// Añadir una página
+// Este método tiene varias opciones, consulta la documentación para más información.
+            $pdf->AddPage();
+
+            //preparamos y maquetamos el contenido a crear
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'p.b4{line-height:23px;}';
+            $html .= 'p.b5{font-size:14px;}';
+            $html .= 'p.b6{line-height:26px;}';
+            $html .= 'td.c1{width:420px;}';
+            $html .= 'td.c2{width:310px;}';
+            $html .= 'td.c3{width:170px;}';
+            $html .= 'td.c4{width:250px;}';
+            $html .= 'td.c5{width:170px;}';
+            $html .= 'td.c6{width:140px;}';
+            $html .= 'td.c7{font-size:16px;}';
+            $html .= 'td.c8{line-height:40px;}';
+            $html .= 'td.c9{background-color:#E8E8E8;}';
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';            
+            $html .= 'td.c11{font-size:12px;}';
+            $html .= 'td.c12{line-height:20px;}';
+            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $html .= 'td.c25{border-top-color:#000000;}';
+            $html .= 'td.c26{border-bottom-color:#000000;}';
+            $html .= 'td.c27{border-left-color:#000000;}';
+            $html .= 'td.c28{border-right-color:#000000;}';
+            $html .= 'td.a1{text-align:left;}';
+            $html .= 'td.a2{text-align:center;}';
+            $html .= 'td.a3{text-align:justify;}';
+            $html .= 'th.a1{text-align:left;}';
+            $html .= 'th.a2{text-align:center;}';
+            $html .= 'table{border-spacing: 0;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2 a2"  colspan="2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png"></td>'
+                    . '<br>'
+                    . '</tr><tr>'
+                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE ADELANTO DE NÓMINA</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpio . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '</tr></table><br><br>'
+                    . '<table width="100%" border="1">'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12"><b>Empleado beneficiario:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1 . '</td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8" rowspan="2"><b> Valor del adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td colspan="4" class="c9 a2 c8"><b>DETALLES DEL ADELANTO</b></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td colspan="4" class="c23">'
+                    . '<table>'
+                    . '<tr><td class="c10"> </td></tr><tr>'
+                    . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr><tr>'
+                    . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr><tr>'                    
+                    . '<td><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr>'
+                    . '</table>'
+                    . '</td>'
+                    . '</tr>'
+                    . '<tr><td colspan="2" class="c11 a3">Recibí éste dinero de la empresa SILI S.A.S en calidad de anticipo, autorizando que me sea descontado de la forma especificada. Así mismo, autorizo a la empresa SILI S.A.S, para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo pendiente de éste adelanto.<p class="b4 b5">Firma empleado: ______________________________________</p></td>'
+                    . '<td colspan="2"><br><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'                    
+                    . '</table><p class="b3">- Copia para el empleado -</p>';
+
+            // Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+//            $pdf->lastPage();
+//            $pdf->AddPage();
+//            $html = '';
+//
+// Imprimimos el texto con writeHTMLCell()
+//            $pdf->writeHTML($html, true, false, true, false, '');
+
+// ---------------------------------------------------------
+// Cerrar el documento PDF y preparamos la salida
+// Este método tiene varias opciones, consulte la documentación para más información.
+            $nombre_archivo = utf8_decode("Adelanto de nómina.pdf");
+            $pdf->Output($nombre_archivo, $salida_pdf);
+        } else {
+            redirect(base_url() . 'adelanto/consultar/');
+        }
+    }    
 
 }

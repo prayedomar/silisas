@@ -233,7 +233,7 @@ class Adelanto extends CI_Controller {
 
     function consultar_pdf($id_adelanto, $salida_pdf) {
         $adelanto_prefijo_id = $id_adelanto;
-        $id_adelanto_limpia = str_replace("_", " ", $adelanto_prefijo_id);
+        $id_adelanto_limpio = str_replace("_", " ", $adelanto_prefijo_id);
         list($prefijo, $id) = explode("_", $adelanto_prefijo_id);
         $adelanto = $this->select_model->adelanto_prefijo_id($prefijo, $id);
         if ($adelanto == TRUE) {
@@ -245,8 +245,8 @@ class Adelanto extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Adelanto de nómina Sili S.A.S');
-            $pdf->SetSubject('Adelanto de nómina Sili S.A.S');
+            $pdf->SetTitle('Adelanto de nómina ' . $id_adelanto_limpio . ' - Sili S.A.S');
+            $pdf->SetSubject('Adelanto de nómina ' . $id_adelanto_limpio . ' - Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -317,7 +317,7 @@ class Adelanto extends CI_Controller {
                     . '<td class="c24 a2" colspan="2">COMPROBANTE DE ADELANTO DE NÓMINA</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpia . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'
@@ -410,7 +410,7 @@ class Adelanto extends CI_Controller {
                     . '<td class="c24 a2" colspan="2">COMPROBANTE DE ADELANTO DE NÓMINA</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpia . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'

@@ -310,8 +310,8 @@ class Abono_adelanto extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Abono a adelanto de nómina Sili S.A.S');
-            $pdf->SetSubject('Abono a adelanto de nómina Sili S.A.S');
+            $pdf->SetTitle('Abono a adelanto de nómina ' . $id_abono_adelanto_limpio . ' - Sili S.A.S');
+            $pdf->SetSubject('Abono a adelanto de nómina ' . $id_abono_adelanto_limpio . ' - Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -399,7 +399,7 @@ class Abono_adelanto extends CI_Controller {
                     . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td colspan="4" class="c9 a2 c8"><b>DETALLES DEL ADELANTO DE NÓMINA</b></td>'
+                    . '<td colspan="4" class="c9 a2 c8"><b>DETALLES DEL ADELANTO</b></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td colspan="4" class="c23">'
@@ -495,7 +495,7 @@ class Abono_adelanto extends CI_Controller {
                     . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td colspan="4" class="c9 a2 c8"><b>DETALLES DEL ADELANTO DE NÓMINA</b></td>'
+                    . '<td colspan="4" class="c9 a2 c8"><b>DETALLES DEL ADELANTO</b></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td colspan="4" class="c23">'

@@ -496,8 +496,8 @@ class Recibo_caja extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Recibo de caja Sili S.A.S');
-            $pdf->SetSubject('Recibo de caja Sili S.A.S');
+            $pdf->SetTitle('Recibo de caja ' . $id_recibo_caja_limpio . ' - Sili S.A.S');
+            $pdf->SetSubject('Recibo de caja ' . $id_recibo_caja_limpio . ' - Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 

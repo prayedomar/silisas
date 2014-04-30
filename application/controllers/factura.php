@@ -483,7 +483,7 @@ class Factura extends CI_Controller {
 
     function consultar_pdf($id_factura, $salida_pdf) {
         $factura_prefijo_id = $id_factura;
-        $id_factura_limpia = str_replace("_", " ", $factura_prefijo_id);
+        $id_factura_limpio = str_replace("_", " ", $factura_prefijo_id);
         list($prefijo, $id) = explode("_", $factura_prefijo_id);
         $factura = $this->select_model->factura_prefijo_id($prefijo, $id);
         $detalles_factura = $this->select_model->detalle_factura_prefijo_id($prefijo, $id);
@@ -494,8 +494,8 @@ class Factura extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Factura de Venta Sili S.A.S');
-            $pdf->SetSubject('Factura de Venta Sili S.A.S');
+            $pdf->SetTitle('Factura de Venta ' . $id_factura_limpio . ' - Sili S.A.S');
+            $pdf->SetSubject('Factura de Venta ' . $id_factura_limpio . ' - Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -568,7 +568,7 @@ class Factura extends CI_Controller {
                     . '<td class="c24 a2" colspan="2">FACTURA DE VENTA</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_factura_limpia . '</td>'
+                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_factura_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>'
@@ -692,7 +692,7 @@ class Factura extends CI_Controller {
                     . '<td class="c24 a2" colspan="2">FACTURA DE VENTA</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_factura_limpia . '</td>'
+                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_factura_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>'

@@ -255,12 +255,12 @@
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>abono_adelanto/crear">Abono adelanto nómina</a></li> 
                                     <?php } ?>                                        
-                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
+                                    <!--<?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                                     <?php } ?>                                                    
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
-                                    <?php } ?>
+                                    <?php } ?>-->
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
                                         <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
                                     <?php } ?>                                    
@@ -508,7 +508,13 @@
                                     <?php } ?>   
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                                         <li><a href="<?= base_url() ?>abono_adelanto/consultar">Abono adelanto de nómina</a></li>
-                                    <?php } ?>                                      
+                                    <?php } ?>  
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                                        <li><a href="<?= base_url() ?>ingreso/consultar">Ingreso</a></li>
+                                    <?php } ?>     
+                                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                                        <li><a href="<?= base_url() ?>egreso/consultar">Egreso</a></li>
+                                    <?php } ?>                                           
                                 </ul>
                             </li>
                             <li class="col-sm-4">
