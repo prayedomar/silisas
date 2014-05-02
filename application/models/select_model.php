@@ -78,7 +78,15 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }  
+    
+    public function t_egreso_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_egreso');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }      
 
     public function t_plan_activo() {
         $this->db->where('vigente', 1);
@@ -1109,6 +1117,15 @@ class Select_model extends CI_Model {
         }
     }     
 
+    public function egreso_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('egreso');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
+    
     public function detalle_recibo_caja_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo_recibo_caja', $prefijo);
         $this->db->where('id_recibo_caja', $id);

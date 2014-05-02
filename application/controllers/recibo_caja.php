@@ -517,7 +517,7 @@ class Recibo_caja extends CI_Controller {
             //preparamos y maquetamos el contenido a crear
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
@@ -641,7 +641,7 @@ class Recibo_caja extends CI_Controller {
             $pdf->AddPage();
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';

@@ -331,7 +331,7 @@ class Abono_adelanto extends CI_Controller {
             //preparamos y maquetamos el contenido a crear
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
@@ -393,7 +393,7 @@ class Abono_adelanto extends CI_Controller {
                     . '<table width="100%" border="1">'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Empleado depositante:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1 . '</td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8" rowspan="2"><b> Valor del abono:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8"><b>$ ' . number_format($abono_adelanto->total, 1, '.', ',') . '</b></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8 c9" rowspan="2"><b> Valor del abono:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($abono_adelanto->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'
@@ -427,7 +427,7 @@ class Abono_adelanto extends CI_Controller {
             $pdf->AddPage();
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:24px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
@@ -489,7 +489,7 @@ class Abono_adelanto extends CI_Controller {
                     . '<table width="100%" border="1">'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Empleado depositante:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1 . '</td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8" rowspan="2"><b> Valor del abono:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8"><b>$ ' . number_format($abono_adelanto->total, 1, '.', ',') . '</b></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8 c9" rowspan="2"><b> Valor del abono:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($abono_adelanto->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'

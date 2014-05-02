@@ -457,8 +457,8 @@ class Ingreso extends CI_Controller {
                         . '</td>'
                         . '</tr>';
             }
-            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma depositante: ____________________</p></td>'
-                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'
+            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma depositante: _____________________________</p></td>'
+                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para el depositante -</p>';
 
             // Imprimimos el texto con writeHTMLCell()
@@ -555,8 +555,8 @@ class Ingreso extends CI_Controller {
                         . '</td>'
                         . '</tr>';
             }
-            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma depositante: ____________________</p></td>'
-                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'
+            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma depositante: _____________________________</p></td>'
+                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para la empresa -</p>';
 //
 // Imprimimos el texto con writeHTMLCell()
