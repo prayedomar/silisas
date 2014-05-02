@@ -31,6 +31,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function t_usuario_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_usuario');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function t_usuario_prestamo() {
         $this->db->where('visible_prestamo', 1);
@@ -63,6 +71,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function t_ingreso_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('t_ingreso');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function t_plan_activo() {
         $this->db->where('vigente', 1);
@@ -522,6 +538,15 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function cliente_id_dni($id, $dni) {
+        $this->db->where('id', $id);
+        $this->db->where('dni', $dni);
+        $query = $this->db->get('cliente');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function cliente_prestamo($id_responsable, $dni_responsable) {
         $where = "((id IN(SELECT id_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))))) AND (dni IN(SELECT dni_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))))))";
@@ -1074,6 +1099,15 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function ingreso_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('ingreso');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }     
 
     public function detalle_recibo_caja_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo_recibo_caja', $prefijo);
@@ -1082,7 +1116,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }     
 
     public function empleado_sede_secundaria($id, $dni) {
         $SqlInfo = "SELECT * FROM empleado_x_sede AS a, sede AS b WHERE (a.sede_secundaria=b.id) AND (a.dni_empleado='" . $dni . "')AND (a.id_empleado='" . $id . "')AND (a.vigente=1)";

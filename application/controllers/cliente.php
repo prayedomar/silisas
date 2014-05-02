@@ -102,6 +102,7 @@ class Cliente extends CI_Controller {
 
             $perfil = 'cliente';
             $vigente = 1;
+            $nombres = $nombre1 . " " . $nombre2;
 
             $data["tab"] = "crear_cliente";
             $this->isLogin($data["tab"]);            
@@ -109,7 +110,7 @@ class Cliente extends CI_Controller {
             $data['url_recrear'] = base_url() . "cliente/crear";
             $data['msn_recrear'] = "Crear otro Cliente";
             
-            $error1 = $this->insert_model->new_usuario($id, $dni, $t_usuario, $password, $perfil, $vigente);
+            $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);
             //No se pudo crear el usuario
             if (isset($error1)) {
                 $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";

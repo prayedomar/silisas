@@ -310,8 +310,8 @@ class Abono_adelanto extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Abono a adelanto de nómina ' . $id_abono_adelanto_limpio . ' - Sili S.A.S');
-            $pdf->SetSubject('Abono a adelanto de nómina ' . $id_abono_adelanto_limpio . ' - Sili S.A.S');
+            $pdf->SetTitle('Abono adelanto de nómina ' . $id_abono_adelanto_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Abono adelanto de nómina ' . $id_abono_adelanto_limpio . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -346,7 +346,7 @@ class Abono_adelanto extends CI_Controller {
             $html .= 'td.c6{width:140px;}';
             $html .= 'td.c7{font-size:16px;}';
             $html .= 'td.c8{line-height:40px;}';
-            $html .= 'td.c9{background-color:#E8E8E8;}';
+            $html .= 'td.c9{background-color:#F5F5F5;}';
             $html .= 'td.c10{font-size:4px;line-height:5px;}';            
             $html .= 'td.c11{font-size:12px;}';
             $html .= 'td.c12{line-height:20px;}';
@@ -364,7 +364,7 @@ class Abono_adelanto extends CI_Controller {
             $html .= 'table{border-spacing: 0;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -442,7 +442,7 @@ class Abono_adelanto extends CI_Controller {
             $html .= 'td.c6{width:140px;}';
             $html .= 'td.c7{font-size:16px;}';
             $html .= 'td.c8{line-height:40px;}';
-            $html .= 'td.c9{background-color:#E8E8E8;}';
+            $html .= 'td.c9{background-color:#F5F5F5;}';
             $html .= 'td.c10{font-size:4px;line-height:5px;}';            
             $html .= 'td.c11{font-size:12px;}';
             $html .= 'td.c12{line-height:20px;}';
@@ -460,7 +460,7 @@ class Abono_adelanto extends CI_Controller {
             $html .= 'table{border-spacing: 0;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -524,10 +524,10 @@ class Abono_adelanto extends CI_Controller {
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
-            $nombre_archivo = utf8_decode("Adelanto de nómina.pdf");
+            $nombre_archivo = utf8_decode('Abono adelanto de nómina ' . $id_abono_adelanto_limpio . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
-            redirect(base_url() . 'adelanto/consultar/');
+            redirect(base_url() . 'abono_adelanto/consultar/');
         }
     }    
 

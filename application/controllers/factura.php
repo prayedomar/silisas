@@ -494,8 +494,8 @@ class Factura extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Factura de Venta ' . $id_factura_limpio . ' - Sili S.A.S');
-            $pdf->SetSubject('Factura de Venta ' . $id_factura_limpio . ' - Sili S.A.S');
+            $pdf->SetTitle('Factura de Venta ' . $id_factura_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Factura de Venta ' . $id_factura_limpio . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -534,10 +534,10 @@ class Factura extends CI_Controller {
             $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
             $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
             $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
-            $html .= 'td.c26{background-color:#E8E8E8;}';
+            $html .= 'td.c26{background-color:#F5F5F5;}';
             $html .= 'td.a1{text-align:left;}';
             $html .= 'td.a2{text-align:center;}';
-            $html .= 'th.c26{background-color:#E8E8E8;}';
+            $html .= 'th.c26{background-color:#F5F5F5;}';
             $html .= 'th.a1{text-align:left;}';
             $html .= 'th.a2{text-align:center;}';
             $html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
@@ -550,7 +550,7 @@ class Factura extends CI_Controller {
             $html .= 'table.t1{text-align:left;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -658,10 +658,10 @@ class Factura extends CI_Controller {
             $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
             $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
             $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
-            $html .= 'td.c26{background-color:#E8E8E8;}';
+            $html .= 'td.c26{background-color:#F5F5F5;}';
             $html .= 'td.a1{text-align:left;}';
             $html .= 'td.a2{text-align:center;}';
-            $html .= 'th.c26{background-color:#E8E8E8;}';
+            $html .= 'th.c26{background-color:#F5F5F5;}';
             $html .= 'th.a1{text-align:left;}';
             $html .= 'th.a2{text-align:center;}';
             $html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
@@ -674,7 +674,7 @@ class Factura extends CI_Controller {
             $html .= 'table.t1{text-align:left;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -760,7 +760,7 @@ class Factura extends CI_Controller {
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
-            $nombre_archivo = utf8_decode("factura de venta.pdf");
+            $nombre_archivo = utf8_decode('Factura de Venta ' . $id_factura_limpio . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'factura/consultar/');
