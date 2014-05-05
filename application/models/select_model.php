@@ -806,15 +806,22 @@ class Select_model extends CI_Model {
         }
     }
 
-    public function proveedor_id_dni($id, $dni, $d_v) {
+    public function proveedor_id_dni($id, $dni) {
         $this->db->where('id', $id);
         $this->db->where('dni', $dni);
-        $this->db->where('d_v', $d_v);
         $query = $this->db->get('proveedor');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
     }
+    
+    public function proveedor() {
+        $this->db->order_by('razon_social', 'asc');
+        $query = $this->db->get('proveedor');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function ciudad_provincia($provincia) {
         $this->db->where('provincia', $provincia);
@@ -1050,6 +1057,15 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function nextId_pago_proveedor($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('pago_proveedor');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function empleado_sede_ppal($id, $dni) {
         $this->db->where('id', $id);
@@ -1121,6 +1137,15 @@ class Select_model extends CI_Model {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
         $query = $this->db->get('egreso');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+    
+    public function pago_proveedor_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('pago_proveedor');
         if ($query->num_rows() == 1) {
             return $query->row();
         }

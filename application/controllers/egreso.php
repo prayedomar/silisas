@@ -75,12 +75,7 @@ class Egreso extends CI_Controller {
                                 }
                             } else {
                                 if ($this->input->post('t_beneficiario') == '5') {
-                                    if ($this->input->post('dni_beneficiario') != "6") {
-                                        $d_v = NULL;
-                                    } else {
-                                        $d_v = $this->input->post('d_v');
-                                    }
-                                    $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $d_v);
+                                    $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'));
                                     if ($check_usuario != TRUE) {
                                         $error_key_exists = "<p>El Proveedor ingresado, no existe en la Base de Datos.</p>";
                                     }
@@ -274,14 +269,14 @@ class Egreso extends CI_Controller {
                 } else {
                     $data["tab"] = "consultar_egreso";
                     $this->isLogin($data["tab"]);
-                    $data["error_consulta"] = "Ingreso no encontrado.";
+                    $data["error_consulta"] = "Egreso no encontrado.";
                     $this->load->view("header", $data);
                     $data['action_crear'] = base_url() . "egreso/consultar_validar";
                     $this->parser->parse('egreso/consultar', $data);
                     $this->load->view('footer');
                 }
             } catch (Exception $e) {
-                $data["tab"] = "consultar_adelanto";
+                $data["tab"] = "consultar_egreso";
                 $this->isLogin($data["tab"]);
                 $data["error_consulta"] = "Error en el formato ingresado del egreso: Prefijo + Espacio + Consecutivo.";
                 $this->load->view("header", $data);

@@ -46,7 +46,7 @@ class Proveedor extends CI_Controller {
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
             if (($this->input->post('id')) && ($this->input->post('dni'))) {
-                $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id'), $this->input->post('dni'), $this->input->post('d_v'));
+                $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id'), $this->input->post('dni'));
                 if ($check_usuario == TRUE) {
                     $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
                 }

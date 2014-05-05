@@ -77,12 +77,7 @@ class Ingreso extends CI_Controller {
                                 }
                             } else {
                                 if ($this->input->post('t_depositante') == '5') {
-                                    if ($this->input->post('dni_depositante') != "6") {
-                                        $d_v = NULL;
-                                    } else {
-                                        $d_v = $this->input->post('d_v');
-                                    }
-                                    $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id_depositante'), $this->input->post('dni_depositante'), $d_v);
+                                    $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id_depositante'), $this->input->post('dni_depositante'));
                                     if ($check_usuario != TRUE) {
                                         $error_key_exists = "<p>El Proveedor ingresado, no existe en la Base de Datos.</p>";
                                     }
@@ -284,7 +279,7 @@ class Ingreso extends CI_Controller {
                     $this->load->view('footer');
                 }
             } catch (Exception $e) {
-                $data["tab"] = "consultar_adelanto";
+                $data["tab"] = "consultar_ingreso";
                 $this->isLogin($data["tab"]);
                 $data["error_consulta"] = "Error en el formato ingresado del ingreso: Prefijo + Espacio + Consecutivo.";
                 $this->load->view("header", $data);
