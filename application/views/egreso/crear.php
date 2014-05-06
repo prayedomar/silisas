@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-xs-10 col-xs-offset-1">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
-                                                        <p style="text-align:justify;"><B>Nota: </B>Utilice esta opción en el caso en que el egreso que desea registrar no pertenezca a ninguna de las otras opciones disponibles de egresos, tales como: Nómina, Adelanto de nómina, Pago a proveedor, etc.<br><br></p>
+                            <p style="text-align:justify;"><B>Nota: </B>Utilice esta opción en el caso en que el egreso que desea registrar no pertenezca a ninguna de las otras opciones disponibles de egresos, tales como: Nómina, Adelanto de nómina, Pago a proveedor, etc.</p><br>
                             <div class="row">
                                 <div class="col-xs-8 col-xs-offset-2">
                                     <div class="form-group">

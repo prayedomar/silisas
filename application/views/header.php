@@ -267,10 +267,10 @@
                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                 <?php } ?>                    
                 <!--<?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                        <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
+                                            <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                 <?php } ?>                                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                        <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
+                                            <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
                 <?php } ?>-->                       
                 <!--<li><a href="#">Nota Credito</a></li>-->
                 <!--<li><a href="#">Transferencia Intersede</a></li>-->
@@ -501,10 +501,7 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador"))) { ?>                                       
                     <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
                 <?php } ?>         
-                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li> 
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
-                    <li><a href="<?= base_url() ?>ingreso/consultar">Ingreso</a></li>
-                <?php } ?>         
+                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>         
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/consultar">Factura de venta</a></li>
                 <?php } ?>   
@@ -514,16 +511,22 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>abono_adelanto/consultar">Abono adelanto de nómina</a></li>
                 <?php } ?>                      
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                    <li><a href="<?= base_url() ?>ingreso/consultar">Ingreso</a></li>
+                <?php } ?>                    
                 <li class="dropdown-header" style="font-size:16px;"><u>Débitos</u>:</li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
-                    <li><a href="<?= base_url() ?>egreso/consultar">Egreso</a></li>
-                <?php } ?>         
+                    <li><a href="<?= base_url() ?>adelanto/consultar">Adelanto de nómina</a></li>
+                <?php } ?>                 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>pago_proveedor/consultar">Pago a proveedor</a></li>
                 <?php } ?>  
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
-                    <li><a href="<?= base_url() ?>adelanto/consultar">Adelanto de nómina</a></li>
-                <?php } ?>                                          
+                    <li><a href="<?= base_url() ?>retefuente/consultar">Retención en la fuente</a></li>
+                <?php } ?>                     
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                    <li><a href="<?= base_url() ?>egreso/consultar">Egreso</a></li>
+                <?php } ?>                    
                 </ul>
                 </li>
                 <li class="col-sm-4">

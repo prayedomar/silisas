@@ -1158,6 +1158,15 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
+    }  
+    
+    public function retefuente_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('retefuente');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
     }    
     
     public function detalle_recibo_caja_prefijo_id($prefijo, $id) {

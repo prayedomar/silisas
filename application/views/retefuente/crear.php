@@ -92,8 +92,9 @@
                             </div>
                             <hr>
                             <div class="form-group">
-                                <label>Observación</label>
-                                <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                                <label>Descripción<em class="required_asterisco">*</em></label>
+                                                                <p class="help-block"><B>> </B>Motivo o concepto de la retención, porcentaje %, etc...</p>
+                                <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Descripción..."  style="max-width:100%;"></textarea>
                             </div>
 
                             <div class="form-group separar_submit">
