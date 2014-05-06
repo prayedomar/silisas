@@ -836,6 +836,35 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }    
+    
+    public function retefuente($prefijo, $id, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
+            't_trans' => '12',
+            'credito_debito' => '1',
+            'id_proveedor' => $id_proveedor,
+            'dni_proveedor' => $dni_proveedor,
+            'factura' => $factura,
+            'total' => $total,
+            'cuenta_destino' => $cuenta_destino,
+            'valor_consignado' => $valor_consignado,
+            'sede_caja_destino' => $sede_caja_destino,
+            't_caja_destino' => $t_caja_destino,
+            'efectivo_ingresado' => $efectivo_ingresado,
+            'sede' => $sede,
+            'vigente' => 1,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('retefuente');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }      
 
     public function ingreso($prefijo, $id, $t_ingreso, $t_depositante, $id_depositante, $dni_depositante, $d_v, $nombre_depositante, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $descripcion, $id_responsable, $dni_responsable) {
         $data = array(

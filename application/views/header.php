@@ -234,10 +234,7 @@
                 <?php } ?>                                    
                 <li class="divider"></li>                                
                 <li class="dropdown-header"><u> Transacciones</u></li>
-                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
-                <?php } ?>         
+                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>        
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>abono_matricula/crear">ABONO A MATRÍCULA</a></li>
                 <?php } ?>                                    
@@ -252,26 +249,29 @@
                 <?php } ?>             
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
                     <li><a href="<?= base_url() ?>retefuente/crear">Retención en la fuente</a></li>
-                <?php } ?>                       
-                <li class="dropdown-header" style="font-size:16px;"><u>Débitos</u>:</li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
-                    <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
+                <?php } ?>   
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                    <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
+                <?php } ?>                     
+                <li class="dropdown-header" style="font-size:16px;"><u>Débitos</u>:</li>  
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
+                    <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
+                <?php } ?>                                             
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                    <li><a href="<?= base_url() ?>adelanto/crear">Adelanto de nómina</a></li>
                 <?php } ?>   
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>pago_proveedor/crear">Pago a proveedor</a></li>
-                <?php } ?>                                       
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>adelanto/crear">Adelanto de nómina</a></li>
-                <?php } ?>                                       
+                <?php } ?>       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                    <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
+                <?php } ?>                    
                 <!--<?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                 <?php } ?>                                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                                         <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
-                <?php } ?>-->
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
-                    <li><a href="<?= base_url() ?>nomina/crear">Nómina Laboral</a></li>
-                <?php } ?>                                         
+                <?php } ?>-->                       
                 <!--<li><a href="#">Nota Credito</a></li>-->
                 <!--<li><a href="#">Transferencia Intersede</a></li>-->
                 </ul>

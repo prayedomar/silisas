@@ -1058,6 +1058,15 @@ class Select_model extends CI_Model {
         }
     }
     
+    public function nextId_retefuente($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('retefuente');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
+    
     public function nextId_pago_proveedor($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);

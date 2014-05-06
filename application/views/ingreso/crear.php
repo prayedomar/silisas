@@ -6,6 +6,7 @@
                 <div class="row">
                     <div class="col-xs-10 col-xs-offset-1">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
+                            <p style="text-align:justify;"><B>Nota: </B>Utilice esta opción en el caso en que el ingreso que desea registrar no pertenezca a ninguna de las otras opciones disponibles de ingresos, tales como: Factura, Recibo de caja, Abono a adelanto de nómina, Retención en la fuente, etc.<br><br></p>
                             <div class="row">
                                 <div class="col-xs-8 col-xs-offset-2">
                                     <div class="form-group">
@@ -207,7 +208,7 @@
     //Mostramos el obligatorio de descripcion si en t_ingreso selecciona "otro" o "transaccion intersede de difereente pais"
     $(".form-group").delegate("#t_ingreso", "change", function() {
         t_ingreso = $('#t_ingreso').val();
-        if ((t_ingreso == '4')||(t_ingreso == '5')) {
+        if ((t_ingreso == '4') || (t_ingreso == '5')) {
             $("#label_descripcion_required").css("display", "block");
             $("#label_descripcion").css("display", "none");
         } else {
@@ -272,7 +273,7 @@
             var valor_consignado = new Number($('#valor_consignado').val().split(",").join(""));
             $('#efectivo_ingresado').attr('value', ((total - valor_consignado).toFixed(2)));
         }
-        $('#efectivo_ingresado').change();        
+        $('#efectivo_ingresado').change();
     });
     //Calcula el valor contrario al modificar el efectivo retirado.
     $(".form-group").delegate("#efectivo_ingresado", "blur", function() {
@@ -281,7 +282,7 @@
             var efectivo_ingresado = new Number($('#efectivo_ingresado').val().split(",").join(""));
             $('#valor_consignado').attr('value', ((total - efectivo_ingresado).toFixed(2)));
         }
-        $('#valor_consignado').change();        
+        $('#valor_consignado').change();
     });
 
 </script>

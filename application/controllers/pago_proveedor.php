@@ -30,7 +30,7 @@ class Pago_proveedor extends CI_Controller {
             $this->escapar($_POST);
             $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|callback_select_default');
             $this->form_validation->set_rules('factura', 'Código de factura', 'required|trim|xss_clean|max_length[40]');
-            $this->form_validation->set_rules('total', 'Valor del Egreso', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('total', 'Valor del pago', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
