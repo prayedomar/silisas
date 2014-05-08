@@ -186,6 +186,8 @@ class Adelanto extends CI_Controller {
         $data["tab"] = "consultar_adelanto";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede();
+        $data['error_consulta'] = "";        
         $data['action_crear'] = base_url() . "adelanto/consultar_validar";
         $data['action_recargar'] = base_url() . "adelanto/consultar";
         $this->parser->parse('adelanto/consultar', $data);
@@ -194,41 +196,31 @@ class Adelanto extends CI_Controller {
 
     public function consultar_validar() {
         $this->escapar($_POST);
-        $adelanto_prefijo_id = $this->input->post('prefijo_id_adelanto');
-        if (!empty($adelanto_prefijo_id)) {
-            try {
-                list($prefijo, $id) = explode(" ", $adelanto_prefijo_id);
-                $adelanto = $this->select_model->adelanto_prefijo_id($prefijo, $id);
-                if ($adelanto == TRUE) {
-//                    $this->consultar_pdf($prefijo . "_" . $id, "I");
-                    redirect(base_url() . "adelanto/consultar_pdf/" . $prefijo . "_" . $id . "/I");                    
-                } else {
-                    $data["tab"] = "consultar_adelanto";
-                    $this->isLogin($data["tab"]);
-                    $data["error_consulta"] = "Adelanto de nómina no encontrado.";
-                    $this->load->view("header", $data);
-                    $data['action_crear'] = base_url() . "adelanto/consultar_validar";
-                    $this->parser->parse('adelanto/consultar', $data);
-                    $this->load->view('footer');
-                }
-            } catch (Exception $e) {
-                $data["tab"] = "consultar_adelanto";
-                $this->isLogin($data["tab"]);
-                $data["error_consulta"] = "Error en el formato ingresado del adelanto: Prefijo + Espacio + Consecutivo.";
-                $this->load->view("header", $data);
-                $data['action_crear'] = base_url() . "adelanto/consultar_validar";
-                $this->parser->parse('adelanto/consultar', $data);
-                $this->load->view('footer');
+        $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+        $this->form_validation->set_rules('id', 'Número o consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+        $prefijo = $this->input->post('prefijo');
+        $id = $this->input->post('id');
+        $error_transaccion = "";
+        if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
+            $adelanto = $this->select_model->adelanto_prefijo_id($prefijo, $id);
+            if ($adelanto != TRUE) {
+                $error_transaccion = "Adelanto de nómina no encontrado.";
             }
-        } else {
+        }
+        if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_adelanto";
             $this->isLogin($data["tab"]);
-            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo del adelanto.";
+            $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
+            $data["prefijo"] = $prefijo;
+            $data["id"] = $id;
             $this->load->view("header", $data);
+            $data['sede'] = $this->select_model->sede();
             $data['action_crear'] = base_url() . "adelanto/consultar_validar";
             $this->parser->parse('adelanto/consultar', $data);
             $this->load->view('footer');
-        }
+        } else {
+            redirect(base_url() . "adelanto/consultar_pdf/" . $prefijo . "_" . $id . "/I");
+        }        
     }
 
     function consultar_pdf($id_adelanto, $salida_pdf) {

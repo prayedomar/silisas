@@ -180,6 +180,8 @@ class Retefuente extends CI_Controller {
         $data["tab"] = "consultar_retefuente";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede();
+        $data['error_consulta'] = "";        
         $data['action_crear'] = base_url() . "retefuente/consultar_validar";
         $data['action_recargar'] = base_url() . "retefuente/consultar";
         $this->parser->parse('retefuente/consultar', $data);
@@ -188,40 +190,30 @@ class Retefuente extends CI_Controller {
 
     public function consultar_validar() {
         $this->escapar($_POST);
-        $retefuente_prefijo_id = $this->input->post('prefijo_id_retefuente');
-        if (!empty($retefuente_prefijo_id)) {
-            try {
-                list($prefijo, $id) = explode(" ", $retefuente_prefijo_id);
-                $retefuente = $this->select_model->retefuente_prefijo_id($prefijo, $id);
-                if ($retefuente == TRUE) {
-//                    $this->consultar_pdf($prefijo . "_" . $id, "I");
-                    redirect(base_url() . "retefuente/consultar_pdf/" . $prefijo . "_" . $id . "/I");
-                } else {
-                    $data["tab"] = "consultar_retefuente";
-                    $this->isLogin($data["tab"]);
-                    $data["error_consulta"] = "Retencion en la fuente no encontrada.";
-                    $this->load->view("header", $data);
-                    $data['action_crear'] = base_url() . "retefuente/consultar_validar";
-                    $this->parser->parse('retefuente/consultar', $data);
-                    $this->load->view('footer');
-                }
-            } catch (Exception $e) {
-                $data["tab"] = "consultar_retefuente";
-                $this->isLogin($data["tab"]);
-                $data["error_consulta"] = "Error en el formato ingresado de la retención en la fuente: Prefijo + Espacio + Consecutivo.";
-                $this->load->view("header", $data);
-                $data['action_crear'] = base_url() . "retefuente/consultar_validar";
-                $this->parser->parse('retefuente/consultar', $data);
-                $this->load->view('footer');
+        $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+        $this->form_validation->set_rules('id', 'Número o consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+        $prefijo = $this->input->post('prefijo');
+        $id = $this->input->post('id');
+        $error_transaccion = "";
+        if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
+            $retefuente = $this->select_model->retefuente_prefijo_id($prefijo, $id);
+            if ($retefuente != TRUE) {
+                $error_transaccion = "Retención en la fuente no encontrada.";
             }
-        } else {
+        }
+        if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_retefuente";
             $this->isLogin($data["tab"]);
-            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo de la retención en la fuente.";
+            $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
+            $data["prefijo"] = $prefijo;
+            $data["id"] = $id;
             $this->load->view("header", $data);
+            $data['sede'] = $this->select_model->sede();
             $data['action_crear'] = base_url() . "retefuente/consultar_validar";
             $this->parser->parse('retefuente/consultar', $data);
             $this->load->view('footer');
+        } else {
+            redirect(base_url() . "retefuente/consultar_pdf/" . $prefijo . "_" . $id . "/I");
         }
     }
 

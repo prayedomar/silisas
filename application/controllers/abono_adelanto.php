@@ -251,6 +251,8 @@ class Abono_adelanto extends CI_Controller {
         $data["tab"] = "consultar_abono_adelanto";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede();
+        $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "abono_adelanto/consultar_validar";
         $data['action_recargar'] = base_url() . "abono_adelanto/consultar";
         $this->parser->parse('abono_adelanto/consultar', $data);
@@ -259,39 +261,30 @@ class Abono_adelanto extends CI_Controller {
 
     public function consultar_validar() {
         $this->escapar($_POST);
-        $abono_adelanto_prefijo_id = $this->input->post('prefijo_id_abono_adelanto');
-        if (!empty($abono_adelanto_prefijo_id)) {
-            try {
-                list($prefijo, $id) = explode(" ", $abono_adelanto_prefijo_id);
-                $abono_adelanto = $this->select_model->abono_adelanto_prefijo_id($prefijo, $id);
-                if ($abono_adelanto == TRUE) {
-                    redirect(base_url() . "abono_adelanto/consultar_pdf/" . $prefijo . "_" . $id . "/I");                    
-                } else {
-                    $data["tab"] = "consultar_abono_adelanto";
-                    $this->isLogin($data["tab"]);
-                    $data["error_consulta"] = "Abono a adelanto de nómina no encontrado.";
-                    $this->load->view("header", $data);
-                    $data['action_crear'] = base_url() . "abono_adelanto/consultar_validar";
-                    $this->parser->parse('abono_adelanto/consultar', $data);
-                    $this->load->view('footer');
-                }
-            } catch (Exception $e) {
-                $data["tab"] = "consultar_abono_adelanto";
-                $this->isLogin($data["tab"]);
-                $data["error_consulta"] = "Error en el formato ingresado del abono: Prefijo + Espacio + Consecutivo.";
-                $this->load->view("header", $data);
-                $data['action_crear'] = base_url() . "abono_adelanto/consultar_validar";
-                $this->parser->parse('abono_adelanto/consultar', $data);
-                $this->load->view('footer');
+        $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+        $this->form_validation->set_rules('id', 'Número o consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+        $prefijo = $this->input->post('prefijo');
+        $id = $this->input->post('id');
+        $error_transaccion = "";
+        if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
+            $abono_adelanto = $this->select_model->abono_adelanto_prefijo_id($prefijo, $id);
+            if ($abono_adelanto != TRUE) {
+                $error_transaccion = "Abono a adelanto de nómina no encontrado.";
             }
-        } else {
+        }
+        if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_abono_adelanto";
             $this->isLogin($data["tab"]);
-            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo del abono.";
+            $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
+            $data["prefijo"] = $prefijo;
+            $data["id"] = $id;
             $this->load->view("header", $data);
+            $data['sede'] = $this->select_model->sede();
             $data['action_crear'] = base_url() . "abono_adelanto/consultar_validar";
             $this->parser->parse('abono_adelanto/consultar', $data);
             $this->load->view('footer');
+        } else {
+            redirect(base_url() . "abono_adelanto/consultar_pdf/" . $prefijo . "_" . $id . "/I");
         }
     }
 

@@ -180,6 +180,8 @@ class Pago_proveedor extends CI_Controller {
         $data["tab"] = "consultar_pago_proveedor";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede();
+        $data['error_consulta'] = "";        
         $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
         $data['action_recargar'] = base_url() . "pago_proveedor/consultar";
         $this->parser->parse('pago_proveedor/consultar', $data);
@@ -188,41 +190,31 @@ class Pago_proveedor extends CI_Controller {
 
     public function consultar_validar() {
         $this->escapar($_POST);
-        $pago_proveedor_prefijo_id = $this->input->post('prefijo_id_pago_proveedor');
-        if (!empty($pago_proveedor_prefijo_id)) {
-            try {
-                list($prefijo, $id) = explode(" ", $pago_proveedor_prefijo_id);
-                $pago_proveedor = $this->select_model->pago_proveedor_prefijo_id($prefijo, $id);
-                if ($pago_proveedor == TRUE) {
-//                    $this->consultar_pdf($prefijo . "_" . $id, "I");
-                    redirect(base_url() . "pago_proveedor/consultar_pdf/" . $prefijo . "_" . $id . "/I");
-                } else {
-                    $data["tab"] = "consultar_pago_proveedor";
-                    $this->isLogin($data["tab"]);
-                    $data["error_consulta"] = "Pago a proveedor no encontrado.";
-                    $this->load->view("header", $data);
-                    $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
-                    $this->parser->parse('pago_proveedor/consultar', $data);
-                    $this->load->view('footer');
-                }
-            } catch (Exception $e) {
-                $data["tab"] = "consultar_pago_proveedor";
-                $this->isLogin($data["tab"]);
-                $data["error_consulta"] = "Error en el formato ingresado del pago: Prefijo + Espacio + Consecutivo.";
-                $this->load->view("header", $data);
-                $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
-                $this->parser->parse('pago_proveedor/consultar', $data);
-                $this->load->view('footer');
+        $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+        $this->form_validation->set_rules('id', 'Número o consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+        $prefijo = $this->input->post('prefijo');
+        $id = $this->input->post('id');
+        $error_transaccion = "";
+        if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
+            $pago_proveedor = $this->select_model->pago_proveedor_prefijo_id($prefijo, $id);
+            if ($pago_proveedor != TRUE) {
+                $error_transaccion = "Pago a proveedor no encontrado.";
             }
-        } else {
+        }
+        if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_pago_proveedor";
             $this->isLogin($data["tab"]);
-            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo del pago a proveedor.";
+            $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
+            $data["prefijo"] = $prefijo;
+            $data["id"] = $id;
             $this->load->view("header", $data);
+            $data['sede'] = $this->select_model->sede();
             $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
             $this->parser->parse('pago_proveedor/consultar', $data);
             $this->load->view('footer');
-        }
+        } else {
+            redirect(base_url() . "pago_proveedor/consultar_pdf/" . $prefijo . "_" . $id . "/I");
+        }        
     }
 
     function consultar_pdf($id_pago_proveedor, $salida_pdf) {
