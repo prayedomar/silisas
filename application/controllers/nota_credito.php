@@ -222,6 +222,8 @@ class Nota_credito extends CI_Controller {
         $data["tab"] = "consultar_nota_credito";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede();
+        $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "nota_credito/consultar_validar";
         $data['action_recargar'] = base_url() . "nota_credito/consultar";
         $this->parser->parse('nota_credito/consultar', $data);
@@ -230,39 +232,30 @@ class Nota_credito extends CI_Controller {
 
     public function consultar_validar() {
         $this->escapar($_POST);
-        $nota_credito_prefijo_id = $this->input->post('prefijo_id_nota_credito');
-        if (!empty($nota_credito_prefijo_id)) {
-            try {
-                list($prefijo, $id) = explode(" ", $nota_credito_prefijo_id);
-                $nota_credito = $this->select_model->nota_credito_prefijo_id($prefijo, $id);
-                if ($nota_credito == TRUE) {
-                    redirect(base_url() . "nota_credito/consultar_pdf/" . $prefijo . "_" . $id . "/I");
-                } else {
-                    $data["tab"] = "consultar_nota_credito";
-                    $this->isLogin($data["tab"]);
-                    $data["error_consulta"] = "Nota crédito no encontrada.";
-                    $this->load->view("header", $data);
-                    $data['action_crear'] = base_url() . "nota_credito/consultar_validar";
-                    $this->parser->parse('nota_credito/consultar', $data);
-                    $this->load->view('footer');
-                }
-            } catch (Exception $e) {
-                $data["tab"] = "consultar_nota_credito";
-                $this->isLogin($data["tab"]);
-                $data["error_consulta"] = "Error en el formato ingresado de la nota crédito: Prefijo + Espacio + Consecutivo.";
-                $this->load->view("header", $data);
-                $data['action_crear'] = base_url() . "nota_credito/consultar_validar";
-                $this->parser->parse('nota_credito/consultar', $data);
-                $this->load->view('footer');
+        $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+        $this->form_validation->set_rules('id', 'Número o consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+        $prefijo = $this->input->post('prefijo');
+        $id = $this->input->post('id');
+        $error_transaccion = "";
+        if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
+            $nota_credito = $this->select_model->nota_credito_prefijo_id($prefijo, $id);
+            if ($nota_credito != TRUE) {
+                $error_transaccion = "Nota crédito no encontrada.";
             }
-        } else {
+        }
+        if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_nota_credito";
             $this->isLogin($data["tab"]);
-            $data["error_consulta"] = "Antes de consultar, ingrese el consecutivo del pago a proveedor.";
+            $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
+            $data["prefijo"] = $prefijo;
+            $data["id"] = $id;
             $this->load->view("header", $data);
+            $data['sede'] = $this->select_model->sede();
             $data['action_crear'] = base_url() . "nota_credito/consultar_validar";
             $this->parser->parse('nota_credito/consultar', $data);
             $this->load->view('footer');
+        } else {
+            redirect(base_url() . "nota_credito/consultar_pdf/" . $prefijo . "_" . $id . "/I");
         }
     }
 
@@ -400,8 +393,8 @@ class Nota_credito extends CI_Controller {
 
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
-            
-             $pdf->lastPage();
+
+            $pdf->lastPage();
             $pdf->AddPage();
             $html = '';
             $html .= '<style type=text/css>';
@@ -501,7 +494,7 @@ class Nota_credito extends CI_Controller {
                     . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para la empresa -</p>';
             $pdf->writeHTML($html, true, false, true, false, '');
-            
+
 
             $nombre_archivo = utf8_decode('Nota crédito ' . $id_nota_credito_limpio . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
