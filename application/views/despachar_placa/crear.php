@@ -25,7 +25,7 @@
                             </div>                            
                             <div class="form-group">
                                 <label>Observación</label>
-                                <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                                <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
                             </div>
                             <div class="form-group">
                                 <p><B>Nota: </B>Si por alguna razón decide cancelar el envío de alguna solicitud de placa, hagálo por la opción: Anular Solicitud de Placa.</p>                            

@@ -10,49 +10,26 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $id_matricula = 15548;
-        $matriz_matricula = $this->matriz_matricula($id_matricula);
-        if ($matriz_matricula) {
+        $id_matricula = 15532423448;
             $matricula = $this->select_model->matricula_id($id_matricula);
-            $plan = $this->select_model->t_plan_id($matricula->plan);
-            $cant_cuotas = $plan->cant_cuotas;
-            $response = array(
-                'respuesta' => 'OK',
-                'filasTabla' => ''
-            );
-            //Solo mostrará las cuotas pendientes de pago
-            for ($i = 0; $i <= $cant_cuotas; $i++) {
-                //Solo se mostraran las cuotas que no se han cancelado
-                if ($matriz_matricula[$i][6] == 0) {
-                    $num_cuota = $matriz_matricula[$i][1];
-                    $id_t_detalle = $matriz_matricula[$i][2];
-                    $t_detalle = $this->select_model->t_detalle($id_t_detalle)->tipo;
-                    $valor_pendiente = $matriz_matricula[$i][5];
-                    $fecha_esperada = $matriz_matricula[$i][7];
-                    $cant_dias_mora = $matriz_matricula[$i][8];
-                    $int_mora = $matriz_matricula[$i][9];
-
-                    $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="checkbox" class="exit_caution" name="cuotas[]" id="cuotas"  value="' . $num_cuota . "_" . $id_t_detalle . "_" . $t_detalle . "_" . $valor_pendiente . "_" . $fecha_esperada . "_" . $cant_dias_mora . "_" . $int_mora . '" data-num_cuota="' . $num_cuota . '" data-t_detalle="' . $t_detalle . '" data-valor_pendiente="' . $valor_pendiente . '" data-fecha_esperada="' . $fecha_esperada . '" data-cant_dias_mora="' . $cant_dias_mora . '" data-int_mora="' . $int_mora . '" /></td>
-                            <td class="text-center">' . $num_cuota . '</td>
-                            <td class="text-center">' . $t_detalle . '</td>
-                            <td class="text-center">$' . number_format($valor_pendiente, 2, '.', ',') . '</td>                            
-                            <td class="text-center">' . $fecha_esperada . '</td> 
-                            <td class="text-center">' . $cant_dias_mora . '</td>                                
-                            <td class="text-center">$' . number_format($int_mora, 2, '.', ',') . '</td>
-                        </tr>';
-                }
+            if ($matricula == TRUE) {
+                $total_abonos = $this->select_model->total_abonos_matricula($id_matricula);
+                $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);
+                $response = array(
+                    'respuesta' => 'OK',
+                    'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
+                    'total_abonos' => $total_abonos->total
+                );
+                echo json_encode($response);
+                return false;
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>La matrícula no existe en la base de datos.</p>'
+                );
+                echo json_encode($response);
+                return false;
             }
-//                    echo $response['filasTabla'];
-            echo json_encode($response);
-            return false;
-        } else {
-            $response = array(
-                'respuesta' => 'error'
-            );
-            echo json_encode($response);
-            return false;
-        }
     }
     
     function matriz_matricula($id_matricula) {

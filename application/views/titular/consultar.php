@@ -318,7 +318,7 @@
                             </div>                 
                             <div class="form-group">
                                 <label>Observación</label>
-                                <textarea name="observacion" id="observacion-modal" class="form-control exit_caution" rows="4" maxlength="255" placeholder="Observación..." style="max-width:100%;"></textarea>
+                                <textarea name="observacion" id="observacion-modal" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación..." style="max-width:100%;"></textarea>
                             </div>
 
                         </div>

@@ -20,7 +20,7 @@
                         </div>
                         <div class="form-group">
                             <label>Descripción</label>
-                            <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Descripción..."  style="max-width:100%;"></textarea>
+                            <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Descripción..."  style="max-width:100%;"></textarea>
                         </div>
                         <div id="validacion_alert">
                         </div>

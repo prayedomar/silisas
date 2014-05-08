@@ -201,7 +201,7 @@
                             </div>                             
                             <div class="form-group">
                                 <label>Observación</label>
-                                <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="255" placeholder="Observación..."style="max-width:100%;"></textarea>
+                                <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación..."style="max-width:100%;"></textarea>
                             </div>
                             <div class="form-group separar_submit">
                                 <input type="hidden" id="action_validar" value={action_validar} />
@@ -301,6 +301,7 @@
                     $("#cant_clases").attr("value", obj.cant_clases);
                     $("#est_alumno").attr("value", obj.estado);
                     $("#observacion").attr("value", obj.observacion);
+                    $("#div_warning").remove();
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);

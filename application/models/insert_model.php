@@ -684,6 +684,35 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function nota_credito($prefijo, $id, $matricula, $autoriza, $motivo, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
+            't_trans' => '10',
+            'credito_debito' => '0',
+            'matricula' => $matricula,
+            'autoriza' => $autoriza,
+            'motivo' => $motivo,            
+            'total' => $total,
+            'cuenta_origen' => $cuenta_origen,
+            'valor_retirado' => $valor_retirado,
+            'sede_caja_origen' => $sede_caja_origen,
+            't_caja_origen' => $t_caja_origen,
+            'efectivo_retirado' => $efectivo_retirado,
+            'sede' => $sede,
+            'vigente' => 1,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('nota_credito');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function prestamo($prefijo, $id, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(

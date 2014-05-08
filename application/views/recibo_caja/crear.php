@@ -206,7 +206,7 @@
                         <hr>
                         <div class="form-group">
                             <label>Observación</label>
-                            <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                            <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
                         </div>
 
                         <div class="form-group separar_submit">
@@ -380,7 +380,8 @@
                     $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
                     $("#id_a_nombre_de").attr("value", $('#id').val());
                     $("#a_nombre_de").attr("value", obj.nombreTitular);
-                    $("#direccion_a_nombre_de").attr("value", obj.direccion);                    
+                    $("#direccion_a_nombre_de").attr("value", obj.direccion); 
+                    $("#div_warning").remove();
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);

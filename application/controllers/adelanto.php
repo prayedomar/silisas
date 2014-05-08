@@ -39,7 +39,7 @@ class Adelanto extends CI_Controller {
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('autoriza', 'Quién autoriza', 'required|trim|xss_clean|max_length[50]');            
             $this->form_validation->set_rules('motivo', 'Motivo del adelanto', 'required|trim|xss_clean|max_length[255]');            
-            $this->form_validation->set_rules('forma_descuento', 'Forma de descuento', 'required|trim|xss_clean|max_length[255]');
+            $this->form_validation->set_rules('forma_descuento', 'Forma de descuento', 'required|trim|xss_clean|max_length[210]');
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
@@ -277,8 +277,8 @@ class Adelanto extends CI_Controller {
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:170px;}';
             $html .= 'td.c4{width:250px;}';
-            $html .= 'td.c5{width:170px;}';
-            $html .= 'td.c6{width:140px;}';
+            $html .= 'td.c5{width:150px;}';
+            $html .= 'td.c6{width:160px;}';
             $html .= 'td.c7{font-size:16px;}';
             $html .= 'td.c8{line-height:40px;}';
             $html .= 'td.c9{background-color:#F5F5F5;}';
@@ -318,18 +318,18 @@ class Adelanto extends CI_Controller {
                     . '<td class="c24 a2" colspan="2">COMPROBANTE DE ADELANTO DE NÓMINA</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpio . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c6">' . $id_adelanto_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c6">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table width="100%" border="1">'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Empleado beneficiario:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1 . '</td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8 c9" rowspan="2"><b> Valor del adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8 c9" rowspan="2"><b> Valor adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'
@@ -341,11 +341,11 @@ class Adelanto extends CI_Controller {
                     . '<td colspan="4" class="c23">'
                     . '<table>'
                     . '<tr><td class="c10"> </td></tr><tr>'
-                    . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
+                    . '<td class="a3"><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
-                    . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
+                    . '<td class="a3"><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'                    
-                    . '<td><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
+                    . '<td class="a3"><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr>'
                     . '</table>'
                     . '</td>'
@@ -413,18 +413,18 @@ class Adelanto extends CI_Controller {
                     . '<td class="c24 a2" colspan="2">COMPROBANTE DE ADELANTO DE NÓMINA</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c23 c25 c26  c27 c28">' . $id_adelanto_limpio . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c6">' . $id_adelanto_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c6">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table width="100%" border="1">'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Empleado beneficiario:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1 . '</td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8 c9" rowspan="2"><b> Valor del adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8 c9" rowspan="2"><b> Valor adelanto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($adelanto->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c12"><b>Documento indentidad: </b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $dni_abreviado_empleado . ' ' . $adelanto->id_empleado . '</td>'

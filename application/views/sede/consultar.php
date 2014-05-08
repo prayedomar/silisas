@@ -202,7 +202,7 @@
                             </div>                            
                             <div class="form-group">
                                 <label>Observación</label>
-                                <textarea name="observacion" id="observacion-modal" class="form-control alfanumerico" rows="4" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                                <textarea name="observacion" id="observacion-modal" class="form-control alfanumerico" rows="4" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
                             </div>
                             <div class="form-group separar_submit">
                                 <input type="hidden" name="id_sede" id="id_sede" value=""/>

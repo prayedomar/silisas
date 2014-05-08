@@ -208,7 +208,7 @@ class Pago_proveedor extends CI_Controller {
             } catch (Exception $e) {
                 $data["tab"] = "consultar_pago_proveedor";
                 $this->isLogin($data["tab"]);
-                $data["error_consulta"] = "Error en el formato ingresado del pago_proveedor: Prefijo + Espacio + Consecutivo.";
+                $data["error_consulta"] = "Error en el formato ingresado del pago: Prefijo + Espacio + Consecutivo.";
                 $this->load->view("header", $data);
                 $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
                 $this->parser->parse('pago_proveedor/consultar', $data);

@@ -74,7 +74,7 @@
                         </div>
                         <div class="form-group">
                             <label>Descripción de los hechos<em class="required_asterisco">*</em></label>
-                            <textarea name="descripcion" id="descripcion" class="form-control exit_caution alfanumerico" rows="3" maxlength="255" placeholder="Descripción de los hechos..."  style="max-width:100%;"></textarea>
+                            <textarea name="descripcion" id="descripcion" class="form-control exit_caution alfanumerico" rows="3" maxlength="250" placeholder="Descripción de los hechos..."  style="max-width:100%;"></textarea>
                         </div>                        
                         <div class="form-group separar_submit">
                             <input type="hidden" id="action_validar" value={action_validar} />

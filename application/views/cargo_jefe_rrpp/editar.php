@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         <label>Observación</label>
-                        <textarea name="observacion" id="observacion_1" class="form-control exit_caution alfanumerico" rows="2" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                        <textarea name="observacion" id="observacion_1" class="form-control exit_caution alfanumerico" rows="2" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
                     </div>                    
                     <div class="form-group">
                         <div class="checkbox">
@@ -115,7 +115,7 @@
                     </div>
                     <div class="form-group">
                         <label>Observación</label>
-                        <textarea name="observacion" id="observacion_2" class="form-control exit_caution alfanumerico" rows="2" maxlength="255" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                        <textarea name="observacion" id="observacion_2" class="form-control exit_caution alfanumerico" rows="2" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
                     </div>                    
                     <input type="hidden" name="id_responsable" value={id_responsable} />
                     <input type="hidden" name="dni_responsable" value={dni_responsable} />                    

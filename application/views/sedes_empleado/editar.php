@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         <label>Observación</label>
-                        <textarea name="observacion" id="observacion" class="form-control input_modal_1" rows="3" maxlength="255" placeholder="Observación..."style="max-width:100%;"></textarea>
+                        <textarea name="observacion" id="observacion" class="form-control input_modal_1" rows="3" maxlength="250" placeholder="Observación..."style="max-width:100%;"></textarea>
                     </div>
                     <input type="hidden" name="id_responsable" value={id_responsable} />
                     <input type="hidden" name="dni_responsable" value={dni_responsable} />                    
