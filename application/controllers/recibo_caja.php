@@ -512,7 +512,7 @@ class Recibo_caja extends CI_Controller {
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:418px;}';
+            $html .= 'td.c1{width:418px;}td.c1000{line-height:85px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';
@@ -543,7 +543,7 @@ class Recibo_caja extends CI_Controller {
             $html .= 'table.t1{text-align:left;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -555,7 +555,7 @@ class Recibo_caja extends CI_Controller {
                     . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                     . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                     . '</td>'
-                    . '<td class="c2 a2"  colspan="2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png"></td>'
+                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
                     . '<td class="c24 a2" colspan="2">RECIBO DE CAJA</td>'
@@ -636,7 +636,7 @@ class Recibo_caja extends CI_Controller {
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:418px;}';
+            $html .= 'td.c1{width:418px;}td.c1000{line-height:85px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';
@@ -667,7 +667,7 @@ class Recibo_caja extends CI_Controller {
             $html .= 'table.t1{text-align:left;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -679,7 +679,7 @@ class Recibo_caja extends CI_Controller {
                     . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                     . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                     . '</td>'
-                    . '<td class="c2 a2"  colspan="2"><img width="150px" height="80px" src="' . base_url() . 'images/logo.png"></td>'
+                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
                     . '<td class="c24 a2" colspan="2">RECIBO DE CAJA</td>'
