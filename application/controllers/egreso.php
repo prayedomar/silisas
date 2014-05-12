@@ -16,8 +16,6 @@ class Egreso extends CI_Controller {
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $id_responsable = $this->session->userdata('idResponsable');
-        $dni_responsable = $this->session->userdata('dniResponsable');
         $data['t_egreso'] = $this->select_model->t_egreso();
         $data['t_beneficiario'] = $this->select_model->t_usuario_ingreso_egreso();
         $data['dni'] = $this->select_model->t_dni_todos();
@@ -267,9 +265,13 @@ class Egreso extends CI_Controller {
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
             $egreso = $this->select_model->egreso_prefijo_id($prefijo, $id);
-            if ($egreso != TRUE) {
-                $error_transaccion = "Egreso no encontrado.";
-            }
+            if ($egreso == TRUE) {
+                if ($egreso->vigente == 0) {
+                    $error_transaccion = "El egreso, se encuentra anulado.";
+                }
+            } else {
+                $error_transaccion = "El egreso, no existe en la base de datos.";
+            }            
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_egreso";

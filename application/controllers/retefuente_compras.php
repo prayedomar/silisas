@@ -1,6 +1,6 @@
 <?php
 
-class Retefuente extends CI_Controller {
+class Retefuente_compras extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -11,18 +11,18 @@ class Retefuente extends CI_Controller {
 
 //Crear: Nomina
     function crear() {
-        $data["tab"] = "crear_retefuente";
+        $data["tab"] = "crear_retefuente_compras";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['proveedor'] = $this->select_model->proveedor();
-        $data['action_validar'] = base_url() . "retefuente/validar";
-        $data['action_crear'] = base_url() . "retefuente/insertar";
-        $data['action_llena_cuenta_responsable'] = base_url() . "retefuente/llena_cuenta_responsable";
-        $data['action_llena_caja_responsable'] = base_url() . "retefuente/llena_caja_responsable";
-        $this->parser->parse('retefuente/crear', $data);
+        $data['action_validar'] = base_url() . "retefuente_compras/validar";
+        $data['action_crear'] = base_url() . "retefuente_compras/insertar";
+        $data['action_llena_cuenta_responsable'] = base_url() . "retefuente_compras/llena_cuenta_responsable";
+        $data['action_llena_caja_responsable'] = base_url() . "retefuente_compras/llena_caja_responsable";
+        $this->parser->parse('retefuente_compras/crear', $data);
         $this->load->view('footer');
     }
 
@@ -89,23 +89,23 @@ class Retefuente extends CI_Controller {
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-            $prefijo_retefuente = $this->select_model->sede_id($sede)->prefijo_trans;
-            $id_retefuente = ($this->select_model->nextId_retefuente($prefijo_retefuente)->id) + 1;
+            $prefijo_retefuente_compras = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_retefuente_compras = ($this->select_model->nextId_retefuente_compras($prefijo_retefuente_compras)->id) + 1;
             $t_trans = 12; //Retencion en la fuente
             $credito_debito = 1; //Credito            
 
-            $data["tab"] = "crear_retefuente";
+            $data["tab"] = "crear_retefuente_compras";
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "retefuente/crear";
+            $data['url_recrear'] = base_url() . "retefuente_compras/crear";
             $data['msn_recrear'] = "Crear otra retención";
-            $data['url_imprimir'] = base_url() . "retefuente/consultar_pdf/" . $prefijo_retefuente . "_" . $id_retefuente . "/I";
+            $data['url_imprimir'] = base_url() . "retefuente_compras/consultar_pdf/" . $prefijo_retefuente_compras . "_" . $id_retefuente_compras . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente, $id_retefuente, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_compras, $id_retefuente_compras, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->retefuente($prefijo_retefuente, $id_retefuente, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->retefuente_compras($prefijo_retefuente_compras, $id_retefuente_compras, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -177,14 +177,14 @@ class Retefuente extends CI_Controller {
     }
 
     function consultar() {
-        $data["tab"] = "consultar_retefuente";
+        $data["tab"] = "consultar_retefuente_compras";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede();
         $data['error_consulta'] = "";        
-        $data['action_crear'] = base_url() . "retefuente/consultar_validar";
-        $data['action_recargar'] = base_url() . "retefuente/consultar";
-        $this->parser->parse('retefuente/consultar', $data);
+        $data['action_crear'] = base_url() . "retefuente_compras/consultar_validar";
+        $data['action_recargar'] = base_url() . "retefuente_compras/consultar";
+        $this->parser->parse('retefuente_compras/consultar', $data);
         $this->load->view('footer');
     }
 
@@ -196,43 +196,47 @@ class Retefuente extends CI_Controller {
         $id = $this->input->post('id');
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
-            $retefuente = $this->select_model->retefuente_prefijo_id($prefijo, $id);
-            if ($retefuente != TRUE) {
-                $error_transaccion = "Retención en la fuente no encontrada.";
-            }
+            $retefuente_compras = $this->select_model->retefuente_compras_prefijo_id($prefijo, $id);
+            if ($retefuente_compras == TRUE) {
+                if ($retefuente_compras->vigente == 0) {
+                    $error_transaccion = "La retención en la fuente, se encuentra anulada.";
+                }
+            } else {
+                $error_transaccion = "La retención en la fuente, no existe en la base de datos.";
+            }            
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
-            $data["tab"] = "consultar_retefuente";
+            $data["tab"] = "consultar_retefuente_compras";
             $this->isLogin($data["tab"]);
             $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
             $data["prefijo"] = $prefijo;
             $data["id"] = $id;
             $this->load->view("header", $data);
             $data['sede'] = $this->select_model->sede();
-            $data['action_crear'] = base_url() . "retefuente/consultar_validar";
-            $this->parser->parse('retefuente/consultar', $data);
+            $data['action_crear'] = base_url() . "retefuente_compras/consultar_validar";
+            $this->parser->parse('retefuente_compras/consultar', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . "retefuente/consultar_pdf/" . $prefijo . "_" . $id . "/I");
+            redirect(base_url() . "retefuente_compras/consultar_pdf/" . $prefijo . "_" . $id . "/I");
         }
     }
 
-    function consultar_pdf($id_retefuente, $salida_pdf) {
-        $retefuente_prefijo_id = $id_retefuente;
-        $id_retefuente_limpio = str_replace("_", " ", $retefuente_prefijo_id);
-        list($prefijo, $id) = explode("_", $retefuente_prefijo_id);
-        $retefuente = $this->select_model->retefuente_prefijo_id($prefijo, $id);
-        if ($retefuente == TRUE) {
-            $reponsable = $this->select_model->empleado($retefuente->id_responsable, $retefuente->dni_responsable);
-            $proveedor = $this->select_model->proveedor_id_dni($retefuente->id_proveedor, $retefuente->dni_proveedor);
+    function consultar_pdf($id_retefuente_compras, $salida_pdf) {
+        $retefuente_compras_prefijo_id = $id_retefuente_compras;
+        $id_retefuente_compras_limpio = str_replace("_", " ", $retefuente_compras_prefijo_id);
+        list($prefijo, $id) = explode("_", $retefuente_compras_prefijo_id);
+        $retefuente_compras = $this->select_model->retefuente_compras_prefijo_id($prefijo, $id);
+        if ($retefuente_compras == TRUE) {
+            $reponsable = $this->select_model->empleado($retefuente_compras->id_responsable, $retefuente_compras->dni_responsable);
+            $proveedor = $this->select_model->proveedor_id_dni($retefuente_compras->id_proveedor, $retefuente_compras->dni_proveedor);
             $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Comprobante de pago a proveedor ' . $id_retefuente_limpio . ' Sili S.A.S');
-            $pdf->SetSubject('Comprobante de pago a proveedor ' . $id_retefuente_limpio . ' Sili S.A.S');
+            $pdf->SetTitle('Comprobante de devolución por retención ' . $id_retefuente_compras_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Comprobante de devolución por retención ' . $id_retefuente_compras_limpio . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -301,13 +305,13 @@ class Retefuente extends CI_Controller {
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE <br>RETENCIÓN EN LA FUENTE</td>'
+                    . '<td class="c24 a2" colspan="2">RETENCIÓN EN LA FUENTE POR COMPRAS O SERVICIOS</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_retefuente_limpio . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_retefuente_compras_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($retefuente->fecha_trans)) . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($retefuente_compras->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
@@ -315,23 +319,23 @@ class Retefuente extends CI_Controller {
                     . '<table>'
                     . '<tr>'
                     . '<td class="c15 c12"></td>'
-                    . '<td class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor retención:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($retefuente->total, 1, '.', ',') . '</b></td>'
+                    . '<td class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor retenido:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($retefuente_compras->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '</table>'
                     . '<table>'
                     . '<tr>'
                     . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Documento proveedor:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_proveedor . ' ' . $proveedor->id . '</td>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Código de factura:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $retefuente->factura . '</td>'
+                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Código de factura:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $retefuente_compras->factura . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre proveedor:</b></td><td colspan="3" class="c23 c12 c25 c26 c27 c28">' . $proveedor->razon_social . '</td>'
                     . '</tr>';
-            if (($retefuente->observacion) != "") {
+            if (($retefuente_compras->observacion) != "") {
                 $html .= '<tr>'
                         . '<td colspan="4" class="c23 c25 c26 c27 c28">'
                         . '<table>'
                         . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Descripción de la retención: </b>' . $retefuente->observacion . '.</td>'
+                        . '<td><b>Descripción de la retención: </b>' . $retefuente_compras->observacion . '.</td>'
                         . '</tr><tr><td class="c10"> </td></tr>'
                         . '</table>'
                         . '</td>'
@@ -343,10 +347,10 @@ class Retefuente extends CI_Controller {
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
 
-            $nombre_archivo = utf8_decode('Comprobante de pago a proveedor ' . $id_retefuente_limpio . ' Sili S.A.S.pdf');
+            $nombre_archivo = utf8_decode('Comprobante de devolución por retención ' . $id_retefuente_compras_limpio . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
-            redirect(base_url() . 'retefuente/consultar/');
+            redirect(base_url() . 'retefuente_compras/consultar/');
         }
     }
 

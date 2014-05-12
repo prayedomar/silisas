@@ -5,7 +5,7 @@
                 <div class="row">
                     <legend>Crear nota crédito (Devolución)</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
-                        <div class="col-xs-10 col-xs-offset-1">
+                        <div class="col-xs-8 col-xs-offset-2">
                             <p style="text-align:justify;"><B>Nota: </B>Utilice ésta opción para registrar la devolución de dinero a un titular, por razones muy excepcionales. <br><b>> </b>Recuerde que para realizar dichas devoluciones de dinero, es necesario estar autorizado por la sede principal.</p><br>
                         </div>
                     </div>
@@ -21,7 +21,7 @@
                             </div> 
                             <div id="validacion_inicial">
                             </div>                             
-                            <div class="row text-center separar_submit">
+                            <div class="row text-center">
                                 <button type="button" class="btn btn-default" id="consultar_matricula"><span class="glyphicon glyphicon-search"></span> Consultar </button>
                                 <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-list-alt"></span> Modificar matrícula </a>
                             </div>                            
@@ -54,7 +54,7 @@
                     <div class="row">
                         <hr>
                         <div class="overflow_tabla">
-                            <label>Caja de Efectivo Origen (Punto de Venta)</label>
+                            <label>Caja de Efectivo Origen (Punto de venta)</label>
                             <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
                             <table class="table table-hover">
                                 <thead>

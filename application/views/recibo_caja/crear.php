@@ -4,6 +4,11 @@
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
                     <legend>Crear recibo de caja</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                                                <div class="row">
+                                <div class="col-xs-10 col-xs-offset-1"> 
+                                    <p style="text-align:justify;"><B>Nota: </B>Recuerde que cuando es un pago con datáfono, consignación o a nombre de empresa, <b>No</b> lo puede hacer por la opción <br><b>crear->Recibo de Caja</b>, sino por la opción: <b>crear->factura</b>.</p><br>
+                                </div>
+                            </div>
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Titular</legend>
@@ -28,7 +33,7 @@
                             </div>
                             <div id="validacion_inicial">
                             </div>                            
-                            <div class="row text-center separar_submit">
+                            <div class="row text-center">
                                 <button type="button" class="btn btn-default" id="consultar_titular"><span class="glyphicon glyphicon-search"></span> Consultar </button>
                                 <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Titular </a>
                             </div>
@@ -145,7 +150,7 @@
                         </div>
                         <hr>
                         <div class="overflow_tabla">
-                            <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                            <label>Caja de Efectivo Destino (Punto de venta)</label>
                             <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>                                    
                             <table class="table table-hover">
                                 <thead>

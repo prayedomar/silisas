@@ -239,9 +239,13 @@ class Nota_credito extends CI_Controller {
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
             $nota_credito = $this->select_model->nota_credito_prefijo_id($prefijo, $id);
-            if ($nota_credito != TRUE) {
-                $error_transaccion = "Nota crédito no encontrada.";
-            }
+            if ($nota_credito == TRUE) {
+                if ($nota_credito->vigente == 0) {
+                    $error_transaccion = "La nota crédito, se encuentra anulada.";
+                }
+            } else {
+                $error_transaccion = "La nota crédito, no existe en la base de datos.";
+            }            
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_nota_credito";

@@ -266,7 +266,7 @@
                 </div>  
                 <hr>    
                 <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1">
+                    <div class="col-xs-12">
                         <div class="form-group">
                             <label>Observación</label>
                             <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>

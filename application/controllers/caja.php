@@ -62,7 +62,7 @@ class Caja extends CI_Controller {
             $this->isLogin($data["tab"]);               
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "caja/crear";
-            $data['msn_recrear'] = "Crear otra Caja (Punto de Venta)";
+            $data['msn_recrear'] = "Crear otra Caja (Punto de venta)";
 
             $error = $this->insert_model->caja($sede, $t_caja, $id_encargado, $dni_encargado, 1, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {

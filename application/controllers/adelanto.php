@@ -111,7 +111,7 @@ class Adelanto extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->adelanto($prefijo_adelanto, $id_adelanto, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $autoriza, $motivo, $forma_descuento, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->adelanto($prefijo_adelanto, $id_adelanto, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $autoriza, $motivo, $forma_descuento, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -203,9 +203,13 @@ class Adelanto extends CI_Controller {
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
             $adelanto = $this->select_model->adelanto_prefijo_id($prefijo, $id);
-            if ($adelanto != TRUE) {
-                $error_transaccion = "Adelanto de nómina no encontrado.";
-            }
+            if ($adelanto == TRUE) {
+                if ($adelanto->vigente == 0) {
+                    $error_transaccion = "El adelanto de nómina, se encuentra anulado.";
+                }
+            } else {
+                $error_transaccion = "El adelanto de nómina, no existe en la base de datos.";
+            }            
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_adelanto";

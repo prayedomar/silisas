@@ -572,6 +572,15 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+
+    public function sede_activa() {
+        $this->db->where('estado  !=', 3);
+        $query = $this->db->get('sede');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function sede_activa_faltante($sede) {
         $this->db->where('id  !=', $sede);
@@ -585,14 +594,6 @@ class Select_model extends CI_Model {
     public function sede_activa_faltante_responsable($sede, $id_responsable, $dni_responsable) {
         $where = "((id IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (estado!='3') AND (id!='" . $sede . "')";
         $this->db->where($where);
-        $query = $this->db->get('sede');
-        if ($query->num_rows() > 0) {
-            return $query->result();
-        }
-    }
-
-    public function sede_activa() {
-        $this->db->where('estado  !=', 3);
         $query = $this->db->get('sede');
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -1058,10 +1059,19 @@ class Select_model extends CI_Model {
         }
     }
     
-    public function nextId_retefuente($prefijo) {
+    public function nextId_retefuente_compras($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
-        $query = $this->db->get('retefuente');
+        $query = $this->db->get('retefuente_compras');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
+    
+    public function nextId_retefuente_ventas($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('retefuente_ventas');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
@@ -1169,10 +1179,10 @@ class Select_model extends CI_Model {
         }
     }  
     
-    public function retefuente_prefijo_id($prefijo, $id) {
+    public function retefuente_compras_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
-        $query = $this->db->get('retefuente');
+        $query = $this->db->get('retefuente_compras');
         if ($query->num_rows() == 1) {
             return $query->row();
         }

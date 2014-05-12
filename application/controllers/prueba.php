@@ -10,26 +10,13 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $id_matricula = 15532423448;
-            $matricula = $this->select_model->matricula_id($id_matricula);
-            if ($matricula == TRUE) {
-                $total_abonos = $this->select_model->total_abonos_matricula($id_matricula);
-                $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);
-                $response = array(
-                    'respuesta' => 'OK',
-                    'nombreTitular' => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
-                    'total_abonos' => $total_abonos->total
-                );
-                echo json_encode($response);
-                return false;
-            } else {
-                $response = array(
-                    'respuesta' => 'error',
-                    'mensaje' => '<p>La matrícula no existe en la base de datos.</p>'
-                );
-                echo json_encode($response);
-                return false;
-            }
+        $recibo_caja_prefijo_id = "BCRM_1";
+        $id_recibo_caja_limpio = str_replace("_", " ", $recibo_caja_prefijo_id);
+        list($prefijo, $id) = explode("_", $recibo_caja_prefijo_id);
+        $recibo_caja = $this->select_model->recibo_caja_prefijo_id($prefijo, $id);
+        $detalles_recibo_caja = $this->select_model->detalle_recibo_caja_prefijo_id($prefijo, $id);
+        VAR_DUMP($recibo_caja);
+        VAR_DUMP($detalles_recibo_caja);
     }
     
     function matriz_matricula($id_matricula) {

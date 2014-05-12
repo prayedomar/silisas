@@ -221,7 +221,7 @@
                             <li class="dropdown-header"><u> Cajas y Bancos</u></li>
                 <?php } ?>   
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de Venta)</a></li>
+                    <li><a href="<?= base_url() ?>caja/crear">Caja (Punto de venta)</a></li>
                 <?php } ?>                       
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                     <li><a href="<?= base_url() ?>cuenta/crear">Cuenta Bancaria</a></li>
@@ -248,7 +248,7 @@
                     <li><a href="<?= base_url() ?>abono_adelanto/crear">Abono adelanto nómina</a></li> 
                 <?php } ?>             
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
-                    <li><a href="<?= base_url() ?>retefuente/crear">Retención en la fuente</a></li>
+                    <li><a href="<?= base_url() ?>retefuente_compras/crear">Retefuente por compras</a></li>
                 <?php } ?>   
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                     <li><a href="<?= base_url() ?>ingreso/crear">Ingreso</a></li>
@@ -265,17 +265,22 @@
                 <?php } ?>     
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>nota_credito/crear">Nota crédito</a></li>
-                <?php } ?>                      
+                <?php } ?>     
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                    <li><a href="<?= base_url() ?>transferencia/crear">Transferencia intersede</a></li>
+                <?php } ?>       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
+                    <li><a href="<?= base_url() ?>retefuente_ventas/crear">Retefuente por ventas</a></li>
+                <?php } ?>                     
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                 <?php } ?>                                       
                 <!--<?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                             <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
+                                 <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                 <?php } ?>                                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                             <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
+                                 <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
                 <?php } ?>-->
-                <!--<li><a href="#">Transferencia Intersede</a></li>-->
                 </ul>
                 </li>
                 <li class="col-sm-4">
@@ -487,7 +492,7 @@
                             <li class="dropdown-header"><u> Cajas y Bancos</u></li>
                 <?php } ?>    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de Venta)</a></li> 
+                    <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de venta)</a></li> 
                 <?php } ?>                                 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
                     <li><a href="<?= base_url() ?>cuenta/consultar">Cuenta Bancaria</a></li>
@@ -514,7 +519,7 @@
                     <li><a href="<?= base_url() ?>abono_adelanto/consultar">Abono adelanto de nómina</a></li>
                 <?php } ?>                      
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
-                    <li><a href="<?= base_url() ?>retefuente/consultar">Retención en la fuente</a></li>
+                    <li><a href="<?= base_url() ?>retefuente_compras/consultar">Retefuente por compras</a></li>
                 <?php } ?>                     
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>ingreso/consultar">Ingreso</a></li>
@@ -528,7 +533,10 @@
                 <?php } ?>    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>nota_credito/consultar">Nota crédito</a></li>
-                <?php } ?>                     
+                <?php } ?>   
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                    <li><a href="<?= base_url() ?>transferencia/consultar">Transferencia intersede</a></li>
+                <?php } ?>                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>egreso/consultar">Egreso</a></li>
                 <?php } ?>                    

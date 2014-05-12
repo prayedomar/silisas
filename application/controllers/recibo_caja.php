@@ -454,8 +454,12 @@ class Recibo_caja extends CI_Controller {
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
             $recibo_caja = $this->select_model->recibo_caja_prefijo_id($prefijo, $id);
-            if ($recibo_caja != TRUE) {
-                $error_transaccion = "Recibo de caja no encontrado.";
+            if ($recibo_caja == TRUE) {
+                if ($recibo_caja->vigente == 0) {
+                    $error_transaccion = "El recibo de caja, se encuentra anulado.";
+                }
+            } else {
+                $error_transaccion = "El recibo de caja, no existe en la base de datos.";
             }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {

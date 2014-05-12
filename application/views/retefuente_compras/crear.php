@@ -2,12 +2,18 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Crear ingreso por retención en la fuente</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Crear retención en la fuente por compras o servicios</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1">
+                    <div class="col-xs-12">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
-                                <div class="col-xs-8 col-xs-offset-2">   
+                                <div class="col-xs-10 col-xs-offset-1"> 
+                                    <p style="text-align:justify;"><B>Nota 1: </B>Ésta opción se utiliza para registrar la retención en la fuente que tiene que retener a los proveedores, cuando las compras de productos superen $742.000 o las compras de servicios superen $110.0000.</p>
+                                    <p style="text-align:justify;"><B>Nota 2: </B>Utilice como base la tabla de retenciones del presente año, para saber que porcentaje debe retener, dependiendo del tipo de compra que realice (Consulte con el departamento de contabilidad).</p><br>                                    
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-xs-offset-3">   
                                     <div class="form-group">
                                         <label>Proveedor<em class="required_asterisco">*</em></label>
                                         <select name="proveedor" id="proveedor" data-placeholder="Seleccione proveedor" class="chosen-select form-control exit_caution">
@@ -32,7 +38,7 @@
                             </div>
                             <hr>                    
                             <div class="overflow_tabla">
-                                <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                                <label>Caja de Efectivo Destino (Punto de venta)</label>
                                 <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>                                    
                                 <table class="table table-hover">
                                     <thead>
@@ -93,7 +99,7 @@
                             <hr>
                             <div class="form-group">
                                 <label>Descripción<em class="required_asterisco">*</em></label>
-                                                                <p class="help-block"><B>> </B>Motivo o concepto de la retención, porcentaje %, etc...</p>
+                                <p class="help-block"><B>> </B>Motivo o concepto de la retención, porcentaje %, etc...</p>
                                 <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Descripción..."  style="max-width:100%;"></textarea>
                             </div>
 

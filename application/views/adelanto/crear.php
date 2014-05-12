@@ -4,10 +4,10 @@
             <div class="row">
                 <legend>Crear adelanto de nómina</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1">
+                    <div class="col-xs-12">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
-                                <div class="col-xs-6 col-xs-offset-3 ">
+                                <div class="col-xs-6 col-xs-offset-3">
                                     <div class="form-group">
                                         <label>Empleado Beneficiario<em class="required_asterisco">*</em></label>
                                         <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos que pertenecen a cualquiera de sus sedes encargadas.</p>                                        
@@ -30,7 +30,7 @@
                             </div>
                             <hr>
                             <div class="overflow_tabla">
-                                <label>Caja de Efectivo Origen (Punto de Venta)</label>
+                                <label>Caja de Efectivo Origen (Punto de venta)</label>
                                 <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
                                 <table class="table table-hover">
                                     <thead>

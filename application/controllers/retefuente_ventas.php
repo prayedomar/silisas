@@ -1,40 +1,42 @@
 <?php
 
-class Pago_proveedor extends CI_Controller {
+class Retefuente_ventas extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
+        $this->load->model('update_model');
     }
 
-//Crear: Egreso
+//Crear: Nomina
     function crear() {
-        $data["tab"] = "crear_pago_proveedor";
+        $data["tab"] = "crear_retefuente_ventas";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $data['proveedor'] = $this->select_model->proveedor();
-        $data['action_validar'] = base_url() . "pago_proveedor/validar";
-        $data['action_crear'] = base_url() . "pago_proveedor/insertar";
-        $data['action_llena_cuenta_responsable'] = base_url() . "pago_proveedor/llena_cuenta_responsable";
-        $data['action_llena_caja_responsable'] = base_url() . "pago_proveedor/llena_caja_responsable";
-        $this->parser->parse('pago_proveedor/crear', $data);
+        $data['sede'] = $this->select_model->sede();
+        $data['action_validar'] = base_url() . "retefuente_ventas/validar";
+        $data['action_crear'] = base_url() . "retefuente_ventas/insertar";
+        $data['action_recargar'] = base_url() . "retefuente_ventas/crear";
+        $data['action_validar_factura'] = base_url() . "retefuente_ventas/validar_factura";
+        $data['action_llena_cuenta_responsable'] = base_url() . "retefuente_ventas/llena_cuenta_responsable";
+        $data['action_llena_caja_responsable'] = base_url() . "retefuente_ventas/llena_caja_responsable";
+        $this->parser->parse('retefuente_ventas/crear', $data);
         $this->load->view('footer');
     }
 
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|callback_select_default');
-            $this->form_validation->set_rules('factura', 'Código de factura', 'required|trim|xss_clean|max_length[40]');
-            $this->form_validation->set_rules('total', 'Valor del pago', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('prefijo_factura', 'Prefijo de factura', 'required|callback_select_default');
+            $this->form_validation->set_rules('id_factura', 'Número de factura', 'required|trim|xss_clean|max_length[40]');
+            $this->form_validation->set_rules('total', 'Valor de la retención en la fuente', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-
+            $this->form_validation->set_rules('observacion', 'Descripción', 'required|trim|xss_clean|max_length[255]');
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
@@ -54,7 +56,7 @@ class Pago_proveedor extends CI_Controller {
             }
 
             if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('proveedor') . form_error('factura') . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
+                echo form_error('prefijo_factura') . form_error('id_factura') . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -66,8 +68,8 @@ class Pago_proveedor extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
-            list($id_proveedor, $dni_proveedor) = explode("_", $this->input->post('proveedor'));
-            $factura = $this->input->post('factura');
+            $prefijo_factura = $this->input->post('prefijo_factura');
+            $id_factura = $this->input->post('id_factura');
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
                 $cuenta_origen = $this->input->post('cuenta');
@@ -84,34 +86,81 @@ class Pago_proveedor extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
+            $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-            $prefijo_pago_proveedor = $this->select_model->sede_id($sede)->prefijo_trans;
-            $id_pago_proveedor = ($this->select_model->nextId_pago_proveedor($prefijo_pago_proveedor)->id) + 1;
-            $t_trans = 11; //Pago a proveedor
-            $credito_debito = 0; //Debito            
+            $prefijo_retefuente_ventas = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_retefuente_ventas = ($this->select_model->nextId_retefuente_ventas($prefijo_retefuente_ventas)->id) + 1;
+            $t_trans = 14; //Retencion en la fuente ventas
+            $credito_debito = 0; //Débito
 
-            $data["tab"] = "crear_pago_proveedor";
-            $this->isLogin($data["tab"]);
+            $data["tab"] = "crear_retefuente_ventas";
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "pago_proveedor/crear";
-            $data['msn_recrear'] = "Crear otro pago";
-            $data['url_imprimir'] = base_url() . "pago_proveedor/consultar_pdf/" . $prefijo_pago_proveedor . "_" . $id_pago_proveedor . "/I";
+            $data['url_recrear'] = base_url() . "retefuente_ventas/crear";
+            $data['msn_recrear'] = "Crear otra retención";
+            $data['url_imprimir'] = base_url() . "retefuente_ventas/consultar_pdf/" . $prefijo_retefuente_ventas . "_" . $id_retefuente_ventas . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_pago_proveedor, $id_pago_proveedor, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_ventas, $id_retefuente_ventas, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->pago_proveedor($prefijo_pago_proveedor, $id_pago_proveedor, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->retefuente_ventas($prefijo_retefuente_ventas, $id_retefuente_ventas, $prefijo_factura, $id_factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     $this->parser->parse('trans_success_print', $data);
                 }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_factura() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo_factura = $this->input->post('prefijo');
+            $id_factura = $this->input->post('id');
+            $factura = $this->select_model->factura_prefijo_id($prefijo_factura, $id_factura);
+            if ($factura == TRUE) {
+                if ($factura->vigente == 0) {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><center><strong>La factura de venta se encuentra anulada.</strong></center></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    if ($factura->retefuente == 1) {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p><center><strong>A la factura, ya se le realizó retención en la fuente.</strong></center></p>'
+                        );
+                        echo json_encode($response);
+                        return false;
+                    } else {
+                        $response = array(
+                            'respuesta' => 'OK',
+                            'aNombreDe' => $factura->a_nombre_de,
+                            'matricula' => $factura->matricula,
+                            'subtotal' => number_format($factura->subtotal, 2, '.', ','),
+                            'retefuente' => number_format((($factura->subtotal) * 0.11), 2, '.', ',')
+                        );
+                        echo json_encode($response);
+                        return false;
+                    }
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><center><strong>La factura de venta, no existe en la base de datos.</strong></center></p>'
+                );
+                echo json_encode($response);
+                return false;
             }
         } else {
             redirect(base_url());
@@ -177,14 +226,14 @@ class Pago_proveedor extends CI_Controller {
     }
 
     function consultar() {
-        $data["tab"] = "consultar_pago_proveedor";
+        $data["tab"] = "consultar_retefuente_ventas";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede();
-        $data['error_consulta'] = "";        
-        $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
-        $data['action_recargar'] = base_url() . "pago_proveedor/consultar";
-        $this->parser->parse('pago_proveedor/consultar', $data);
+        $data['error_consulta'] = "";
+        $data['action_crear'] = base_url() . "retefuente_ventas/consultar_validar";
+        $data['action_recargar'] = base_url() . "retefuente_ventas/consultar";
+        $this->parser->parse('retefuente_ventas/consultar', $data);
         $this->load->view('footer');
     }
 
@@ -196,47 +245,43 @@ class Pago_proveedor extends CI_Controller {
         $id = $this->input->post('id');
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
-            $pago_proveedor = $this->select_model->pago_proveedor_prefijo_id($prefijo, $id);
-            if ($pago_proveedor == TRUE) {
-                if ($pago_proveedor->vigente == 0) {
-                    $error_transaccion = "El pago a proveedor, se encuentra anulado.";
-                }
-            } else {
-                $error_transaccion = "El pago a proveedor, no existe en la base de datos.";
-            }            
+            $retefuente_ventas = $this->select_model->retefuente_ventas_prefijo_id($prefijo, $id);
+            if ($retefuente_ventas != TRUE) {
+                $error_transaccion = "Retención en la fuente no encontrada.";
+            }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
-            $data["tab"] = "consultar_pago_proveedor";
+            $data["tab"] = "consultar_retefuente_ventas";
             $this->isLogin($data["tab"]);
             $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
             $data["prefijo"] = $prefijo;
             $data["id"] = $id;
             $this->load->view("header", $data);
             $data['sede'] = $this->select_model->sede();
-            $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
-            $this->parser->parse('pago_proveedor/consultar', $data);
+            $data['action_crear'] = base_url() . "retefuente_ventas/consultar_validar";
+            $this->parser->parse('retefuente_ventas/consultar', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . "pago_proveedor/consultar_pdf/" . $prefijo . "_" . $id . "/I");
-        }        
+            redirect(base_url() . "retefuente_ventas/consultar_pdf/" . $prefijo . "_" . $id . "/I");
+        }
     }
 
-    function consultar_pdf($id_pago_proveedor, $salida_pdf) {
-        $pago_proveedor_prefijo_id = $id_pago_proveedor;
-        $id_pago_proveedor_limpio = str_replace("_", " ", $pago_proveedor_prefijo_id);
-        list($prefijo, $id) = explode("_", $pago_proveedor_prefijo_id);
-        $pago_proveedor = $this->select_model->pago_proveedor_prefijo_id($prefijo, $id);
-        if ($pago_proveedor == TRUE) {
-            $reponsable = $this->select_model->empleado($pago_proveedor->id_responsable, $pago_proveedor->dni_responsable);
-            $proveedor = $this->select_model->proveedor_id_dni($pago_proveedor->id_proveedor, $pago_proveedor->dni_proveedor);
+    function consultar_pdf($id_retefuente_ventas, $salida_pdf) {
+        $retefuente_ventas_prefijo_id = $id_retefuente_ventas;
+        $id_retefuente_ventas_limpio = str_replace("_", " ", $retefuente_ventas_prefijo_id);
+        list($prefijo, $id) = explode("_", $retefuente_ventas_prefijo_id);
+        $retefuente_ventas = $this->select_model->retefuente_ventas_prefijo_id($prefijo, $id);
+        if ($retefuente_ventas == TRUE) {
+            $reponsable = $this->select_model->empleado($retefuente_ventas->id_responsable, $retefuente_ventas->dni_responsable);
+            $proveedor = $this->select_model->proveedor_id_dni($retefuente_ventas->id_proveedor, $retefuente_ventas->dni_proveedor);
             $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Comprobante de pago a proveedor ' . $id_pago_proveedor_limpio . ' Sili S.A.S');
-            $pdf->SetSubject('Comprobante de pago a proveedor ' . $id_pago_proveedor_limpio . ' Sili S.A.S');
+            $pdf->SetTitle('Comprobante de devolución por retención ' . $id_retefuente_ventas_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Comprobante de devolución por retención ' . $id_retefuente_ventas_limpio . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -305,13 +350,13 @@ class Pago_proveedor extends CI_Controller {
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE <br>PAGO A PROVEEDOR</td>'
+                    . '<td class="c24 a2" colspan="2">RETENCIÓN EN LA FUENTE POR COMPRAS O SERVICIOS</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_pago_proveedor_limpio . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_retefuente_ventas_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($pago_proveedor->fecha_trans)) . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($retefuente_ventas->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
@@ -319,23 +364,23 @@ class Pago_proveedor extends CI_Controller {
                     . '<table>'
                     . '<tr>'
                     . '<td class="c15 c12"></td>'
-                    . '<td class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del pago:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($pago_proveedor->total, 1, '.', ',') . '</b></td>'
+                    . '<td class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor retenido:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($retefuente_ventas->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '</table>'
                     . '<table>'
                     . '<tr>'
                     . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Documento proveedor:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_proveedor . ' ' . $proveedor->id . '</td>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Código de factura:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $pago_proveedor->factura . '</td>'
+                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Código de factura:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $retefuente_ventas->factura . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre proveedor:</b></td><td colspan="3" class="c23 c12 c25 c26 c27 c28">' . $proveedor->razon_social . '</td>'
                     . '</tr>';
-            if (($pago_proveedor->observacion) != "") {
+            if (($retefuente_ventas->observacion) != "") {
                 $html .= '<tr>'
                         . '<td colspan="4" class="c23 c25 c26 c27 c28">'
                         . '<table>'
                         . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Observaciones del pago: </b>' . $pago_proveedor->observacion . '.</td>'
+                        . '<td><b>Descripción de la retención: </b>' . $retefuente_ventas->observacion . '.</td>'
                         . '</tr><tr><td class="c10"> </td></tr>'
                         . '</table>'
                         . '</td>'
@@ -347,10 +392,10 @@ class Pago_proveedor extends CI_Controller {
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
 
-            $nombre_archivo = utf8_decode('Comprobante de pago a proveedor ' . $id_pago_proveedor_limpio . ' Sili S.A.S.pdf');
+            $nombre_archivo = utf8_decode('Comprobante de devolución por retención ' . $id_retefuente_ventas_limpio . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
-            redirect(base_url() . 'pago_proveedor/consultar/');
+            redirect(base_url() . 'retefuente_ventas/consultar/');
         }
     }
 

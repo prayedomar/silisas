@@ -12,7 +12,7 @@ class Abono_adelanto extends CI_Controller {
 //Crear: Abono a Adelanto de nomina
     function crear() {
         $data["tab"] = "crear_abono_adelanto";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -98,7 +98,7 @@ class Abono_adelanto extends CI_Controller {
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -108,7 +108,7 @@ class Abono_adelanto extends CI_Controller {
             $credito_debito = 1; //Credito
 
             $data["tab"] = "crear_abono_adelanto";
-            $this->isLogin($data["tab"]);               
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_adelanto/crear";
             $data['msn_recrear'] = "Crear otro abono";
@@ -246,7 +246,7 @@ class Abono_adelanto extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     function consultar() {
         $data["tab"] = "consultar_abono_adelanto";
         $this->isLogin($data["tab"]);
@@ -268,8 +268,12 @@ class Abono_adelanto extends CI_Controller {
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
             $abono_adelanto = $this->select_model->abono_adelanto_prefijo_id($prefijo, $id);
-            if ($abono_adelanto != TRUE) {
-                $error_transaccion = "Abono a adelanto de nómina no encontrado.";
+            if ($abono_adelanto == TRUE) {
+                if ($abono_adelanto->vigente == 0) {
+                    $error_transaccion = "El abono a adelanto, se encuentra anulado.";
+                }
+            } else {
+                $error_transaccion = "El abono a adelanto, existe en la base de datos.";
             }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
@@ -296,9 +300,9 @@ class Abono_adelanto extends CI_Controller {
         $adelanto = $this->select_model->adelanto_prefijo_id($abono_adelanto->prefijo_adelanto, $abono_adelanto->id_adelanto);
         if ($abono_adelanto == TRUE) {
             $empleado = $this->select_model->empleado($adelanto->id_empleado, $adelanto->dni_empleado);
-            $dni_abreviado_empleado = $this->select_model->t_dni_id($adelanto->dni_empleado)->abreviacion;            
+            $dni_abreviado_empleado = $this->select_model->t_dni_id($adelanto->dni_empleado)->abreviacion;
             $reponsable = $this->select_model->empleado($abono_adelanto->id_responsable, $abono_adelanto->dni_responsable);
-            
+
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -340,7 +344,7 @@ class Abono_adelanto extends CI_Controller {
             $html .= 'td.c7{font-size:16px;}';
             $html .= 'td.c8{line-height:40px;}';
             $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';            
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';
             $html .= 'td.c11{font-size:12px;}';
             $html .= 'td.c12{line-height:20px;}';
             $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
@@ -401,16 +405,16 @@ class Abono_adelanto extends CI_Controller {
                     . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
-                    . '</tr><tr><td class="c10"> </td></tr>'                    
+                    . '</tr><tr><td class="c10"> </td></tr>'
                     . '<tr><td><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr>'
                     . '<tr><td><b>Saldo pendiente del adelanto, después de éste abono: </b> $' . number_format($adelanto->saldo, 1, '.', ',') . '</td>'
-                    . '</tr><tr><td class="c10"> </td></tr>'                    
+                    . '</tr><tr><td class="c10"> </td></tr>'
                     . '</table>'
                     . '</td>'
                     . '</tr>'
                     . '<tr><td colspan="2" class="c11 a3"><br>Autorizo a la empresa SILI S.A.S, para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo pendiente de éste adelanto.<p class="b4 b5">Firma empleado: ______________________________________</p></td>'
-                    . '<td colspan="2"><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'                    
+                    . '<td colspan="2"><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para el empleado -</p>';
 
             // Imprimimos el texto con writeHTMLCell()
@@ -436,7 +440,7 @@ class Abono_adelanto extends CI_Controller {
             $html .= 'td.c7{font-size:16px;}';
             $html .= 'td.c8{line-height:40px;}';
             $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';            
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';
             $html .= 'td.c11{font-size:12px;}';
             $html .= 'td.c12{line-height:20px;}';
             $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
@@ -497,23 +501,23 @@ class Abono_adelanto extends CI_Controller {
                     . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
-                    . '</tr><tr><td class="c10"> </td></tr>'                    
+                    . '</tr><tr><td class="c10"> </td></tr>'
                     . '<tr><td><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr>'
                     . '<tr><td><b>Saldo pendiente del adelanto, después de éste abono: </b> $' . number_format($adelanto->saldo, 1, '.', ',') . '</td>'
-                    . '</tr><tr><td class="c10"> </td></tr>'                    
+                    . '</tr><tr><td class="c10"> </td></tr>'
                     . '</table>'
                     . '</td>'
                     . '</tr>'
                     . '<tr><td colspan="2" class="c11 a3"><br>Autorizo a la empresa SILI S.A.S, para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo pendiente de éste adelanto.<p class="b4 b5">Firma empleado: ______________________________________</p></td>'
-                    . '<td colspan="2"><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'                    
+                    . '<td colspan="2"><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para la empresa -</p>';
-            
+
 //
 // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
-            
-            
+
+
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
@@ -522,6 +526,6 @@ class Abono_adelanto extends CI_Controller {
         } else {
             redirect(base_url() . 'abono_adelanto/consultar/');
         }
-    }    
+    }
 
 }

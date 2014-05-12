@@ -655,7 +655,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function adelanto($prefijo, $id, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $autoriza, $motivo, $forma_descuento, $id_responsable, $dni_responsable) {
+    public function adelanto($prefijo, $id, $id_empleado, $dni_empleado, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $autoriza, $motivo, $forma_descuento, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -670,7 +670,7 @@ class Insert_model extends CI_Model {
             't_caja_origen' => $t_caja_origen,
             'efectivo_retirado' => $efectivo_retirado,
             'sede' => $sede,
-            'estado' => $estado,
+            'vigente' => 1,
             'autoriza' => $autoriza,
             'motivo' => $motivo,
             'forma_descuento' => $forma_descuento,
@@ -866,7 +866,7 @@ class Insert_model extends CI_Model {
         }
     }    
     
-    public function retefuente($prefijo, $id, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $observacion, $id_responsable, $dni_responsable) {
+    public function retefuente_compras($prefijo, $id, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -889,7 +889,35 @@ class Insert_model extends CI_Model {
         );
         $this->db->set($data);
         $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
-        $this->db->insert('retefuente');
+        $this->db->insert('retefuente_compras');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }     
+    
+    public function retefuente_ventas($prefijo, $id, $prefijo_factura, $id_factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
+            't_trans' => '11',
+            'credito_debito' => '0',
+            'prefijo_factura' => $prefijo_factura,
+            'id_factura' => $id_factura,
+            'total' => $total,
+            'cuenta_origen' => $cuenta_origen,
+            'valor_retirado' => $valor_retirado,
+            'sede_caja_origen' => $sede_caja_origen,
+            't_caja_origen' => $t_caja_origen,
+            'efectivo_retirado' => $efectivo_retirado,
+            'sede' => $sede,
+            'vigente' => 1,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('retefuente_ventas');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
@@ -1047,7 +1075,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function factura($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
+    public function factura($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $retefuente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -1069,6 +1097,7 @@ class Insert_model extends CI_Model {
             'valor_consignado' => $valor_consignado,
             'sede' => $sede,
             'vigente' => $vigente,
+            'retefuente' => $retefuente,
             'observacion' => $observacion,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable

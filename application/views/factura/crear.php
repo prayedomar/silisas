@@ -28,7 +28,7 @@
                             </div>
                             <div id="validacion_inicial">
                             </div>                            
-                            <div class="row text-center separar_submit">
+                            <div class="row text-center">
                                 <button type="button" class="btn btn-default" id="consultar_titular"><span class="glyphicon glyphicon-search"></span> Consultar </button>
                                 <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Titular </a>
                             </div>
@@ -145,7 +145,7 @@
                         </div>
                         <hr>
                         <div class="overflow_tabla">
-                            <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                            <label>Caja de Efectivo Destino (Punto de venta)</label>
                             <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>                                    
                             <table class="table table-hover">
                                 <thead>

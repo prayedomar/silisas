@@ -4,7 +4,7 @@
             <div class="row">
                 <legend>Crear matrícula</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1">
+                    <div class="col-xs-12">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
                                 <div class="col-xs-8 col-xs-offset-2">

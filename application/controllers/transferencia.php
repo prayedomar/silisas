@@ -1,81 +1,77 @@
 <?php
 
-class Ingreso extends CI_Controller {
+class Transferencia extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
-        $this->load->model('update_model');
     }
 
-//Crear: Ingreso
+//Crear: Egreso
     function crear() {
-        $data["tab"] = "crear_ingreso";
-        $this->isLogin($data["tab"]);
+        $data["tab"] = "crear_transferencia";
+        $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $data['t_ingreso'] = $this->select_model->t_ingreso();
-        $data['t_depositante'] = $this->select_model->t_usuario_ingreso_egreso();
-        $data['dni'] = $this->select_model->t_dni_todos();
-        $data['action_validar'] = base_url() . "ingreso/validar";
-        $data['action_crear'] = base_url() . "ingreso/insertar";
-        $data['action_llena_cuenta_responsable'] = base_url() . "ingreso/llena_cuenta_responsable";
-        $data['action_llena_caja_responsable'] = base_url() . "ingreso/llena_caja_responsable";
-
-        $this->parser->parse('ingreso/crear', $data);
+        $data['sede_destino'] = $this->select_model->sede_activa();
+        $data['action_validar'] = base_url() . "transferencia/validar";
+        $data['action_crear'] = base_url() . "transferencia/insertar";
+        $data['action_llena_cuenta_responsable'] = base_url() . "transferencia/llena_cuenta_responsable";
+        $data['action_llena_caja_responsable'] = base_url() . "transferencia/llena_caja_responsable";
+        $this->parser->parse('transferencia/crear', $data);
         $this->load->view('footer');
     }
 
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $this->form_validation->set_rules('t_ingreso', 'Tipo de Ingreso', 'required|callback_select_default');
-            $this->form_validation->set_rules('t_depositante', 'Tipo de Usuario Depositante', 'required|callback_select_default');
-            $this->form_validation->set_rules('dni_depositante', 'Tipo Id. Depositante', 'required|callback_select_default');
-            $this->form_validation->set_rules('id_depositante', 'Número Id. Depositante', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
-            if ($this->input->post('t_depositante') == '6') {
-                $this->form_validation->set_rules('nombre_depositante', 'Nombre Depositante', 'required|trim|xss_clean|max_length[100]');
+            $this->form_validation->set_rules('t_transferencia', 'Tipo de Egreso', 'required|callback_select_default');
+            $this->form_validation->set_rules('t_beneficiario', 'Tipo de Usuario Beneficiario', 'required|callback_select_default');
+            $this->form_validation->set_rules('dni_beneficiario', 'Tipo Id. Beneficiario', 'required|callback_select_default');
+            $this->form_validation->set_rules('id_beneficiario', 'Número Id. Beneficiario', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            if ($this->input->post('t_beneficiario') == '6') {
+                $this->form_validation->set_rules('nombre_beneficiario', 'Nombre Beneficiario', 'required|trim|xss_clean|max_length[100]');
             }
-            $this->form_validation->set_rules('total', 'Valor del Ingreso', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
-            $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('total', 'Valor del Egreso', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
 
             //Validamos que los usuarios si existan
             $error_key_exists = "";
-            if (($this->input->post('t_depositante') != "default") && ($this->input->post('dni_depositante') != "default") && $this->input->post('id_depositante')) {
-                if ($this->input->post('t_depositante') == '1') {
+            if (($this->input->post('t_beneficiario') != "default") && ($this->input->post('dni_beneficiario') != "default") && $this->input->post('id_beneficiario')) {
+                if ($this->input->post('t_beneficiario') == '1') {
                     $t_usuario = 1; //Empleado
-                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_depositante'), $this->input->post('dni_depositante'), $t_usuario);
+                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
                     if ($check_usuario != TRUE) {
                         $error_key_exists = "<p>El Empleado ingresado, no existe en la Base de Datos.</p>";
                     }
                 } else {
-                    if ($this->input->post('t_depositante') == '2') {
+                    if ($this->input->post('t_beneficiario') == '2') {
                         $t_usuario = 2; //Titular
-                        $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_depositante'), $this->input->post('dni_depositante'), $t_usuario);
+                        $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
                         if ($check_usuario != TRUE) {
                             $error_key_exists = "<p>El Titular ingresado, no existe en la Base de Datos.</p>";
                         }
                     } else {
-                        if ($this->input->post('t_depositante') == '3') {
+                        if ($this->input->post('t_beneficiario') == '3') {
                             $t_usuario = 3; //Alumno
-                            $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_depositante'), $this->input->post('dni_depositante'), $t_usuario);
+                            $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
                             if ($check_usuario != TRUE) {
                                 $error_key_exists = "<p>El Alumno ingresado, no existe en la Base de Datos.</p>";
                             }
                         } else {
-                            if ($this->input->post('t_depositante') == '4') {
+                            if ($this->input->post('t_beneficiario') == '4') {
                                 $t_usuario = 4; //Cliente Prestatario
-                                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_depositante'), $this->input->post('dni_depositante'), $t_usuario);
+                                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
                                 if ($check_usuario != TRUE) {
                                     $error_key_exists = "<p>El Cliente Prestatario ingresado, no existe en la Base de Datos.</p>";
                                 }
                             } else {
-                                if ($this->input->post('t_depositante') == '5') {
-                                    $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id_depositante'), $this->input->post('dni_depositante'));
+                                if ($this->input->post('t_beneficiario') == '5') {
+                                    $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'));
                                     if ($check_usuario != TRUE) {
                                         $error_key_exists = "<p>El Proveedor ingresado, no existe en la Base de Datos.</p>";
                                     }
@@ -89,29 +85,29 @@ class Ingreso extends CI_Controller {
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
-                if (!$this->input->post('valor_consignado')) {
-                    $valor_consignado = 0;
+                if (!$this->input->post('valor_retirado')) {
+                    $valor_retirado = 0;
                 } else {
-                    $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+                    $valor_retirado = round(str_replace(",", "", $this->input->post('valor_retirado')), 2);
                 }
-                if (!$this->input->post('efectivo_ingresado')) {
-                    $efectivo_ingresado = 0;
+                if (!$this->input->post('efectivo_retirado')) {
+                    $efectivo_retirado = 0;
                 } else {
-                    $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+                    $efectivo_retirado = round(str_replace(",", "", $this->input->post('efectivo_retirado')), 2);
                 }
-                if (round(($valor_consignado + $efectivo_ingresado), 2) != $total) {
-                    $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                if (round(($valor_retirado + $efectivo_retirado), 2) != $total) {
+                    $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
                 }
             }
 
-            if ((($this->input->post('t_ingreso')) == "4") || (($this->input->post('t_ingreso')) == "5")) { //t_ingreso = 4: Otros
+            if ((($this->input->post('t_transferencia')) == "8") || (($this->input->post('t_transferencia')) == "9")) { //t_transferencia = 8: Otros
                 $this->form_validation->set_rules('descripcion', 'Descripcion', 'required|trim|xss_clean|max_length[255]');
             } else {
                 $this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|max_length[255]');
             }
 
             if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_key_exists != "")) {
-                echo form_error('t_ingreso') . form_error('t_depositante') . form_error('dni_depositante') . form_error('id_depositante') . form_error('nombre_depositante') . $error_key_exists . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('descripcion');
+                echo form_error('t_transferencia') . form_error('t_beneficiario') . form_error('dni_beneficiario') . form_error('id_beneficiario') . form_error('nombre_beneficiario') . $error_key_exists . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('descripcion');
             } else {
                 echo "OK";
             }
@@ -123,60 +119,59 @@ class Ingreso extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
-            $t_ingreso = $this->input->post('t_ingreso');
-            $t_depositante = $this->input->post('t_depositante');
-            $dni_depositante = $this->input->post('dni_depositante');
-            $id_depositante = $this->input->post('id_depositante');
-            if ($dni_depositante != "6") {
+            $t_transferencia = $this->input->post('t_transferencia');
+            $t_beneficiario = $this->input->post('t_beneficiario');
+            $dni_beneficiario = $this->input->post('dni_beneficiario');
+            $id_beneficiario = $this->input->post('id_beneficiario');
+            if ($dni_beneficiario != "6") {
                 $d_v = NULL;
             } else {
                 $d_v = $this->input->post('d_v');
             }
-            if (($t_depositante == 1) || ($t_depositante == 2) || ($t_depositante == 3) || ($t_depositante == 4) || ($t_depositante == 5)) {
-                $nombre_depositante = NULL;
+            if (($t_beneficiario == 1) || ($t_beneficiario == 2) || ($t_beneficiario == 3) || ($t_beneficiario == 4) || ($t_beneficiario == 5)) {
+                $nombre_beneficiario = NULL;
             } else {
-                $nombre_depositante = ucwords(strtolower($this->input->post('nombre_depositante')));
+                $nombre_beneficiario = ucwords(strtolower($this->input->post('nombre_beneficiario')));
             }
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
-            if (($this->input->post('cuenta')) && ($this->input->post('valor_consignado')) && ($this->input->post('valor_consignado') != 0)) {
-                $cuenta_destino = $this->input->post('cuenta');
-                $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+            if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
+                $cuenta_origen = $this->input->post('cuenta');
+                $valor_retirado = round(str_replace(",", "", $this->input->post('valor_retirado')), 2);
             } else {
-                $cuenta_destino = NULL;
-                $valor_consignado = NULL;
+                $cuenta_origen = NULL;
+                $valor_retirado = NULL;
             }
-            if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
-                list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
-                $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+            if (($this->input->post('caja')) && ($this->input->post('efectivo_retirado')) && ($this->input->post('efectivo_retirado') != 0)) {
+                list($sede_caja_origen, $t_caja_origen) = explode("-", $this->input->post('caja'));
+                $efectivo_retirado = round(str_replace(",", "", $this->input->post('efectivo_retirado')), 2);
             } else {
-                $sede_caja_destino = NULL;
-                $t_caja_destino = NULL;
-                $efectivo_ingresado = NULL;
+                $sede_caja_origen = NULL;
+                $t_caja_origen = NULL;
+                $efectivo_retirado = NULL;
             }
-            $vigente = 1;
             $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
-
+            
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-            $prefijo_ingreso = $this->select_model->sede_id($sede)->prefijo_trans;
-            $id_ingreso = ($this->select_model->nextId_ingreso($prefijo_ingreso)->id) + 1;
-            $t_trans = 5; //Ingreso
-            $credito_debito = 1; //Credito
+            $prefijo_transferencia = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_transferencia = ($this->select_model->nextId_transferencia($prefijo_transferencia)->id) + 1;
+            $t_trans = 6; //Egreso
+            $credito_debito = 0; //Debito            
 
-            $data["tab"] = "crear_ingreso";
-            $this->isLogin($data["tab"]);
+            $data["tab"] = "crear_transferencia";
+            $this->isLogin($data["tab"]);               
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "ingreso/crear";
-            $data['msn_recrear'] = "Crear otro Ingreso";
-            $data['url_imprimir'] = base_url() . "ingreso/consultar_pdf/" . $prefijo_ingreso . "_" . $id_ingreso . "/I";
+            $data['url_recrear'] = base_url() . "transferencia/crear";
+            $data['msn_recrear'] = "Crear otro Egreso";
+            $data['url_imprimir'] = base_url() . "transferencia/consultar_pdf/" . $prefijo_transferencia . "_" . $id_transferencia . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_ingreso, $id_ingreso, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->ingreso($prefijo_ingreso, $id_ingreso, $t_ingreso, $t_depositante, $id_depositante, $dni_depositante, $d_v, $nombre_depositante, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $descripcion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->transferencia($prefijo_transferencia, $id_transferencia, $t_transferencia, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $descripcion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -246,16 +241,16 @@ class Ingreso extends CI_Controller {
             redirect(base_url());
         }
     }
-
+    
     function consultar() {
-        $data["tab"] = "consultar_ingreso";
+        $data["tab"] = "consultar_transferencia";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede();
         $data['error_consulta'] = "";        
-        $data['action_crear'] = base_url() . "ingreso/consultar_validar";
-        $data['action_recargar'] = base_url() . "ingreso/consultar";
-        $this->parser->parse('ingreso/consultar', $data);
+        $data['action_crear'] = base_url() . "transferencia/consultar_validar";
+        $data['action_recargar'] = base_url() . "transferencia/consultar";
+        $this->parser->parse('transferencia/consultar', $data);
         $this->load->view('footer');
     }
 
@@ -267,66 +262,66 @@ class Ingreso extends CI_Controller {
         $id = $this->input->post('id');
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
-            $ingreso = $this->select_model->ingreso_prefijo_id($prefijo, $id);
-            if ($ingreso == TRUE) {
-                if ($ingreso->vigente == 0) {
-                    $error_transaccion = "El ingreso, se encuentra anulado.";
+            $transferencia = $this->select_model->transferencia_prefijo_id($prefijo, $id);
+            if ($transferencia == TRUE) {
+                if ($transferencia->vigente == 0) {
+                    $error_transaccion = "La transferencia intersede, se encuentra anulada.";
                 }
             } else {
-                $error_transaccion = "El ingreso, no existe en la base de datos.";
+                $error_transaccion = "La transferencia intersede, no existe en la base de datos.";
             }            
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
-            $data["tab"] = "consultar_ingreso";
+            $data["tab"] = "consultar_transferencia";
             $this->isLogin($data["tab"]);
             $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
             $data["prefijo"] = $prefijo;
             $data["id"] = $id;
             $this->load->view("header", $data);
             $data['sede'] = $this->select_model->sede();
-            $data['action_crear'] = base_url() . "ingreso/consultar_validar";
-            $this->parser->parse('ingreso/consultar', $data);
+            $data['action_crear'] = base_url() . "transferencia/consultar_validar";
+            $this->parser->parse('transferencia/consultar', $data);
             $this->load->view('footer');
         } else {
-            redirect(base_url() . "ingreso/consultar_pdf/" . $prefijo . "_" . $id . "/I");
+            redirect(base_url() . "transferencia/consultar_pdf/" . $prefijo . "_" . $id . "/I");
         }
     }
 
-    function consultar_pdf($id_ingreso, $salida_pdf) {
-        $ingreso_prefijo_id = $id_ingreso;
-        $id_ingreso_limpio = str_replace("_", " ", $ingreso_prefijo_id);
-        list($prefijo, $id) = explode("_", $ingreso_prefijo_id);
-        $ingreso = $this->select_model->ingreso_prefijo_id($prefijo, $id);
-        if ($ingreso == TRUE) {
-            $reponsable = $this->select_model->empleado($ingreso->id_responsable, $ingreso->dni_responsable);
-            $dni_abreviado_depositante = $this->select_model->t_dni_id($ingreso->dni_depositante)->abreviacion;
-            if (($ingreso->d_v) == (NULL)) {
+    function consultar_pdf($id_transferencia, $salida_pdf) {
+        $transferencia_prefijo_id = $id_transferencia;
+        $id_transferencia_limpio = str_replace("_", " ", $transferencia_prefijo_id);
+        list($prefijo, $id) = explode("_", $transferencia_prefijo_id);
+        $transferencia = $this->select_model->transferencia_prefijo_id($prefijo, $id);
+        if ($transferencia == TRUE) {
+            $reponsable = $this->select_model->empleado($transferencia->id_responsable, $transferencia->dni_responsable);
+            $dni_abreviado_beneficiario = $this->select_model->t_dni_id($transferencia->dni_beneficiario)->abreviacion;
+            if (($transferencia->d_v) == (NULL)) {
                 $d_v = "";
             } else {
-                $d_v = " - " . $ingreso->d_v;
+                $d_v = " - " . $transferencia->d_v;
             }
-            $t_ingreso = $this->select_model->t_ingreso_id($ingreso->t_ingreso)->tipo;
-            $t_depositante = $this->select_model->t_usuario_id($ingreso->t_depositante)->tipo;
-            if ($ingreso->t_depositante == '1') {
-                $depositante = $this->select_model->empleado($ingreso->id_depositante, $ingreso->dni_depositante);
-                $nombre_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+            $t_transferencia = $this->select_model->t_transferencia_id($transferencia->t_transferencia)->tipo;
+            $t_beneficiario = $this->select_model->t_usuario_id($transferencia->t_beneficiario)->tipo;
+            if ($transferencia->t_beneficiario == '1') {
+                $beneficiario = $this->select_model->empleado($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
+                $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
             } else {
-                if ($ingreso->t_depositante == '2') {
-                    $depositante = $this->select_model->titular($ingreso->id_depositante, $ingreso->dni_depositante);
-                    $nombre_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+                if ($transferencia->t_beneficiario == '2') {
+                    $beneficiario = $this->select_model->titular($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
+                    $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
                 } else {
-                    if ($ingreso->t_depositante == '3') {
-                        $depositante = $this->select_model->alumno($ingreso->id_depositante, $ingreso->dni_depositante);
-                        $nombre_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+                    if ($transferencia->t_beneficiario == '3') {
+                        $beneficiario = $this->select_model->alumno($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
+                        $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
                     } else {
-                        if ($ingreso->t_depositante == '4') {
-                            $depositante = $this->select_model->cliente_id_dni($ingreso->id_depositante, $ingreso->dni_depositante);
-                            $nombre_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+                        if ($transferencia->t_beneficiario == '4') {
+                            $beneficiario = $this->select_model->cliente_id_dni($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
+                            $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
                         } else {
-                            if ($ingreso->t_depositante == '5') {
-                                $nombre_depositante = $this->select_model->proveedor_id_dni($ingreso->id_depositante, $ingreso->dni_depositante)->razon_social;
+                            if ($transferencia->t_beneficiario == '5') {
+                                $nombre_beneficiario = $this->select_model->proveedor_id_dni($transferencia->id_beneficiario, $transferencia->dni_beneficiario)->razon_social;
                             } else {
-                                $nombre_depositante = $ingreso->nombre_depositante;
+                                $nombre_beneficiario = $transferencia->nombre_beneficiario;
                             }
                         }
                     }
@@ -338,8 +333,8 @@ class Ingreso extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Comprobante de ingreso ' . $id_ingreso_limpio . ' Sili S.A.S');
-            $pdf->SetSubject('Comprobante de ingreso ' . $id_ingreso_limpio . ' Sili S.A.S');
+            $pdf->SetTitle('Comprobante de transferencia ' . $id_transferencia_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Comprobante de transferencia ' . $id_transferencia_limpio . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -408,13 +403,13 @@ class Ingreso extends CI_Controller {
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE INGRESO</td>'
+                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE EGRESO</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_ingreso_limpio . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_transferencia_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($ingreso->fecha_trans)) . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($transferencia->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
@@ -422,33 +417,33 @@ class Ingreso extends CI_Controller {
                     . '<table>'
                     . '<tr>'
                     . '<td class="c3 c12"></td><td class="c4 c12"></td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del ingreso:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($ingreso->total, 1, '.', ',') . '</b></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del transferencia:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($transferencia->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Tipo depositante:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $t_depositante . '</td>'
+                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Tipo beneficiario:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $t_beneficiario . '</td>'
                     . '</tr></table>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de ingreso:</b></td><td  colspan="3" class="c23 c25 c26  c27 c28 c12 c13">' . $t_ingreso . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de transferencia:</b></td><td  colspan="3" class="c23 c25 c26  c27 c28 c12 c13">' . $t_transferencia . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre depositante:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nombre_depositante . '</td>'
-                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento depositante:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_depositante . ' ' . $ingreso->id_depositante . $d_v . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre beneficiario:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nombre_beneficiario . '</td>'
+                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento beneficiario:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_beneficiario . ' ' . $transferencia->id_beneficiario . $d_v . '</td>'
                     . '</tr>';
-            if (($ingreso->descripcion) != "") {
+            if (($transferencia->descripcion) != "") {
                 $html .= '<tr>'
                         . '<td colspan="4" class="c23 c25 c26 c27 c28">'
                         . '<table>'
                         . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Descripción del ingreso: </b>' . $ingreso->descripcion . '.</td>'
+                        . '<td><b>Descripción del transferencia: </b>' . $transferencia->descripcion . '.</td>'
                         . '</tr><tr><td class="c10"> </td></tr>'
                         . '</table>'
                         . '</td>'
                         . '</tr>';
             }
-            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma depositante: _____________________________</p></td>'
+            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma beneficiario: _____________________________</p></td>'
                     . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
-                    . '</table><p class="b3">- Copia para el depositante -</p>';
+                    . '</table><p class="b3">- Copia para el beneficiario -</p>';
 
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
@@ -506,13 +501,13 @@ class Ingreso extends CI_Controller {
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE INGRESO</td>'
+                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE EGRESO</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_ingreso_limpio . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_transferencia_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($ingreso->fecha_trans)) . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($transferencia->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
@@ -520,31 +515,31 @@ class Ingreso extends CI_Controller {
                     . '<table>'
                     . '<tr>'
                     . '<td class="c3 c12"></td><td class="c4 c12"></td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del ingreso:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($ingreso->total, 1, '.', ',') . '</b></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del transferencia:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($transferencia->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Tipo depositante:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $t_depositante . '</td>'
+                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Tipo beneficiario:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $t_beneficiario . '</td>'
                     . '</tr></table>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de ingreso:</b></td><td  colspan="3" class="c23 c25 c26  c27 c28 c12 c13">' . $t_ingreso . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de transferencia:</b></td><td  colspan="3" class="c23 c25 c26  c27 c28 c12 c13">' . $t_transferencia . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre depositante:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nombre_depositante . '</td>'
-                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento depositante:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_depositante . ' ' . $ingreso->id_depositante . $d_v . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre beneficiario:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nombre_beneficiario . '</td>'
+                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento beneficiario:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_beneficiario . ' ' . $transferencia->id_beneficiario . $d_v . '</td>'
                     . '</tr>';
-            if (($ingreso->descripcion) != "") {
+            if (($transferencia->descripcion) != "") {
                 $html .= '<tr>'
                         . '<td colspan="4" class="c23 c25 c26 c27 c28">'
                         . '<table>'
                         . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Descripción del ingreso: </b>' . $ingreso->descripcion . '.</td>'
+                        . '<td><b>Descripción del transferencia: </b>' . $transferencia->descripcion . '.</td>'
                         . '</tr><tr><td class="c10"> </td></tr>'
                         . '</table>'
                         . '</td>'
                         . '</tr>';
             }
-            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma depositante: _____________________________</p></td>'
+            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma beneficiario: _____________________________</p></td>'
                     . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para la empresa -</p>';
 //
@@ -553,11 +548,12 @@ class Ingreso extends CI_Controller {
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
-            $nombre_archivo = utf8_decode('Comprobante de ingreso ' . $id_ingreso_limpio . ' Sili S.A.S.pdf');
+            $nombre_archivo = utf8_decode('Comprobante de transferencia ' . $id_transferencia_limpio . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
-            redirect(base_url() . 'ingreso/consultar/');
+            redirect(base_url() . 'transferencia/consultar/');
         }
     }
+    
 
 }

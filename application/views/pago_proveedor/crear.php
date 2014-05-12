@@ -4,12 +4,16 @@
             <div class="row">
                 <legend>Crear pago a proveedor</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1">
+                    <div class="col-xs-12">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
-                            <p style="text-align:justify;"><B>Nota 1: </B>Recuerde que ésta opción se utiliza para pagos de <B>FACTURAS LEGALES</B>, es decir, pagos de facturas legales con consecutivo, nit del proveedor y a nombre de nuestra empresa. Si la factura es un recibo electronico, recuerde pedir copia del rut para soportar debidamente estos pagos a la DIAN.<br><b>></b>Sí el pago que va a registrar no es una factura legal, registrelo por la opción: Crear->Egreso. </p>
-                            <p style="text-align:justify;"><B>Nota 2: </B>No incluir en este formulario las deducciones realizadas por concepto de: <b>retención en la fuente.<br>></b> Ingrese el valor total de la factura sin restar dichos valores.<br><b>> </b>Los valores deducidos por dicho concepto, deben ser ingresados en la opción: <b>crear->Retención en la fuente.</b></p><br>
                             <div class="row">
-                                <div class="col-xs-8 col-xs-offset-2">   
+                                <div class="col-xs-10 col-xs-offset-1"> 
+                                    <p style="text-align:justify;"><B>Nota 1: </B>Recuerde que ésta opción se utiliza para pagos de <B>FACTURAS LEGALES</B>, es decir, pagos de facturas legales con consecutivo, nit del proveedor y a nombre de nuestra empresa. Si la factura es un recibo electronico, recuerde pedir copia del rut para soportar debidamente estos pagos a la DIAN.<br><b>></b>Sí el pago que va a registrar no es una factura legal, registrelo por la opción: Crear->Egreso. </p>
+                                    <p style="text-align:justify;"><B>Nota 2: </B>No incluir en este formulario las deducciones realizadas por concepto de: <b>retención en la fuente.<br>></b> Ingrese el valor total de la factura sin restar dichos valores.<br><b>> </b>Los valores deducidos por dicho concepto, deben ser ingresados en la opción: <b>crear->Retención en la fuente.</b></p><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-xs-offset-3">   
                                     <div class="form-group">
                                         <label>Proveedor<em class="required_asterisco">*</em></label>
                                         <select name="proveedor" id="proveedor" data-placeholder="Seleccione proveedor" class="chosen-select form-control exit_caution">
@@ -34,7 +38,7 @@
                             </div>
                             <hr>
                             <div class="overflow_tabla">
-                                <label>Caja de Efectivo Origen (Punto de Venta)</label>
+                                <label>Caja de Efectivo Origen (Punto de venta)</label>
                                 <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
                                 <table class="table table-hover">
                                     <thead>

@@ -94,7 +94,7 @@
                         <div class="col-xs-2 col-xs-offset-5 separar_div">
                             <img src="{base_url}images/loading_2.gif" class="img-responsive">
                         </div>
-                        <div class="col-xs-10 col-xs-offset-1">
+                        <div class="col-xs-12">
                             <h4 class="modal-title" id="myModalLabel">Estamos procesando su solicitud</h4>
                             <h6 class="modal-title" id="myModalLabel">Espere unos segundos</h6>
                         </div>

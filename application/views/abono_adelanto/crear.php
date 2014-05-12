@@ -48,7 +48,7 @@
                             </div>
                             <hr>
                             <div class="overflow_tabla">
-                                <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                                <label>Caja de Efectivo Destino (Punto de venta)</label>
                                 <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>                                    
                                 <table class="table table-hover">
                                     <thead>

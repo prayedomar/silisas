@@ -126,7 +126,8 @@ class Factura extends CI_Controller {
             $prefijo_factura = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_factura = ($this->select_model->nextId_factura($prefijo_factura)->id) + 1;
             $t_trans = 7; //Factura
-            $credito_debito = 1; //Credito            
+            $credito_debito = 1; //Credito   
+            $retefuente = 0; //Significa que al momento de crearla no se ha hecho retencion del 11% a dicha factura
 
             $data["tab"] = "crear_factura";
             $this->load->view("header", $data);
@@ -139,7 +140,7 @@ class Factura extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $retefuente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -452,8 +453,12 @@ class Factura extends CI_Controller {
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
             $factura = $this->select_model->factura_prefijo_id($prefijo, $id);
-            if ($factura != TRUE) {
-                $error_transaccion = "Factura de venta no encontrada.";
+            if ($factura == TRUE) {
+                if ($factura->vigente == 0) {
+                    $error_transaccion = "La factura de venta, se encuentra anulada.";
+                }
+            } else {
+                $error_transaccion = "La factura de venta, no existe en la base de datos.";
             }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
@@ -613,10 +618,10 @@ class Factura extends CI_Controller {
                     . '<tr>'
                     . '<td class="c21 c23 c26">Total Descuento (-)</td>'
                     . '<td class="c22 c23 a2 c26">$' . number_format($factura->descuento, 1, '.', ',') . '</td>'
-                    . '</tr>'                    
+                    . '</tr>'
                     . '<tr>'
                     . '<td class="c21 c23 c26">Total a Pagar (=)</td>'
-                    . '<td class="c22 c23 a2 c26">$' . number_format((($factura->subtotal + $factura->int_mora)-($factura->descuento)), 1, '.', ',') . '</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format((($factura->subtotal + $factura->int_mora) - ($factura->descuento)), 1, '.', ',') . '</td>'
                     . '</tr>'
                     . '</table><p class="b3">- Copia para el cliente -</p>';
 
@@ -736,10 +741,10 @@ class Factura extends CI_Controller {
                     . '<tr>'
                     . '<td class="c21 c23 c26">Total Descuento (-)</td>'
                     . '<td class="c22 c23 a2 c26">$' . number_format($factura->descuento, 1, '.', ',') . '</td>'
-                    . '</tr>'                    
+                    . '</tr>'
                     . '<tr>'
                     . '<td class="c21 c23 c26">Total a Pagar (=)</td>'
-                    . '<td class="c22 c23 a2 c26">$' . number_format((($factura->subtotal + $factura->int_mora)-($factura->descuento)), 1, '.', ',') . '</td>'
+                    . '<td class="c22 c23 a2 c26">$' . number_format((($factura->subtotal + $factura->int_mora) - ($factura->descuento)), 1, '.', ',') . '</td>'
                     . '</tr>'
                     . '</table><p class="b3">- Copia para la empresa -</p>';
 

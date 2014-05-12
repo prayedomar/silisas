@@ -4,11 +4,15 @@
             <div class="row">
                 <legend>Crear ingreso</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1">
+                    <div class="col-xs-12">
                         <form role="form" method="post" action="{action_crear}" id="formulario">
-                            <p style="text-align:justify;"><B>Nota: </B>Utilice esta opción en el caso en que el ingreso que desea registrar no pertenezca a ninguna de las otras opciones disponibles de ingresos, tales como: Factura, Recibo de caja, Abono a adelanto de nómina, Retención en la fuente, etc.</p><br>
                             <div class="row">
-                                <div class="col-xs-8 col-xs-offset-2">
+                                <div class="col-xs-8 col-xs-offset-2"> 
+                                    <p style="text-align:justify;"><B>Nota: </B>Utilice esta opción en el caso en que el ingreso que desea registrar no pertenezca a ninguna de las otras opciones disponibles de ingresos, tales como: Factura, Recibo de caja, Abono a adelanto de nómina, Retención en la fuente, etc.</p><br>
+                                </div>
+                            </div>                           
+                            <div class="row">
+                                <div class="col-xs-6 col-xs-offset-3">
                                     <div class="form-group">
                                         <label>Tipo de Ingreso<em class="required_asterisco">*</em></label>
                                         <select name="t_ingreso" id="t_ingreso" class="form-control exit_caution">
@@ -65,7 +69,7 @@
                             </div>
                             <hr>
                             <div class="overflow_tabla">
-                                <label>Caja de Efectivo Destino (Punto de Venta)</label>
+                                <label>Caja de Efectivo Destino (Punto de venta)</label>
                                 <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla ingresado dinero en ella con el dinero recibido (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
                                 <table class="table table-hover">
                                     <thead>
