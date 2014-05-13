@@ -181,7 +181,7 @@ class Pago_proveedor extends CI_Controller {
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede();
-        $data['error_consulta'] = "";        
+        $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
         $data['action_recargar'] = base_url() . "pago_proveedor/consultar";
         $this->parser->parse('pago_proveedor/consultar', $data);
@@ -203,7 +203,7 @@ class Pago_proveedor extends CI_Controller {
                 }
             } else {
                 $error_transaccion = "El pago a proveedor, no existe en la base de datos.";
-            }            
+            }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_pago_proveedor";
@@ -218,7 +218,7 @@ class Pago_proveedor extends CI_Controller {
             $this->load->view('footer');
         } else {
             redirect(base_url() . "pago_proveedor/consultar_pdf/" . $prefijo . "_" . $id . "/I");
-        }        
+        }
     }
 
     function consultar_pdf($id_pago_proveedor, $salida_pdf) {
@@ -230,6 +230,11 @@ class Pago_proveedor extends CI_Controller {
             $reponsable = $this->select_model->empleado($pago_proveedor->id_responsable, $pago_proveedor->dni_responsable);
             $proveedor = $this->select_model->proveedor_id_dni($pago_proveedor->id_proveedor, $pago_proveedor->dni_proveedor);
             $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
+            if (($proveedor->d_v) == (NULL)) {
+                $d_v = "";
+            } else {
+                $d_v = " - " . $proveedor->d_v;
+            }
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
@@ -324,7 +329,7 @@ class Pago_proveedor extends CI_Controller {
                     . '</table>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Documento proveedor:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_proveedor . ' ' . $proveedor->id . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Documento proveedor:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_proveedor . ' ' . $proveedor->id . $d_v . '</td>'
                     . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Código de factura:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $pago_proveedor->factura . '</td>'
                     . '</tr>'
                     . '<tr>'

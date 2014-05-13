@@ -181,7 +181,7 @@ class Retefuente_compras extends CI_Controller {
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede();
-        $data['error_consulta'] = "";        
+        $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "retefuente_compras/consultar_validar";
         $data['action_recargar'] = base_url() . "retefuente_compras/consultar";
         $this->parser->parse('retefuente_compras/consultar', $data);
@@ -203,7 +203,7 @@ class Retefuente_compras extends CI_Controller {
                 }
             } else {
                 $error_transaccion = "La retención en la fuente, no existe en la base de datos.";
-            }            
+            }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_retefuente_compras";
@@ -230,6 +230,11 @@ class Retefuente_compras extends CI_Controller {
             $reponsable = $this->select_model->empleado($retefuente_compras->id_responsable, $retefuente_compras->dni_responsable);
             $proveedor = $this->select_model->proveedor_id_dni($retefuente_compras->id_proveedor, $retefuente_compras->dni_proveedor);
             $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
+            if (($proveedor->d_v) == (NULL)) {
+                $d_v = "";
+            } else {
+                $d_v = " - " . $proveedor->d_v;
+            }
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
@@ -324,7 +329,7 @@ class Retefuente_compras extends CI_Controller {
                     . '</table>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Documento proveedor:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_proveedor . ' ' . $proveedor->id . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Documento proveedor:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_proveedor . ' ' . $proveedor->id . $d_v . '</td>'
                     . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Código de factura:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $retefuente_compras->factura . '</td>'
                     . '</tr>'
                     . '<tr>'

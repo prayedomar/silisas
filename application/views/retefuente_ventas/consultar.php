@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
-                    <legend>Consultar retención en la fuente</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Consultar retención en la fuente por ventas</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Consecutivo de la retención</legend>

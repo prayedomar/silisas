@@ -899,7 +899,7 @@ class Insert_model extends CI_Model {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
-            't_trans' => '11',
+            't_trans' => '14',
             'credito_debito' => '0',
             'prefijo_factura' => $prefijo_factura,
             'id_factura' => $id_factura,

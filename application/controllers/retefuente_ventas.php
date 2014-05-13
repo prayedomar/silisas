@@ -36,7 +36,7 @@ class Retefuente_ventas extends CI_Controller {
             $this->form_validation->set_rules('total', 'Valor de la retención en la fuente', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('observacion', 'Descripción', 'required|trim|xss_clean|max_length[255]');
+            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
@@ -86,7 +86,6 @@ class Retefuente_ventas extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
-            $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
@@ -112,7 +111,13 @@ class Retefuente_ventas extends CI_Controller {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    $this->parser->parse('trans_success_print', $data);
+                    $error2 = $this->update_model->factura_retefuente($prefijo_factura, $id_factura, 1);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success_print', $data);
+                    }
                 }
             }
         } else {
@@ -138,7 +143,7 @@ class Retefuente_ventas extends CI_Controller {
                     if ($factura->retefuente == 1) {
                         $response = array(
                             'respuesta' => 'error',
-                            'mensaje' => '<p><center><strong>A la factura, ya se le realizó retención en la fuente.</strong></center></p>'
+                            'mensaje' => '<p><center><strong>Ya se le realizó la retención en la fuente a ésta factura de venta.</strong></center></p>'
                         );
                         echo json_encode($response);
                         return false;
@@ -273,8 +278,15 @@ class Retefuente_ventas extends CI_Controller {
         $retefuente_ventas = $this->select_model->retefuente_ventas_prefijo_id($prefijo, $id);
         if ($retefuente_ventas == TRUE) {
             $reponsable = $this->select_model->empleado($retefuente_ventas->id_responsable, $retefuente_ventas->dni_responsable);
-            $proveedor = $this->select_model->proveedor_id_dni($retefuente_ventas->id_proveedor, $retefuente_ventas->dni_proveedor);
-            $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
+            $factura = $this->select_model->factura_prefijo_id($retefuente_ventas->prefijo_factura, $retefuente_ventas->id_factura);
+            $dni_abreviado = $this->select_model->t_dni_id($factura->dni_a_nombre_de)->abreviacion;
+            $matricula = $this->select_model->matricula_id($factura->matricula);
+            $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);
+            if (($factura->d_v_a_nombre_de) == (NULL)) {
+                $d_v = "";
+            } else {
+                $d_v = " - " . $factura->d_v_a_nombre_de;
+            }
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
@@ -302,7 +314,7 @@ class Retefuente_ventas extends CI_Controller {
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
             $html .= 'p.b4{line-height:23px;}';
@@ -310,8 +322,8 @@ class Retefuente_ventas extends CI_Controller {
             $html .= 'p.b6{line-height:26px;}';
             $html .= 'td.c1{width:420px;}td.c1000{line-height:85px;}';
             $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:170px;}';
-            $html .= 'td.c4{width:195px;}';
+            $html .= 'td.c3{width:150px;}';
+            $html .= 'td.c4{width:270px;}';
             $html .= 'td.c5{width:160px;}';
             $html .= 'td.c6{width:150px;}';
             $html .= 'td.c7{font-size:16px;}';
@@ -319,17 +331,18 @@ class Retefuente_ventas extends CI_Controller {
             $html .= 'td.c9{background-color:#F5F5F5;}';
             $html .= 'td.c10{font-size:4px;line-height:5px;}';
             $html .= 'td.c11{font-size:12px;}';
-            $html .= 'td.c12{line-height:25px;}';
-            $html .= 'td.c13{width:580px;}';
-            $html .= 'td.c15{width:420px;}';
+            $html .= 'td.c12{line-height:20px;}';
+            $html .= 'td.c13{line-height:25px;}';
+            $html .= 'td.c14{width:365px;}';
             $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;line-height:35px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
             $html .= 'td.c25{border-top-color:#000000;}';
             $html .= 'td.c26{border-bottom-color:#000000;}';
             $html .= 'td.c27{border-left-color:#000000;}';
             $html .= 'td.c28{border-right-color:#000000;}';
             $html .= 'td.a1{text-align:left;}';
             $html .= 'td.a2{text-align:center;}';
+            $html .= 'td.a3{text-align:justify;}';
             $html .= 'th.a1{text-align:left;}';
             $html .= 'th.a2{text-align:center;}';
             $html .= 'table{border-spacing: 0;}';
@@ -350,7 +363,7 @@ class Retefuente_ventas extends CI_Controller {
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">RETENCIÓN EN LA FUENTE POR COMPRAS O SERVICIOS</td>'
+                    . '<td class="c24 a2" colspan="2">RETENCIÓN EN LA FUENTE <br> POR VENTAS</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_retefuente_ventas_limpio . '</td>'
@@ -363,31 +376,38 @@ class Retefuente_ventas extends CI_Controller {
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c15 c12"></td>'
-                    . '<td class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor retenido:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($retefuente_ventas->total, 1, '.', ',') . '</b></td>'
+                    . '<td class="c3 c12"></td><td class="c4 c12"></td>'
+                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor devuelto:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($retefuente_ventas->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
-                    . '</table>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Factura:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $retefuente_ventas->prefijo_factura . " " . $retefuente_ventas->id_factura . '</td>'
+                    . '</tr></table>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Documento proveedor:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_proveedor . ' ' . $proveedor->id . '</td>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Código de factura:</b></td><td class="c4 c23 c25 c26  c27 c28 c12">' . $retefuente_ventas->factura . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>A nombre de:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $factura->a_nombre_de . '</td>'
+                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento titular:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . $d_v . '</td>'
                     . '</tr>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre proveedor:</b></td><td colspan="3" class="c23 c12 c25 c26 c27 c28">' . $proveedor->razon_social . '</td>'
-                    . '</tr>';
-            if (($retefuente_ventas->observacion) != "") {
-                $html .= '<tr>'
-                        . '<td colspan="4" class="c23 c25 c26 c27 c28">'
-                        . '<table>'
-                        . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Descripción de la retención: </b>' . $retefuente_ventas->observacion . '.</td>'
-                        . '</tr><tr><td class="c10"> </td></tr>'
-                        . '</table>'
-                        . '</td>'
-                        . '</tr>';
-            }
-            $html .= '<tr><td colspan="4" class="c25 c26 c27 c28"><br><br><p class="b5 b6">Firma del responsable: _________________________________________________________________________</p></td></tr>'
-                    . '</table><p class="b3">- Copia para la empresa -</p>';
+//                    . '<tr>'
+//                    . '<td colspan="4" class="c9 a2 c13 c25 c26 c27 c28"><b>DETALLES DE LA NOTA CRÉDITO</b></td>'
+//                    . '</tr>'
+//                    . '<tr>'
+//                    . '<td colspan="4" class="c23 c25 c26 c27 c28">'
+//                    . '<table>'
+//                    . '<tr><td class="c10"> </td></tr>'
+//                    . '<tr><td class="a3"><b>Autorizó: </b>' . $retefuente_ventas->autoriza . '.</td></tr>'
+//                    . '<tr><td class="c10"> </td></tr>'
+//                    . '<tr><td class="a3"><b>Motivo de la devolución: </b>' . $retefuente_ventas->motivo . '.</td></tr>'
+//                    . '<tr><td class="c10"> </td></tr>';
+//            if (($retefuente_ventas->observacion) != "") {
+//                $html .= '<tr><td class="a3"><b>Observaciones: </b>' . $retefuente_ventas->observacion . '.</td></tr>'
+//                        . '<tr><td class="c10"> </td></tr>';
+//            }
+//            $html .= '</table>'
+//                    . '</td>'
+//                    . '</tr>'
+                    . '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><p class="b5 b6">Firma titular: ___________________________________</p></td>'
+                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
+                    . '</table><p class="b3">- Copia para el titular -</p>';
 
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');

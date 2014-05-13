@@ -486,6 +486,13 @@ class Factura extends CI_Controller {
         if (($factura == TRUE) && ($detalles_factura == TRUE)) {
             $reponsable = $this->select_model->empleado($factura->id_responsable, $factura->dni_responsable);
             $dni_abreviado = $this->select_model->t_dni_id($factura->dni_a_nombre_de)->abreviacion;
+            if (($factura->d_v_a_nombre_de) == (NULL)) {
+                $d_v = "";
+            } else {
+                $d_v = " - " . $factura->d_v_a_nombre_de;
+            }
+            
+            
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -573,7 +580,7 @@ class Factura extends CI_Controller {
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $factura->a_nombre_de . '</td>'
-                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . $d_v . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $factura->direccion_a_nombre_de . '</td>'
@@ -696,7 +703,7 @@ class Factura extends CI_Controller {
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $factura->a_nombre_de . '</td>'
-                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . $d_v . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $factura->direccion_a_nombre_de . '</td>'

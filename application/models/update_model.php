@@ -20,8 +20,8 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
-    
+    }
+
     public function empleado_sede_ppal($id, $dni, $sede_ppal) {
         $data = array(
             'sede_ppal' => $sede_ppal
@@ -176,7 +176,7 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function contrato_matricula_estado($id, $new_estado) {
         $data = array(
             'estado' => $new_estado
@@ -186,8 +186,8 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
-    
+    }
+
     public function contrato_matricula_sede_actual($id, $sede_actual) {
         $data = array(
             'sede_actual' => $sede_actual
@@ -197,9 +197,8 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    } 
-    
-    
+    }
+
     public function matricula_liquidacion_escalas($id_matricula, $liquidada) {
         $data = array(
             'liquidacion_escalas' => $liquidada
@@ -210,7 +209,7 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function ejecutivo_matricula($id_matricula, $id_ejecutivo, $dni_ejecutivo) {
         $data = array(
             'id_ejecutivo' => $id_ejecutivo,
@@ -221,8 +220,8 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }  
-    
+    }
+
     public function concepto_nomina_rrpp_ok($id, $prefijo_nomina, $id_nomina) {
         $data = array(
             'prefijo_nomina' => $prefijo_nomina,
@@ -234,8 +233,8 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }     
-    
+    }
+
     public function alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $est_alumno, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'nombre1' => $nombre1,
@@ -263,15 +262,15 @@ class Update_model extends CI_Model {
             'dni_responsable' => $dni_responsable
         );
         $this->db->where('id', $id);
-        $this->db->where('dni', $dni);        
+        $this->db->where('dni', $dni);
         $this->db->set($data);
         $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
         $this->db->update('alumno');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    } 
-    
+    }
+
     public function cambio_plan_matricula($id_matricula, $plan_new) {
         $data = array(
             'plan' => $plan_new
@@ -281,6 +280,18 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }      
+    }
+
+    public function factura_retefuente($prefijo_factura, $id_factura, $new_retefuente) {
+        $data = array(
+            'retefuente' => $new_retefuente
+        );
+        $this->db->where('prefijo', $prefijo_factura);
+        $this->db->where('id', $id_factura);
+        $this->db->update('factura', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
 
 }

@@ -536,7 +536,10 @@
                 <?php } ?>   
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>transferencia/consultar">Transferencia intersede</a></li>
-                <?php } ?>                    
+                <?php } ?>   
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                    <li><a href="<?= base_url() ?>retefuente_ventas/consultar">Retefuente por ventas</a></li>
+                <?php } ?>                      
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>egreso/consultar">Egreso</a></li>
                 <?php } ?>                    

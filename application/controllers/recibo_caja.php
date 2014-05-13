@@ -487,6 +487,12 @@ class Recibo_caja extends CI_Controller {
         if (($recibo_caja == TRUE) && ($detalles_recibo_caja == TRUE)) {
             $reponsable = $this->select_model->empleado($recibo_caja->id_responsable, $recibo_caja->dni_responsable);
             $dni_abreviado = $this->select_model->t_dni_id($recibo_caja->dni_a_nombre_de)->abreviacion;
+            if (($recibo_caja->d_v_a_nombre_de) == (NULL)) {
+                $d_v = "";
+            } else {
+                $d_v = " - " . $recibo_caja->d_v_a_nombre_de;
+            }
+
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -575,7 +581,7 @@ class Recibo_caja extends CI_Controller {
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $recibo_caja->a_nombre_de . '</td>'
-                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $recibo_caja->id_a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $recibo_caja->id_a_nombre_de . $d_v . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $recibo_caja->direccion_a_nombre_de . '</td>'
@@ -699,7 +705,7 @@ class Recibo_caja extends CI_Controller {
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $recibo_caja->a_nombre_de . '</td>'
-                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $recibo_caja->id_a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $recibo_caja->id_a_nombre_de . $d_v . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $recibo_caja->direccion_a_nombre_de . '</td>'
