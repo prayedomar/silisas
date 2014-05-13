@@ -268,7 +268,7 @@ class Pago_proveedor extends CI_Controller {
             $html .= 'p.b4{line-height:23px;}';
             $html .= 'p.b5{font-size:14px;}';
             $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;}td.c1000{line-height:85px;}';
+            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:85px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:170px;}';
             $html .= 'td.c4{width:195px;}';
