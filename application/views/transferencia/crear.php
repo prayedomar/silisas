@@ -32,7 +32,7 @@
                                             <th class="text-center">Escojer</th>  
                                             <th class="text-center">Sede</th>                                            
                                             <th class="text-center">Tipo de Caja</th>
-                                            <th class="text-center">Observación</th>
+                                            <th class="text-center">Responsable</th>
                                             <th class="text-center">Fecha de Creación</th>
                                         </tr>
                                     </thead>
@@ -80,7 +80,7 @@
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Sede destino<em class="required_asterisco">*</em></label>
-                                                <select name="prefijo" id="prefijo" class="form-control" value="flst">
+                                                <select name="sede_destino" id="sede_destino" class="form-control" value="flst">
                                                     <option value="default">Seleccione sede</option>
                                                     {sede_destino}
                                                     <option value="{id}">{nombre}</option>
@@ -91,7 +91,7 @@
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Tipo de destino<em class="required_asterisco">*</em></label>
-                                                <select name="prefijo" id="prefijo" class="form-control" value="flst">
+                                                <select name="tipo_destino" id="tipo_destino" class="form-control" value="flst">
                                                     <option value="default">Seleccione tipo de destino</option>
                                                     <option value="caja">Caja de efectivo</option>
                                                     <option value="cuenta">Cuenta bancaria</option>
@@ -101,10 +101,10 @@
                                     </div>
                                     <div id="validacion_inicial">
                                     </div>                             
-                                    <div class="row text-center separar_submit">
-                                        <button type="button" class="btn btn-default" id="consultar_matricula"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                        <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-list-alt"></span> Modificar matrícula </a>
-                                    </div>                            
+                                    <div class="row text-center">
+                                        <button type="button" class="btn btn-default" id="consultar_destino"><span class="glyphicon glyphicon-search"></span> Consultar información de destino </button>
+                                        <button type="button" class="btn btn-default" id="modificar_destino"><span class="glyphicon glyphicon-list-alt"></span> Modificar información de destino </button>
+                                    </div><br><br>                           
                                 </div>
                             </div>
                             <div>
@@ -117,11 +117,11 @@
                                                 <th class="text-center">Escojer</th>  
                                                 <th class="text-center">Sede</th>                                            
                                                 <th class="text-center">Tipo de Caja</th>
-                                                <th class="text-center">Observación</th>
+                                                <th class="text-center">Responsable</th>
                                                 <th class="text-center">Fecha de Creación</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tbody_caja_efectivo">
+                                        <tbody id="tbody_caja_destino">
                                         </tbody>
                                     </table>
                                 </div>
@@ -151,7 +151,7 @@
                                                 <th class="text-center">Fecha Creación</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tbody_cuenta_bancaria">
+                                        <tbody id="tbody_cuenta_destino">
                                         </tbody>
                                     </table>
                                 </div>
@@ -194,82 +194,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(".form-group").delegate("#id_beneficiario", "blur", function() {
-        var vpri, x, y, z, i, nit1, dv1;
-        nit1 = $(this).val();
-        if (isNaN(nit1))
-        {
-            $("#d_v").attr('value', 'Error de Nit');
-        } else {
-            vpri = new Array(16);
-            x = 0;
-            y = 0;
-            z = nit1.length;
-            vpri[1] = 3;
-            vpri[2] = 7;
-            vpri[3] = 13;
-            vpri[4] = 17;
-            vpri[5] = 19;
-            vpri[6] = 23;
-            vpri[7] = 29;
-            vpri[8] = 37;
-            vpri[9] = 41;
-            vpri[10] = 43;
-            vpri[11] = 47;
-            vpri[12] = 53;
-            vpri[13] = 59;
-            vpri[14] = 67;
-            vpri[15] = 71;
-            for (i = 0; i < z; i++)
-            {
-                y = (nit1.substr(i, 1));
-                //document.write(y+"x"+ vpri[z-i] +":");
-                x += (y * vpri[z - i]);
-                //document.write(x+"<br>");		
-            }
-            y = x % 11
-            //document.write(y+"<br>");
-            if (y > 1)
-            {
-                dv1 = 11 - y;
-            } else {
-                dv1 = y;
-            }
-            $("#d_v").attr('value', dv1);
-        }
-    });
-
-    //Cargar div de d.v segun t_sancion
-    $(".form-group").delegate("#dni_beneficiario", "change", function() {
-        dni = $('#dni_beneficiario').val();
-        if (dni == '6') {
-            $("#div_dv").css("display", "block");
-        } else {
-            $("#div_dv").css("display", "none");
-        }
-    });
-
-    //Mostramos el obligatorio de descripcion si en t_egreso selecciona "otro" o "transaccion intersede de difereente pais"
-    $(".form-group").delegate("#t_egreso", "change", function() {
-        t_egreso = $('#t_egreso').val();
-        if ((t_egreso == '8') || (t_egreso == '9')) {
-            $("#label_descripcion_required").css("display", "block");
-            $("#label_descripcion").css("display", "none");
-        } else {
-            $("#label_descripcion_required").css("display", "none");
-            $("#label_descripcion").css("display", "block");
-        }
-    });
-
-    //Mostramos el div de nombre de beneficiario si es otros
-    $(".form-group").delegate("#t_beneficiario", "change", function() {
-        t_beneficiario = $('#t_beneficiario').val();
-        if (t_beneficiario == '6') {
-            $("#div_nombre_beneficiario").css("display", "block");
-        } else {
-            $("#div_nombre_beneficiario").css("display", "none");
-        }
-    });
 
     //Llenamos la cajas del responsable
     $.post('{action_llena_caja_responsable}', {
@@ -278,6 +202,7 @@
     }, function(data) {
         $("#tbody_caja_efectivo").html(data);
     });
+
     //Llenamos las cajas del responsable
     $.post('{action_llena_cuenta_responsable}', {
         idResposable: '{id_responsable}',
@@ -285,6 +210,46 @@
     }, function(data) {
         $("#tbody_cuenta_bancaria").html(data);
     });
+
+    $("form").delegate("#consultar_destino", "click", function() {
+        var sedeDestino = $('#sede_destino').val();
+        var tipoDestino = $('#tipo_destino').val();
+        if ((sedeDestino != "default") && (tipoDestino != "default")) {
+            $("#div_warning").remove();
+            if (tipoDestino == "caja") {
+                $.post('{action_llena_caja_destino}', {
+                    sedeDestino: sedeDestino
+                }, function(data) {
+                    if (data != "") {
+                        $("#tbody_caja_destino").html(data);
+                    } else {
+                        $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+                        $("#div_warning").html("<p><strong><center>No se encontró ninguna caja autorizada para ésta sede.</center></strong></p>");
+                        $("#div_warning").delay(8000).fadeOut(1000);
+                        $("#tbody_caja_destino").html("");
+                    }
+                });
+            } else {
+                $.post('{action_llena_cuenta_destino}', {
+                    sedeDestino: sedeDestino
+                }, function(data) {
+                    if (data != "") {
+                        $("#tbody_cuenta_destino").html(data);
+                    } else {
+                        $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+                        $("#div_warning").html("<p><strong><center>No se encontró ninguna cuenta autorizada para ésta sede.</center></strong></p>");
+                        $("#div_warning").delay(8000).fadeOut(1000);
+                        $("#tbody_cuenta_destino").html("");
+                    }                    
+                });
+            }
+        } else {
+            $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+            $("#div_warning").html("<p><strong><center>Antes de consultar, ingrese la sede y el tipo de destino.</center></strong></p>");
+            $("#div_warning").delay(8000).fadeOut(1000);
+        }
+    });
+
     //Habilitamos input de efectivo retirado de las cajas
     $("table").delegate("#caja", "click", function() {
         var total = new Number($('#total').val().split(",").join(""));

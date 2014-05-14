@@ -906,14 +906,15 @@ class Nomina extends CI_Controller {
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
-                $cuentas = $this->select_model->caja_responsable($id_responsable, $dni_responsable);
-                if (($cuentas == TRUE)) {
-                    foreach ($cuentas as $fila) {
+                $cajas = $this->select_model->caja_responsable($id_responsable, $dni_responsable);
+                if (($cajas == TRUE)) {
+                    foreach ($cajas as $fila) {
+                        $responsable = $this->select_model->empleado($fila->id_encargado, $fila->dni_encargado);
                         echo '<tr>
                             <td class="text-center"><input type="radio" class="exit_caution" name="caja" id="caja" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
                             <td class="text-center">' . $fila->name_sede . '</td>
                             <td>' . $fila->name_t_caja . '</td>  
-                            <td>' . $fila->observacion . '</td>   
+                            <td>' . $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1 . " " . '</td>  
                             <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>    
                         </tr>';
                     }

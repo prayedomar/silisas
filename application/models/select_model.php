@@ -162,14 +162,30 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function cuenta_banco_sede($sede_autorizada) {
+        $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede WHERE ((sede='" . $sede_autorizada . "') AND (vigente=1))))) ORDER BY cu.fecha_trans";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function caja_responsable($id_responsable, $dni_responsable) {
-        $SqlInfo = "SELECT DISTINCT c.sede, c.t_caja, c.observacion, c.fecha_trans, s.nombre AS name_sede, t.tipo AS name_t_caja FROM caja AS c, t_caja AS t, sede AS s WHERE ((c.t_caja=t.id) AND (c.sede=s.id) AND (c.vigente=1) AND ((c.id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "'))) ORDER BY c.fecha_trans";
+        $SqlInfo = "SELECT DISTINCT c.sede, c.t_caja, c.id_encargado, c.dni_encargado, c.observacion, c.fecha_trans, s.nombre AS name_sede, t.tipo AS name_t_caja FROM caja AS c, t_caja AS t, sede AS s WHERE ((c.t_caja=t.id) AND (c.sede=s.id) AND (c.vigente=1) AND ((c.id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "'))) ORDER BY c.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
     }
+    
+    public function caja_sede($sede_autorizada) {
+        $SqlInfo = "SELECT DISTINCT c.sede, c.t_caja, c.id_encargado, c.dni_encargado, c.observacion, c.fecha_trans, s.nombre AS name_sede, t.tipo AS name_t_caja FROM caja AS c, t_caja AS t, sede AS s WHERE ((c.t_caja=t.id) AND (c.sede=s.id) AND (c.vigente=1) AND (c.sede='" . $sede_autorizada . "')) ORDER BY c.fecha_trans";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function sede_id($id) {
         $this->db->where('id', $id);
@@ -764,7 +780,7 @@ class Select_model extends CI_Model {
     public function empleado_sedes_responsable_adelantos($id_responsable, $dni_responsable) {
         $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
-        $where2 = "((id IN(SELECT id_empleado FROM adelanto WHERE (((estado=1)||(estado=2))))) AND (dni IN(SELECT dni_empleado FROM adelanto WHERE (((estado=1)||(estado=2))))))";
+        $where2 = "((id IN(SELECT id_empleado FROM adelanto WHERE (((estado=1)||(estado=2))))) AND (dni IN(SELECT dni_empleado FROM adelanto WHERE (vigente=1))))";
         $this->db->where($where2);
         $this->db->order_by('nombre1', 'asc');
         $query = $this->db->get('empleado');
@@ -1338,7 +1354,7 @@ class Select_model extends CI_Model {
 
     //adelantos vigente con saldo incluido > 0
     public function adelanto_vigente_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.autoriza, ad.motivo, ad.forma_descuento, ad.fecha_trans, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad, sede AS s WHERE ((ad.id_empleado='" . $id_empleado . "') AND (ad.dni_empleado='" . $dni_empleado . "') AND ((ad.estado=1)||(ad.estado=2)) AND (ad.sede=s.id))";
+        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.autoriza, ad.motivo, ad.forma_descuento, ad.fecha_trans, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad, sede AS s WHERE ((ad.id_empleado='" . $id_empleado . "') AND (ad.dni_empleado='" . $dni_empleado . "') AND (ad.vigente=1) AND (ad.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

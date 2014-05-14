@@ -202,6 +202,7 @@
                         $("#cerrar_modal_3").click();
                         $("#trans_success").modal('show');
                         $("#div_checkbox_empleados_cuenta  > *").remove();
+                        $("input[name='cuenta']:checked").click();
                         return false;
                     }
                 }
@@ -243,6 +244,7 @@
                         $("#cuenta").change();
                         $("#cerrar_modal_2").click();
                         $("#trans_success").modal('show');
+                        $("input[name='cuenta']:checked").click();
                         return false;
                     }
                 }

@@ -38,7 +38,7 @@
                                             <th class="text-center">Escojer</th>  
                                             <th class="text-center">Sede</th>                                            
                                             <th class="text-center">Tipo de Caja</th>
-                                            <th class="text-center">Observación</th>
+                                            <th class="text-center">Responsable</th>
                                             <th class="text-center">Fecha de Creación</th>
                                         </tr>
                                     </thead>

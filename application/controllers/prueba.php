@@ -10,13 +10,12 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $recibo_caja_prefijo_id = "BCRM_1";
-        $id_recibo_caja_limpio = str_replace("_", " ", $recibo_caja_prefijo_id);
-        list($prefijo, $id) = explode("_", $recibo_caja_prefijo_id);
-        $recibo_caja = $this->select_model->recibo_caja_prefijo_id($prefijo, $id);
-        $detalles_recibo_caja = $this->select_model->detalle_recibo_caja_prefijo_id($prefijo, $id);
-        VAR_DUMP($recibo_caja);
-        VAR_DUMP($detalles_recibo_caja);
+
+list($sede, $cuenta) = explode("-", "4-238478762342zzzz");
+            
+            $adelantos = $this->select_model->adelanto_vigente_empleado("98560635", "1");  
+            var_dump($adelantos);
+        
     }
     
     function matriz_matricula($id_matricula) {

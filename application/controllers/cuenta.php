@@ -6,7 +6,7 @@ class Cuenta extends CI_Controller {
         parent::__construct();
         $this->load->model('select_model');
         $this->load->model('insert_model');
-        $this->load->model('cuentam');
+        $this->load->model('update_model');
     }
 
     function crear() {
