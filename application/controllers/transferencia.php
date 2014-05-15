@@ -30,60 +30,14 @@ class Transferencia extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $this->form_validation->set_rules('t_transferencia', 'Tipo de Egreso', 'required|callback_select_default');
-            $this->form_validation->set_rules('t_beneficiario', 'Tipo de Usuario Beneficiario', 'required|callback_select_default');
-            $this->form_validation->set_rules('dni_beneficiario', 'Tipo Id. Beneficiario', 'required|callback_select_default');
-            $this->form_validation->set_rules('id_beneficiario', 'Número Id. Beneficiario', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
-            if ($this->input->post('t_beneficiario') == '6') {
-                $this->form_validation->set_rules('nombre_beneficiario', 'Nombre Beneficiario', 'required|trim|xss_clean|max_length[100]');
-            }
-            $this->form_validation->set_rules('total', 'Valor del Egreso', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('total', 'Valor a transferir', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+            $this->form_validation->set_rules('sede_destino_hidden', 'Sede de destino', 'trim|xss_clean');
+            $this->form_validation->set_rules('tipo_destino_hidden', 'Tipo de destino', 'trim|xss_clean');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-
-            //Validamos que los usuarios si existan
-            $error_key_exists = "";
-            if (($this->input->post('t_beneficiario') != "default") && ($this->input->post('dni_beneficiario') != "default") && $this->input->post('id_beneficiario')) {
-                if ($this->input->post('t_beneficiario') == '1') {
-                    $t_usuario = 1; //Empleado
-                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
-                    if ($check_usuario != TRUE) {
-                        $error_key_exists = "<p>El Empleado ingresado, no existe en la Base de Datos.</p>";
-                    }
-                } else {
-                    if ($this->input->post('t_beneficiario') == '2') {
-                        $t_usuario = 2; //Titular
-                        $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
-                        if ($check_usuario != TRUE) {
-                            $error_key_exists = "<p>El Titular ingresado, no existe en la Base de Datos.</p>";
-                        }
-                    } else {
-                        if ($this->input->post('t_beneficiario') == '3') {
-                            $t_usuario = 3; //Alumno
-                            $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
-                            if ($check_usuario != TRUE) {
-                                $error_key_exists = "<p>El Alumno ingresado, no existe en la Base de Datos.</p>";
-                            }
-                        } else {
-                            if ($this->input->post('t_beneficiario') == '4') {
-                                $t_usuario = 4; //Cliente Prestatario
-                                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'), $t_usuario);
-                                if ($check_usuario != TRUE) {
-                                    $error_key_exists = "<p>El Cliente Prestatario ingresado, no existe en la Base de Datos.</p>";
-                                }
-                            } else {
-                                if ($this->input->post('t_beneficiario') == '5') {
-                                    $check_usuario = $this->select_model->proveedor_id_dni($this->input->post('id_beneficiario'), $this->input->post('dni_beneficiario'));
-                                    if ($check_usuario != TRUE) {
-                                        $error_key_exists = "<p>El Proveedor ingresado, no existe en la Base de Datos.</p>";
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
+            $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
@@ -98,18 +52,31 @@ class Transferencia extends CI_Controller {
                     $efectivo_retirado = round(str_replace(",", "", $this->input->post('efectivo_retirado')), 2);
                 }
                 if (round(($valor_retirado + $efectivo_retirado), 2) != $total) {
-                    $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
+                    $error_valores = "<p>La suma del valor retirado de la cuenta y el efectivo retirado de la caja de origen, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
                 }
             }
-
-            if ((($this->input->post('t_transferencia')) == "8") || (($this->input->post('t_transferencia')) == "9")) { //t_transferencia = 8: Otros
-                $this->form_validation->set_rules('descripcion', 'Descripcion', 'required|trim|xss_clean|max_length[255]');
+            $error_valores_destino = "";
+            if ($this->input->post('btn_consultar_destino') == "1") {
+                $total = round(str_replace(",", "", $this->input->post('total')), 2);
+                $tipo_destino = $this->input->post('tipo_destino_hidden');
+                if ($tipo_destino == "caja") {
+                    $valor_consignado = 0;
+                    $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+                    if (round($efectivo_ingresado, 2) != $total) {
+                        $error_valores_destino = "<p>El efectivo ingresado a la caja, deben ser igual al valor a transferir: $" . $this->input->post('total') . ", en vez de: $" . number_format($efectivo_ingresado, 2, '.', ',') . ".</p>";
+                    }
+                } else {
+                    $efectivo_ingresado = 0;
+                    $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+                    if (round(($valor_consignado + $efectivo_ingresado), 2) != $total) {
+                        $error_valores_destino = "<p>El valor consignado a la cuenta, deben ser igual al valor a transferir: $" . $this->input->post('total') . ", en vez de: $" . number_format($valor_consignado, 2, '.', ',') . ".</p>";
+                    }
+                }
             } else {
-                $this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|max_length[255]');
+                $error_valores_destino = "<p>Seleccione la sede de destino, el tipo de destino y oprima el botón consultar información de destino.</p>";
             }
-
-            if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_key_exists != "")) {
-                echo form_error('t_transferencia') . form_error('t_beneficiario') . form_error('dni_beneficiario') . form_error('id_beneficiario') . form_error('nombre_beneficiario') . $error_key_exists . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('descripcion');
+            if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_valores_destino != "")) {
+                echo form_error('total') . form_error('sede_destino_hidden') . form_error('tipo_destino_hidden') . form_error('valor_retirado') . form_error('efectivo_retirado') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . $error_valores_destino . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -254,7 +221,7 @@ class Transferencia extends CI_Controller {
                 if (($cuentas == TRUE)) {
                     foreach ($cuentas as $fila) {
                         echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="cuenta" id="cuenta" value="' . $fila->id . '"/></td>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="cuenta_destino" id="cuenta_destino" value="' . $fila->id . '"/></td>
                             <td>' . $fila->id . '</td>
                             <td class="text-center">' . $fila->t_cuenta . '</td>
                             <td>' . $fila->banco . '</td>
@@ -284,7 +251,7 @@ class Transferencia extends CI_Controller {
                     foreach ($cajas as $fila) {
                         $responsable = $this->select_model->empleado($fila->id_encargado, $fila->dni_encargado);
                         echo '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="caja" id="caja" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="caja_destino" id="caja_destino" value="' . $fila->sede . "-" . $fila->t_caja . '"/></td>
                             <td class="text-center">' . $fila->name_sede . '</td>
                             <td>' . $fila->name_t_caja . '</td>  
                             <td>' . $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1 . " " . '</td>  
