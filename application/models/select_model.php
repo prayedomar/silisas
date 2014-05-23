@@ -155,13 +155,29 @@ class Select_model extends CI_Model {
         }
     }
 
-    public function cuenta_banco_responsable($id_responsable, $dni_responsable) {
-        $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (vigente=1))))) ORDER BY cu.fecha_trans";
+    public function cuenta_banco_responsable_ingresar($id_responsable, $dni_responsable) {
+        $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (permiso_ingresar=1))))) ORDER BY cu.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
     }
+    
+    public function cuenta_banco_responsable_retirar($id_responsable, $dni_responsable) {
+        $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (permiso_retirar=1))))) ORDER BY cu.fecha_trans";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }
+    
+    public function cuenta_banco_responsable_consultar($id_responsable, $dni_responsable) {
+        $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (permiso_consultar=1))))) ORDER BY cu.fecha_trans";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function transferencia_pdte_responsable($id_responsable, $dni_responsable) {
         $SqlInfo = "SELECT tr.*, so.nombre nombre_sede_origen, sd.nombre nombre_sede_destino FROM transferencia tr LEFT JOIN cuenta cu ON tr.cuenta_destino = cu.id LEFT JOIN caja ca ON ((tr.sede_caja_destino=ca.sede) AND (tr.t_caja_destino=ca.t_caja)) JOIN sede so ON tr.sede_origen = so.id JOIN sede sd ON tr.sede_destino = sd.id where (((ca.id_encargado='" . $id_responsable . "')  AND (ca.dni_encargado='" . $dni_responsable . "') AND (ca.vigente=1)) OR ((cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (vigente=1)))))) ORDER BY tr.fecha_trans";

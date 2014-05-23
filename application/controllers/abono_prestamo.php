@@ -423,7 +423,7 @@ class Abono_prestamo extends CI_Controller {
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
-                $cuentas = $this->select_model->cuenta_banco_responsable($id_responsable, $dni_responsable);
+                $cuentas = $this->select_model->cuenta_banco_responsable_ingresar($id_responsable, $dni_responsable);
                 if (($cuentas == TRUE)) {
                     foreach ($cuentas as $fila) {
                         echo '<tr>
