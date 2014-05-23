@@ -31,14 +31,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function t_usuario_id($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('t_usuario');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     public function t_usuario_prestamo() {
         $this->db->where('visible_prestamo', 1);
@@ -71,22 +71,22 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function t_ingreso_id($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('t_ingreso');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }  
-    
+    }
+
     public function t_egreso_id($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('t_egreso');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }      
+    }
 
     public function t_plan_activo() {
         $this->db->where('vigente', 1);
@@ -162,14 +162,22 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
+    public function transferencia_pdte_responsable($id_responsable, $dni_responsable) {
+        $SqlInfo = "SELECT tr.*, so.nombre nombre_sede_origen, sd.nombre nombre_sede_destino FROM transferencia tr LEFT JOIN cuenta cu ON tr.cuenta_destino = cu.id LEFT JOIN caja ca ON ((tr.sede_caja_destino=ca.sede) AND (tr.t_caja_destino=ca.t_caja)) JOIN sede so ON tr.sede_origen = so.id JOIN sede sd ON tr.sede_destino = sd.id where (((ca.id_encargado='" . $id_responsable . "')  AND (ca.dni_encargado='" . $dni_responsable . "') AND (ca.vigente=1)) OR ((cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (vigente=1)))))) ORDER BY tr.fecha_trans";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }
+
     public function cuenta_banco_sede($sede_autorizada) {
         $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede WHERE ((sede='" . $sede_autorizada . "') AND (vigente=1))))) ORDER BY cu.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function caja_responsable($id_responsable, $dni_responsable) {
         $SqlInfo = "SELECT DISTINCT c.sede, c.t_caja, c.id_encargado, c.dni_encargado, c.observacion, c.fecha_trans, s.nombre AS name_sede, t.tipo AS name_t_caja FROM caja AS c, t_caja AS t, sede AS s WHERE ((c.t_caja=t.id) AND (c.sede=s.id) AND (c.vigente=1) AND ((c.id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "'))) ORDER BY c.fecha_trans";
@@ -178,14 +186,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function caja_sede($sede_autorizada) {
         $SqlInfo = "SELECT DISTINCT c.sede, c.t_caja, c.id_encargado, c.dni_encargado, c.observacion, c.fecha_trans, s.nombre AS name_sede, t.tipo AS name_t_caja FROM caja AS c, t_caja AS t, sede AS s WHERE ((c.t_caja=t.id) AND (c.sede=s.id) AND (c.vigente=1) AND (c.sede='" . $sede_autorizada . "')) ORDER BY c.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function sede_id($id) {
         $this->db->where('id', $id);
@@ -211,13 +219,29 @@ class Select_model extends CI_Model {
         }
     }
 
-    public function empleados_cuenta_bancaria($cuenta) {
-        $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta='" . $cuenta . "') AND (c.vigente=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
+    public function empleados_cuenta_bancaria_ingresar($cuenta) {
+        $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta='" . $cuenta . "') AND (c.permiso_ingresar=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
     }
+    
+    public function empleados_cuenta_bancaria_retirar($cuenta) {
+        $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta='" . $cuenta . "') AND (c.permiso_retirar=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }
+    
+    public function empleados_cuenta_bancaria_consultar($cuenta) {
+        $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta='" . $cuenta . "') AND (c.permiso_consultar=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function cuenta_banco_id($id) {
         $this->db->where('id', $id);
@@ -562,7 +586,7 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function cliente_id_dni($id, $dni) {
         $this->db->where('id', $id);
         $this->db->where('dni', $dni);
@@ -570,7 +594,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
 
     public function cliente_prestamo($id_responsable, $dni_responsable) {
         $where = "((id IN(SELECT id_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))))) AND (dni IN(SELECT dni_beneficiario FROM prestamo WHERE (((estado=1)||(estado=2)) AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')) OR (sede IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1))))))))";
@@ -588,7 +612,6 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
 
     public function sede_activa() {
         $this->db->where('estado  !=', 3);
@@ -596,7 +619,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function sede_activa_faltante($sede) {
         $this->db->where('id  !=', $sede);
@@ -831,14 +854,14 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function proveedor() {
         $this->db->order_by('razon_social', 'asc');
         $query = $this->db->get('proveedor');
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function ciudad_provincia($provincia) {
         $this->db->where('provincia', $provincia);
@@ -1074,7 +1097,7 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function nextId_retefuente_compras($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
@@ -1082,8 +1105,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
-    
+    }
+
     public function nextId_retefuente_ventas($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
@@ -1091,8 +1114,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
-    
+    }
+
     public function nextId_nota_credito($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
@@ -1100,8 +1123,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }     
-    
+    }
+
     public function nextId_pago_proveedor($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
@@ -1109,7 +1132,16 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
+
+    public function nextId_transferencia($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('transferencia');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
 
     public function empleado_sede_ppal($id, $dni) {
         $this->db->where('id', $id);
@@ -1123,15 +1155,15 @@ class Select_model extends CI_Model {
             }
         }
     }
-    
+
     public function adelanto_prefijo_id($prefijo, $id) {
         $SqlInfo = "SELECT DISTINCT ad.*, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad WHERE ((ad.prefijo='" . $prefijo . "') AND (ad.id='" . $id . "'))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    } 
-    
+    }
+
     public function abono_adelanto_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
@@ -1139,7 +1171,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }     
+    }
 
     public function factura_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
@@ -1158,7 +1190,7 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function recibo_caja_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
@@ -1167,7 +1199,7 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function ingreso_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
@@ -1175,7 +1207,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }     
+    }
 
     public function egreso_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
@@ -1185,7 +1217,7 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
-    
+
     public function pago_proveedor_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
@@ -1193,8 +1225,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }  
-    
+    }
+
     public function retefuente_compras_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
@@ -1202,8 +1234,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    } 
-    
+    }
+
     public function retefuente_ventas_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
@@ -1211,8 +1243,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
-    
+    }
+
     public function detalle_recibo_caja_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo_recibo_caja', $prefijo);
         $this->db->where('id_recibo_caja', $id);
@@ -1220,8 +1252,8 @@ class Select_model extends CI_Model {
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }   
-    
+    }
+
     public function nota_credito_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
@@ -1229,7 +1261,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }     
+    }
 
     public function empleado_sede_secundaria($id, $dni) {
         $SqlInfo = "SELECT * FROM empleado_x_sede AS a, sede AS b WHERE (a.sede_secundaria=b.id) AND (a.dni_empleado='" . $dni . "')AND (a.id_empleado='" . $id . "')AND (a.vigente=1)";
@@ -1268,12 +1300,12 @@ class Select_model extends CI_Model {
     //empleados cuya sede principal conincida con las sedes autorizadas para dicha cuenta.
     //empleados cuya sede principal o secundaria coinciden con la sede del responsable.
     //Empleados que no esten autorizados para esa sede, porq no tendria sentido volverlos a autorizar.
-    public function empleado_faltante_cuenta_bancaria_responsable($cuenta, $id_responsable, $dni_responsable) {
+    public function empleado_faltante_cuenta_bancaria_ingresar($cuenta, $id_responsable, $dni_responsable) {
         $where1 = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where1);
         $where2 = "sede_ppal IN(SELECT sede FROM cuenta_x_sede WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))";
         $this->db->where($where2);
-        $where3 = "not((id IN(SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))))";
+        $where3 = "not((id IN(SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (permiso_ingresar=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (permiso_ingresar=1)))))";
         $this->db->where($where3);
         $where4 = '(NOT(id=1 AND dni=1))';
         $this->db->where($where4);
@@ -1283,6 +1315,48 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
+    
+    //necesitamos los empleados activos.
+    //Solo puede autorizar a empleados que esten en las sedes del responsable
+    //empleados cuya sede principal conincida con las sedes autorizadas para dicha cuenta.
+    //empleados cuya sede principal o secundaria coinciden con la sede del responsable.
+    //Empleados que no esten autorizados para esa sede, porq no tendria sentido volverlos a autorizar.
+    public function empleado_faltante_cuenta_bancaria_retirar($cuenta, $id_responsable, $dni_responsable) {
+        $where1 = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
+        $this->db->where($where1);
+        $where2 = "sede_ppal IN(SELECT sede FROM cuenta_x_sede WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))";
+        $this->db->where($where2);
+        $where3 = "not((id IN(SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (permiso_retirar=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (permiso_retirar=1)))))";
+        $this->db->where($where3);
+        $where4 = '(NOT(id=1 AND dni=1))';
+        $this->db->where($where4);
+        $this->db->where('estado  !=', 3);
+        $query = $this->db->get('empleado');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }
+    
+    //necesitamos los empleados activos.
+    //Solo puede autorizar a empleados que esten en las sedes del responsable
+    //empleados cuya sede principal conincida con las sedes autorizadas para dicha cuenta.
+    //empleados cuya sede principal o secundaria coinciden con la sede del responsable.
+    //Empleados que no esten autorizados para esa sede, porq no tendria sentido volverlos a autorizar.
+    public function empleado_faltante_cuenta_bancaria_consultar($cuenta, $id_responsable, $dni_responsable) {
+        $where1 = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
+        $this->db->where($where1);
+        $where2 = "sede_ppal IN(SELECT sede FROM cuenta_x_sede WHERE ((cuenta='" . $cuenta . "')  AND (vigente=1)))";
+        $this->db->where($where2);
+        $where3 = "not((id IN(SELECT id_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (permiso_consultar=1)))) AND (dni IN (SELECT dni_encargado FROM cuenta_x_sede_x_empleado WHERE ((cuenta='" . $cuenta . "')  AND (permiso_consultar=1)))))";
+        $this->db->where($where3);
+        $where4 = '(NOT(id=1 AND dni=1))';
+        $this->db->where($where4);
+        $this->db->where('estado  !=', 3);
+        $query = $this->db->get('empleado');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function empleado_cargo($id, $dni) {
         $this->db->where('id', $id);

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail"> 
             <div class="row">
-                <legend>Autorizar y consultar, cuentas bancarias a empleados</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                <legend>Autorizar cuentas bancaria a empleados para <U>CONSULTAR TRANSACCIONES</U></legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                 <div class="col-xs-12">
                     <div class="overflow_tabla separar_div">
                         <label>Cuenta Bancaria<em class="required_asterisco">*</em></label>
@@ -29,7 +29,7 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Empleados Autorizados para utilizar la Cuenta</th>
+                                        <th class="text-center">Empleados Autorizados para <u>consultar las transacciones</u>  de la Cuenta</th>
                                         <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
@@ -61,7 +61,7 @@
             </div>
             <div class="modal-body">
                 <form role="form" method="post" action="{action_anular_empleado_cuenta}" id="form_anular_empleado_cuenta">
-                    <center><p>¿Está seguro que desea desautorizar la cuenta seleccionada para éste empleado?</p>
+                    <center><p>¿Está seguro que desea desautorizar la cuenta seleccionada para éste empleado?</p></center>
                         <input type="hidden" name="id_responsable" value={id_responsable} />
                         <input type="hidden" name="dni_responsable" value={dni_responsable} />
                         <input type="hidden" name="empleado_cuenta" id="empleado_cuenta"/>

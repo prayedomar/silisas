@@ -181,12 +181,12 @@
                                 <input type="hidden" id="action_validar" value={action_validar} />
                                 <input type="hidden" name="id_responsable" value={id_responsable} />
                                 <input type="hidden" name="dni_responsable" value={dni_responsable} />
-                                <input type="text" name="sede_destino_hidden" id="sede_destino_hidden" value="" />
-                                <input type="text" name="tipo_destino_hidden" id="tipo_destino_hidden" value="" />
-                                <input type="text" name="btn_consultar_destino" id="btn_consultar_destino" value="0" /><!--Sirve para saber si esta apretado o no-->
+                                <input type="hidden" name="sede_destino_hidden" id="sede_destino_hidden" value="" />
+                                <input type="hidden" name="tipo_destino_hidden" id="tipo_destino_hidden" value="" />
+                                <input type="hidden" name="btn_consultar_destino" id="btn_consultar_destino" value="0" /><!--Sirve para saber si esta apretado o no-->
                                 <center>
                                     <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->                                    
-                                    <button id="botonValidar" class="btn btn-success">Crear Egreso</button>                                 
+                                    <button id="botonValidar" class="btn btn-success"> Crear transferencia </button>                                 
                                     <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                     <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                                 </center>

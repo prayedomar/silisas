@@ -61,7 +61,9 @@ class Update_model extends CI_Model {
 
     public function cuenta_x_sede_x_empleado_todos($cuenta, $sede, $vigente) {
         $data = array(
-            'vigente' => $vigente
+            'permiso_ingresar' => $vigente,
+            'permiso_retirar' => $vigente,
+            'permiso_consultar' => $vigente            
         );
         $this->db->where('cuenta', $cuenta);
         $this->db->where('sede', $sede);
@@ -71,9 +73,9 @@ class Update_model extends CI_Model {
         }
     }
 
-    public function cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
+    public function cuenta_x_sede_x_empleado_ingresar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
         $data = array(
-            'vigente' => $vigente
+            'permiso_ingresar' => $vigente
         );
         $this->db->where('cuenta', $cuenta);
         $this->db->where('sede', $sede);
@@ -84,6 +86,34 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function cuenta_x_sede_x_empleado_retirar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
+        $data = array(
+            'permiso_retirar' => $vigente
+        );
+        $this->db->where('cuenta', $cuenta);
+        $this->db->where('sede', $sede);
+        $this->db->where('id_encargado', $id_encargado);
+        $this->db->where('dni_encargado', $dni_encargado);
+        $this->db->update('cuenta_x_sede_x_empleado', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+    
+    public function cuenta_x_sede_x_empleado_consultar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
+        $data = array(
+            'permiso_consultar' => $vigente
+        );
+        $this->db->where('cuenta', $cuenta);
+        $this->db->where('sede', $sede);
+        $this->db->where('id_encargado', $id_encargado);
+        $this->db->where('dni_encargado', $dni_encargado);
+        $this->db->update('cuenta_x_sede_x_empleado', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function matricula_cant_alumnos_mermar($matricula) {
         $this->db->set('cant_alumnos_disponibles', 'cant_alumnos_disponibles-1', FALSE);

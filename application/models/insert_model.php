@@ -341,7 +341,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
+    public function cuenta_x_sede_x_empleado_ingresar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
         $this->db->where('cuenta', $cuenta);
         $this->db->where('sede', $sede);
         $this->db->where('id_encargado', $id_encargado);
@@ -350,7 +350,7 @@ class Insert_model extends CI_Model {
         if ($query->num_rows() == 1) {
             //Si la sede ya existe actualizo el vigente a 1
             $data = array(
-                'vigente' => $vigente
+                'permiso_ingresar' => $vigente
             );
             $this->db->where('cuenta', $cuenta);
             $this->db->where('sede', $sede);
@@ -363,7 +363,7 @@ class Insert_model extends CI_Model {
                 'sede' => $sede,
                 'id_encargado' => $id_encargado,
                 'dni_encargado' => $dni_encargado,
-                'vigente' => $vigente
+                'permiso_ingresar' => $vigente
             );
             $this->db->insert('cuenta_x_sede_x_empleado', $data);
         }
@@ -371,6 +371,68 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function cuenta_x_sede_x_empleado_retirar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
+        $this->db->where('cuenta', $cuenta);
+        $this->db->where('sede', $sede);
+        $this->db->where('id_encargado', $id_encargado);
+        $this->db->where('dni_encargado', $dni_encargado);
+        $query = $this->db->get('cuenta_x_sede_x_empleado');
+        if ($query->num_rows() == 1) {
+            //Si la sede ya existe actualizo el vigente a 1
+            $data = array(
+                'permiso_retirar' => $vigente
+            );
+            $this->db->where('cuenta', $cuenta);
+            $this->db->where('sede', $sede);
+            $this->db->where('id_encargado', $id_encargado);
+            $this->db->where('dni_encargado', $dni_encargado);
+            $this->db->update('cuenta_x_sede_x_empleado', $data);
+        } else {
+            $data = array(
+                'cuenta' => $cuenta,
+                'sede' => $sede,
+                'id_encargado' => $id_encargado,
+                'dni_encargado' => $dni_encargado,
+                'permiso_retirar' => $vigente
+            );
+            $this->db->insert('cuenta_x_sede_x_empleado', $data);
+        }
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+    
+    public function cuenta_x_sede_x_empleado_consultar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
+        $this->db->where('cuenta', $cuenta);
+        $this->db->where('sede', $sede);
+        $this->db->where('id_encargado', $id_encargado);
+        $this->db->where('dni_encargado', $dni_encargado);
+        $query = $this->db->get('cuenta_x_sede_x_empleado');
+        if ($query->num_rows() == 1) {
+            //Si la sede ya existe actualizo el vigente a 1
+            $data = array(
+                'permiso_consultar' => $vigente
+            );
+            $this->db->where('cuenta', $cuenta);
+            $this->db->where('sede', $sede);
+            $this->db->where('id_encargado', $id_encargado);
+            $this->db->where('dni_encargado', $dni_encargado);
+            $this->db->update('cuenta_x_sede_x_empleado', $data);
+        } else {
+            $data = array(
+                'cuenta' => $cuenta,
+                'sede' => $sede,
+                'id_encargado' => $id_encargado,
+                'dni_encargado' => $dni_encargado,
+                'permiso_consultar' => $vigente
+            );
+            $this->db->insert('cuenta_x_sede_x_empleado', $data);
+        }
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function anular_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $id_responsable, $dni_responsable) {
         $data = array(
@@ -432,12 +494,13 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function asignar_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $id_responsable, $dni_responsable) {
+    public function asignar_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $tipo_permiso, $id_responsable, $dni_responsable) {
         $data = array(
             'cuenta' => $cuenta,
             'sede' => $sede,
             'id_encargado' => $id_encargado,
             'dni_encargado' => $dni_encargado,
+            'tipo_permiso'=>$tipo_permiso,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
@@ -449,12 +512,13 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function anular_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $id_responsable, $dni_responsable) {
+    public function anular_cuenta_x_sede_x_empleado($cuenta, $sede, $id_encargado, $dni_encargado, $tipo_permiso, $id_responsable, $dni_responsable) {
         $data = array(
             'cuenta' => $cuenta,
             'sede' => $sede,
             'id_encargado' => $id_encargado,
             'dni_encargado' => $dni_encargado,
+            'tipo_permiso' => $tipo_permiso,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
@@ -684,7 +748,7 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function nota_credito($prefijo, $id, $matricula, $autoriza, $motivo, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
@@ -693,7 +757,7 @@ class Insert_model extends CI_Model {
             'credito_debito' => '0',
             'matricula' => $matricula,
             'autoriza' => $autoriza,
-            'motivo' => $motivo,            
+            'motivo' => $motivo,
             'total' => $total,
             'cuenta_origen' => $cuenta_origen,
             'valor_retirado' => $valor_retirado,
@@ -712,7 +776,7 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function prestamo($prefijo, $id, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $total, $tasa_interes, $cant_cuotas, $cuota_fija, $fecha_desembolso, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
@@ -836,7 +900,41 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
+    public function transferencia($prefijo, $id, $credito_debito_origen, $credito_debito_destino, $total, $sede_origen, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $tipo_destino, $sede_destino, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $observacion, $est_traslado, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
+            't_trans' => '13',
+            'credito_debito_origen' => $credito_debito_origen,
+            'credito_debito_destino' => $credito_debito_destino,
+            'total' => $total,
+            'sede_origen' => $sede_origen,
+            'cuenta_origen' => $cuenta_origen,
+            'valor_retirado' => $valor_retirado,
+            'sede_caja_origen' => $sede_caja_origen,
+            't_caja_origen' => $t_caja_origen,
+            'efectivo_retirado' => $efectivo_retirado,
+            'tipo_destino' => $tipo_destino,
+            'sede_destino' => $sede_destino,
+            'cuenta_destino' => $cuenta_destino,
+            'valor_consignado' => $valor_consignado,
+            'sede_caja_destino' => $sede_caja_destino,
+            't_caja_destino' => $t_caja_destino,
+            'efectivo_ingresado' => $efectivo_ingresado,
+            'observacion' => $observacion,
+            'est_traslado' => $est_traslado,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('transferencia');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
     public function pago_proveedor($prefijo, $id, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
@@ -864,8 +962,8 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
-    
+    }
+
     public function retefuente_compras($prefijo, $id, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
@@ -893,8 +991,8 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }     
-    
+    }
+
     public function retefuente_ventas($prefijo, $id, $prefijo_factura, $id_factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
@@ -921,7 +1019,7 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }      
+    }
 
     public function ingreso($prefijo, $id, $t_ingreso, $t_depositante, $id_depositante, $dni_depositante, $d_v, $nombre_depositante, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $descripcion, $id_responsable, $dni_responsable) {
         $data = array(
@@ -1127,7 +1225,7 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function recibo_caja($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
@@ -1139,10 +1237,10 @@ class Insert_model extends CI_Model {
             'dni_a_nombre_de' => $dni_a_nombre_de,
             'd_v_a_nombre_de' => $d_v_a_nombre_de,
             'a_nombre_de' => $a_nombre_de,
-            'direccion_a_nombre_de' => $direccion_a_nombre_de,            
+            'direccion_a_nombre_de' => $direccion_a_nombre_de,
             'subtotal' => $subtotal,
             'int_mora' => $int_mora,
-            'descuento' => $descuento,            
+            'descuento' => $descuento,
             'sede_caja_destino' => $sede_caja_destino,
             't_caja_destino' => $t_caja_destino,
             'efectivo_ingresado' => $efectivo_ingresado,
@@ -1178,7 +1276,7 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function cambio_ejecutivo_matricula($matricula, $id_ejecutivo_old, $dni_ejecutivo_old, $id_ejecutivo_new, $dni_ejecutivo_new, $id_responsable, $dni_responsable) {
         $data = array(
@@ -1222,7 +1320,7 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function cambio_plan_matricula($matricula, $plan_old, $plan_new, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'matricula' => $matricula,
@@ -1238,6 +1336,6 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
 }

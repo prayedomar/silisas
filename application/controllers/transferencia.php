@@ -8,7 +8,6 @@ class Transferencia extends CI_Controller {
         $this->load->model('insert_model');
     }
 
-//Crear: Egreso
     function crear() {
         $data["tab"] = "crear_transferencia";
         $this->isLogin($data["tab"]);
@@ -88,21 +87,23 @@ class Transferencia extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
-            $t_transferencia = $this->input->post('t_transferencia');
-            $t_beneficiario = $this->input->post('t_beneficiario');
-            $dni_beneficiario = $this->input->post('dni_beneficiario');
-            $id_beneficiario = $this->input->post('id_beneficiario');
-            if ($dni_beneficiario != "6") {
-                $d_v = NULL;
-            } else {
-                $d_v = $this->input->post('d_v');
-            }
-            if (($t_beneficiario == 1) || ($t_beneficiario == 2) || ($t_beneficiario == 3) || ($t_beneficiario == 4) || ($t_beneficiario == 5)) {
-                $nombre_beneficiario = NULL;
-            } else {
-                $nombre_beneficiario = ucwords(strtolower($this->input->post('nombre_beneficiario')));
-            }
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
+            $sede_destino = $this->input->post('sede_destino_hidden');
+            $tipo_destino = $this->input->post('tipo_destino_hidden');
+            if ($tipo_destino == "caja") {
+                $tipo_destino = 1; //1 significa caja
+                list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja_destino'));
+                $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+                $cuenta_destino = NULL;
+                $valor_consignado = NULL;
+            } else {
+                $tipo_destino = 0; //0 significa cuenta
+                $cuenta_destino = $this->input->post('cuenta_destino');
+                $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+                $sede_caja_destino = NULL;
+                $t_caja_destino = NULL;
+                $efectivo_ingresado = NULL;
+            }
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
                 $cuenta_origen = $this->input->post('cuenta');
                 $valor_retirado = round(str_replace(",", "", $this->input->post('valor_retirado')), 2);
@@ -118,35 +119,30 @@ class Transferencia extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
-            $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
+            $observacion = ucfirst(strtolower($this->input->post('observacion')));
 
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
-            $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-            $prefijo_transferencia = $this->select_model->sede_id($sede)->prefijo_trans;
+            $sede_origen = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+            $prefijo_transferencia = $this->select_model->sede_id($sede_origen)->prefijo_trans;
             $id_transferencia = ($this->select_model->nextId_transferencia($prefijo_transferencia)->id) + 1;
-            $t_trans = 6; //Egreso
-            $credito_debito = 0; //Debito            
+            $credito_debito_origen = NULL; //Débito            
+            $credito_debito_destino = NULL; //Crédito   
+            $est_traslado = 2; //Pendiente
 
             $data["tab"] = "crear_transferencia";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "transferencia/crear";
-            $data['msn_recrear'] = "Crear otro Egreso";
+            $data['msn_recrear'] = "Crear otra tranferencia";
             $data['url_imprimir'] = base_url() . "transferencia/consultar_pdf/" . $prefijo_transferencia . "_" . $id_transferencia . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->transferencia($prefijo_transferencia, $id_transferencia, $credito_debito_origen, $credito_debito_destino, $total, $sede_origen, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $tipo_destino, $sede_destino, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $observacion, $est_traslado, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->transferencia($prefijo_transferencia, $id_transferencia, $t_transferencia, $t_beneficiario, $id_beneficiario, $dni_beneficiario, $d_v, $nombre_beneficiario, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, 1, $descripcion, $id_responsable, $dni_responsable);
-                if (isset($error1)) {
-                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                    $this->parser->parse('trans_error', $data);
-                } else {
-                    $this->parser->parse('trans_success_print', $data);
-                }
+                $this->parser->parse('trans_success_print', $data);
             }
         } else {
             redirect(base_url());
@@ -260,6 +256,42 @@ class Transferencia extends CI_Controller {
                     }
                 } else {
                     echo "";
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function aprobar() {
+        $data["tab"] = "aprobar_transferencia";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['base_url'] = base_url();
+        $data['action_validar'] = base_url() . "transferencia/validar_aprobar";
+        $data['action_crear'] = base_url() . "transferencia/insertar_aprobar";
+        $data['action_llena_transferencias'] = base_url() . "transferencia/llena_transferencias";
+        $this->parser->parse('transferencia/aprobar', $data);
+        $this->load->view('footer');
+    }
+
+    public function llena_transferencias() {
+        if ($this->input->is_ajax_request()) {
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $solicitudes = $this->select_model->transferencia_pdte_responsable($id_responsable, $dni_responsable);
+            if ($solicitudes == TRUE) {
+                foreach ($solicitudes as $fila) {
+                    echo '<tr>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="transferencia_prefijo_id"  value="' . $fila->prefijo . "+" . $fila->id . '"/></td>
+                            <td>' . number_format($fila->total, 2, '.', ',') . '</td>
+                            <td><p><b>Sede origen: </b></p></td>
+                            <td class="text-center">' . "" . '</td>
+                            <td>' . $fila->observacion . '</td>
+                            <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>
+                        </tr>';
                 }
             } else {
                 echo "";
