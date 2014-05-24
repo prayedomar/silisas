@@ -354,6 +354,7 @@ class Transferencia extends CI_Controller {
                 foreach ($transferencias as $fila) {
                     echo '<tr>
                             <td class="text-center"><input type="radio" class="exit_caution" name="transferencia_prefijo_id"  value="' . $fila->prefijo . "+" . $fila->id . '"/></td>
+                            <td>' . $fila->prefijo . $fila->id . '</td>
                             <td>$' . number_format($fila->total, 2, '.', ',') . '</td>
                             <td>
                             <p><b>Sede origen:</b> ' . $fila->nombre_sede_origen . '</p>

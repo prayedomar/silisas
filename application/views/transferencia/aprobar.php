@@ -11,7 +11,8 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">Escojer</th>                                            
+                                            <th class="text-center">Escojer</th> 
+                                            <th class="text-center">Id</th>
                                             <th class="text-center">Valor</th>
                                             <th class="text-center">Información de origen</th>
                                             <th class="text-center">Información de destino</th>

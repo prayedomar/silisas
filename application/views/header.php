@@ -154,7 +154,6 @@
         </script>
     </head>
     <body>
-        <?=invierte_date_time('2013-03-08 21:38:22')?>
         <div class="navbar navbar-default">
             <div class="navbar-header">
                 <a class="navbar-brand" href="<?= base_url() ?>" style="font-size: 40px;">SILI S.A.S</a>
@@ -220,13 +219,13 @@
                     <ul>
                         <li class="dropdown-header"><u> Transacciones</u></li>
                 <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>        
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>abono_matricula/crear">ABONO A MATRÍCULA</a></li>
                 <?php } ?>                                    
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/crear">Factura de venta</a></li>
                 <?php } ?>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>recibo_caja/crear">Recibo de Caja</a></li>     
                 <?php } ?>        
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
@@ -261,10 +260,10 @@
                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                 <?php } ?>                                       
                 <!--<?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                                                                         <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
+                                                                                                 <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                 <?php } ?>                                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                                                                         <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
+                                                                                                 <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
                 <?php } ?>-->
                 </ul>
                 </li>
@@ -356,7 +355,7 @@
                         <?php } ?>                             
                         <li class="divider"></li>                      
                         <li class="dropdown-header"><u> Transacciones</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>transferencia/aprobar">Transferencia intersede</a></li>
                 <?php } ?>                       
                 </ul>
@@ -614,17 +613,8 @@
                 </li>                    
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;"><span
-                                class="glyphicon glyphicon-bell"></span> Alertas <span class="label label-success">0</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#"><span class="label label-warning">7:00 AM</span> Hi :)</a></li>
-                            <li><a href="#"><span class="label label-warning">8:00 AM</span> How are you?</a></li>
-                            <li><a href="#"><span class="label label-warning">9:00 AM</span> What are you doing?</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" class="text-center">View All</a></li>
-                        </ul>
-                    </li>                    
+                    <!--llamamos al helper alertas_helper para que nos traiga el menu de alertas-->
+                    <?= menu_alertas() ?>                   
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 18px;"><span
                                 class="glyphicon glyphicon-user"></span> Opciones de usuario <b class="caret"></b></a>

@@ -52,8 +52,6 @@ class Transaccionesm extends CI_Model {
     }
 
     public function listar_transacciones($criterios, $inicio, $filasPorPagina) {
-
-
         $query = "SELECT mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
         $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
         $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
