@@ -180,7 +180,7 @@ class Select_model extends CI_Model {
     }    
 
     public function transferencia_pdte_responsable($id_responsable, $dni_responsable) {
-        $SqlInfo = "SELECT tr.*, so.nombre nombre_sede_origen, sd.nombre nombre_sede_destino FROM transferencia tr LEFT JOIN cuenta cu ON tr.cuenta_destino = cu.id LEFT JOIN caja ca ON ((tr.sede_caja_destino=ca.sede) AND (tr.t_caja_destino=ca.t_caja)) JOIN sede so ON tr.sede_origen = so.id JOIN sede sd ON tr.sede_destino = sd.id where (((ca.id_encargado='" . $id_responsable . "')  AND (ca.dni_encargado='" . $dni_responsable . "') AND (ca.vigente=1)) OR ((cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (vigente=1)))))) ORDER BY tr.fecha_trans";
+        $SqlInfo = "SELECT tr.*, so.nombre nombre_sede_origen, sd.nombre nombre_sede_destino, CONCAT(em.nombre1, ' ', em.nombre2, ' ', em.apellido1) nombre_remitente, t_ca_o.tipo nombre_caja_origen, t_ca_d.tipo nombre_caja_destino FROM transferencia tr LEFT JOIN cuenta cu ON tr.cuenta_destino = cu.id LEFT JOIN caja ca ON ((tr.sede_caja_destino=ca.sede) AND (tr.t_caja_destino=ca.t_caja)) LEFT JOIN t_caja t_ca_o ON tr.t_caja_origen = t_ca_o.id LEFT JOIN t_caja t_ca_d ON tr.t_caja_destino = t_ca_d.id JOIN sede so ON tr.sede_origen = so.id JOIN empleado em ON ((tr.id_responsable = em.id) and (tr.dni_responsable = em.dni)) JOIN sede sd ON tr.sede_destino = sd.id where ((((ca.id_encargado='" . $id_responsable . "')  AND (ca.dni_encargado='" . $dni_responsable . "') AND (ca.vigente=1)) OR ((cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (permiso_consultar=1)))))) AND (tr.est_traslado=2)) ORDER BY tr.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -1224,6 +1224,16 @@ class Select_model extends CI_Model {
             return $query->row();
         }
     }
+    
+
+    public function transferencia_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('transferencia');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function egreso_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);

@@ -63,7 +63,7 @@ class Update_model extends CI_Model {
         $data = array(
             'permiso_ingresar' => $vigente,
             'permiso_retirar' => $vigente,
-            'permiso_consultar' => $vigente            
+            'permiso_consultar' => $vigente
         );
         $this->db->where('cuenta', $cuenta);
         $this->db->where('sede', $sede);
@@ -86,7 +86,7 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function cuenta_x_sede_x_empleado_retirar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
         $data = array(
             'permiso_retirar' => $vigente
@@ -100,7 +100,7 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function cuenta_x_sede_x_empleado_consultar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
         $data = array(
             'permiso_consultar' => $vigente
@@ -113,7 +113,7 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function matricula_cant_alumnos_mermar($matricula) {
         $this->db->set('cant_alumnos_disponibles', 'cant_alumnos_disponibles-1', FALSE);
@@ -319,6 +319,18 @@ class Update_model extends CI_Model {
         $this->db->where('prefijo', $prefijo_factura);
         $this->db->where('id', $id_factura);
         $this->db->update('factura', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function transferencia_estado($prefijo_transferencia, $id_transferencia, $est_traslado) {
+        $data = array(
+            'est_traslado' => $est_traslado
+        );
+        $this->db->where('prefijo', $prefijo_transferencia);
+        $this->db->where('id', $id_transferencia);
+        $this->db->update('transferencia', $data);
         if ($error = $this->db->_error_message()) {
             return $error;
         }

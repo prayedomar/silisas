@@ -371,7 +371,7 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function cuenta_x_sede_x_empleado_retirar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
         $this->db->where('cuenta', $cuenta);
         $this->db->where('sede', $sede);
@@ -402,7 +402,7 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function cuenta_x_sede_x_empleado_consultar($cuenta, $sede, $id_encargado, $dni_encargado, $vigente) {
         $this->db->where('cuenta', $cuenta);
         $this->db->where('sede', $sede);
@@ -432,7 +432,7 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function anular_empleado_x_sede($id_empleado, $dni_empleado, $sede_secundaria, $id_responsable, $dni_responsable) {
         $data = array(
@@ -500,7 +500,7 @@ class Insert_model extends CI_Model {
             'sede' => $sede,
             'id_encargado' => $id_encargado,
             'dni_encargado' => $dni_encargado,
-            'tipo_permiso'=>$tipo_permiso,
+            'tipo_permiso' => $tipo_permiso,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable
         );
@@ -1333,6 +1333,22 @@ class Insert_model extends CI_Model {
         $this->db->set($data);
         $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
         $this->db->insert('cambio_plan_matricula');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function aprobar_transferencia($prefijo_transferencia, $id_transferencia, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo_transferencia' => $prefijo_transferencia,
+            'id_transferencia' => $id_transferencia,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('aprobar_transferencia');
         if ($error = $this->db->_error_message()) {
             return $error;
         }

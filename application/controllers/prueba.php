@@ -10,11 +10,16 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        for ($i = 0; $i <= 625; $i++) {
-            echo 'With Formas' . $i . '<br>
-            .Fill.ForeColor.RGB = RGB(220, 230, 242)<br>
-        End With<br>';
-        }
+        $this->insert_model->cuenta_x_sede("999999999999", 1, 0);
+        $this->insert_model->cuenta_x_sede_x_empleado_ingresar("999999999999", 1, 1, 1, 1);
+        $this->insert_model->cuenta_x_sede_x_empleado_retirar("999999999999", 1, 1, 1, 1);
+        $this->insert_model->cuenta_x_sede_x_empleado_consultar("999999999999", 1, 1, 1, 1);
+
+        $this->insert_model->cuenta_x_sede("238478762342", 1, 0);
+        $this->insert_model->cuenta_x_sede_x_empleado_ingresar("238478762342", 1, 1, 1, 1);
+        $this->insert_model->cuenta_x_sede_x_empleado_retirar("238478762342", 1, 1, 1, 1);
+        $this->insert_model->cuenta_x_sede_x_empleado_consultar("238478762342", 1, 1, 1, 1);
+        echo "ok";
     }
 
 }

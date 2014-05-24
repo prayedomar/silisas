@@ -154,6 +154,7 @@
         </script>
     </head>
     <body>
+        <?=invierte_date_time('2013-03-08 21:38:22')?>
         <div class="navbar navbar-default">
             <div class="navbar-header">
                 <a class="navbar-brand" href="<?= base_url() ?>" style="font-size: 40px;">SILI S.A.S</a>
