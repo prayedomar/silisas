@@ -22,7 +22,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Sede Actual<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes encargadas.</p>                                
+                                <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes autorizadas.</p>                                
                                 <select name="sede_actual" id="sede_actual" class="form-control exit_caution">
                                     <option value="default">Seleccione Sede</option>
                                     {sede}

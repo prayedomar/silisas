@@ -223,7 +223,7 @@ class Nota_credito extends CI_Controller {
         $data["tab"] = "consultar_nota_credito";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['sede'] = $this->select_model->sede();
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "nota_credito/consultar_validar";
         $data['action_recargar'] = base_url() . "nota_credito/consultar";
@@ -270,7 +270,7 @@ class Nota_credito extends CI_Controller {
         list($prefijo, $id) = explode("_", $nota_credito_prefijo_id);
         $nota_credito = $this->select_model->nota_credito_prefijo_id($prefijo, $id);
         if ($nota_credito == TRUE) {
-            $reponsable = $this->select_model->empleado($nota_credito->id_responsable, $nota_credito->dni_responsable);
+            $responsable = $this->select_model->empleado($nota_credito->id_responsable, $nota_credito->dni_responsable);
             $matricula = $this->select_model->matricula_id($nota_credito->matricula);
             $dni_abreviado_titular = $this->select_model->t_dni_id($matricula->dni_titular)->abreviacion;
             $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);
@@ -359,7 +359,7 @@ class Nota_credito extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($nota_credito->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
@@ -462,7 +462,7 @@ class Nota_credito extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($nota_credito->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'

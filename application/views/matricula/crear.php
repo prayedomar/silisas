@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Sede Principal<em class="required_asterisco">*</em></label>
-                                        <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes encargadas.</p>                                
+                                        <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes autorizadas.</p>                                
                                         <select name="sede_ppal" id="sede_ppal" class="form-control exit_caution">
                                             <option value="default">Seleccione Sede Principal</option>
                                             {sede_ppal}

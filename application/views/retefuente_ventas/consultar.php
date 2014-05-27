@@ -7,6 +7,7 @@
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Consecutivo de la retención</legend>
+                            <p class="help-block"><B>> </B>Sólo aparecerán los prefijos de cada una de sus sedes autorizadas.</p> 
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">

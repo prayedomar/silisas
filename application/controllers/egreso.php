@@ -249,7 +249,7 @@ class Egreso extends CI_Controller {
         $data["tab"] = "consultar_egreso";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['sede'] = $this->select_model->sede();
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['error_consulta'] = "";        
         $data['action_crear'] = base_url() . "egreso/consultar_validar";
         $data['action_recargar'] = base_url() . "egreso/consultar";
@@ -296,7 +296,7 @@ class Egreso extends CI_Controller {
         list($prefijo, $id) = explode("_", $egreso_prefijo_id);
         $egreso = $this->select_model->egreso_prefijo_id($prefijo, $id);
         if ($egreso == TRUE) {
-            $reponsable = $this->select_model->empleado($egreso->id_responsable, $egreso->dni_responsable);
+            $responsable = $this->select_model->empleado($egreso->id_responsable, $egreso->dni_responsable);
             $dni_abreviado_beneficiario = $this->select_model->t_dni_id($egreso->dni_beneficiario)->abreviacion;
             if (($egreso->d_v) == (NULL)) {
                 $d_v = "";
@@ -358,7 +358,7 @@ class Egreso extends CI_Controller {
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
             $html .= 'p.b4{line-height:23px;}';
@@ -415,7 +415,7 @@ class Egreso extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($egreso->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
@@ -456,7 +456,7 @@ class Egreso extends CI_Controller {
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
             $html .= 'p.b4{line-height:23px;}';
@@ -513,7 +513,7 @@ class Egreso extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($egreso->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'

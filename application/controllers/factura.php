@@ -437,7 +437,7 @@ class Factura extends CI_Controller {
         $data["tab"] = "consultar_factura";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['sede'] = $this->select_model->sede();
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "factura/consultar_validar";
         $data['action_recargar'] = base_url() . "factura/consultar";
@@ -485,7 +485,7 @@ class Factura extends CI_Controller {
         $factura = $this->select_model->factura_prefijo_id($prefijo, $id);
         $detalles_factura = $this->select_model->detalle_factura_prefijo_id($prefijo, $id);
         if (($factura == TRUE) && ($detalles_factura == TRUE)) {
-            $reponsable = $this->select_model->empleado($factura->id_responsable, $factura->dni_responsable);
+            $responsable = $this->select_model->empleado($factura->id_responsable, $factura->dni_responsable);
             $dni_abreviado = $this->select_model->t_dni_id($factura->dni_a_nombre_de)->abreviacion;
             if (($factura->d_v_a_nombre_de) == (NULL)) {
                 $d_v = "";
@@ -527,8 +527,6 @@ class Factura extends CI_Controller {
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';
-            $html .= 'td.c9{width:177px;}';
-            $html .= 'td.c5{width:128px;}';
             $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
             $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
             $html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
@@ -577,7 +575,7 @@ class Factura extends CI_Controller {
                     . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $factura->a_nombre_de . '</td>'
@@ -650,8 +648,6 @@ class Factura extends CI_Controller {
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';
-            $html .= 'td.c9{width:177px;}';
-            $html .= 'td.c5{width:128px;}';
             $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
             $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
             $html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
@@ -700,7 +696,7 @@ class Factura extends CI_Controller {
                     . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $factura->a_nombre_de . '</td>'

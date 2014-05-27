@@ -13,8 +13,8 @@ if (!function_exists('get_transferencias_pdtes')) {
             $ci = & get_instance();
             $ci->load->model('transferenciam');
             $transferencias = $ci->transferenciam->transferencia_pdte_responsable_rapida();
-            $cantidad_transacciones = $ci->transferenciam->cantidad_transferencia_pdte_responsable_rapida();
-            $cantidad = $cantidad_transacciones[0]->cantidad;
+            $cantidad_transferencias = $ci->transferenciam->cantidad_transferencia_pdte_responsable_rapida();
+            $cantidad = $cantidad_transferencias[0]->cantidad;
             if ($cantidad == 0) {
                 $menu = '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;"><span class="glyphicon glyphicon-bell">
                          </span> Alertas <span class="label label-success">0</span></a><ul class="dropdown-menu">

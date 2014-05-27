@@ -252,7 +252,7 @@ class Abono_adelanto extends CI_Controller {
         $data["tab"] = "consultar_abono_adelanto";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['sede'] = $this->select_model->sede();
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "abono_adelanto/consultar_validar";
         $data['action_recargar'] = base_url() . "abono_adelanto/consultar";
@@ -302,7 +302,7 @@ class Abono_adelanto extends CI_Controller {
         if ($abono_adelanto == TRUE) {
             $empleado = $this->select_model->empleado($adelanto->id_empleado, $adelanto->dni_empleado);
             $dni_abreviado_empleado = $this->select_model->t_dni_id($adelanto->dni_empleado)->abreviacion;
-            $reponsable = $this->select_model->empleado($abono_adelanto->id_responsable, $abono_adelanto->dni_responsable);
+            $responsable = $this->select_model->empleado($abono_adelanto->id_responsable, $abono_adelanto->dni_responsable);
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
@@ -386,7 +386,7 @@ class Abono_adelanto extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($abono_adelanto->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table width="100%" border="1">'
                     . '<tr>'
@@ -482,7 +482,7 @@ class Abono_adelanto extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($abono_adelanto->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table width="100%" border="1">'
                     . '<tr>'

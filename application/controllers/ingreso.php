@@ -252,7 +252,7 @@ class Ingreso extends CI_Controller {
         $data["tab"] = "consultar_ingreso";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['sede'] = $this->select_model->sede();
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['error_consulta'] = "";        
         $data['action_crear'] = base_url() . "ingreso/consultar_validar";
         $data['action_recargar'] = base_url() . "ingreso/consultar";
@@ -299,7 +299,7 @@ class Ingreso extends CI_Controller {
         list($prefijo, $id) = explode("_", $ingreso_prefijo_id);
         $ingreso = $this->select_model->ingreso_prefijo_id($prefijo, $id);
         if ($ingreso == TRUE) {
-            $reponsable = $this->select_model->empleado($ingreso->id_responsable, $ingreso->dni_responsable);
+            $responsable = $this->select_model->empleado($ingreso->id_responsable, $ingreso->dni_responsable);
             $dni_abreviado_depositante = $this->select_model->t_dni_id($ingreso->dni_depositante)->abreviacion;
             if (($ingreso->d_v) == (NULL)) {
                 $d_v = "";
@@ -418,7 +418,7 @@ class Ingreso extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($ingreso->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
@@ -516,7 +516,7 @@ class Ingreso extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($ingreso->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'

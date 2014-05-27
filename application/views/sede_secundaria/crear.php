@@ -156,7 +156,7 @@
             if ($('#div_checkbox_secundarias').is(':empty')) {
                 $("#trans_error").modal('show');
             } else {
-                $("#div_checkbox_secundarias").append('<p class="help-block"><B>> </B>Sólo aparecerán las sedes faltantes del empleado y cada una de sus sedes encargadas.</p>');
+                $("#div_checkbox_secundarias").append('<p class="help-block"><B>> </B>Sólo aparecerán las sedes faltantes del empleado y cada una de sus sedes autorizadas.</p>');
                 $("#empleado_select").attr('value', $(empleado_sedes).val());
                 $("#alert_modal_3").removeAttr('class');
                 $("#alert_modal_3  > *").remove();

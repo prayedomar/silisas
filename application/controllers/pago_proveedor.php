@@ -181,7 +181,7 @@ class Pago_proveedor extends CI_Controller {
         $data["tab"] = "consultar_pago_proveedor";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['sede'] = $this->select_model->sede();
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "pago_proveedor/consultar_validar";
         $data['action_recargar'] = base_url() . "pago_proveedor/consultar";
@@ -228,7 +228,7 @@ class Pago_proveedor extends CI_Controller {
         list($prefijo, $id) = explode("_", $pago_proveedor_prefijo_id);
         $pago_proveedor = $this->select_model->pago_proveedor_prefijo_id($prefijo, $id);
         if ($pago_proveedor == TRUE) {
-            $reponsable = $this->select_model->empleado($pago_proveedor->id_responsable, $pago_proveedor->dni_responsable);
+            $responsable = $this->select_model->empleado($pago_proveedor->id_responsable, $pago_proveedor->dni_responsable);
             $proveedor = $this->select_model->proveedor_id_dni($pago_proveedor->id_proveedor, $pago_proveedor->dni_proveedor);
             $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
             if (($proveedor->d_v) == (NULL)) {
@@ -320,7 +320,7 @@ class Pago_proveedor extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($pago_proveedor->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'

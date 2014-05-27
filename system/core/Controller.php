@@ -57,12 +57,12 @@ class CI_Controller {
                     redirect(base_url() . 'login');
                 break;   
             case "aux_admon":
-                $privilegios = array("cambiar_password", "crear_empleado", "crear_despachar_placa", "crear_abono_matricula", "crear_factura", "crear_recibo_caja", "aprobar_transferencia", "editar_alumno", "consultar_sede", "consultar_salon", "consultar_empleado",  "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_matricula", "consultar_liquidar_comisiones", "consultar_factura", "consultar_recibo_caja");
+                $privilegios = array("cambiar_password", "crear_empleado", "crear_despachar_placa", "crear_abono_matricula", "crear_factura", "crear_recibo_caja", "aprobar_transferencia", "editar_alumno", "consultar_sede", "consultar_salon", "consultar_empleado",  "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_matricula", "consultar_liquidar_comisiones", "consultar_factura", "consultar_recibo_caja", "consultar_transferencia");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break;        
             case "cartera":
-                $privilegios = array("cambiar_password", "crear_abono_matricula", "crear_factura", "crear_recibo_caja", "aprobar_transferencia", "consultar_sede", "consultar_salon", "consultar_empleado", "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_matricula", "consultar_liquidar_comisiones", "consultar_factura", "consultar_recibo_caja");
+                $privilegios = array("cambiar_password", "crear_abono_matricula", "crear_factura", "crear_recibo_caja", "aprobar_transferencia", "consultar_sede", "consultar_salon", "consultar_empleado", "consultar_titular", "consultar_alumno", "consultar_proveedor", "consultar_matricula", "consultar_liquidar_comisiones", "consultar_factura", "consultar_recibo_caja", "consultar_transferencia");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break; 
@@ -92,7 +92,7 @@ class CI_Controller {
                     redirect(base_url() . 'login');
                 break;   
             case "secretaria":
-                $privilegios = array("cambiar_password", "crear_abono_matricula", "crear_factura", "crear_recibo_caja", "aprobar_transferencia", "editar_alumno", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno", "consultar_matricula", "consultar_factura", "consultar_recibo_caja");
+                $privilegios = array("cambiar_password", "crear_abono_matricula", "crear_factura", "crear_recibo_caja", "aprobar_transferencia", "editar_alumno", "consultar_sede", "consultar_salon", "consultar_titular", "consultar_alumno", "consultar_matricula", "consultar_factura", "consultar_recibo_caja", "consultar_transferencia");
                 if (!in_array($tab, $privilegios))
                     redirect(base_url() . 'login');
                 break;   

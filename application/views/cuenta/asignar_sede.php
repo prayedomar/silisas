@@ -174,7 +174,7 @@
             if ($('#div_checkbox_sedes_cuenta').is(':empty')) {
                 $("#trans_error").modal('show');
             } else {
-                $("#div_checkbox_sedes_cuenta").append('<p class="help-block"><B>> </B>Sólo aparecerán las sedes faltantes de la cuenta y cada una de sus sedes encargadas.</p>');
+                $("#div_checkbox_sedes_cuenta").append('<p class="help-block"><B>> </B>Sólo aparecerán las sedes faltantes de la cuenta y cada una de sus sedes autorizadas.</p>');
                 $("#cuenta_select").attr('value', $("input[name='cuenta']:checked").val());
                 $("#alert_modal_3").removeAttr('class');
                 $("#alert_modal_3  > *").remove();

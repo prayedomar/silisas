@@ -7,6 +7,7 @@ class Transferencia extends CI_Controller {
         $this->load->model('select_model');
         $this->load->model('insert_model');
         $this->load->model('update_model');
+        $this->load->model('transferenciam');        
     }
 
     function crear() {
@@ -143,7 +144,7 @@ class Transferencia extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $this->parser->parse('trans_success_print', $data);
+                $this->parser->parse('trans_success', $data);
             }
         } else {
             redirect(base_url());
@@ -297,7 +298,7 @@ class Transferencia extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             list($prefijo_transferencia, $id_transferencia) = explode("+", $this->input->post('transferencia_prefijo_id'));
-            $transferencia = $this->select_model->transferencia_prefijo_id($prefijo_transferencia, $id_transferencia);
+            $transferencia = $this->transferenciam->transferencia_prefijo_id($prefijo_transferencia, $id_transferencia);
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
@@ -349,7 +350,7 @@ class Transferencia extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
-            $transferencias = $this->select_model->transferencia_pdte_responsable($id_responsable, $dni_responsable);
+            $transferencias = $this->transferenciam->transferencia_pdte_responsable($id_responsable, $dni_responsable);
             if ($transferencias == TRUE) {
                 foreach ($transferencias as $fila) {
                     echo '<tr>
@@ -412,10 +413,28 @@ class Transferencia extends CI_Controller {
         $id = $this->input->post('id');
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
-            $transferencia = $this->select_model->transferencia_prefijo_id($prefijo, $id);
+            $transferencia = $this->transferenciam->transferencia_prefijo_id($prefijo, $id);
             if ($transferencia == TRUE) {
-                if ($transferencia->vigente == 0) {
+                if ($transferencia->est_traslado == 3) {
                     $error_transaccion = "La transferencia intersede, se encuentra anulada.";
+                } else {
+                    if ($transferencia->est_traslado == 2) {
+                        $error_transaccion = "La transferencia intersede, se encuentra pendiente por ser autorizada.";
+                    } else {
+                        if (($_SESSION["perfil"] == "admon_sistema") || ($_SESSION["perfil"] == "directio") || ($_SESSION["perfil"] == "admon_sede") || ($_SESSION["perfil"] == "aux_admon")) {
+                            $cantidad_transferencia = $this->transferenciam->transferencia_aurotorizada_directivos($prefijo, $id);
+                            $cantidad = $cantidad_transferencia[0]->cantidad;
+                            if ($cantidad == 0) {
+                                $error_transaccion = "Usted no se encuentra autorizado para consultar ésta transferencia intersede.";
+                            }
+                        } else { //El caso de la secretaria y la cartera
+                            $cantidad_transferencia = $this->transferenciam->transferencia_aurotorizada_empleados($prefijo, $id);
+                            $cantidad = $cantidad_transferencia[0]->cantidad;
+                            if ($cantidad == 0) {
+                                $error_transaccion = "Usted no se encuentra autorizado para consultar ésta transferencia intersede.";
+                            }
+                        }
+                    }
                 }
             } else {
                 $error_transaccion = "La transferencia intersede, no existe en la base de datos.";
@@ -441,44 +460,10 @@ class Transferencia extends CI_Controller {
         $transferencia_prefijo_id = $id_transferencia;
         $id_transferencia_limpio = str_replace("_", " ", $transferencia_prefijo_id);
         list($prefijo, $id) = explode("_", $transferencia_prefijo_id);
-        $transferencia = $this->select_model->transferencia_prefijo_id($prefijo, $id);
+        $transferencia = $this->transferenciam->transferencia_prefijo_id($prefijo, $id);
         if ($transferencia == TRUE) {
-            $reponsable = $this->select_model->empleado($transferencia->id_responsable, $transferencia->dni_responsable);
-            $dni_abreviado_beneficiario = $this->select_model->t_dni_id($transferencia->dni_beneficiario)->abreviacion;
-            if (($transferencia->d_v) == (NULL)) {
-                $d_v = "";
-            } else {
-                $d_v = " - " . $transferencia->d_v;
-            }
-            $t_transferencia = $this->select_model->t_transferencia_id($transferencia->t_transferencia)->tipo;
-            $t_beneficiario = $this->select_model->t_usuario_id($transferencia->t_beneficiario)->tipo;
-            if ($transferencia->t_beneficiario == '1') {
-                $beneficiario = $this->select_model->empleado($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
-                $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
-            } else {
-                if ($transferencia->t_beneficiario == '2') {
-                    $beneficiario = $this->select_model->titular($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
-                    $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
-                } else {
-                    if ($transferencia->t_beneficiario == '3') {
-                        $beneficiario = $this->select_model->alumno($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
-                        $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
-                    } else {
-                        if ($transferencia->t_beneficiario == '4') {
-                            $beneficiario = $this->select_model->cliente_id_dni($transferencia->id_beneficiario, $transferencia->dni_beneficiario);
-                            $nombre_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
-                        } else {
-                            if ($transferencia->t_beneficiario == '5') {
-                                $nombre_beneficiario = $this->select_model->proveedor_id_dni($transferencia->id_beneficiario, $transferencia->dni_beneficiario)->razon_social;
-                            } else {
-                                $nombre_beneficiario = $transferencia->nombre_beneficiario;
-                            }
-                        }
-                    }
-                }
-            }
-
-
+            $responsable = $this->select_model->empleado($transferencia->id_responsable, $transferencia->dni_responsable);
+            $aprobacion_transferencia = $this->transferenciam->aprobar_transferencia_prefijo_id($prefijo, $id);
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -505,196 +490,110 @@ class Transferencia extends CI_Controller {
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'p.b4{line-height:23px;}';
-            $html .= 'p.b5{font-size:14px;}';
-            $html .= 'p.b6{line-height:26px;}';
             $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:85px;}';
             $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:150px;}';
-            $html .= 'td.c4{width:270px;}';
+            $html .= 'td.c3{width:170px;}';
+            $html .= 'td.c4{width:195px;}';
             $html .= 'td.c5{width:160px;}';
             $html .= 'td.c6{width:150px;}';
             $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:50px;}';
+            $html .= 'td.c8{line-height:40px;}';
             $html .= 'td.c9{background-color:#F5F5F5;}';
             $html .= 'td.c10{font-size:4px;line-height:5px;}';
-            $html .= 'td.c11{font-size:12px;}';
             $html .= 'td.c12{line-height:25px;}';
-            $html .= 'td.c13{width:580px;}';
+            $html .= 'td.c13{line-height:25px;}';
             $html .= 'td.c14{width:365px;}';
+            $html .= 'td.c15{width:420px;}';
             $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;line-height:35px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
             $html .= 'td.c25{border-top-color:#000000;}';
             $html .= 'td.c26{border-bottom-color:#000000;}';
             $html .= 'td.c27{border-left-color:#000000;}';
             $html .= 'td.c28{border-right-color:#000000;}';
-            $html .= 'td.a1{text-align:left;}';
             $html .= 'td.a2{text-align:center;}';
-            $html .= 'th.a1{text-align:left;}';
             $html .= 'th.a2{text-align:center;}';
             $html .= 'table{border-spacing: 0;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
-                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
-                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
-                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
-                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
-                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
-                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
-                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
-                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
-                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
-                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '<td class="c1 a2" rowspan="3" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '</td>'
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE EGRESO</td>'
+                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE<BR>TRANSFERENCIA INTERSEDE</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_transferencia_limpio . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($transferencia->fecha_trans)) . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c3 c12"></td><td class="c4 c12"></td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del transferencia:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($transferencia->total, 1, '.', ',') . '</b></td>'
+                    . '<td class="c15 c12"></td>'
+                    . '<td class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor transferido:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($transferencia->total, 1, '.', ',') . '</b></td>'
                     . '</tr>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Tipo beneficiario:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $t_beneficiario . '</td>'
-                    . '</tr></table>'
+                    . '</table>'
                     . '<table>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de transferencia:</b></td><td  colspan="3" class="c23 c25 c26  c27 c28 c12 c13">' . $t_transferencia . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Fecha de emisión:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . date("Y-m-d", strtotime($transferencia->fecha_trans)) . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Fecha de aprobación:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . date("Y-m-d", strtotime($aprobacion_transferencia->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre beneficiario:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nombre_beneficiario . '</td>'
-                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento beneficiario:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_beneficiario . ' ' . $transferencia->id_beneficiario . $d_v . '</td>'
-                    . '</tr>';
-            if (($transferencia->descripcion) != "") {
-                $html .= '<tr>'
-                        . '<td colspan="4" class="c23 c25 c26 c27 c28">'
-                        . '<table>'
-                        . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Descripción del transferencia: </b>' . $transferencia->descripcion . '.</td>'
-                        . '</tr><tr><td class="c10"> </td></tr>'
-                        . '</table>'
-                        . '</td>'
-                        . '</tr>';
+                    . '<td colspan="4" class="a2 c9 c13 c14 c25 c27 c28"><b>INFORMACIÓN DE ORIGEN</b></td>'
+                    . '<td colspan="4" class="a2 c9 c13 c14 c25 c27 c28"><b>INFORMACIÓN DE DESTINO</b></td>'
+                    . '</tr>'
+                    . '<tr><td colspan="2" class="c14 c25 c26 c27 c28">'
+                    . '<table>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Sede origen: </b>' . $transferencia->nombre_sede_origen . '.</td></tr>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Remitente: </b>' . $transferencia->nombre_remitente . '.</td></tr>';
+            if ($transferencia->sede_caja_origen != NULL) {
+                $html .= '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Nombre de la caja: </b>' . $transferencia->nombre_caja_origen . '.</td></tr>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Efectivo retirado de caja: </b>' . number_format($transferencia->efectivo_retirado, 2, '.', ',') . '.</td></tr>';
             }
-            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma beneficiario: _____________________________</p></td>'
-                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
-                    . '</table><p class="b3">- Copia para el beneficiario -</p>';
-
+            if ($transferencia->cuenta_origen != NULL) {
+                $html .= '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Número de la cuenta: </b>' . $transferencia->cuenta_origen . '.</td></tr>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Valor retirado de cuenta: </b>' . number_format($transferencia->valor_retirado, 2, '.', ',') . '.</td></tr>';
+            }
+            if (($transferencia->observacion) != "") {
+                $html .= '<tr><td class="c10"> </td></tr>'
+                         .'<tr><td class="a3"><b>Observacion de transferencia: </b>' . $transferencia->observacion . '</td></tr>';
+            }            
+            $html .= '<tr><td class="c10"> </td></tr></table></td>'
+                    . '<td colspan="2" class="c14 c25 c26 c27 c28">'
+                    . '<table>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Sede destino: </b>' . $transferencia->nombre_sede_destino . '.</td></tr>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Empleado que aprueba: </b>' . $aprobacion_transferencia->empleado_autoriza . '.</td></tr>';                    
+            if ($transferencia->tipo_destino == 1) {
+                $html .= '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Tipo destino: </b> Caja.</td></tr>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Nombre de la caja: </b>' . $transferencia->nombre_caja_destino . '.</td></tr>'                        
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Efectivo enviado a la caja: </b>' . number_format($transferencia->efectivo_ingresado, 2, '.', ',') . '.</td></tr>';
+            } else {
+                $html .= '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Tipo destino: </b> Cuenta.</td></tr>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Número de la cuenta: </b>' . $transferencia->cuenta_destino . '.</td></tr>'
+                    . '<tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="a3"><b>Valor enviado a la cuenta: </b>' . number_format($transferencia->valor_consignado, 2, '.', ',') . '.</td></tr>';
+            }
+            if (($aprobacion_transferencia->observacion) != "") {
+                $html .= '<tr><td class="c10"> </td></tr>'
+                         .'<tr><td class="a3"><b>Observacion de aprobación: </b>' . $aprobacion_transferencia->observacion . '</td></tr>';
+            }            
+            $html .= '<tr><td class="c10"> </td></tr></table></td></tr>'
+                    . '</table>';
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
 
-            $pdf->lastPage();
-            $pdf->AddPage();
-            $html = '';
-            $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
-            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'p.b4{line-height:23px;}';
-            $html .= 'p.b5{font-size:14px;}';
-            $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:85px;}';
-            $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:150px;}';
-            $html .= 'td.c4{width:270px;}';
-            $html .= 'td.c5{width:160px;}';
-            $html .= 'td.c6{width:150px;}';
-            $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:50px;}';
-            $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';
-            $html .= 'td.c11{font-size:12px;}';
-            $html .= 'td.c12{line-height:25px;}';
-            $html .= 'td.c13{width:580px;}';
-            $html .= 'td.c14{width:365px;}';
-            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;line-height:35px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-            $html .= 'td.c25{border-top-color:#000000;}';
-            $html .= 'td.c26{border-bottom-color:#000000;}';
-            $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';
-            $html .= 'td.a1{text-align:left;}';
-            $html .= 'td.a2{text-align:center;}';
-            $html .= 'th.a1{text-align:left;}';
-            $html .= 'th.a2{text-align:center;}';
-            $html .= 'table{border-spacing: 0;}';
-            $html .= '</style>';
-            $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
-                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
-                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
-                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
-                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
-                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
-                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
-                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
-                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
-                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
-                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
-                    . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
-                    . '<br>'
-                    . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE EGRESO</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_transferencia_limpio . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($transferencia->fecha_trans)) . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
-                    . '</tr></table><br><br>'
-                    . '<table>'
-                    . '<tr>'
-                    . '<td class="c3 c12"></td><td class="c4 c12"></td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del transferencia:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($transferencia->total, 1, '.', ',') . '</b></td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Tipo beneficiario:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $t_beneficiario . '</td>'
-                    . '</tr></table>'
-                    . '<table>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de transferencia:</b></td><td  colspan="3" class="c23 c25 c26  c27 c28 c12 c13">' . $t_transferencia . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre beneficiario:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nombre_beneficiario . '</td>'
-                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento beneficiario:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_beneficiario . ' ' . $transferencia->id_beneficiario . $d_v . '</td>'
-                    . '</tr>';
-            if (($transferencia->descripcion) != "") {
-                $html .= '<tr>'
-                        . '<td colspan="4" class="c23 c25 c26 c27 c28">'
-                        . '<table>'
-                        . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Descripción del transferencia: </b>' . $transferencia->descripcion . '.</td>'
-                        . '</tr><tr><td class="c10"> </td></tr>'
-                        . '</table>'
-                        . '</td>'
-                        . '</tr>';
-            }
-            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma beneficiario: _____________________________</p></td>'
-                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
-                    . '</table><p class="b3">- Copia para la empresa -</p>';
-//
-// Imprimimos el texto con writeHTMLCell()
-            $pdf->writeHTML($html, true, false, true, false, '');
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.

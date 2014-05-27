@@ -181,7 +181,7 @@ class Retefuente_compras extends CI_Controller {
         $data["tab"] = "consultar_retefuente_compras";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['sede'] = $this->select_model->sede();
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "retefuente_compras/consultar_validar";
         $data['action_recargar'] = base_url() . "retefuente_compras/consultar";
@@ -228,7 +228,7 @@ class Retefuente_compras extends CI_Controller {
         list($prefijo, $id) = explode("_", $retefuente_compras_prefijo_id);
         $retefuente_compras = $this->select_model->retefuente_compras_prefijo_id($prefijo, $id);
         if ($retefuente_compras == TRUE) {
-            $reponsable = $this->select_model->empleado($retefuente_compras->id_responsable, $retefuente_compras->dni_responsable);
+            $responsable = $this->select_model->empleado($retefuente_compras->id_responsable, $retefuente_compras->dni_responsable);
             $proveedor = $this->select_model->proveedor_id_dni($retefuente_compras->id_proveedor, $retefuente_compras->dni_proveedor);
             $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
             if (($proveedor->d_v) == (NULL)) {
@@ -320,7 +320,7 @@ class Retefuente_compras extends CI_Controller {
                     . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($retefuente_compras->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $reponsable->nombre1 . " " . $reponsable->apellido1 . '</td>'
+                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
