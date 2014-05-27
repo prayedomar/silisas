@@ -353,8 +353,6 @@ class Egreso extends CI_Controller {
 // Añadir una página
 // Este método tiene varias opciones, consulta la documentación para más información.
             $pdf->AddPage();
-
-            //preparamos y maquetamos el contenido a crear
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
@@ -364,7 +362,7 @@ class Egreso extends CI_Controller {
             $html .= 'p.b4{line-height:23px;}';
             $html .= 'p.b5{font-size:14px;}';
             $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:85px;}';
+            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:150px;}';
             $html .= 'td.c4{width:270px;}';
@@ -390,130 +388,22 @@ class Egreso extends CI_Controller {
             $html .= 'th.a2{text-align:center;}';
             $html .= 'table{border-spacing: 0;}';
             $html .= '</style>';
-            $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
-                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
-                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
-                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
-                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
-                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
-                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
-                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
-                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
-                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
-                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+            $html .= '<table width="100%">'
+                    . '<tr>'
+                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '</td>'
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
-                    . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE EGRESO</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_egreso_limpio . '</td>'
+                    . '<td class="c1 c24 a2 c28" rowspan="3">COMPROBANTE DE EGRESO</td>'
+                    . '<td class="c5 c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c6 c23 c25 c26  c27 c28">' . $id_egreso_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($egreso->fecha_trans)) . '</td>'
+                    . '<td class="c5 c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c6 c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($egreso->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
-                    . '</tr></table><br><br>'
-                    . '<table>'
-                    . '<tr>'
-                    . '<td class="c3 c12"></td><td class="c4 c12"></td>'
-                    . '<td rowspan="2" class="c23 c7 c5 c8 c9 c25 c26  c27 c28" rowspan="2"><b> Valor del egreso:</b></td><td rowspan="2" class="c23 c25 c26  c27 c28 c7 c6 c8 c9"><b>$ ' . number_format($egreso->total, 1, '.', ',') . '</b></td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c25 c26 c27 c28 c12"><b>Tipo beneficiario:</b></td><td class="c23 c25 c26  c27 c28 c12">' . $t_beneficiario . '</td>'
-                    . '</tr></table>'
-                    . '<table>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de egreso:</b></td><td  colspan="3" class="c23 c25 c26  c27 c28 c12 c13">' . $t_egreso . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre beneficiario:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nombre_beneficiario . '</td>'
-                    . '<td class="c5 c23 c12 c25 c26 c27 c28"><b>Documento beneficiario:</b></td><td class="c6 c23 c12 c25 c26 c27 c28">' . $dni_abreviado_beneficiario . ' ' . $egreso->id_beneficiario . $d_v . '</td>'
-                    . '</tr>';
-            if (($egreso->descripcion) != "") {
-                $html .= '<tr>'
-                        . '<td colspan="4" class="c23 c25 c26 c27 c28">'
-                        . '<table>'
-                        . '<tr><td class="c10"> </td></tr><tr>'
-                        . '<td><b>Descripción del egreso: </b>' . $egreso->descripcion . '.</td>'
-                        . '</tr><tr><td class="c10"> </td></tr>'
-                        . '</table>'
-                        . '</td>'
-                        . '</tr>';
-            }
-            $html .= '<tr><td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma beneficiario: _____________________________</p></td>'
-                    . '<td colspan="2" class="c14 c25 c26 c27 c28"><br><br><p class="b5 b6">Firma y sello empresa: __________________________</p></td></tr>'
-                    . '</table><p class="b3">- Copia para el beneficiario -</p>';
-
-            // Imprimimos el texto con writeHTMLCell()
-            $pdf->writeHTML($html, true, false, true, false, '');
-
-            $pdf->lastPage();
-            $pdf->AddPage();
-            $html = '';
-            $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
-            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'p.b4{line-height:23px;}';
-            $html .= 'p.b5{font-size:14px;}';
-            $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:85px;}';
-            $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:150px;}';
-            $html .= 'td.c4{width:270px;}';
-            $html .= 'td.c5{width:160px;}';
-            $html .= 'td.c6{width:150px;}';
-            $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:50px;}';
-            $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';
-            $html .= 'td.c11{font-size:12px;}';
-            $html .= 'td.c12{line-height:25px;}';
-            $html .= 'td.c13{width:580px;}';
-            $html .= 'td.c14{width:365px;}';
-            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;line-height:35px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-            $html .= 'td.c25{border-top-color:#000000;}';
-            $html .= 'td.c26{border-bottom-color:#000000;}';
-            $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';
-            $html .= 'td.a1{text-align:left;}';
-            $html .= 'td.a2{text-align:center;}';
-            $html .= 'th.a1{text-align:left;}';
-            $html .= 'th.a2{text-align:center;}';
-            $html .= 'table{border-spacing: 0;}';
-            $html .= '</style>';
-            $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
-                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
-                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
-                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
-                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
-                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
-                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
-                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
-                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
-                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
-                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
-                    . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
-                    . '<br>'
-                    . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE EGRESO</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_egreso_limpio . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($egreso->fecha_trans)) . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
+                    . '<td class="c5 c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c6 c23 c25 c26  c27 c28">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'

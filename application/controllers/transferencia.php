@@ -491,7 +491,8 @@ class Transferencia extends CI_Controller {
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:85px;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';            
+            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:170px;}';
             $html .= 'td.c4{width:195px;}';
@@ -515,16 +516,16 @@ class Transferencia extends CI_Controller {
             $html .= 'th.a2{text-align:center;}';
             $html .= 'table{border-spacing: 0;}';
             $html .= '</style>';
-            $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="3" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+            $html .= '<table width="100%">'
+                    . '<tr>'
+                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '</td>'
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
-                    . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">COMPROBANTE DE<BR>TRANSFERENCIA INTERSEDE</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_transferencia_limpio . '</td>'
+                    . '<td class="c1 c24 a2 c28">COMPROBANTE DE<BR>TRANSFERENCIA INTERSEDE</td>'
+                    . '<td class="c5 c8 c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c6 c8 c23 c25 c26  c27 c28">' . $id_transferencia_limpio . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
@@ -590,7 +591,7 @@ class Transferencia extends CI_Controller {
                          .'<tr><td class="a3"><b>Observacion de aprobación: </b>' . $aprobacion_transferencia->observacion . '</td></tr>';
             }            
             $html .= '<tr><td class="c10"> </td></tr></table></td></tr>'
-                    . '</table>';
+                    . '</table><p class="b3">- Copia para la empresa -</p>';
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
 

@@ -269,7 +269,7 @@ class Retefuente_compras extends CI_Controller {
             $html .= 'p.b4{line-height:23px;}';
             $html .= 'p.b5{font-size:14px;}';
             $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:85px;}';
+            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:170px;}';
             $html .= 'td.c4{width:195px;}';
@@ -295,32 +295,22 @@ class Retefuente_compras extends CI_Controller {
             $html .= 'th.a2{text-align:center;}';
             $html .= 'table{border-spacing: 0;}';
             $html .= '</style>';
-            $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
-                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
-                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
-                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
-                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
-                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
-                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
-                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
-                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
-                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
-                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+            $html .= '<table width="100%">'
+                    . '<tr>'
+                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
                     . '</td>'
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
-                    . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">RETENCIÓN EN LA FUENTE POR COMPRAS O SERVICIOS</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $id_retefuente_compras_limpio . '</td>'
+                    . '<td class="c1 c24 a2 c28" rowspan="3">RETENCIÓN EN LA FUENTE <br>POR COMPRAS O SERVICIOS</td>'
+                    . '<td class="c5 c23 c25 c26  c27 c28"><b>Número:</b></td><td class="c6 c23 c25 c26  c27 c28">' . $id_retefuente_compras_limpio . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . date("Y-m-d", strtotime($retefuente_compras->fecha_trans)) . '</td>'
+                    . '<td class="c5 c23 c25 c26  c27 c28"><b>Fecha de emisión:</b></td><td class="c6 c23 c25 c26  c27 c28">' . date("Y-m-d", strtotime($retefuente_compras->fecha_trans)) . '</td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="c23 c25 c26  c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26  c27 c28 c12 c6">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
+                    . '<td class="c5 c23 c25 c26  c27 c28"><b>Responsable empresa:</b></td><td class="c6 c23 c25 c26  c27 c28">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
                     . '</tr></table><br><br>'
                     . '<table>'
                     . '<tr>'
