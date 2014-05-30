@@ -166,6 +166,7 @@
                             <!--calculamos la cantidad de dias de la nomina y la cantidad de dias laborados (dias_nomina - ausencias)-->
                             <input type="hidden" name="dias_nomina" id="dias_nomina"/>
                             <input type="hidden" name="dias_remunerados" id="dias_remunerados"/>
+                            <input type="hidden" name="cant_ausencias" id="cant_ausencias"/>
                             <!--Aqui almacenamos el total devengado de la nomina-->
                             <input type="hidden" name="total_devengado" class="miles decimal2" id="total_devengado"/>
                             <input type="hidden" name="total_deducido" class="miles decimal2" id="total_deducido"/>
@@ -333,6 +334,7 @@
                                     var dias_no_remunerados = new Number(obj.cant_no_remunerada);
                                     $('#dias_nomina').attr('value', dias_nomina);
                                     $('#dias_remunerados').attr('value', (dias_nomina - dias_no_remunerados));
+                                    $('#cant_ausencias').attr('value', obj.cant_ausencias);
                                     if (obj.html_ausencias == "") {
                                         $("#div_ausencias").html('<label>Ausencias Laborales</label><div class="alert alert-info separar_div" id="div_info_ausencias"></div>');
                                         $("#div_info_ausencias").html("<p>No se encontraron Ausencias Laborales vigentes para el empleado, en el rango de fechas de la Nómina.</p>");

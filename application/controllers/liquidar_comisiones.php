@@ -49,8 +49,36 @@ class Liquidar_comisiones extends CI_Controller {
                     $i++;
                 }
             }
-            if (($this->form_validation->run() == FALSE) || ($error_escalas != "")) {
-                echo form_error('matricula') . form_error('ejecutivo_directo') . $error_escalas;
+            $error_comisiones = "";
+            if ($this->input->post('ejecutivo_directo') && $this->input->post('matricula')) {
+                $id_matricula = $this->input->post('matricula');
+                //Aqui vamos a verificar que si exita la tabla de comisiones para el plan de la matricula.
+                list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("-", $this->input->post('ejecutivo_directo'));
+                $plan = $this->select_model->matricula_id($id_matricula)->plan;
+                $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo);
+                if ($valor_unitario != TRUE) {
+                    $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula.</P>';
+                }
+                $cargos_escalas = $this->input->post('cargos_escalas');
+                $escalas = $this->input->post('escalas');
+                if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
+                    //Si hay escalas las pagamos.
+                    $i = 0;
+                    foreach ($escalas as $fila) {
+                        //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
+                        if ($fila != "nula") {
+                            list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
+                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala);
+                            if ($valor_unitario != TRUE) {
+                                $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula.</P>';
+                            }
+                        }
+                        $i++;
+                    }
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($error_escalas != "") || ($error_comisiones != "")) {
+                echo form_error('matricula') . form_error('ejecutivo_directo') . $error_escalas . $error_comisiones;
             } else {
                 echo "OK";
             }
@@ -67,7 +95,7 @@ class Liquidar_comisiones extends CI_Controller {
             list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("-", $this->input->post('ejecutivo_directo'));
 
             $est_concepto_nomina = 2; //2: Pendiente
-            
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -75,6 +103,7 @@ class Liquidar_comisiones extends CI_Controller {
             $matricula = $this->select_model->matricula_id($id_matricula);
             $t_concepto_nomina = 29; //29, 'Comisión Directa Matricula
             $plan = $matricula->plan;
+            //a continuacion asumimos que las comisiones del tipo de plan estan creadas.
             $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo)->comision;
             //Si no encuentra en la base de datos la comision, entonces la comision es cero.
             if ($valor_unitario != TRUE) {
@@ -116,6 +145,7 @@ class Liquidar_comisiones extends CI_Controller {
                         if ($fila != "nula") {
                             list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
                             list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
+                            //Asumimos que las comisiones ya estan creadas
                             $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
                             if ($valor_unitario != TRUE) {
                                 $valor_unitario = 0.00;

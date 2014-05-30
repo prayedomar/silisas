@@ -7,12 +7,13 @@ class Nomina extends CI_Controller {
         $this->load->model('select_model');
         $this->load->model('insert_model');
         $this->load->model('update_model');
+        $this->load->model('nominam');
     }
 
 //Crear: Nomina
     function crear() {
         $data["tab"] = "crear_nomina";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -84,8 +85,8 @@ class Nomina extends CI_Controller {
                     if (($cantidad[$i] <= '0') || ($cantidad[$i] == '')) {
                         $error_conceptos .= "<p>El campo Cantidad, debe ser mayor a cero.</p>";
                     }
-                    if (($valor_unitario[$i] <= '0') || ($valor_unitario[$i] == '')) {
-                        $error_conceptos .= "<p>El campo Valor Unitario, debe ser mayor a cero.</p>";
+                    if ($valor_unitario[$i] == '') {
+                        $error_conceptos .= "<p>El campo valor unitario, es obligatorio</p>";
                     }
                     $i++;
                 }
@@ -105,9 +106,17 @@ class Nomina extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
+            $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
+            $depto = $empleado->depto;
+            $cargo = $empleado->cargo;
             $t_periodicidad = $this->input->post('periodicidad');
             $fecha_inicio = $this->input->post('fecha_inicio');
             $fecha_fin = $this->input->post('fecha_fin');
+            $dias_nomina = $this->input->post('dias_nomina');
+            $dias_remunerados = $this->input->post('dias_remunerados');
+            $ausencias = $this->input->post('cant_ausencias');
+            $total_devengado = round(str_replace(",", "", $this->input->post('total_devengado')), 2);
+            $total_deducido = round(str_replace(",", "", $this->input->post('total_deducido')), 2);
             $total = round(str_replace(",", "", $this->input->post('total_nomina')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
                 $cuenta_origen = $this->input->post('cuenta');
@@ -126,7 +135,7 @@ class Nomina extends CI_Controller {
             }
             $vigente = 1;
             $observacion = ucfirst(strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -134,19 +143,19 @@ class Nomina extends CI_Controller {
             $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
             $t_trans = 9; //Nomina Laboral
             $credito_debito = 0; //Debito             
-
             $data["tab"] = "crear_nomina";
-            $this->isLogin($data["tab"]);               
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "nomina/crear";
             $data['msn_recrear'] = "Crear otra Nómina";
+            $data['url_imprimir'] = base_url() . "nomina/consultar_pdf/" . $prefijo_nomina . "_" . $id_nomina . "/I";
 
             $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nomina, $id_nomina, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->nomina($prefijo_nomina, $id_nomina, $id_empleado, $dni_empleado, $depto, $cargo, $t_periodicidad, $fecha_inicio, $fecha_fin, $dias_nomina, $dias_remunerados, $ausencias, $total_devengado, $total_deducido, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -176,7 +185,7 @@ class Nomina extends CI_Controller {
                                 $detalle_temp = strtolower($detalle[$i]);
                                 $cantidad_temp = $cantidad[$i];
                                 $valor_unitario_temp = round(str_replace(",", "", $valor_unitario[$i]), 2);
-                                $error3 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $cantidad_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $id_responsable, $dni_responsable);
+                                $error3 = $this->insert_model->concepto_nomina($id_empleado, $dni_empleado, $prefijo_nomina, $id_nomina, $t_concepto_temp, $detalle_temp, NULL, NULL, NULL, NULL, $cantidad_temp, $valor_unitario_temp, 1, $sede, $id_responsable, $dni_responsable);
                                 if (isset($error3)) {
                                     $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                                     $this->parser->parse('trans_error', $data);
@@ -185,7 +194,7 @@ class Nomina extends CI_Controller {
                             }
                             $i++;
                         }
-                        $this->parser->parse('trans_success', $data);
+                        $this->parser->parse('trans_success_print', $data);
                     } else {
                         $data['trans_error'] = "<p>No llegaron correctamente los conceptos al servidor. Comuníquele este error a soporte de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
@@ -926,6 +935,255 @@ class Nomina extends CI_Controller {
             }
         } else {
             redirect(base_url());
+        }
+    }
+
+    function consultar() {
+        $data["tab"] = "consultar_nomina";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['error_consulta'] = "";
+        $data['action_crear'] = base_url() . "nomina/consultar_validar";
+        $data['action_recargar'] = base_url() . "nomina/consultar";
+        $this->parser->parse('nomina/consultar', $data);
+        $this->load->view('footer');
+    }
+
+    public function consultar_validar() {
+        $this->escapar($_POST);
+        $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+        $this->form_validation->set_rules('id', 'Número o consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+        $prefijo = $this->input->post('prefijo');
+        $id = $this->input->post('id');
+        $error_transaccion = "";
+        if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
+            $nomina = $this->nominam->nomina_prefijo_id($prefijo, $id);
+            if ($nomina == TRUE) {
+                if ($nomina->vigente == 0) {
+                    $error_transaccion = "La nómina laboral, se encuentra anulada.";
+                }
+            } else {
+                $error_transaccion = "La nómina laboral, no existe en la base de datos.";
+            }
+        }
+        if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
+            $data["tab"] = "consultar_nomina";
+            $this->isLogin($data["tab"]);
+            $data["error_consulta"] = form_error('prefijo') . form_error('id') . $error_transaccion;
+            $data["prefijo"] = $prefijo;
+            $data["id"] = $id;
+            $this->load->view("header", $data);
+            $data['sede'] = $this->select_model->sede();
+            $data['action_crear'] = base_url() . "nomina/consultar_validar";
+            $this->parser->parse('nomina/consultar', $data);
+            $this->load->view('footer');
+        } else {
+            redirect(base_url() . "nomina/consultar_pdf/" . $prefijo . "_" . $id . "/I");
+        }
+    }
+
+    function consultar_pdf($id_nomina, $salida_pdf) {
+        $nomina_prefijo_id = $id_nomina;
+        $id_nomina_limpio = str_replace("_", " ", $nomina_prefijo_id);
+        list($prefijo, $id) = explode("_", $nomina_prefijo_id);
+        $nomina = $this->nominam->nomina_prefijo_id($prefijo, $id);
+        $conceptos_nomina = $this->nominam->concepto_nomina_prefijo_id($prefijo, $id);
+        if (($nomina == TRUE) && ($conceptos_nomina == TRUE)) {
+            $dni_abreviado_empleado = $this->select_model->t_dni_id($nomina->dni_empleado)->abreviacion;
+            if ($nomina->genero_empleado == "M") {
+                $empleado_a = "o";
+                $cargo = $nomina->cargo_masculino;
+            } else {
+                $empleado_a = "a";
+                $cargo = $nomina->cargo_femenino;
+            }
+            if ($nomina->t_periodicidad == "1") {
+                
+            }
+
+            $this->load->library('Pdf');
+            $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Sili S.A.S');
+            $pdf->SetTitle('Factura de Venta ' . $id_nomina_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Factura de Venta ' . $id_nomina_limpio . ' Sili S.A.S');
+            $pdf->SetKeywords('sili, sili sas');
+
+
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+//relación utilizada para ajustar la conversión de los píxeles
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+// ---------------------------------------------------------
+// establecer el modo de fuente por defecto            
+            $pdf->setFontSubsetting(true);
+            $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
+            $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
+// Añadir una página
+// Este método tiene varias opciones, consulta la documentación para más información.
+            $pdf->AddPage();
+
+            //preparamos y maquetamos el contenido a crear
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:30px;font-weight: bold;font-style: italic;line-height:40px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
+            $html .= 'td.c2{width:310px;}';
+            $html .= 'td.c3{width:100px;}';
+            $html .= 'td.c11{width:150px;}';
+            $html .= 'td.c4{width:265px;}';
+            $html .= 'td.c5{width:160px;}';
+            $html .= 'td.c6{width:150px;}';
+            $html .= 'td.c9{width:115px;}';
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';
+            $html .= 'td.c20{width:240px;font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c21{width:140px;height:32px;line-height:32px;font-weight: bold;font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c22{width:110px;height:32px;line-height:32px;font-weight: bold;font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;line-height:25px;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;height:30px;line-height:25px;}';
+            $html .= 'td.c25{border-top-color:#000000;}';
+            $html .= 'td.c26{border-bottom-color:#000000;}';
+            $html .= 'td.c27{border-left-color:#000000;}';
+            $html .= 'td.c28{border-right-color:#000000;}';            
+            $html .= 'td.c29{background-color:#F5F5F5;}';
+            $html .= 'td.c30{font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.a1{text-align:left;}';
+            $html .= 'td.a2{text-align:center;}';
+            $html .= 'td.a3{text-align:justify;}';
+            $html .= 'th.a1{text-align:left;}';
+            $html .= 'th.a2{text-align:center;}';
+            $html .= 'th.a3{background-color:#F5F5F5;}';            
+            $html .= 'th.d1{width:310px;}';
+            $html .= 'th.d2{width:80px;}';
+            $html .= 'th.d3{width:120px;}';
+            $html .= 'th.d4{width:110px;}';
+            $html .= 'th.d5{width:110px;}';
+            $html .= 'th.d6{height:30px;line-height:25px;}';
+            $html .= 'th.d7{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
+            $html .= 'table{border-spacing: 0;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<br>'
+                    . '</tr><tr>'
+                    . '<td class="a2 c24" colspan="2">NÓMINA LABORAL</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . $id_nomina_limpio . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Fecha de emisión:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . date("Y-m-d", strtotime($nomina->fecha_trans)) . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . $nomina->responsable . '</td>'
+                    . '</tr></table><br><br>'
+                    . '<table>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Periodicidad:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nomina->tipo_periodicidad . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Periodo:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">Del ' . $nomina->fecha_inicio . ' al ' . $nomina->fecha_fin . '</td>'
+                    . '</tr></table>'
+                    . '<table><tr>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Días nómina:</b></td><td class="c9 c23 c12 c25 c26 c27 c28">' . $nomina->dias_nomina . '</td>'
+                    . '<td class="c11 c23 c12 c25 c26 c27 c28"><b>Días remunerados:</b></td><td class="c3 c23 c12 c25 c26 c27 c28">' . $nomina->dias_remunerados . '</td>'
+                    . '<td class="c11 c23 c12 c25 c26 c27 c28"><b>Ausencias:</b></td><td class="c9 c23 c12 c25 c26 c27 c28">' . $nomina->ausencias . '</td>'
+                    . '</tr></table>'
+                    . '<table><tr>'
+                    . '<td class="c3 c23 c25 c26 c27 c28"><b>Emplead' . $empleado_a . ':</b></td><td class="c4 c23 c25 c26 c27 c28">' . $nomina->empleado . '</td>'
+                    . '<td class="c3 c23 c25 c26 c27 c28"><b>Documento:</b></td><td class="c4 c23 c25 c26 c27 c28">' . $dni_abreviado_empleado . ' ' . $nomina->id_empleado . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c25 c26 c27 c28"><b>Departamento:</b></td><td class="c4 c23 c25 c26 c27 c28">' . $nomina->departamento . '</td>'
+                    . '<td class="c3 c23 c25 c26 c27 c28"><b>Cargo:</b></td><td class="c4 c23 c25 c26 c27 c28">' . $cargo . '</td>'
+                    . '</tr>'
+                    . '</table><br><br>'
+                    . '<table>'
+                    . '<tr>'
+                    . '<th class="d1 c23 d6 a2 d7 a3"><b>Concepto</b></th>'
+                    . '<th class="d2 c23 d6 a2 d7 a3"><b>Cantidad</b></th>'
+                    . '<th class="d3 c23 d6 a2 d7 a3"><b>Valor unitario</b></th>'
+                    . '<th class="d4 c23 d6 a2 d7 a3"><b>Devengado</b></th>'
+                    . '<th class="d5 c23 d6 a2 d7 a3"><b>Deducido</b></th>'
+                    . '</tr>';
+            $cont_filas = 0;
+            foreach ($conceptos_nomina as $fila) {
+                if ($fila->debito_credito == 1) {
+                    $devengado = $fila->cantidad * $fila->valor_unitario;
+                    $deducido = "0.00";
+                } else {
+                    $devengado = "0.00";
+                    $deducido = $fila->cantidad * $fila->valor_unitario;
+                }
+                if($fila->detalle){
+                    $detalle = " - (" . $fila->detalle . ")";
+                }else{
+                    $detalle = "";
+                }
+                $cont_filas ++;
+                $html .= '<tr>'
+                        . '<td class="d1 c30 c27 c28">' . $fila->tipo . $detalle . '</td>'
+                        . '<td class="d2 a2 c30 c27 c28">' . $fila->cantidad . '</td>'
+                        . '<td class="d3 a2 c30 c27 c28">$' . number_format($fila->valor_unitario, 1, '.', ',') . '</td>'
+                        . '<td class="d4 a2 c30 c27 c28">$' . number_format($devengado, 1, '.', ',') . '</td>'
+                        . '<td class="d5 a2 c30 c27 c28">$' . number_format($deducido, 1, '.', ',') . '</td>'
+                        . '</tr>';
+            }
+            for ($i = $cont_filas; $i < 28; $i++) {
+                $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
+            }
+            $html .= '</table><table>';
+            if($nomina->observacion != ""){
+                $html .= '<tr><td class="c10 c25 c27 c28" colspan="4"> </td></tr><tr><td class="a3 c30 c27 c28" colspan="4"><b>Observaciones: </b>' . $nomina->observacion . '.</td></tr>'
+                        . '<tr><td class="c10 c26 c27 c28" colspan="4"> </td></tr>';
+            }            
+            $html .= '<tr>'
+                    . '<td class="c20 a2 c25 c26 c27 c28" rowspan="3"><br><br><br><br><br>___________________________<br>Firma empleado</td>'
+                    . '<td class="c20 a2 c25 c26 c27 c28" rowspan="3"><br><br><br><br><br>___________________________<br>Firma y sello empresa</td>'
+                    . '<td class="c21 c29 c25 c26 c27 c28">Total devengados (+)</td>'
+                    . '<td class="c22 a2 c29 c25 c26 c27 c28">$' . number_format($nomina->total_devengado, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c29 c25 c26 c27 c28">Total deducidos (-)</td>'
+                    . '<td class="c22 a2 c29 c25 c26 c27 c28">$' . number_format($nomina->total_deducido, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c21 c29 c25 c26 c27 c28">Total percibido (=)</td>'
+                    . '<td class="c22 a2 c29 c25 c26 c27 c28">$' . number_format($nomina->total, 1, '.', ',') . '</td>'
+                    . '</tr>'
+                    . '</table><p class="b3">- Copia para el empleado -</p>';
+            // Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            // reset pointer to the last page
+//            $pdf->lastPage();
+//
+//            $pdf->AddPage();
+//            $html = '';
+//
+//// Imprimimos el texto con writeHTMLCell()
+//            $pdf->writeHTML($html, true, false, true, false, '');
+// ---------------------------------------------------------
+// Cerrar el documento PDF y preparamos la salida
+// Este método tiene varias opciones, consulte la documentación para más información.
+            $nombre_archivo = utf8_decode('Factura de Venta ' . $id_nomina_limpio . ' Sili S.A.S.pdf');
+            $pdf->Output($nombre_archivo, $salida_pdf);
+        } else {
+            redirect(base_url() . 'nomina/consultar/');
         }
     }
 

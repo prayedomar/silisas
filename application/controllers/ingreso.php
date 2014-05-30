@@ -395,7 +395,7 @@ class Ingreso extends CI_Controller {
             $html .= '</style>';
             $html .= '<table width="100%">'
                     . '<tr>'
-                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '</td>'
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
@@ -483,7 +483,7 @@ class Ingreso extends CI_Controller {
             $html .= '</style>';
             $html .= '<table width="100%">'
                     . '<tr>'
-                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución DIAN No. 110000497290 del 16/08/2012</p>'
+                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '</td>'
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'

@@ -1142,7 +1142,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function nomina($prefijo, $id, $id_empleado, $dni_empleado, $t_periodicidad, $fecha_inicio, $fecha_fin, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
+    public function nomina($prefijo, $id, $id_empleado, $dni_empleado, $depto, $cargo, $t_periodicidad, $fecha_inicio, $fecha_fin, $dias_nomina, $dias_remunerados, $ausencias, $total_devengado, $total_deducido, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -1150,9 +1150,16 @@ class Insert_model extends CI_Model {
             'credito_debito' => '0',
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
+            'depto' => $depto,
+            'cargo' => $cargo,
             't_periodicidad' => $t_periodicidad,
             'fecha_inicio' => $fecha_inicio,
             'fecha_fin' => $fecha_fin,
+            'dias_nomina' => $dias_nomina,
+            'dias_remunerados' => $dias_remunerados,
+            'ausencias' => $ausencias,
+            'total_devengado' => $total_devengado,
+            'total_deducido' => $total_deducido,
             'total' => $total,
             'cuenta_origen' => $cuenta_origen,
             'valor_retirado' => $valor_retirado,

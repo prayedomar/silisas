@@ -532,6 +532,9 @@
                     <li><a href="<?= base_url() ?>ingreso/consultar">Ingreso</a></li>
                 <?php } ?>                    
                 <li class="dropdown-header" style="font-size:16px;"><u>Débitos</u>:</li>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
+                    <li><a href="<?= base_url() ?>nomina/consultar">Nómina laboral</a></li>
+                <?php } ?>          
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>adelanto/consultar">Adelanto de nómina</a></li>
                 <?php } ?>                 
