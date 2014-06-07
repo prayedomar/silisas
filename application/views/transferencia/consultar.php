@@ -31,7 +31,7 @@
                             </div>
                             <div id="validacion_inicial">
                                 <?php if ($error_consulta != "") { ?>
-                                    <div class="alert alert-warning" id="div_warning"><p><strong><?php echo $error_consulta ?></strong></p></div>
+                                <div class="alert alert-warning" id="div_warning"><p><strong><center><?php echo $error_consulta?></center></strong></p></div>
                                 <?php } ?>
                             </div>                            
                             <div class="row text-center separar_submit">
@@ -50,11 +50,4 @@
         $("#div_warning").delay(4000).fadeOut(1000);
         $("#prefijo").val('{prefijo}');
     });
-
-    //Convertir a mayuscula
-    function aMays(e, elemento) {
-        tecla = (document.all) ? e.keyCode : e.which;
-        elemento.value = elemento.value.toUpperCase();
-    }
-
 </script>

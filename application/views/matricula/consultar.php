@@ -131,7 +131,7 @@
                                         <td><?= $row->fecha_matricula ?></td>
                                         <td><?= $row->nombre_dni . " " . $row->id_titular ?></td>
                                         <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
-                                        <td><?= $row->nombre_plan ?></td>
+                                        <td><?= $row->nombre_plan . " " . $row->anio_plan ?></td>
                                         <td><?= $row->nombre_sede ?></td>
                                         <td><button class="ver-detalles btn  btn-primary btn-sm" 
                                                     data-alumnos="<?= $row->lista_alumnos ?>"

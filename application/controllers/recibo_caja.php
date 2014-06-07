@@ -470,7 +470,7 @@ class Recibo_caja extends CI_Controller {
             $data["prefijo"] = $prefijo;
             $data["id"] = $id;
             $this->load->view("header", $data);
-            $data['sede'] = $this->select_model->sede();
+            $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
             $data['action_crear'] = base_url() . "recibo_caja/consultar_validar";
             $this->parser->parse('recibo_caja/consultar', $data);
             $this->load->view('footer');

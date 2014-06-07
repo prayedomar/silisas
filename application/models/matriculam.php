@@ -8,6 +8,21 @@ class Matriculam extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+    
+    public function matricula_id($id) {
+        $SqlInfo = "SELECT ma.*, se.nombre sede_ppal, CONCAT(t_p.nombre, ' - ', t_p.anio) nombre_plan, t_p.valor_total, t_p.valor_inicial, t_p.valor_cuota, t_p.cant_cuotas, CONCAT(ej.nombre1, ' ', ej.nombre2, ' ', ej.apellido1) ejecutivo, CONCAT(re.nombre1, ' ', re.apellido1) responsable, CONCAT(ti.nombre1, ' ', ti.nombre2, ' ', ti.apellido1,  ' ', ti.apellido2) titular, ti.direccion, ti.telefono, ti.celular "
+                . "FROM matricula ma "
+                . "JOIN empleado ej ON ((ma.id_ejecutivo = ej.id) and (ma.dni_ejecutivo = ej.dni)) "
+                . "JOIN titular ti ON ((ma.id_titular = ti.id) and (ma.dni_titular = ti.dni)) "                
+                . "JOIN empleado re ON ((ma.id_responsable = re.id) and (ma.dni_responsable = re.dni)) " 
+                . "JOIN t_plan t_p ON ma.plan=t_p.id "
+                . "JOIN sede se ON ma.sede=se.id "
+                . "where (ma.contrato='" . $id . "')";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function cantidad_matriculas($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT count(*) cantidad
@@ -34,7 +49,7 @@ class Matriculam extends CI_Model {
     }
 
     public function listar_matriculas($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT *,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
+        $query = "SELECT *,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,p.anio anio_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
                     tc.cargo_masculino,em.nombre1 nom1res,em.nombre2 nom2res,em.apellido1 apell1res,em.apellido2 apell2res,
                     ea.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_ejecutivo,
                     em2.nombre1 nombre1ejecutivo,em2.nombre2 nombre2ejecutivo,em2.apellido1 apellido1ejecutivo,em2.apellido2 apellido2ejecutivo

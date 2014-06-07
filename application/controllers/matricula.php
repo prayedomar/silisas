@@ -45,7 +45,7 @@ class MAtricula extends CI_Controller {
 
             //Validamos que el número de contrato físico exista en dicha sede
             $error_contrato = "";
-            if (($this->input->post('contrato'))&&($this->input->post('sede_ppal')!="default")) {
+            if (($this->input->post('contrato')) && ($this->input->post('sede_ppal') != "default")) {
                 $contrato = $this->input->post('contrato');
                 $id_responsable = $this->session->userdata('idResponsable');
                 $dni_responsable = $this->session->userdata('dniResponsable');
@@ -54,17 +54,17 @@ class MAtricula extends CI_Controller {
                 $check_contrato = $this->select_model->contrato_matricula_id($contrato);
                 if ($check_contrato != TRUE) {
                     $error_contrato = "<p>El contrato físico ingresado, no existe en la base de datos.</p>";
-                } else {
-                    $check_contrato = $this->select_model->contrato_matricula_id_sede($contrato, $sede);
-                    if ($check_contrato != TRUE) {
-                        $error_contrato = "<p>El contrato físico ingresado, no se encuentra en la sede principal escogida.</p>";
+//                } else {
+//                    $check_contrato = $this->select_model->contrato_matricula_id_sede($contrato, $sede);
+//                    if ($check_contrato != TRUE) {
+//                        $error_contrato = "<p>El contrato físico ingresado, no se encuentra en la sede principal escogida.</p>";
                     } else {
                         $check_contrato = $this->select_model->contrato_matricula_vacio_id($contrato);
                         if ($check_contrato != TRUE) {
                             $error_contrato = "<p>El contrato físico ingresado, no se encuentra vacío.</p>";
                         }
                     }
-                }
+//                }
             }
             $error_titular = "";
             if (($this->input->post('id_titular')) && ($this->input->post('dni_titular'))) {
@@ -382,7 +382,7 @@ class MAtricula extends CI_Controller {
     }
 
     public function excel() {
-           $this->load->model('matriculam');
+        $this->load->model('matriculam');
         header("Content-type: application/vnd.ms-excel; name='excel'");
         header("Content-Disposition: filename=reporte_matricula_" . date("Y-m-d") . ".xls");
         header("Pragma: no-cache");
@@ -410,6 +410,224 @@ class MAtricula extends CI_Controller {
             <?php } ?>
         </table>
         <?php
+    }
+
+    function consultar_plan_pagos() {
+        $data["tab"] = "consultar_plan_pagos";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['error_consulta'] = "";
+        $data['action_crear'] = base_url() . "matricula/validar_plan_pagos";
+        $data['action_recargar'] = base_url() . "matricula/consultar_plan_pagos";
+        $this->parser->parse('matricula/consultar_plan_pagos', $data);
+        $this->load->view('footer');
+    }
+
+    public function validar_plan_pagos() {
+        $this->escapar($_POST);
+        $this->form_validation->set_rules('id', 'Número de Matrícula', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+        $id = $this->input->post('id');
+        $error_transaccion = "";
+        if ($this->input->post('id')) {
+            $matricula = $this->select_model->matricula_id($id);
+            if ($matricula == TRUE) {
+                if ($matricula->estado == 5) {
+                    $error_transaccion = "La matrícula, se encuentra anulada.";
+                }
+            } else {
+                $error_transaccion = "La matrícula, no existe en la base de datos.";
+            }
+        }
+        if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
+            $data["tab"] = "consultar_plan_pagos";
+            $this->isLogin($data["tab"]);
+            $data["error_consulta"] = form_error('id') . $error_transaccion;
+            $data["id"] = $id;
+            $this->load->view("header", $data);
+            $data['action_crear'] = base_url() . "matricula/validar_plan_pagos";
+            $this->parser->parse('matricula/consultar_plan_pagos', $data);
+            $this->load->view('footer');
+        } else {
+            redirect(base_url() . "matricula/consultar_pdf/" . $id . "/I");
+        }
+    }
+
+    function consultar_pdf($id, $salida_pdf) {
+        $this->load->model('matriculam');
+        $matricula = $this->matriculam->matricula_id($id);
+        if ($matricula == TRUE) {
+            $dni_abreviado_ejecutivo = $this->select_model->t_dni_id($matricula->dni_ejecutivo)->abreviacion;
+            $dni_abreviado_titular = $this->select_model->t_dni_id($matricula->dni_titular)->abreviacion;
+
+            $this->load->library('Pdf');
+            $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Sili S.A.S');
+            $pdf->SetTitle('Factura de Venta ' . $id . ' Sili S.A.S');
+            $pdf->SetSubject('Factura de Venta ' . $id . ' Sili S.A.S');
+            $pdf->SetKeywords('sili, sili sas');
+
+
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+//relación utilizada para ajustar la conversión de los píxeles
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+// ---------------------------------------------------------
+// establecer el modo de fuente por defecto            
+            $pdf->setFontSubsetting(true);
+            $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
+            $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
+// Añadir una página
+// Este método tiene varias opciones, consulta la documentación para más información.
+            $pdf->AddPage();
+
+            //preparamos y maquetamos el contenido a crear
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:15px;text-align:center;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
+            $html .= 'td.c2{width:310px;}';
+            $html .= 'td.c3{width:130px;}';
+            $html .= 'td.c4{width:235px;}';
+            $html .= 'td.c5{width:160px;}';
+            $html .= 'td.c6{width:150px;}';
+            $html .= 'td.c9{width:115px;}';
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';
+            $html .= 'td.c20{width:240px;font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c21{width:140px;height:33px;line-height:32px;font-weight: bold;font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c22{width:110px;height:33px;line-height:32px;font-weight: bold;font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;line-height:25px;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;height:30px;line-height:20px;}';
+            $html .= 'td.c25{border-top-color:#000000;}';
+            $html .= 'td.c26{border-bottom-color:#000000;}';
+            $html .= 'td.c27{border-left-color:#000000;}';
+            $html .= 'td.c28{border-right-color:#000000;}';
+            $html .= 'td.c29{background-color:#F5F5F5;}';
+            $html .= 'td.c30{font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.a1{text-align:left;}';
+            $html .= 'td.a2{text-align:center;}';
+            $html .= 'td.a3{text-align:justify;}';
+            $html .= 'th.a1{text-align:left;}';
+            $html .= 'th.a2{text-align:center;}';
+            $html .= 'th.a3{background-color:#F5F5F5;}';
+            $html .= 'th.d1{width:80px;}';
+            $html .= 'th.d2{width:110px;}';
+            $html .= 'th.d3{width:320px;}';
+            $html .= 'th.d4{width:110px;}';
+            $html .= 'th.d5{width:110px;}';
+            $html .= 'td.d8{width:365px;}';            
+            $html .= 'td.d10{width:730px;}';    
+            $html .= 'th.d6{height:30px;line-height:25px;}';
+            $html .= 'th.d9{height:30px;line-height:30px;}';
+            $html .= 'th.d7{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
+            $html .= 'table{border-spacing: 0;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1 a2" rowspan="4" colspan="2"><h2> </h2><br><br><br><br><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<p class="b1"><br><br><br><br>Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<br>'
+                    . '</tr><tr>'
+                    . '<td class="a2 c24" colspan="2">PLAN DE PAGOS DE MATRÍCULA<br></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Contrato:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . $id . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Responsable empresa:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . $matricula->responsable . '</td>'
+                    . '</tr></table><br><br>'
+                    . '<table>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Sede de ingreso:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $matricula->sede_ppal . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Fecha de ingreso:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . date("Y-m-d", strtotime($matricula->fecha_trans)) . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre del plan:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $matricula->nombre_plan . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Ejecutivo de venta:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $matricula->ejecutivo . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c25 c26 c27 c28"><b>Titular:</b></td><td class="c4 c23 c25 c26 c27 c28">' . $matricula->titular . '</td>'
+                    . '<td class="c3 c23 c25 c26 c27 c28"><b>Documento titular:</b></td><td class="c4 c23 c25 c26 c27 c28">' . $dni_abreviado_titular . ' ' . $matricula->id_titular . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Dirección:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $matricula->direccion . '</td>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Telefonos:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $matricula->telefono . ' ' . $matricula->celular . '</td>'
+                    . '</tr>'
+                    . '</table><br><br>'
+                    . '<table>'
+                    . '<tr>'
+                    . '<th class="d1 c23 d6 a2 d7 a3"><b># cuota</b></th>'
+                    . '<th class="d2 c23 d6 a2 d7 a3"><b>Fecha límite</b></th>'
+                    . '<th class="d3 c23 d6 a2 d7 a3"><b>Descripción </b></th>'
+                    . '<th class="d4 c23 d6 a2 d7 a3"><b>Valor</b></th>'
+                    . '<th class="d5 c23 d6 a2 d7 a3"><b>saldo</b></th>'
+                    . '</tr>';
+            if ($matricula->cant_cuotas == 0) { //Plan contado
+                $t_detalle = "Pago Total modulo enseñanza lectora"; //T_detalle: pago total 
+            } else {
+                $t_detalle = "Pago inicial modulo enseñanza lectora"; //T_detalle: pago inicial
+            }
+            //Ingresamos la primera cuota manual
+            $saldo = $matricula->valor_total - $matricula->valor_inicial;
+            $html .= '<tr>'
+                    . '<td class="d1 a2 c30 c27 c28">0</td>'
+                    . '<td class="d2 a2 c30 c27 c28">' . date("Y-m-d", strtotime($matricula->fecha_trans)) . '</td>'
+                    . '<td class="d3 c30 c27 c28">' . $t_detalle . '</td>'
+                    . '<td class="d4 a2 c30 c27 c28">$' . number_format($matricula->valor_inicial, 0, '.', ',') . '</td>'
+                    . '<td class="d5 a2 c30 c27 c28">$' . number_format($saldo, 0, '.', ',') . '</td>'
+                    . '</tr>';
+
+            $cont_filas = 1;
+            for ($i = 1; $i <= $matricula->cant_cuotas; $i++) {
+                $saldo = $saldo - $matricula->valor_cuota;
+                $cont_filas ++;
+                $html .= '<tr>'
+                        . '<td class="d1 a2 c30 c27 c28">' . $i . '</td>'
+                        . '<td class="d2 a2 c30 c27 c28">' . date("Y-m-d", strtotime("$matricula->fecha_trans +$i month")) . '</td>'
+                        . '<td class="d3 c30 c27 c28">Abono modulo enseñanza lectora</td>'
+                        . '<td class="d4 a2 c30 c27 c28">$' . number_format($matricula->valor_cuota, 0, '.', ',') . '</td>'
+                        . '<td class="d5 a2 c30 c27 c28">$' . number_format($saldo, 0, '.', ',') . '</td>'
+                        . '</tr>';
+            }
+            for ($i = $cont_filas; $i < 16; $i++) {
+                $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
+            }
+            $html .= '<tr>'
+                    . '<td colspan="3" class="c25 c28"></td>'
+                    . '<th class="d4 c23 d9 a2 d7 a3"><b>Total pagado</b></th>'
+                    . '<th class="d5 c23 d9 a2 d7 a3"><b>$' . number_format($matricula->valor_total, 0, '.', ',') . '</b></th>'                    
+                    . '</tr></table><br><br><table>'
+                    . '<tr>'
+                    . '<td colspan="2" class="d10 c20 a2 c25 c26 c27 c28 a2"><br><br><b>"Transcurridos 4 días después de la fecha límite de pago, el sistema empezará a generar intereses por mora en base a la tasa maxíma de usura definida por la superintendencia financiera de Colombia, por lo cual le invitamos a dar cumplimiento oportuno al compromiso comercial adquirido con nuestra compañía"</b><br></td>'
+                    . '</tr>'                    
+                    . '<tr>'
+                    . '<td class="d8 c20 a2 c25 c26 c27 c28">Certifico que estoy de acuerdo con éste plan de pagos.<br><br><br><br><br>______________________________________<br>Firma y documento titular</td>'
+                    . '<td class="d8 c20 a2 c25 c26 c27 c28"><br><br><br><br><br><br>______________________________________<br>Firma y sello empresa</td>'
+                    . '</tr></table><p class="b3">- Copia para el titular -</p>';
+            // Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+// ---------------------------------------------------------
+// Cerrar el documento PDF y preparamos la salida
+// Este método tiene varias opciones, consulte la documentación para más información.
+            $nombre_archivo = utf8_decode('Factura de Venta ' . $id . ' Sili S.A.S.pdf');
+            $pdf->Output($nombre_archivo, $salida_pdf);
+        } else {
+            redirect(base_url() . 'matricula/consultar_plan_pagos/');
+        }
     }
 
 }
