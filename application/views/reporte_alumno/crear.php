@@ -36,143 +36,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="div_reporte" style="display: none">
+                            <div class="row" id="div_t_curso" style="display: none">
                                 <hr>
-                                <div class="row separar_submit" id="info_alumno">
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-4 col-xs-offset-1">
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Primer Nombre<em class="required_asterisco">*</em></label>
-                                                    <input name="nombre1" id="nombre1" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Nombre" maxlength="30">
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Segundo Nombre</label>
-                                                    <input name="nombre2" id="nombre2" type="text" class="form-control exit_caution alfabeto_espacios" placeholder="Segundo Nombre" maxlength="30">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Primer Apellido<em class="required_asterisco">*</em></label>
-                                                    <input name="apellido1" id="apellido1" type="text" class="form-control exit_caution alfabeto" placeholder="Primer Apellido" maxlength="30">
-                                                </div> 
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Segundo Apellido</label>
-                                                    <input name="apellido2" id="apellido2" type="text" class="form-control exit_caution alfabeto" placeholder="Segundo Apellido" maxlength="30">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Fecha de Nacimiento<em class="required_asterisco">*</em></label>
-                                                    <div class="input-group">
-                                                        <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
-                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                                    </div> 
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Género<em class="required_asterisco">*</em></label>
-                                                    <select name="genero" id="genero" class="form-control exit_caution">
-                                                        <option value="default">Seleccione Género</option>
-                                                        <option value="F">Mujer</option>
-                                                        <option value="M">Hombre</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>País de domicilio<em class="required_asterisco">*</em></label>
-                                            <select name="pais" id="pais" class="form-control exit_caution">
-                                                <option value="default">Seleccione País</option>
-                                                {pais}
-                                                <option value="{id}">{nombre}</option>
-                                                {/pais}
-                                            </select>
-                                        </div>  
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
-                                                    <select name="provincia" id="provincia" class="form-control exit_caution">
-                                                        <option value="default">Seleccione primero País</option>
-                                                    </select>                                
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
-                                                    <select name="ciudad" id="ciudad" class="form-control exit_caution">
-                                                        <option value="default">Seleccione primero Depto</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Tipo de Domicilio<em class="required_asterisco">*</em></label>
-                                            <select name="t_domicilio" id="t_domicilio" class="form-control exit_caution">
-                                                <option value="default">Seleccione T. de Domicilio</option>
-                                                {t_domicilio}
-                                                <option value="{id}">{tipo}</option>
-                                                {/t_domicilio}
-                                            </select>
-                                        </div>    
-                                        <div class="form-group">
-                                            <label>Dirección<em class="required_asterisco">*</em></label>
-                                            <input name="direccion" id="direccion" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección" maxlength="80">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Barrio/Sector<em class="required_asterisco">*</em></label>
-                                            <input name="barrio" id="barrio" type="text" class="form-control exit_caution letras_numeros" placeholder="Barrio o Sector" maxlength="40">
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Telefonos fijos de contacto<em class="required_asterisco">*</em></label>                         
-                                                    <input name="telefono" id="telefono" type="text" class="form-control exit_caution alfanumerico" placeholder="Anexar indicativo Ej:(034-4114107)" maxlength="40">
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="form-group">
-                                                    <label>Celular</label>
-                                                    <input name="celular" id="celular" type="text" class="form-control exit_caution numerico" placeholder="Celular" maxlength="10">
-                                                </div>
-                                            </div>
-                                        </div>                           
-                                    </div>
-                                    <div class="col-xs-4 col-xs-offset-1">                           
-                                        <div class="form-group">
-                                            <label>Correo Electrónico<em class="required_asterisco">*</em></label>
-                                            <input name="email" id="email" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
-                                        </div>                            
-                                        <div class="form-group">
-                                            <label>Número de Matrícula<em class="required_asterisco">*</em></label>
-                                            <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Velocidad Inicial<em class="required_asterisco">*</em></label>                                
-                                            <div class="input-group">
-                                                <span class="input-group-addon">p.p.m</span>
-                                                <input type="text" name="velocidad_ini" id="velocidad_ini" class="form-control numerico miles" placeholder="0" maxlength="5">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Comprensión Inicial<em class="required_asterisco">*</em></label>                                
-                                            <div class="input-group">
-                                                <span class="input-group-addon">%</span>
-                                                <input type="text" name="comprension_ini" id="comprension_ini" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                            </div>
-                                        </div>            
+                                <div class="col-xs-6 col-xs-offset-3">
+                                    <legend>Actualizar tipo de curso del alumno</legend>
+                                    <div class="row">
                                         <div class="form-group">
                                             <label>Tipo de Curso<em class="required_asterisco">*</em></label>
                                             <select name="t_curso" id="t_curso" class="form-control exit_caution">
@@ -182,30 +50,118 @@
                                                 {/t_curso}
                                             </select>
                                         </div> 
+                                    </div>
+                                    <div id="validacion_t_curso">
+                                    </div>                            
+                                    <div class="row text-center separar_submit">
+                                        <button type="button" class="btn btn-default" id="actualizar_t_curso"><span class="glyphicon glyphicon-upload"></span> Actualizar tipo de curso </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div_reporte" style="display: none">
+                                <!--<div id="div_reporte">-->
+                                <hr>
+                                <div class="row separar_submit" id="info_alumno">
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4 col-xs-offset-1">
                                         <div class="form-group">
-                                            <label>Clases por Semana<em class="required_asterisco">*</em></label>
-                                            <select name="cant_clases" id="cant_clases" class="form-control exit_caution">
-                                                <option value="default">Seleccione cantidad de Clases</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
+                                            <label>¿Asistió a la clase?<em class="required_asterisco">*</em></label>
+                                            <select name="asistencia" id="asistencia" class="form-control exit_caution">
+                                                <option value="1"  selected="selected">Si</option>
+                                                <option value="0">No</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Etapa al finalizar la clase<em class="required_asterisco">*</em></label>
+                                            <select name="etapa" id="etapa" class="form-control exit_caution">
+                                                <option value="default">Etapa al finalizar la clase</option>
+                                                <option value="1">1</option>
+                                                <option value="1">2</option>
+                                                <option value="1">3</option>
+                                                <option value="1">4</option>
+                                                <option value="1">5</option>
+                                                <option value="1">6</option>
+                                                <option value="1">7</option>
+                                                <option value="1">8</option>
+                                                <option value="1">9</option>
+                                                <option value="1">10</option>
+                                                <option value="1">11</option>
+                                                <option value="1">12</option>
+                                                <option value="1">13</option>
+                                                <option value="1">14</option>
+                                                <option value="1">15</option>
+                                                <option value="1">16</option>
+                                                <option value="1">17</option>
+                                                <option value="1">18</option>
+                                            </select>
+                                        </div>   
+                                        <div class="form-group">
+                                            <label>Fase</label>
+                                            <input name="fase" id="fase" type="text" class="form-control exit_caution alfanumerico" placeholder="Fase" maxlength="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Meta velocidad</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">p.p.m</span>
+                                                <input type="text" name="meta_v" id="meta_v" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Meta comprensión</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">%</span>
+                                                <input type="text" name="meta_c" id="meta_c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Meta Retención</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">%</span>
+                                                <input type="text" name="meta_r" id="meta_r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                            </div>
                                         </div> 
                                         <div class="form-group">
-                                            <label>Estado del alumno<em class="required_asterisco">*</em></label>
-                                            <select name="est_alumno" id="est_alumno" class="form-control exit_caution">
-                                                <option value="default">Seleccione estado del alumno</option>
-                                                {est_alumno}
-                                                <option value="{id}">{estado}</option>
-                                                {/est_alumno}
-                                            </select>
-                                        </div>                             
+                                            <label>Cantidad de practicas</label>
+                                            <input type="text" name="cant_practicas" id="cant_practicas" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-xs-4 col-xs-offset-1">    
                                         <div class="form-group">
-                                            <label>Observación</label>
-                                            <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación..."style="max-width:100%;"></textarea>
+                                            <label>Lectura</label>
+                                            <input name="lectura" id="lectura" type="text" class="form-control exit_caution alfanumerico" placeholder="Lectura" maxlength="100">
+                                        </div>                                        
+                                        <div class="form-group">
+                                            <label>Velocidad mental actual</label>                                
+                                            <div class="input-group">
+                                                <span class="input-group-addon">p.p.m</span>
+                                                <input type="text" name="vlm" id="vlm" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Velocidad verbal actual</label>                                
+                                            <div class="input-group">
+                                                <span class="input-group-addon">p.p.m</span>
+                                                <input type="text" name="vlv" id="vlv" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                            </div>
+                                        </div>                                        
+                                        <div class="form-group">
+                                            <label>Comprensión actual</label>                                
+                                            <div class="input-group">
+                                                <span class="input-group-addon">%</span>
+                                                <input type="text" name="c" id="c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                            </div>
+                                        </div>   
+                                        <div class="form-group">
+                                            <label>Retención actual</label>                                
+                                            <div class="input-group">
+                                                <span class="input-group-addon">%</span>
+                                                <input type="text" name="r" id="r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Observaciones<em class="required_asterisco">*</em></label>
+                                            <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="5" maxlength="250" placeholder="Observaciones..."style="max-width:100%;"></textarea>
                                         </div>                          
                                     </div>
                                 </div>
@@ -246,12 +202,17 @@
                 var obj = JSON.parse(data);
                 if (obj.respuesta == "OK")
                 {
-                    $("#info_alumno").html('<center><table><th><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre1 + ' ' + obj.nombre2 + ' ' + obj.apellido1 + ' ' + obj.apellido2 + '</h4></td></th></table></center>');
-                    $("#div_reporte").css("display", "block");
-                    $('#dni').attr('disabled', 'disabled');
-                    $('#id').attr('readonly', 'readonly');
-                    $('#consultar_alumno').attr('disabled', 'disabled');
-                    $("#div_warning").remove();
+                    if (obj.t_curso == null) {
+                        $("#div_t_curso").css("display", "block");
+                    } else {
+                        $("#div_t_curso").css("display", "none");
+                        $("#info_alumno").html('<center><table><tr><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre_alumno + '</h4></td></tr><tr><td><h4>Tipo de curso del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.tipo_curso + '</h4></td></tr></table></center>');
+                        $("#div_reporte").css("display", "block");
+                        $('#dni').attr('disabled', 'disabled');
+                        $('#id').attr('readonly', 'readonly');
+                        $('#consultar_alumno').attr('disabled', 'disabled');
+                        $("#div_warning").remove();
+                    }
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);
@@ -261,6 +222,34 @@
         } else {
             $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
             $("#div_warning").html("<p><strong><center>Antes de consultar, ingrese el tipo y número de identificación del alumno.</center></strong></p>");
+            $("#div_warning").delay(8000).fadeOut(1000);
+        }
+    });
+
+    //Llenamos la informacion de las matriculas y los pagos.
+    $("form").delegate("#actualizar_t_curso", "click", function() {
+        var dni = $('#dni').val();
+        var id = $('#id').val();
+        var tCurso = $('#t_curso').val();
+        if ((dni != "default") && (id != "") && (tCurso != "default")) {
+            $.post('{action_actualizar_t_curso}', {
+                dni: dni,
+                id: id,
+                tCurso: tCurso
+            }, function(data) {
+                var obj = JSON.parse(data);
+                if (obj.respuesta == "OK")
+                {
+                    $("#consultar_alumno").click();
+                } else {
+                    $("#validacion_t_curso").html('<div class="alert alert-warning" id="div_warning"></div>');
+                    $("#div_warning").html(obj.mensaje);
+                    $("#div_warning").delay(8000).fadeOut(1000);
+                }
+            });
+        } else {
+            $("#validacion_t_curso").html('<div class="alert alert-warning" id="div_warning"></div>');
+            $("#div_warning").html("<p><strong><center>Antes de actualizar, seleccione el tipo del curso del alumno.</center></strong></p>");
             $("#div_warning").delay(8000).fadeOut(1000);
         }
     });

@@ -10,16 +10,13 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $this->insert_model->cuenta_x_sede("999999999999", 1, 0);
-        $this->insert_model->cuenta_x_sede_x_empleado_ingresar("999999999999", 1, 1, 1, 1);
-        $this->insert_model->cuenta_x_sede_x_empleado_retirar("999999999999", 1, 1, 1, 1);
-        $this->insert_model->cuenta_x_sede_x_empleado_consultar("999999999999", 1, 1, 1, 1);
-
-        $this->insert_model->cuenta_x_sede("238478762342", 1, 0);
-        $this->insert_model->cuenta_x_sede_x_empleado_ingresar("238478762342", 1, 1, 1, 1);
-        $this->insert_model->cuenta_x_sede_x_empleado_retirar("238478762342", 1, 1, 1, 1);
-        $this->insert_model->cuenta_x_sede_x_empleado_consultar("238478762342", 1, 1, 1, 1);
-        echo "ok";
+        $error2 = $this->update_model->t_curso_alumno("1007111078", "4", "5");
+        //No se pudo crear el empleado
+        if (isset($error2)) {
+            echo "error";
+        } else {
+            echo "ok";
+        }
     }
 
 }

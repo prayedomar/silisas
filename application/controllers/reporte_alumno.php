@@ -7,6 +7,7 @@ class Reporte_alumno extends CI_Controller {
         $this->load->model('select_model');
         $this->load->model('insert_model');
         $this->load->model('update_model');
+        $this->load->model('alumnom');
     }
 
 //Crear: Nomina
@@ -16,10 +17,12 @@ class Reporte_alumno extends CI_Controller {
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['dni'] = $this->select_model->t_dni_alumno();
+        $data['t_curso'] = $this->select_model->t_curso();
         $data['action_validar'] = base_url() . "reporte_alumno/validar";
         $data['action_crear'] = base_url() . "reporte_alumno/insertar";
         $data['action_recargar'] = base_url() . "reporte_alumno/crear";
         $data['action_validar_alumno'] = base_url() . "reporte_alumno/validar_alumno";
+        $data['action_actualizar_t_curso'] = base_url() . "reporte_alumno/actualizar_t_curso";
         $this->parser->parse('reporte_alumno/crear', $data);
         $this->load->view('footer');
     }
@@ -60,38 +63,19 @@ class Reporte_alumno extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function validar_alumno() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             $dni_alumno = $this->input->post('dni');
             $id_alumno = $this->input->post('id');
-            $alumno = $this->select_model->alumno($id_alumno, $dni_alumno);
+            $alumno = $this->alumnom->alumno_id_dni($id_alumno, $dni_alumno);
             if ($alumno == TRUE) {
                 $response = array(
                     'respuesta' => 'OK',
-                    'nombre1' => $alumno->nombre1,
-                    'nombre2' => $alumno->nombre2,
-                    'apellido1' => $alumno->apellido1,
-                    'apellido2' => $alumno->apellido2,
-                    'genero' => $alumno->genero,
-                    'fecha_nacimiento' => $alumno->fecha_nacimiento,
-                    'pais' => $alumno->pais,
-                    'provincia' => $alumno->provincia,
-                    'ciudad' => $alumno->ciudad,
-                    't_domicilio' => $alumno->t_domicilio,
-                    'direccion' => $alumno->direccion,
-                    'barrio' => $alumno->barrio,
-                    'telefono' => $alumno->telefono,
-                    'celular' => $alumno->celular,
-                    'email' => $alumno->email,
-                    'matricula' => $alumno->matricula,
-                    'velocidad_ini' => $alumno->velocidad_ini,
-                    'comprension_ini' => $alumno->comprension_ini,
-                    't_curso' => $alumno->t_curso,
-                    'cant_clases' => $alumno->cant_clases,
-                    'estado' => $alumno->estado,
-                    'observacion' => $alumno->observacion
+                    'nombre_alumno' => $alumno->nombre_alumno,
+                    'tipo_curso' => $alumno->tipo_curso,
+                    't_curso' => $alumno->t_curso
                 );
                 echo json_encode($response);
                 return false;
@@ -106,7 +90,34 @@ class Reporte_alumno extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
+    }
+
+    public function actualizar_t_curso() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $dni_alumno = $this->input->post('dni');
+            $id_alumno = $this->input->post('id');
+            $t_curso = $this->input->post('tCurso');
+            $error2 = $this->update_model->t_curso_alumno($id_alumno, $dni_alumno, $t_curso);
+            //No se pudo crear el empleado
+            if (isset($error2)) {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>Hubo un problema al actualizar el tipo de curso. Recargue la página y vuelva a intentarlo.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            } else {
+                $response = array(
+                    'respuesta' => 'OK'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
 
     function insertar() {
         if ($this->input->post('submit')) {
@@ -167,6 +178,5 @@ class Reporte_alumno extends CI_Controller {
             redirect(base_url());
         }
     }
-
 
 }

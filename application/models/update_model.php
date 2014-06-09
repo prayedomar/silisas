@@ -300,6 +300,18 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function t_curso_alumno($id_alumno, $dni_alumno, $t_curso) {
+        $data = array(
+            't_curso' => $t_curso
+        );
+        $this->db->where('id', $id_alumno);
+        $this->db->where('dni', $dni_alumno);
+        $this->db->update('alumno', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function cambio_plan_matricula($id_matricula, $plan_new) {
         $data = array(
@@ -335,5 +347,7 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
+    
+    
 
 }
