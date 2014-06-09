@@ -42,7 +42,6 @@ class MAtricula extends CI_Controller {
             $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
             $this->form_validation->set_rules('plan', 'Plan Comercial', 'required');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-
             //Validamos que el número de contrato físico exista en dicha sede
             $error_contrato = "";
             if (($this->input->post('contrato')) && ($this->input->post('sede_ppal') != "default")) {
@@ -50,7 +49,6 @@ class MAtricula extends CI_Controller {
                 $id_responsable = $this->session->userdata('idResponsable');
                 $dni_responsable = $this->session->userdata('dniResponsable');
                 $sede = $this->input->post('sede_ppal');
-
                 $check_contrato = $this->select_model->contrato_matricula_id($contrato);
                 if ($check_contrato != TRUE) {
                     $error_contrato = "<p>El contrato físico ingresado, no existe en la base de datos.</p>";
@@ -74,7 +72,6 @@ class MAtricula extends CI_Controller {
                     $error_titular = "<p>El Titular ingresado, no existe en la Base de Datos.</p>";
                 }
             }
-
             if (($this->form_validation->run() == FALSE) || ($error_contrato != "") || ($error_titular != "")) {
                 echo form_error('contrato') . $error_contrato . form_error('fecha_matricula') . form_error('dni_titular') . form_error('id_titular') . $error_titular . form_error('ejecutivo') . form_error('sede_ppal') . form_error('plan') . form_error('observacion');
             } else {
