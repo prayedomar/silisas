@@ -211,7 +211,6 @@
                 $(this).find("#total_concepto").attr('value', (cantidad * valor_unitario).toFixed(2));
                 $(this).find("#total_concepto").change();
             }
-
         });
         $('#total_devengado').attr('value', ((total_devengado).toFixed(2)));
         $('#total_devengado').change();

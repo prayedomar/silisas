@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-xs-2">
                             <label>Id</label>
-                            <input type='text' id="id" class='form-control letras_numeros' placeholder="Id" value="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>">
+                            <input type='text' id="id" class='form-control numerico' placeholder="Id" value="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>">
                         </div>
                         <div class="col-xs-2">
                             <label>Caja</label>

@@ -59,120 +59,137 @@
                                 </div>
                             </div>
                             <div id="div_reporte" style="display: none">
-                                <!--<div id="div_reporte">-->
+                            <!--<div id="div_reporte">-->
                                 <hr>
                                 <div class="row separar_submit" id="info_alumno">
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-4 col-xs-offset-1">
-                                        <div class="form-group">
-                                            <label>¿Asistió a la clase?<em class="required_asterisco">*</em></label>
-                                            <select name="asistencia" id="asistencia" class="form-control exit_caution">
-                                                <option value="1"  selected="selected">Si</option>
-                                                <option value="0">No</option>
-                                            </select>
+                                    <div class="col-xs-10 col-xs-offset-1">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label>¿Asistió a la clase?<em class="required_asterisco">*</em></label>
+                                                <select name="asistencia" id="asistencia" class="form-control exit_caution">
+                                                    <option value="1"  selected="selected">Si</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Etapa al finalizar la clase</label>
+                                                <select name="etapa" id="etapa" class="form-control exit_caution">
+                                                    <option value="default">Etapa al finalizar la clase</option>
+                                                    <option value="1">1</option>
+                                                    <option value="1">2</option>
+                                                    <option value="1">3</option>
+                                                    <option value="1">4</option>
+                                                    <option value="1">5</option>
+                                                    <option value="1">6</option>
+                                                    <option value="1">7</option>
+                                                    <option value="1">8</option>
+                                                    <option value="1">9</option>
+                                                    <option value="1">10</option>
+                                                    <option value="1">11</option>
+                                                    <option value="1">12</option>
+                                                    <option value="1">13</option>
+                                                    <option value="1">14</option>
+                                                    <option value="1">15</option>
+                                                    <option value="1">16</option>
+                                                    <option value="1">17</option>
+                                                    <option value="1">18</option>
+                                                </select>
+                                            </div>   
+                                            <div class="form-group">
+                                                <label>Fase</label>
+                                                <input name="fase" id="fase" type="text" class="form-control exit_caution alfanumerico" placeholder="Fase" maxlength="100">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Meta velocidad</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">p.p.m</span>
+                                                    <input type="text" name="meta_v" id="meta_v" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Meta comprensión</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">%</span>
+                                                    <input type="text" name="meta_c" id="meta_c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Meta Retención</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">%</span>
+                                                    <input type="text" name="meta_r" id="meta_r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                                </div>
+                                            </div>                                        
                                         </div>
-                                        <div class="form-group">
-                                            <label>Etapa al finalizar la clase<em class="required_asterisco">*</em></label>
-                                            <select name="etapa" id="etapa" class="form-control exit_caution">
-                                                <option value="default">Etapa al finalizar la clase</option>
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="1">5</option>
-                                                <option value="1">6</option>
-                                                <option value="1">7</option>
-                                                <option value="1">8</option>
-                                                <option value="1">9</option>
-                                                <option value="1">10</option>
-                                                <option value="1">11</option>
-                                                <option value="1">12</option>
-                                                <option value="1">13</option>
-                                                <option value="1">14</option>
-                                                <option value="1">15</option>
-                                                <option value="1">16</option>
-                                                <option value="1">17</option>
-                                                <option value="1">18</option>
-                                            </select>
-                                        </div>   
-                                        <div class="form-group">
-                                            <label>Fase</label>
-                                            <input name="fase" id="fase" type="text" class="form-control exit_caution alfanumerico" placeholder="Fase" maxlength="100">
+                                        <div class="col-xs-6">  
+                                            <div class="form-group">
+                                                <label>Cantidad de prácticas realizadas</label>
+                                                <input type="text" name="cant_practicas" id="cant_practicas" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                            </div>                                             
+                                            <div class="form-group">
+                                                <label>Lectura</label>
+                                                <input name="lectura" id="lectura" type="text" class="form-control exit_caution alfanumerico" placeholder="Lectura" maxlength="100">
+                                            </div>                                        
+                                            <div class="form-group">
+                                                <label>Velocidad mental actual</label>                                
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">p.p.m</span>
+                                                    <input type="text" name="vlm" id="vlm" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Velocidad verbal actual</label>                                
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">p.p.m</span>
+                                                    <input type="text" name="vlv" id="vlv" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                                </div>
+                                            </div>                                        
+                                            <div class="form-group">
+                                                <label>Comprensión actual</label>                                
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">%</span>
+                                                    <input type="text" name="c" id="c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                                </div>
+                                            </div>   
+                                            <div class="form-group">
+                                                <label>Retención actual</label>                                
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">%</span>
+                                                    <input type="text" name="r" id="r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                                </div>
+                                            </div>                         
                                         </div>
-                                        <div class="form-group">
-                                            <label>Meta velocidad</label>
-                                            <div class="input-group">
-                                                <span class="input-group-addon">p.p.m</span>
-                                                <input type="text" name="meta_v" id="meta_v" class="form-control numerico miles" placeholder="0" maxlength="5">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Meta comprensión</label>
-                                            <div class="input-group">
-                                                <span class="input-group-addon">%</span>
-                                                <input type="text" name="meta_c" id="meta_c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Meta Retención</label>
-                                            <div class="input-group">
-                                                <span class="input-group-addon">%</span>
-                                                <input type="text" name="meta_r" id="meta_r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                            </div>
-                                        </div> 
-                                        <div class="form-group">
-                                            <label>Cantidad de practicas</label>
-                                            <input type="text" name="cant_practicas" id="cant_practicas" class="form-control numerico miles" placeholder="0" maxlength="5">
-                                        </div>                                        
-                                    </div>
-                                    <div class="col-xs-4 col-xs-offset-1">    
-                                        <div class="form-group">
-                                            <label>Lectura</label>
-                                            <input name="lectura" id="lectura" type="text" class="form-control exit_caution alfanumerico" placeholder="Lectura" maxlength="100">
-                                        </div>                                        
-                                        <div class="form-group">
-                                            <label>Velocidad mental actual</label>                                
-                                            <div class="input-group">
-                                                <span class="input-group-addon">p.p.m</span>
-                                                <input type="text" name="vlm" id="vlm" class="form-control numerico miles" placeholder="0" maxlength="5">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Velocidad verbal actual</label>                                
-                                            <div class="input-group">
-                                                <span class="input-group-addon">p.p.m</span>
-                                                <input type="text" name="vlv" id="vlv" class="form-control numerico miles" placeholder="0" maxlength="5">
-                                            </div>
-                                        </div>                                        
-                                        <div class="form-group">
-                                            <label>Comprensión actual</label>                                
-                                            <div class="input-group">
-                                                <span class="input-group-addon">%</span>
-                                                <input type="text" name="c" id="c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                            </div>
-                                        </div>   
-                                        <div class="form-group">
-                                            <label>Retención actual</label>                                
-                                            <div class="input-group">
-                                                <span class="input-group-addon">%</span>
-                                                <input type="text" name="r" id="r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Observaciones<em class="required_asterisco">*</em></label>
-                                            <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="5" maxlength="250" placeholder="Observaciones..."style="max-width:100%;"></textarea>
-                                        </div>                          
                                     </div>
                                 </div>
+                                <div class="row separar_div">
+                                    <div class="col-xs-10 col-xs-offset-1">
+                                        <div id="div_ejercicios">
+                                            <label>Ejercicios realizados en clase</label>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <button class="btn btn-default" type="button" id="agregar_ejercicio"><span class="glyphicon glyphicon-plus"></span> Agregar ejercicio de clase</button>  
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="row separar_div">
+                                    <div class="col-xs-10 col-xs-offset-1">
+                                        <div class="form-group">
+                                            <label>Observaciones<em class="required_asterisco">*</em></label>
+                                            <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observaciones..."style="max-width:100%;"></textarea>
+                                        </div> 
+                                    </div>
+                                </div>                                
                                 <div class="row">
                                     <div class="form-group separar_submit">
                                         <input type="hidden" id="action_validar" value={action_validar} />
                                         <input type="hidden" name="id_responsable" value={id_responsable} />
                                         <input type="hidden" name="dni_responsable" value={dni_responsable} />
+                                        <input type="hidden" name="contador_new_ejercicio" class="miles decimal2" id="contador_new_ejercicio"/>
                                         <center>
                                             <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                                            <button id="btn_validar" class="btn btn-success">Actualizar reporte de alumno</button> 
+                                            <button id="btn_validar" class="btn btn-success">Crear reporte de alumno</button> 
                                             <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                             <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                                         </center>
@@ -189,8 +206,10 @@
     </div>
 </div>
 <script type="text/javascript">
+    //Colocamos el contador de nuevos ejercicios en 1
+    $('#contador_new_ejercicio').attr('value', '1');
 
-    //Llenamos la informacion de las matriculas y los pagos.
+    //Llenamos la informacion de las matriculas y los pagos.     
     $("form").delegate("#consultar_alumno", "click", function() {
         var dni = $('#dni').val();
         var id = $('#id').val();
@@ -206,7 +225,7 @@
                         $("#div_t_curso").css("display", "block");
                     } else {
                         $("#div_t_curso").css("display", "none");
-                        $("#info_alumno").html('<center><table><tr><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre_alumno + '</h4></td></tr><tr><td><h4>Tipo de curso del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.tipo_curso + '</h4></td></tr></table></center>');
+                        $("#info_alumno").html('<center><table><tr><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre_alumno + '</h4></td></tr><tr><td><h4>Tipo de curso: </h4></td><td><h4 class="h_negrita"> ' + obj.tipo_curso + '</h4></td></tr></table></center>');
                         $("#div_reporte").css("display", "block");
                         $('#dni').attr('disabled', 'disabled');
                         $('#id').attr('readonly', 'readonly');
@@ -224,7 +243,8 @@
             $("#div_warning").html("<p><strong><center>Antes de consultar, ingrese el tipo y número de identificación del alumno.</center></strong></p>");
             $("#div_warning").delay(8000).fadeOut(1000);
         }
-    });
+    }
+    );
 
     //Llenamos la informacion de las matriculas y los pagos.
     $("form").delegate("#actualizar_t_curso", "click", function() {
@@ -254,68 +274,48 @@
         }
     });
 
-    //Llenamos la cajas del responsable
-    $.post('{action_llena_caja_responsable}', {
-        idResposable: '{id_responsable}',
-        dniResposable: '{dni_responsable}'
-    }, function(data) {
-        $("#tbody_caja_efectivo").html(data);
+    $("#div_reporte").delegate("#agregar_ejercicio", "click", function() {
+        //Agregamos un ejercicio de nomina
+        var dni = $('#dni').val();
+        var id = $('#id').val();
+        var idUltimoEjercicio = $('#contador_new_ejercicio').val();
+        $.post('{action_llena_agregar_ejercicio}', {
+            dni: dni,
+            id: id,
+            idUltimoEjercicio: idUltimoEjercicio
+        }, function(data) {
+            if (data != "") {
+                $("#div_ejercicios").append(data);
+                var aumentarId = (new Number($('#contador_new_ejercicio').val()) + 1);
+                $('#contador_new_ejercicio').attr('value', aumentarId);
+            }
+        });
     });
 
-    //Llenamos las cajas del responsable
-    $.post('{action_llena_cuenta_responsable}', {
-        idResposable: '{id_responsable}',
-        dniResposable: '{dni_responsable}'
-    }, function(data) {
-        $("#tbody_cuenta_bancaria").html(data);
-    });
-
-    //Habilitamos input de efectivo retirado de las cajas
-    $("table").delegate("#caja", "click", function() {
-        var total = new Number($('#total').val().split(",").join(""));
-        if ($('#valor_retirado').is('[readonly]')) {
-            $('#efectivo_retirado').attr('value', ((total).toFixed(2)));
-        } else {
-            var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-            $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
+    //Eliminamos los conceptos y preguntamos antes
+    $("#div_reporte").delegate(".drop_new_ejercicio", "click", function() {
+        if (confirm('¿Está seguro que desea eliminar el ejercicio realizado?')) {
+            $("#div_new_ejercicio_" + $(this).attr('id')).remove();
+            calcular_total();
         }
-        $('#efectivo_retirado').change();
-        $("#efectivo_retirado").removeAttr("readonly");
     });
 
-    //Habilitamos inputde valor retirado de las cuentas
-    $("table").delegate("#cuenta", "click", function() {
-        var total = new Number($('#total').val().split(",").join(""));
-        if ($('#efectivo_retirado').is('[readonly]')) {
-            $('#valor_retirado').attr('value', ((total).toFixed(2)));
-        } else {
-            var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-            $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
-        }
-        $('#valor_retirado').change();
-        $("#valor_retirado").removeAttr("readonly");
+    $("#div_reporte").delegate("#t_habilidad", "change", function() {
+        var dni = $('#dni').val();
+        var id = $('#id').val();
+        var habilidad = $(this).val();
+        var idDivEjercicio = $(this).parent().parent().parent().parent().attr('id');
+        $.post('{action_llena_ejercicio_habilidad}', {
+            dni: dni,
+            id: id,
+            habilidad: habilidad
+        }, function(data) {
+            $("#" + idDivEjercicio).find("#t_ejercicio").removeAttr("disabled");
+            $("#" + idDivEjercicio).find("#t_ejercicio").html(data);
+            $("#" + idDivEjercicio).find("#t_ejercicio").prepend('<option value="default" selected>Seleccione Ejercicio</option>');
+        });
     });
 
-    //Calcula el valor contrario al modificar el valor retirado.
-    $(".form-group").delegate("#valor_retirado", "blur", function() {
-        //Preguntamos si el valor retirado es readonly
-        if (!($('#efectivo_retirado').is('[readonly]'))) {
-            var total = new Number($('#total').val().split(",").join(""));
-            var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
-            $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
-        }
-        $('#efectivo_retirado').change();
-    });
-
-    //Calcula el valor contrario al modificar el efectivo retirado.
-    $(".form-group").delegate("#efectivo_retirado", "blur", function() {
-        if (!($('#valor_retirado').is('[readonly]'))) {
-            var total = new Number($('#total').val().split(",").join(""));
-            var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
-            $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
-        }
-        $('#valor_retirado').change();
-    });
 
     //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax

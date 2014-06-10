@@ -8,13 +8,13 @@ class Matriculam extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-    
+
     public function matricula_id($id) {
         $SqlInfo = "SELECT ma.*, se.nombre sede_ppal, CONCAT(t_p.nombre, ' - ', t_p.anio) nombre_plan, t_p.valor_total, t_p.valor_inicial, t_p.valor_cuota, t_p.cant_cuotas, CONCAT(ej.nombre1, ' ', ej.nombre2, ' ', ej.apellido1) ejecutivo, CONCAT(re.nombre1, ' ', re.apellido1) responsable, CONCAT(ti.nombre1, ' ', ti.nombre2, ' ', ti.apellido1,  ' ', ti.apellido2) titular, ti.direccion, ti.telefono, ti.celular "
                 . "FROM matricula ma "
                 . "JOIN empleado ej ON ((ma.id_ejecutivo = ej.id) and (ma.dni_ejecutivo = ej.dni)) "
-                . "JOIN titular ti ON ((ma.id_titular = ti.id) and (ma.dni_titular = ti.dni)) "                
-                . "JOIN empleado re ON ((ma.id_responsable = re.id) and (ma.dni_responsable = re.dni)) " 
+                . "JOIN titular ti ON ((ma.id_titular = ti.id) and (ma.dni_titular = ti.dni)) "
+                . "JOIN empleado re ON ((ma.id_responsable = re.id) and (ma.dni_responsable = re.dni)) "
                 . "JOIN t_plan t_p ON ma.plan=t_p.id "
                 . "JOIN sede se ON ma.sede=se.id "
                 . "where (ma.contrato='" . $id . "')";
@@ -22,7 +22,24 @@ class Matriculam extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }    
+    }
+
+    public function pagos_matricula_id($id_matricula) {
+        $query = "SELECT fa.prefijo, fa.id, fa.t_trans, fa.subtotal, fa.int_mora, fa.descuento, fa.id_responsable, fa.dni_responsable, fa.fecha_trans, CONCAT(re.nombre1, ' ', re.apellido1) responsable "
+                . "FROM factura fa "
+                . "JOIN matricula ma ON (fa.matricula = ma.contrato) "
+                . "JOIN empleado re ON ((ma.id_responsable = re.id) and (ma.dni_responsable = re.dni)) "
+                . "where ((ma.contrato='" . $id_matricula . "') AND (fa.vigente='1')) "
+                . "UNION "
+                . "SELECT rc.prefijo, rc.id, rc.t_trans, rc.subtotal, rc.int_mora, rc.descuento, rc.id_responsable, rc.dni_responsable, rc.fecha_trans, CONCAT(re.nombre1, ' ', re.apellido1) responsable  "
+                . "FROM recibo_caja rc "
+                . "JOIN matricula ma ON (rc.matricula = ma.contrato) "
+                . "JOIN empleado re ON ((ma.id_responsable = re.id) and (ma.dni_responsable = re.dni)) "
+                . "where ((ma.contrato='" . $id_matricula . "') AND (rc.vigente='1'))";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }
 
     public function cantidad_matriculas($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT count(*) cantidad
@@ -78,7 +95,7 @@ class Matriculam extends CI_Model {
         $query.=(!empty($criterios['estado'])) ? "AND ma.estado = '{$criterios['estado']}'" : "";
         $query.=(!empty($criterios['id_alumno'])) ? "AND al.id = '{$criterios['id_alumno']}'" : "";
         $query.=" LIMIT $inicio,$filasPorPagina";
-     //   echo $query;
+        //   echo $query;
         return $this->db->query($query)->result();
     }
 
