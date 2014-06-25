@@ -110,10 +110,10 @@ class Titular extends CI_Controller {
             $this->escapar($_POST);
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');
-            $nombre1 = ucwords(strtolower($this->input->post('nombre1')));
-            $nombre2 = ucwords(strtolower($this->input->post('nombre2')));
-            $apellido1 = ucwords(strtolower($this->input->post('apellido1')));
-            $apellido2 = ucwords(strtolower($this->input->post('apellido2')));
+            $nombre1 = ucwords(mb_strtolower($this->input->post('nombre1')));
+            $nombre2 = ucwords(mb_strtolower($this->input->post('nombre2')));
+            $apellido1 = ucwords(mb_strtolower($this->input->post('apellido1')));
+            $apellido2 = ucwords(mb_strtolower($this->input->post('apellido2')));
             $fecha_nacimiento = $this->input->post('fecha_nacimiento');
             if ($fecha_nacimiento == "") {
                 $fecha_nacimiento = NULL;
@@ -123,12 +123,12 @@ class Titular extends CI_Controller {
             $provincia = $this->input->post('provincia');
             $ciudad = $this->input->post('ciudad');
             $t_domicilio = $this->input->post('t_domicilio');
-            $direccion = ucwords(strtolower($this->input->post('direccion')));
-            $barrio = ucwords(strtolower($this->input->post('barrio')));
-            $telefono = strtolower($this->input->post('telefono'));
+            $direccion = ucwords(mb_strtolower($this->input->post('direccion')));
+            $barrio = ucwords(mb_strtolower($this->input->post('barrio')));
+            $telefono = mb_strtolower($this->input->post('telefono'));
             $celular = $this->input->post('celular');
-            $email = strtolower($this->input->post('email'));
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $email = mb_strtolower($this->input->post('email'));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
 
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

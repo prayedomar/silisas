@@ -59,17 +59,32 @@
                                 </div>
                             </div>
                             <div id="div_reporte" style="display: none">
-                            <!--<div id="div_reporte">-->
+                                <!--<div id="div_reporte">-->
                                 <hr>
                                 <div class="row separar_submit" id="info_alumno">
                                 </div>
+                                <div class="row" id="div_reportes_anteriores">
+                                </div>
                                 <div class="row">
                                     <div class="col-xs-10 col-xs-offset-1">
+                                        <legend>Nuevo reporte de clase</legend>
+                                        <div class="row">
+                                            <div class="col-xs-4 col-xs-offset-4">
+                                                <div class="form-group">
+                                                    <label>Fecha de la clase<em class="required_asterisco">*</em></label>
+                                                    <div class="input-group">
+                                                        <input name="fecha_clase" id="fecha_clase" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de la clase">
+                                                        <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>¿Asistió a la clase?<em class="required_asterisco">*</em></label>
                                                 <select name="asistencia" id="asistencia" class="form-control exit_caution">
-                                                    <option value="1"  selected="selected">Si</option>
+                                                    <option value="default"  selected="selected">Seleccione sí asistió a la clase</option>
+                                                    <option value="1">Si</option>
                                                     <option value="0">No</option>
                                                 </select>
                                             </div>
@@ -78,23 +93,23 @@
                                                 <select name="etapa" id="etapa" class="form-control exit_caution">
                                                     <option value="default">Etapa al finalizar la clase</option>
                                                     <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="1">5</option>
-                                                    <option value="1">6</option>
-                                                    <option value="1">7</option>
-                                                    <option value="1">8</option>
-                                                    <option value="1">9</option>
-                                                    <option value="1">10</option>
-                                                    <option value="1">11</option>
-                                                    <option value="1">12</option>
-                                                    <option value="1">13</option>
-                                                    <option value="1">14</option>
-                                                    <option value="1">15</option>
-                                                    <option value="1">16</option>
-                                                    <option value="1">17</option>
-                                                    <option value="1">18</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
                                                 </select>
                                             </div>   
                                             <div class="form-group">
@@ -176,16 +191,24 @@
                                 <div class="row separar_div">
                                     <div class="col-xs-10 col-xs-offset-1">
                                         <div class="form-group">
-                                            <label>Observaciones<em class="required_asterisco">*</em></label>
-                                            <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observaciones..."style="max-width:100%;"></textarea>
+                                            <label class="label_observacion">Observación para manejo interno</label>
+                                            <label  style="display:none;" class="label_observacion_required">Observación interna<em class="required_asterisco">*</em></label>
+                                            <textarea name="observacion_interna" id="observacion_interna" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación manejo interno..."style="max-width:100%;"></textarea>
                                         </div> 
                                     </div>
-                                </div>                                
+                                </div>  
+                                <div class="row separar_div">
+                                    <div class="col-xs-10 col-xs-offset-1">
+                                        <div class="form-group">
+                                            <label class="label_observacion">Observación para el titular y/o el alumno</label>
+                                            <label  style="display:none;" class="label_observacion_required">Observación para el titular y/o el alumno<em class="required_asterisco">*</em></label>
+                                            <textarea name="observacion_titular_alumno" id="observacion_titular_alumno" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación para el titular y/o el alumno..."style="max-width:100%;"></textarea>
+                                        </div> 
+                                    </div>
+                                </div>                                 
                                 <div class="row">
                                     <div class="form-group separar_submit">
                                         <input type="hidden" id="action_validar" value={action_validar} />
-                                        <input type="hidden" name="id_responsable" value={id_responsable} />
-                                        <input type="hidden" name="dni_responsable" value={dni_responsable} />
                                         <input type="hidden" name="contador_new_ejercicio" class="miles decimal2" id="contador_new_ejercicio"/>
                                         <center>
                                             <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
@@ -205,7 +228,129 @@
         </div>
     </div>
 </div>
+<div class="modal" id="modalDetalles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Detalles del reporte</h3>
+            </div>
+            <div id="bodyModalDetalles" class="modal-body">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Ejercicios realizados:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_ejercicios"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Meta velocidad:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_meta_v"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Meta Comprensión:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_meta_c"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Meta retención:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_meta_r"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Observación interna:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_observacion_interna"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Observación Titular y/o Alumno:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_observacion_titular_alumno"></div></b>
+                        </div>
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Responsable:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_responsable"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Fecha del reporte:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_fecha_trans"></div></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
+    //Mostramos el obligatorio de descripcion si en t_egreso selecciona "otro" o "transaccion intersede de difereente pais"
+    $(".form-group").delegate("#asistencia", "change", function() {
+        if ($(this).val() == '1') {
+            $(".label_observacion_required").css("display", "block");
+            $(".label_observacion").css("display", "none");
+        } else {
+            $(".label_observacion_required").css("display", "none");
+            $(".label_observacion").css("display", "block");
+        }
+    });
+
     //Colocamos el contador de nuevos ejercicios en 1
     $('#contador_new_ejercicio').attr('value', '1');
 
@@ -226,9 +371,10 @@
                     } else {
                         $("#div_t_curso").css("display", "none");
                         $("#info_alumno").html('<center><table><tr><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre_alumno + '</h4></td></tr><tr><td><h4>Tipo de curso: </h4></td><td><h4 class="h_negrita"> ' + obj.tipo_curso + '</h4></td></tr></table></center>');
+                        $("#div_reportes_anteriores").html(obj.html_reportes);
                         $("#div_reporte").css("display", "block");
                         $('#dni').attr('disabled', 'disabled');
-                        $('#id').attr('readonly', 'readonly');
+                        $('#id').attr('disabled', 'disabled');
                         $('#consultar_alumno').attr('disabled', 'disabled');
                         $("#div_warning").remove();
                     }
@@ -316,12 +462,23 @@
         });
     });
 
+    $("#div_reporte").delegate(".ver-detalles", "click", function() {
+        $("#modalDetalles").modal();
+        $("#divM_ejercicios").html($(this).data("ejercicios"));
+        $("#divM_meta_v").html($(this).data("meta_v"));
+        $("#divM_meta_c").html($(this).data("meta_c"));
+        $("#divM_meta_r").html($(this).data("meta_r"));
+        $("#divM_observacion_interna").html($(this).data("observacion_interna"));
+        $("#divM_observacion_titular_alumno").html($(this).data("observacion_titular_alumno"));
+        $("#divM_responsable").html($(this).data("responsable"));
+        $("#divM_fecha_trans").html($(this).data("fecha_trans"));
+    });
 
     //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
-        $('#prefijo_factura').removeAttr("disabled");
-        $('#id_factura').removeAttr("disabled");
+        $('#dni').removeAttr("disabled");
+        $('#id').removeAttr("disabled");
         $.ajax({
             type: "POST",
             url: $("#action_validar").attr("value"),
@@ -330,8 +487,8 @@
             success: function(data)
             {
                 if (data != "OK") {
-                    $('#prefijo_factura').attr('disabled', 'disabled');
-                    $('#id_factura').attr('disabled', 'disabled');
+                    $('#dni').attr('disabled', 'disabled');
+                    $('#id').attr('disabled', 'disabled');
                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                     $("#div_alert").html(data);
                     $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
@@ -341,8 +498,8 @@
                 }
             },
             error: function(data) {
-                $('#prefijo_factura').attr('disabled', 'disabled');
-                $('#id_factura').attr('disabled', 'disabled');
+                $('#dni').attr('disabled', 'disabled');
+                $('#id').attr('disabled', 'disabled');
                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                 $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');

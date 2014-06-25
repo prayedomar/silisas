@@ -86,7 +86,7 @@ class Retefuente_ventas extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;

@@ -1233,11 +1233,11 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function recibo_caja($prefijo, $id, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
+    public function recibo_caja($prefijo, $id, $t_trans, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
-            't_trans' => '8',
+            't_trans' => $t_trans,
             'credito_debito' => '1',
             'matricula' => $matricula,
             'id_a_nombre_de' => $id_a_nombre_de,
@@ -1266,6 +1266,40 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function abono_matricula($prefijo, $id, $t_trans, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'prefijo' => $prefijo,
+            'id' => $id,
+            't_trans' => $t_trans,
+            'credito_debito' => '1',
+            'matricula' => $matricula,
+            'id_a_nombre_de' => $id_a_nombre_de,
+            'dni_a_nombre_de' => $dni_a_nombre_de,
+            'd_v_a_nombre_de' => $d_v_a_nombre_de,
+            'a_nombre_de' => $a_nombre_de,
+            'direccion_a_nombre_de' => $direccion_a_nombre_de,
+            'subtotal' => $subtotal,
+            'int_mora' => $int_mora,
+            'descuento' => $descuento,
+            'sede_caja_destino' => $sede_caja_destino,
+            't_caja_destino' => $t_caja_destino,
+            'efectivo_ingresado' => $efectivo_ingresado,
+            'cuenta_destino' => $cuenta_destino,
+            'valor_consignado' => $valor_consignado,
+            'sede' => $sede,
+            'vigente' => $vigente,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('abono_matricula');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $t_detalle, $num_cuota, $subtotal, $fecha_esperada, $cant_dias_mora, $int_mora) {
         $data = array(
@@ -1356,6 +1390,51 @@ class Insert_model extends CI_Model {
         $this->db->set($data);
         $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
         $this->db->insert('aprobar_transferencia');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $fecha_clase, $asistencia, $etapa, $fase, $meta_v, $meta_c, $meta_r, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $vigente, $observacion_interna, $observacion_titular_alumno, $id_responsable, $dni_responsable) {
+        $data = array(
+            'id' => $id_reporte,
+            'id_alumno' => $id_alumno,
+            'dni_alumno' => $dni_alumno,
+            'fecha_clase' => $fecha_clase,
+            'asistencia' => $asistencia,
+            'etapa' => $etapa,
+            'fase' => $fase,
+            'meta_v' => $meta_v,
+            'meta_c' => $meta_c,
+            'meta_r' => $meta_r,
+            'cant_practicas' => $cant_practicas,
+            'lectura' => $lectura,
+            'vlm' => $vlm,
+            'vlv' => $vlv,
+            'c' => $c,
+            'r' => $r,
+            'vigente' => $vigente,
+            'observacion_interna' => $observacion_interna,
+            'observacion_titular_alumno' => $observacion_titular_alumno,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('reporte_alumno');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function ejercicio_ensenanza($id_reporte, $t_habilidad, $t_ejercicio) {
+        $data = array(
+            'id_reporte' => $id_reporte,
+            't_habilidad' => $t_habilidad,
+            't_ejercicio' => $t_ejercicio,
+            'vigente' => '1'
+        );
+        $this->db->insert('ejercicio_ensenanza', $data);
         if ($error = $this->db->_error_message()) {
             return $error;
         }

@@ -11,7 +11,7 @@ class Traslado_contrato_matricula extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_traslado_contrato_matricula";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -28,7 +28,7 @@ class Traslado_contrato_matricula extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('contrato_inicial', 'Número de Contrato Inicial', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('contrato_final', 'Número de Contrato Final', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('sede_actual', 'Sede Actual', 'required|callback_select_default');
@@ -96,17 +96,17 @@ class Traslado_contrato_matricula extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
-            $contrato_inicial = ucwords(strtolower($this->input->post('contrato_inicial')));
-            $contrato_final = ucwords(strtolower($this->input->post('contrato_final')));
-            $sede_actual = ucwords(strtolower($this->input->post('sede_actual')));
-            $sede_destino = ucwords(strtolower($this->input->post('sede_destino')));
-            
+            $this->escapar($_POST);
+            $contrato_inicial = $this->input->post('contrato_inicial');
+            $contrato_final = $this->input->post('contrato_final');
+            $sede_actual = $this->input->post('sede_actual');
+            $sede_destino = $this->input->post('sede_destino');
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
 
             $data["tab"] = "crear_traslado_contrato_matricula";
-            $this->isLogin($data["tab"]);              
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "traslado_contrato_matricula/crear";
             $data['msn_recrear'] = "Crear otro Traslado de Contratos";

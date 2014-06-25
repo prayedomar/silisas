@@ -53,7 +53,7 @@ class Caja extends CI_Controller {
             $sede = $this->input->post('sede');
             $t_caja = $this->input->post('t_caja');
             list($id_encargado, $dni_encargado) = explode("-", $this->input->post('empleado'));
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

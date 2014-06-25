@@ -479,10 +479,10 @@
                         <li class="col-sm-4">
                             <ul>
                                 <li class="dropdown-header"><u> Sedes</u></li>
-                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                             <li><a href="<?= base_url() ?>sede/consultar">Sedes</a></li>
                         <?php } ?>                           
-                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "calidad", "docente", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                             <li><a href="<?= base_url() ?>salon/consultar">Salones</a></li>
                         <?php } ?>                                    
                         <li class="divider"></li>                                            
@@ -504,10 +504,10 @@
                 <?php } ?>                                    
                 <li class="divider"></li>
                 <li class="dropdown-header"><u> Clientes</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                     <li><a href="<?= base_url() ?>titular/consultar">Titulares</a></li>
                 <?php } ?>                              
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "analista_cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                     <li><a href="<?= base_url() ?>alumno/consultar">Alumnos</a></li>
                 <?php } ?>                            
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       

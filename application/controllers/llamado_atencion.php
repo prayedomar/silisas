@@ -66,7 +66,7 @@ class Llamado_atencion extends CI_Controller {
             list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
             $t_falta_laboral = $this->input->post('t_falta_laboral');
             $t_sancion = $this->input->post('t_sancion');
-            $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
+            $descripcion = ucfirst(mb_strtolower($this->input->post('descripcion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

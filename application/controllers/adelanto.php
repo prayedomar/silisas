@@ -87,9 +87,9 @@ class Adelanto extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
-            $autoriza = ucfirst(strtolower($this->input->post('autoriza')));
-            $motivo = ucfirst(strtolower($this->input->post('motivo')));
-            $forma_descuento = ucfirst(strtolower($this->input->post('forma_descuento')));
+            $autoriza = ucfirst(mb_strtolower($this->input->post('autoriza')));
+            $motivo = ucfirst(mb_strtolower($this->input->post('motivo')));
+            $forma_descuento = ucfirst(mb_strtolower($this->input->post('forma_descuento')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

@@ -97,8 +97,8 @@ class MAtricula extends CI_Controller {
             $datacredito = 1;
             $juridico = 0;
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
-            $estado = 2; //2: Activo            
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $estado_matricula = 1; //1:Vigente Pago Voluntario           
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
 
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
@@ -107,7 +107,7 @@ class MAtricula extends CI_Controller {
             $data["tab"] = "crear_matricula";
             $this->isLogin($data["tab"]);
 
-            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado_matricula, $observacion, $id_responsable, $dni_responsable);
 
             if (isset($error)) {
                 $data["tab"] = "crear_matricula";
@@ -188,7 +188,7 @@ class MAtricula extends CI_Controller {
             $id_matricula = $this->input->post('id_matricula');
             $plan_old = $this->input->post('plan_old');
             $plan_new = $this->input->post('plan_new');
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
 
@@ -196,7 +196,7 @@ class MAtricula extends CI_Controller {
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "matricula/editar_plan";
-            $data['msn_recrear'] = "Editar otro tipo de plan de una matrícula";
+            $data['msn_recrear'] = "Editar otro tipo de plan";
 
             $error = $this->update_model->cambio_plan_matricula($id_matricula, $plan_new);
             if (isset($error)) {
@@ -643,14 +643,24 @@ class MAtricula extends CI_Controller {
             $this->escapar($_POST);
             $this->load->model('matriculam');
             $id_matricula = $this->input->post('id');
-            $matricula = $this->select_model->matricula_id($id_matricula);
+            $matricula = $this->matriculam->matricula_id($id_matricula);
             if ($matricula == TRUE) {
+                $saldo = $this->select_model->saldo_matricula($id_matricula);
+                $dni_abreviado_titular = $this->select_model->t_dni_id($matricula->dni_titular)->abreviacion;
+                $response = array(
+                    'respuesta' => 'OK',
+                    'sede' => $matricula->sede_ppal,
+                    'titular' => $matricula->titular,
+                    'idTitular' => $dni_abreviado_titular . ' ' . $matricula->id_titular,
+                    'titular' => $matricula->titular,
+                    'plan' => $matricula->nombre_plan,
+                    'costo' => number_format($matricula->valor_total, 2, '.', ','),
+                    'abonado' => number_format(($matricula->valor_total - $saldo->saldo), 2, '.', ','),
+                    'saldo' => number_format($saldo->saldo, 2, '.', ','),
+                    'html_pagos' => ''
+                );
                 $pagos = $this->matriculam->pagos_matricula_id($id_matricula);
                 if ($pagos == TRUE) {
-                    $response = array(
-                        'respuesta' => 'OK',
-                        'html_pagos' => ''
-                    );
                     $response['html_pagos'] = '<div class="overflow_tabla">
                                     <table class="table table-hover">
                                         <thead>
@@ -668,9 +678,13 @@ class MAtricula extends CI_Controller {
                                         <tbody>';
                     foreach ($pagos as $fila) {
                         if ($fila->t_trans == '7') {
-                            $t_trans = 'F.V.';
+                            $t_trans = 'Fact. Ven.';
                         } else {
-                            $t_trans = 'R.C.';
+                            if ($fila->t_trans == '8') {
+                                $t_trans = 'Rec. Caj.';
+                            } else {
+                                $t_trans = 'Abon. Mat.';
+                            }
                         }
                         $response['html_pagos'] .= '<tr>
                                 <td class="text-center">' . $t_trans . '</td>
@@ -686,16 +700,9 @@ class MAtricula extends CI_Controller {
                     $response['html_pagos'] .= '</tbody>
                         </table>
                     </div>';
-                    echo json_encode($response);
-                    return false;
-                } else {
-                    $response = array(
-                        'respuesta' => 'error',
-                        'mensaje' => '<p><strong><center>La matrícula no tiene ningún pago vigente.</center></strong></p>'
-                    );
-                    echo json_encode($response);
-                    return false;
                 }
+                echo json_encode($response);
+                return false;
             } else {
                 $response = array(
                     'respuesta' => 'error',

@@ -135,7 +135,7 @@ class Ingreso extends CI_Controller {
             if (($t_depositante == 1) || ($t_depositante == 2) || ($t_depositante == 3) || ($t_depositante == 4) || ($t_depositante == 5)) {
                 $nombre_depositante = NULL;
             } else {
-                $nombre_depositante = ucwords(strtolower($this->input->post('nombre_depositante')));
+                $nombre_depositante = ucwords(mb_strtolower($this->input->post('nombre_depositante')));
             }
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_consignado')) && ($this->input->post('valor_consignado') != 0)) {
@@ -154,7 +154,7 @@ class Ingreso extends CI_Controller {
                 $efectivo_ingresado = NULL;
             }
             $vigente = 1;
-            $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
+            $descripcion = ucfirst(mb_strtolower($this->input->post('descripcion')));
 
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

@@ -90,6 +90,8 @@ class Select_model extends CI_Model {
 
     public function t_plan_activo() {
         $this->db->where('vigente', 1);
+        $this->db->order_by('cant_alumnos', 'asc');  
+        $this->db->order_by('valor_total', 'asc');        
         $query = $this->db->get('t_plan');
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -97,7 +99,7 @@ class Select_model extends CI_Model {
     }
 
     public function t_plan_igual_cantAlumnos($id_matricula) {
-        $SqlInfo = "SELECT * FROM t_plan WHERE (cant_alumnos=(SELECT cant_alumnos from t_plan where (id=(SELECT plan FROM matricula WHERE (contrato='" . $id_matricula . "')))))";
+        $SqlInfo = "SELECT * FROM t_plan WHERE (cant_alumnos=(SELECT cant_alumnos from t_plan where (id=(SELECT plan FROM matricula WHERE (contrato='" . $id_matricula . "'))))) ORDER BY cant_alumnos ASC, valor_total ASC";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -162,7 +164,7 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function cuenta_banco_responsable_retirar($id_responsable, $dni_responsable) {
         $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (permiso_retirar=1))))) ORDER BY cu.fecha_trans";
         $query = $this->db->query($SqlInfo);
@@ -170,14 +172,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function cuenta_banco_responsable_consultar($id_responsable, $dni_responsable) {
         $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede_x_empleado WHERE ((id_encargado='" . $id_responsable . "') AND (dni_encargado='" . $dni_responsable . "') AND (permiso_consultar=1))))) ORDER BY cu.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function cuenta_banco_sede($sede_autorizada) {
         $SqlInfo = "SELECT DISTINCT cu.id, t.tipo AS t_cuenta, b.nombre AS banco, cu.nombre_cuenta, cu.observacion, cu.fecha_trans FROM cuenta AS cu, t_cuenta AS t, banco AS b WHERE ((cu.t_cuenta=t.id) AND (cu.banco=b.id) AND (cu.vigente=1) AND (cu.id IN (SELECT cuenta FROM cuenta_x_sede WHERE ((sede='" . $sede_autorizada . "') AND (vigente=1))))) ORDER BY cu.fecha_trans";
@@ -234,7 +236,7 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function empleados_cuenta_bancaria_retirar($cuenta) {
         $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta='" . $cuenta . "') AND (c.permiso_retirar=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
         $query = $this->db->query($SqlInfo);
@@ -242,14 +244,14 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     public function empleados_cuenta_bancaria_consultar($cuenta) {
         $SqlInfo = "SELECT DISTINCT e.id, e.dni, e.nombre1, e.nombre2, e.apellido1, e.apellido2 FROM cuenta_x_sede_x_empleado AS c, empleado AS e WHERE ((c.id_encargado=e.id) AND (c.dni_encargado=e.dni) AND (c.cuenta='" . $cuenta . "') AND (c.permiso_consultar=1) AND (NOT(e.id='1' AND e.dni='1')) AND (e.estado!='3'))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function cuenta_banco_id($id) {
         $this->db->where('id', $id);
@@ -329,7 +331,7 @@ class Select_model extends CI_Model {
 
     //Matriculas vigente con saldo incluido > 0
     public function matricula_vigente_titular($id_titular, $dni_titular) {
-        $SqlInfo = "SELECT DISTINCT ma.contrato, ma.fecha_matricula, t_p.nombre as nombre_plan, t_p.valor_total,  s.nombre AS sede, (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))+(SELECT COALESCE(SUM(total), 0) FROM nota_credito WHERE ((matricula=ma.contrato) AND (vigente=1)))) AS saldo from matricula AS ma, t_plan as t_p, sede AS s  where ((ma.id_titular = '" . $id_titular . "') AND (ma.dni_titular = '" . $dni_titular . "') AND ((ma.estado=1)||(ma.estado=2)) AND (ma.plan = t_p.id) AND (ma.sede=s.id))";
+        $SqlInfo = "SELECT DISTINCT ma.contrato, ma.fecha_matricula, t_p.nombre as nombre_plan, t_p.valor_total,  s.nombre AS sede, (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM abono_matricula WHERE ((matricula=ma.contrato) AND (vigente=1))))+(SELECT COALESCE(SUM(total), 0) FROM nota_credito WHERE ((matricula=ma.contrato) AND (vigente=1)))) AS saldo from matricula AS ma, t_plan as t_p, sede AS s  where ((ma.id_titular = '" . $id_titular . "') AND (ma.dni_titular = '" . $dni_titular . "') AND ((ma.estado=1)||(ma.estado=2)) AND (ma.plan = t_p.id) AND (ma.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -338,7 +340,7 @@ class Select_model extends CI_Model {
 
     //Matriculas vigente con saldo incluido > 0
     public function saldo_matricula($id_matricula) {
-        $SqlInfo = "SELECT (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1))))+(SELECT COALESCE(SUM(total), 0) FROM nota_credito WHERE ((matricula=ma.contrato) AND (vigente=1)))) AS saldo from matricula AS ma, t_plan as t_p  where ((ma.contrato = '" . $id_matricula . "') AND (ma.plan = t_p.id))";
+        $SqlInfo = "SELECT (t_p.valor_total - ((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM abono_matricula WHERE ((matricula=ma.contrato) AND (vigente=1))))+(SELECT COALESCE(SUM(total), 0) FROM nota_credito WHERE ((matricula=ma.contrato) AND (vigente=1)))) AS saldo from matricula AS ma, t_plan as t_p  where ((ma.contrato = '" . $id_matricula . "') AND (ma.plan = t_p.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -347,7 +349,7 @@ class Select_model extends CI_Model {
 
     //Matriculas vigente con saldo incluido > 0
     public function total_abonos_matricula($matricula) {
-        $SqlInfo = "SELECT (((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula='" . $matricula . "') AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula='" . $matricula . "') AND (vigente=1))))-(SELECT COALESCE(SUM(total), 0) FROM nota_credito WHERE ((matricula='" . $matricula . "') AND (vigente=1)))) AS total";
+        $SqlInfo = "SELECT (((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula='" . $matricula . "') AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula='" . $matricula . "') AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM abono_matricula WHERE ((matricula='" . $matricula . "') AND (vigente=1))))-(SELECT COALESCE(SUM(total), 0) FROM nota_credito WHERE ((matricula='" . $matricula . "') AND (vigente=1)))) AS total";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -1106,6 +1108,15 @@ class Select_model extends CI_Model {
         }
     }
 
+    public function nextId_abono_matricula($prefijo) {
+        $this->db->select_max('id');
+        $this->db->where('prefijo', $prefijo);
+        $query = $this->db->get('abono_matricula');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
     public function nextId_retefuente_compras($prefijo) {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
@@ -1146,6 +1157,14 @@ class Select_model extends CI_Model {
         $this->db->select_max('id');
         $this->db->where('prefijo', $prefijo);
         $query = $this->db->get('transferencia');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
+    public function nextId_reporte_alumno() {
+        $this->db->select_max('id');
+        $query = $this->db->get('reporte_alumno');
         if ($query->num_rows() == 1) {
             return $query->row();
         }
@@ -1215,7 +1234,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }  
+    }
 
     public function egreso_prefijo_id($prefijo, $id) {
         $this->db->where('prefijo', $prefijo);
@@ -1323,7 +1342,7 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     //necesitamos los empleados activos.
     //Solo puede autorizar a empleados que esten en las sedes del responsable
     //empleados cuya sede principal conincida con las sedes autorizadas para dicha cuenta.
@@ -1344,7 +1363,7 @@ class Select_model extends CI_Model {
             return $query->result();
         }
     }
-    
+
     //necesitamos los empleados activos.
     //Solo puede autorizar a empleados que esten en las sedes del responsable
     //empleados cuya sede principal conincida con las sedes autorizadas para dicha cuenta.
@@ -1364,7 +1383,7 @@ class Select_model extends CI_Model {
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }    
+    }
 
     public function empleado_cargo($id, $dni) {
         $this->db->where('id', $id);

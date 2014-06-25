@@ -22,7 +22,7 @@
                                         <label>Fecha Inicial<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
                                             <input name="fecha_inicio" id="fecha_inicio" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha inicial de la Ausencia">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div> 
                                     </div>
                                 </div>
@@ -31,7 +31,7 @@
                                         <label>Fecha Final<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
                                             <input name="fecha_fin" id="fecha_fin" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha final de la Ausencia">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div> 
                                     </div>
                                 </div>

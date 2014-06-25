@@ -121,7 +121,7 @@ class Transferencia extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
 
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
@@ -299,7 +299,7 @@ class Transferencia extends CI_Controller {
             $this->escapar($_POST);
             list($prefijo_transferencia, $id_transferencia) = explode("+", $this->input->post('transferencia_prefijo_id'));
             $transferencia = $this->transferenciam->transferencia_prefijo_id($prefijo_transferencia, $id_transferencia);
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $credito_debito_origen = 0; //Débito            

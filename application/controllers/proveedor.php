@@ -86,9 +86,9 @@ class Proveedor extends CI_Controller {
             if ($t_domicilio == "default") {
                 $t_domicilio = NULL;
             }
-            $direccion = ucwords(strtolower($this->input->post('direccion')));
-            $telefono = strtolower($this->input->post('telefono'));
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $direccion = ucwords(mb_strtolower($this->input->post('direccion')));
+            $telefono = mb_strtolower($this->input->post('telefono'));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

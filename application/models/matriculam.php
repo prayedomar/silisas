@@ -28,14 +28,20 @@ class Matriculam extends CI_Model {
         $query = "SELECT fa.prefijo, fa.id, fa.t_trans, fa.subtotal, fa.int_mora, fa.descuento, fa.id_responsable, fa.dni_responsable, fa.fecha_trans, CONCAT(re.nombre1, ' ', re.apellido1) responsable "
                 . "FROM factura fa "
                 . "JOIN matricula ma ON (fa.matricula = ma.contrato) "
-                . "JOIN empleado re ON ((ma.id_responsable = re.id) and (ma.dni_responsable = re.dni)) "
+                . "JOIN empleado re ON ((fa.id_responsable = re.id) and (fa.dni_responsable = re.dni)) "
                 . "where ((ma.contrato='" . $id_matricula . "') AND (fa.vigente='1')) "
                 . "UNION "
                 . "SELECT rc.prefijo, rc.id, rc.t_trans, rc.subtotal, rc.int_mora, rc.descuento, rc.id_responsable, rc.dni_responsable, rc.fecha_trans, CONCAT(re.nombre1, ' ', re.apellido1) responsable  "
                 . "FROM recibo_caja rc "
                 . "JOIN matricula ma ON (rc.matricula = ma.contrato) "
-                . "JOIN empleado re ON ((ma.id_responsable = re.id) and (ma.dni_responsable = re.dni)) "
-                . "where ((ma.contrato='" . $id_matricula . "') AND (rc.vigente='1'))";
+                . "JOIN empleado re ON ((rc.id_responsable = re.id) and (rc.dni_responsable = re.dni)) "
+                . "where ((ma.contrato='" . $id_matricula . "') AND (rc.vigente='1'))"
+                . "UNION "                
+                . "SELECT am.prefijo, am.id, am.t_trans, am.subtotal, am.int_mora, am.descuento, am.id_responsable, am.dni_responsable, am.fecha_trans, CONCAT(re.nombre1, ' ', re.apellido1) responsable  "
+                . "FROM abono_matricula am "
+                . "JOIN matricula ma ON (am.matricula = ma.contrato) "
+                . "JOIN empleado re ON ((am.id_responsable = re.id) and (am.dni_responsable = re.dni)) "
+                . "where ((ma.contrato='" . $id_matricula . "') AND (am.vigente='1')) ORDER BY fecha_trans";
         if ($this->db->query($query)->num_rows() > 0) {
             return $this->db->query($query)->result();
         }
@@ -66,9 +72,9 @@ class Matriculam extends CI_Model {
     }
 
     public function listar_matriculas($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT *,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,p.anio anio_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
+        $query = "SELECT ma.*,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,p.anio anio_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
                     tc.cargo_masculino,em.nombre1 nom1res,em.nombre2 nom2res,em.apellido1 apell1res,em.apellido2 apell2res,
-                    ea.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_ejecutivo,
+                    ed.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_ejecutivo,
                     em2.nombre1 nombre1ejecutivo,em2.nombre2 nombre2ejecutivo,em2.apellido1 apellido1ejecutivo,em2.apellido2 apellido2ejecutivo
                   FROM matricula ma
                   JOIN titular t ON ma.dni_titular=t.dni AND ma.id_titular=t.id
@@ -78,7 +84,7 @@ class Matriculam extends CI_Model {
                   LEFT JOIN  alumno al ON ma.contrato=al.matricula AND al.matricula is null
                   JOIN  t_cargo tc ON ma.cargo_ejecutivo=tc.id
                    JOIN empleado em ON ma.dni_responsable=em.dni AND ma.id_responsable=em.id
-                    JOIN  est_alumno ea ON ma.estado=ea.id
+                    JOIN  est_deuda ed ON ma.estado=ed.id
                        JOIN empleado em2 ON ma.dni_ejecutivo=em2.dni AND ma.id_ejecutivo=em2.id
                          JOIN  t_dni td ON ma.dni_ejecutivo=td.id
                   where true ";
@@ -100,7 +106,7 @@ class Matriculam extends CI_Model {
     }
 
     public function listar_matriculas_excel($criterios) {
-        $query = "SELECT *,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
+        $query = "SELECT ma.*,t.nombre1,t.nombre2,t.apellido1,t.apellido2,p.nombre nombre_plan,s.nombre nombre_sede,tdni.abreviacion nombre_dni,
                     tc.cargo_masculino,em.nombre1 nom1res,em.nombre2 nom2res,em.apellido1 apell1res,em.apellido2 apell2res,
                     ea.estado nombre_estado,ma.observacion observacion_matricula,td.abreviacion dni_ejecutivo,
                     em2.nombre1 nombre1ejecutivo,em2.nombre2 nombre2ejecutivo,em2.apellido1 apellido1ejecutivo,em2.apellido2 apellido2ejecutivo

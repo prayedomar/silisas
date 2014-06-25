@@ -72,7 +72,7 @@
                                         <label>Fecha de Nacimiento<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
                                             <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div> 
                                     </div>
                                 </div>

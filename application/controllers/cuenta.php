@@ -33,7 +33,7 @@ class Cuenta extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
         $this->escapar($_POST);            
-            $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'required|trim|min_length[12]|max_length[12]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'required|trim|min_length[11]|max_length[12]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('t_cuenta', 'Tipo de Cuenta', 'required|callback_select_default');
             $this->form_validation->set_rules('pais', 'País del Banco', 'required|callback_select_default');
             $this->form_validation->set_rules('banco', 'Banco', 'required|callback_select_default');
@@ -64,8 +64,8 @@ class Cuenta extends CI_Controller {
             $cuenta = $this->input->post('cuenta');
             $t_cuenta = $this->input->post('t_cuenta');
             $banco = $this->input->post('banco');
-            $nombre_cuenta = ucwords(strtolower($this->input->post('nombre_cuenta')));
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $nombre_cuenta = ucwords(mb_strtolower($this->input->post('nombre_cuenta')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

@@ -10,7 +10,7 @@ class Alumnom extends CI_Model {
     }
 
     public function alumno_id_dni($id, $dni) {
-        $SqlInfo = "SELECT a.t_curso, CONCAT(a.nombre1, ' ', a.nombre2, ' ', a.apellido1, ' ', a.apellido2) nombre_alumno, t_c.tipo tipo_curso "
+        $SqlInfo = "SELECT a.*, CONCAT(a.nombre1, ' ', a.nombre2, ' ', a.apellido1, ' ', a.apellido2) nombre_alumno, t_c.tipo tipo_curso "
                 . "FROM alumno a "
                 . "LEFT JOIN t_curso t_c ON a.t_curso=t_c.id "
                 . "where ((a.id='" . $id . "') AND (a.dni='" . $dni . "'))";

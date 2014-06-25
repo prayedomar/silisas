@@ -88,7 +88,7 @@ class Sedes_empleado extends CI_Controller {
             } else {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $sede_ppal = $this->input->post('sede_ppal');
-                $observacion = ucfirst(strtolower($this->input->post('observacion')));
+                $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
                 
                 $id_responsable = $this->session->userdata('idResponsable');
                 $dni_responsable = $this->session->userdata('dniResponsable');

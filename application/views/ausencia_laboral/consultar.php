@@ -50,14 +50,14 @@
                             <label>Desde</label>
                             <div class="input-group">
                                 <input id="desde"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Desde" value="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <label>Hasta</label>
                             <div class="input-group">
                                 <input id="hasta"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Hasta" value="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
                         <div class="col-xs-2">

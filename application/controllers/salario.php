@@ -48,9 +48,9 @@ class Salario extends CI_Controller {
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
-            $nombre = ucwords(strtolower($this->input->post('nombre')));
+            $nombre = ucwords(mb_strtolower($this->input->post('nombre')));
             $t_salario = $this->input->post('t_salario');
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

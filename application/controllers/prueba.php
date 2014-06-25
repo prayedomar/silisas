@@ -10,70 +10,84 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $tal_cosa = $this->valida_llena_pagos();
-        var_dump($tal_cosa);
+        echo $total_abonos = $this->select_model->total_abonos_matricula(17715)->total;
     }
 
-    public function valida_llena_pagos() {
-        $this->load->model('matriculam');
-        $id_matricula = '12297';
-        $matricula = $this->select_model->matricula_id($id_matricula);
-        if ($matricula == TRUE) {
-            $pagos = $this->matriculam->pagos_matricula_id($id_matricula);
-            if ($pagos == TRUE) {
-                $response = array(
-                    'respuesta' => 'OK',
-                    'html_pagos' => ''
-                );
-                $response['html_pagos'] = '<div class="overflow_tabla">
+    public function validar_alumno() {
+        $dni_alumno = '1';
+        $id_alumno = '95042409961';
+        $this->load->model('alumnom');
+        $alumno = $this->alumnom->alumno_id_dni($id_alumno, $dni_alumno);
+            if ($alumno == TRUE) {
+                $this->load->model('reporte_alumnom');
+                $this->load->model('ejercicio_ensenanzam');
+                $reportes_anteriores = $this->reporte_alumnom->reporte_alumno($id_alumno, $dni_alumno);
+                if ($reportes_anteriores == TRUE) {
+                    $html_reportes = '<div class="col-xs-12 separar_div"><legend>Reportes anteriores</legend><div class="overflow_tabla">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Tipo</th>
-                                                <th class="text-center">Id</th>
-                                                <th class="text-center">Subtotal</th>
-                                                <th class="text-center">Int. Mora</th>                                                
-                                                <th class="text-center">Descuento</th>
-                                                <th class="text-center">Total</th>
-                                                <th class="text-center">Reponsable</th>
-                                                <th class="text-center">Fecha</th>
+                                                <th class="text-center">Fecha de la clase</th>                                            
+                                                <th class="text-center">¿Asistió?</th>
+                                                <th class="text-center">Etapa</th>
+                                                <th class="text-center">Fase</th>
+                                                <th class="text-center"># Prácticas</th>
+                                                <th class="text-center">lectura</th>
+                                                <th class="text-center">V M</th>
+                                                <th class="text-center">V V</th>
+                                                <th class="text-center">C</th>
+                                                <th class="text-center">R</th>
+                                                <th class="text-center">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>';
-                foreach ($pagos as $fila) {
-                    if ($fila->t_trans == '8') {
-                        $t_trans = 'F.V.';
-                    } else {
-                        $t_trans = 'R.C.';
-                    }
-                    $response['html_pagos'] .= '<tr>
-                                <td class="text-center">' . $t_trans . '</td>
-                                <td class="text-center">' . $fila->prefijo . " " . $fila->id . '</td> 
-                                <td class="text-center">$' . number_format($fila->subtotal, 2, '.', ',') . '</td>
-                                <td class="text-center">$' . number_format($fila->int_mora, 2, '.', ',') . '</td>
-                                <td class="text-center">$' . number_format($fila->descuento, 2, '.', ',') . '</td>
-                                    <td class="text-center">$' . number_format(($fila->subtotal + $fila->int_mora - $fila->descuento), 2, '.', ',') . '</td>
-                                <td class="text-center">' . $fila->responsable . '</td>
-                                <td class="text-center">' . $fila->fecha_trans . '</td>
+                    foreach ($reportes_anteriores as $fila) {
+                        $ejercicios = $this->ejercicio_ensenanzam->ejercicio_reporte_ensenanza($fila->id);
+                        $lista_ejercicios = "";
+                        foreach ($ejercicios as $fila2) {
+                            $lista_ejercicios .= $fila2->habilidad . " - " . $fila2->ejercicio . " <br>";
+                        }
+                        $html_reportes .= '<tr>
+                                <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_clase)) . '</td>                             
+                                <td class="text-center">' . $fila->asistio . '</td>                            
+                                <td class="text-center">' . $fila->etapa . '</td>
+                                <td>' . $fila->fase . '</td>  
+                                <td class="text-center">' . $fila->cant_practicas . '</td>                                
+                                <td>' . $fila->lectura . '</td> 
+                                <td class="text-center">' . $fila->vlm . '</td> 
+                                <td class="text-center">' . $fila->vlv . '</td>
+                                <td class="text-center">' . $fila->c . '</td> 
+                                <td class="text-center">' . $fila->r . '</td> 
+                                <td><button class="ver-detalles btn  btn-primary btn-sm" 
+                                                    data-meta_v="' . $fila->meta_v . '"
+                                                    data-meta_c="' . $fila->meta_c . '"
+                                                    data-meta_r="' . $fila->meta_r . '"
+                                                    data-observacion="' . $fila->observacion . '"
+                                                    data-reponsable="' . $fila->responsable . '"
+                                                    data-fecha_trans="' . $fila->fecha_trans . '"
+                                                    >Ver detalles</button></td>
                             </tr>';
-                }
-                $response['html_pagos'] .= '</tbody>
+                    }
+                $html_reportes .= '</tbody>
                         </table>
                     </div>';
-                echo json_encode($response);
-                return false;
             } else {
-                $response = array(
-                    'respuesta' => 'error',
-                    'mensaje' => '<p><strong><center>La matrícula no tiene ningún pago vigente.</center></strong></p>'
-                );
-                echo json_encode($response);
-                return false;
+                $html_reportes = "";
             }
+            //Buscamos si tiene reportes vigente anteriores.
+            $response = array(
+                'respuesta' => 'OK',
+                'nombre_alumno' => $alumno->nombre_alumno,
+                'tipo_curso' => $alumno->tipo_curso,
+                't_curso' => $alumno->t_curso,
+                'html_reportes' => $html_reportes
+            );
+            echo json_encode($response);
+            return false;
         } else {
             $response = array(
                 'respuesta' => 'error',
-                'mensaje' => '<p><strong><center>La matrícula no existe en la base de datos.</center></strong></p>'
+                'mensaje' => '<p><strong><center>El alumno no existe en la base de datos.</center></strong></p>'
             );
             echo json_encode($response);
             return false;

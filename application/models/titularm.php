@@ -19,6 +19,17 @@ class Titularm extends CI_Model {
         $query.=(isset($criterios['vigente'])) ? "AND sa.vigente = '{$criterios['vigente']}'" : "";
         return $this->db->query($query)->result();
     }
+    
+    public function titular_matricula($matricula) {
+        $SqlInfo = "SELECT t.* "
+                . "FROM titular t "
+                . "JOIN matricula ma ON ((ma.id_titular=t.id) AND (ma.dni_titular=t.dni)) "
+                . "where (ma.contrato='" . $matricula . "')";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }      
 
     public function listar_salones($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT sa.*,s.nombre sede 
@@ -98,10 +109,10 @@ class Titularm extends CI_Model {
     }
 
     public function actualizarTitular($criterios) {
-        $query = "UPDATE titular SET id='{$criterios["id"]}', dni='{$criterios["dni"]}', nombre1='{$criterios["nombre1"]}',nombre2='{$criterios["nombre2"]}',apellido1='{$criterios["apellido1"]}',apellido2='{$criterios["apellido2"]}', fecha_nacimiento='{$criterios["fecha_nacimiento"]}',genero='{$criterios["genero"]}',pais='{$criterios["pais"]}',provincia='{$criterios["provincia"]}',ciudad='{$criterios["ciudad"]}', t_domicilio='{$criterios["t_domicilio"]}', direccion='{$criterios["direccion"]}', barrio='{$criterios["barrio"]}', telefono='{$criterios["telefono"]}', celular='{$criterios["celular"]}', email='{$criterios["email"]}', observacion='{$criterios["observacion"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' ";
+        $query = "UPDATE titular SET id='{$criterios["id"]}', dni='{$criterios["dni"]}', nombre1='" . ucwords(mb_strtolower($criterios["nombre1"])) . "',nombre2='" . ucwords(mb_strtolower($criterios["nombre2"])) . "',apellido1='" . ucwords(mb_strtolower($criterios["apellido1"])) . "',apellido2='" . ucwords(mb_strtolower($criterios["apellido2"])) . "', fecha_nacimiento='{$criterios["fecha_nacimiento"]}',genero='{$criterios["genero"]}',pais='{$criterios["pais"]}',provincia='{$criterios["provincia"]}',ciudad='{$criterios["ciudad"]}', t_domicilio='{$criterios["t_domicilio"]}', direccion='" . ucwords(mb_strtolower($criterios["direccion"])) . "', barrio='" . ucwords(mb_strtolower($criterios["barrio"])) . "', telefono='{$criterios["telefono"]}', celular='{$criterios["celular"]}', email='" . strtolower($criterios["email"]) . "', observacion='" . strtolower($criterios["observacion"]) . "' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' ";
         $this->db->query($query);
 
-        $query = "UPDATE usuario SET nombres='" . $criterios["nombre1"] . " " . $criterios["nombre2"] . "',genero='{$criterios["genero"]}', email='{$criterios["email"]}' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' and t_usuario=2 ";
+        $query = "UPDATE usuario SET nombres='" . ucwords(mb_strtolower($criterios["nombre1"])) . " " . ucwords(mb_strtolower($criterios["nombre2"])) . "',genero='{$criterios["genero"]}', email='" . mb_strtolower($criterios["email"]) . "' where id='{$criterios["id"]}' and dni='{$criterios["dni"]}' and t_usuario=2 ";
         return $this->db->query($query);
     }
 

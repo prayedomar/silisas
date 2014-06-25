@@ -44,7 +44,7 @@ class Abono_matricula extends CI_Controller {
             $this->form_validation->set_rules('dni_a_nombre_de', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');
-            $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');                        
+            $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('total', 'Valor del abono', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
@@ -94,7 +94,7 @@ class Abono_matricula extends CI_Controller {
                 $d_v_a_nombre_de = $this->input->post('d_v_a_nombre_de');
             }
             $a_nombre_de = $this->input->post('a_nombre_de');
-            $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');               
+            $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');
             $subtotal = round(str_replace(",", "", $this->input->post('total')), 2);
             $int_mora = '0';
             if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
@@ -113,25 +113,25 @@ class Abono_matricula extends CI_Controller {
                 $valor_consignado = NULL;
             }
             $vigente = 1;
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
-            $prefijo_recibo_caja = $this->select_model->sede_id($sede)->prefijo_trans;
-            $id_recibo_caja = ($this->select_model->nextId_recibo_caja($prefijo_recibo_caja)->id) + 1;
-            $t_trans = 8; //Recibo de caja
+            $prefijo_abono_matricula = $this->select_model->sede_id($sede)->prefijo_trans;
+            $id_abono_matricula = ($this->select_model->nextId_abono_matricula($prefijo_abono_matricula)->id) + 1;
+            $t_trans = 15; //Abono a matricula
             $credito_debito = 1; //Credito            
 
             $data["tab"] = "crear_abono_matricula";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_matricula/crear";
             $data['msn_recrear'] = "Crear otro abono a matrícula";
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_recibo_caja, $id_recibo_caja, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono_matricula, $id_abono_matricula, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de,  $subtotal, $int_mora, 0, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->abono_matricula($prefijo_abono_matricula, $id_abono_matricula, $t_trans, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, 0, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);

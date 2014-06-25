@@ -13,14 +13,14 @@
                             <label>Fecha matr. (desde)</label>
                             <div class="input-group">
                                 <input name="fecha_matricula_desde" id="fecha_matricula_desde" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="<?= isset($_GET["fecha_matricula_desde"]) ? $_GET["fecha_matricula_desde"] : "" ?>">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
                         <div class="col-xs-2">
                             <label>Fecha matr. (hasta)</label>
                             <div class="input-group">
                                 <input name="fecha_matricula_hasta" id="fecha_matricula_hasta" type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="mm-dd" value="<?= isset($_GET["fecha_matricula_hasta"]) ? $_GET["fecha_matricula_hasta"] : "" ?>">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
                         <div class="col-xs-2">

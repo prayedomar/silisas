@@ -29,12 +29,15 @@ class Login extends CI_Controller {
             case 'admon_sistema':
                 redirect(base_url() . 'index');
                 break;
-            case 'analista_cartera':
-                redirect(base_url() . 'index');
-                break;
             case 'aux_admon':
                 redirect(base_url() . 'index');
                 break;
+            case 'calidad':
+                redirect(base_url() . 'index');
+                break;  
+            case 'cartera':
+                redirect(base_url() . 'index');
+                break;             
             case 'contador':
                 redirect(base_url() . 'index');
                 break;
@@ -48,12 +51,6 @@ class Login extends CI_Controller {
                 redirect(base_url() . 'index');
                 break;
             case 'empleado_rrpp':
-                redirect(base_url() . 'index');
-                break;
-            case 'jefe_cartera':
-                redirect(base_url() . 'index');
-                break;
-            case 'jefe_enseñanza':
                 redirect(base_url() . 'index');
                 break;
             case 'secretaria':

@@ -60,7 +60,7 @@ class Ausencia_laboral extends CI_Controller {
             $fecha_inicio = $this->input->post('fecha_inicio');
             $fecha_fin = $this->input->post('fecha_fin');
             $t_ausencia = $this->input->post('t_ausencia');
-            $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
+            $descripcion = ucfirst(mb_strtolower($this->input->post('descripcion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

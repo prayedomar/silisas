@@ -97,7 +97,7 @@ class Abono_adelanto extends CI_Controller {
                 $efectivo_ingresado = NULL;
             }
             $vigente = 1;
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
 
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

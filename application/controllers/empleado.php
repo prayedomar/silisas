@@ -63,7 +63,7 @@ class Empleado extends CI_Controller {
             $this->form_validation->set_rules('telefono', 'Teléfono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'trim|min_length[12]|max_length[12]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'trim|min_length[11]|max_length[12]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
             $this->form_validation->set_rules('depto', 'Departamento Empresarial', 'required|callback_select_default');
             $this->form_validation->set_rules('cargo', 'Cargo', 'required|callback_select_default');
@@ -137,10 +137,10 @@ class Empleado extends CI_Controller {
             $this->escapar($_POST);
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');
-            $nombre1 = ucwords(strtolower($this->input->post('nombre1')));
-            $nombre2 = ucwords(strtolower($this->input->post('nombre2')));
-            $apellido1 = ucwords(strtolower($this->input->post('apellido1')));
-            $apellido2 = ucwords(strtolower($this->input->post('apellido2')));
+            $nombre1 = ucwords(mb_strtolower($this->input->post('nombre1')));
+            $nombre2 = ucwords(mb_strtolower($this->input->post('nombre2')));
+            $apellido1 = ucwords(mb_strtolower($this->input->post('apellido1')));
+            $apellido2 = ucwords(mb_strtolower($this->input->post('apellido2')));
             $fecha_nacimiento = $this->input->post('fecha_nacimiento');
             $genero = $this->input->post('genero');
             $est_civil = $this->input->post('est_civil');
@@ -148,11 +148,11 @@ class Empleado extends CI_Controller {
             $provincia = $this->input->post('provincia');
             $ciudad = $this->input->post('ciudad');
             $t_domicilio = $this->input->post('t_domicilio');
-            $direccion = ucwords(strtolower($this->input->post('direccion')));
-            $barrio = ucwords(strtolower($this->input->post('barrio')));
-            $telefono = strtolower($this->input->post('telefono'));
+            $direccion = ucwords(mb_strtolower($this->input->post('direccion')));
+            $barrio = ucwords(mb_strtolower($this->input->post('barrio')));
+            $telefono = mb_strtolower($this->input->post('telefono'));
             $celular = $this->input->post('celular');
-            $email = strtolower($this->input->post('email'));
+            $email = mb_strtolower($this->input->post('email'));
             $cuenta = $this->input->post('cuenta');
             $sede_ppal = $this->input->post('sede_ppal');
             $depto = $this->input->post('depto');
@@ -161,7 +161,7 @@ class Empleado extends CI_Controller {
             list($id_jefe, $dni_jefe) = explode("-", $this->input->post('jefe'));
             $t_contrato = $this->input->post('t_contrato');
             $fecha_inicio = $this->input->post('fecha_inicio');
-            $observacion = ucfirst(strtolower($this->input->post('observacion')));
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

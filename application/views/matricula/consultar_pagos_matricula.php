@@ -21,6 +21,9 @@
                 </div>
                 <div class="row" style="display: none" id="div_pagos">
                     <div class="col-xs-12">
+                        <hr>
+                        <div class="row separar_submit" id="info_matricula">
+                        </div>
                         <div id="tabla_pagos">
                         </div>
                     </div>
@@ -42,6 +45,7 @@
                 {
                     $("#div_pagos").css("display", "block");
                     $("#tabla_pagos").html(obj.html_pagos);
+                    $("#info_matricula").html('<center><table><tr><td><h4>Sede principal: </h4></td><td><h4 class="h_negrita"> ' + obj.sede + '</h4></td></tr><tr><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.titular + '</h4></td></tr><tr><td><h4>Documento titular: </h4></td><td><h4 class="h_negrita"> ' + obj.idTitular + '</h4></td></tr><tr><td><h4>Nombre del plan: </h4></td><td><h4 class="h_negrita"> ' + obj.plan + '</h4></td></tr><tr><td><h4>Costo total: </h4></td><td><h4 class="h_negrita"> $' + obj.costo + '</h4></td></tr><tr><td><h4>Abonado al plan: </h4></td><td><h4 class="h_negrita"> $' + obj.abonado + '</h4></td></tr><tr><td><h4>Saldo pendiente: </h4></td><td><h4 class="h_negrita"> $' + obj.saldo + '</h4></td></tr></table></center>');
                     $('#id').attr('disabled', 'disabled');
                     $('#consultar_pagos').attr('disabled', 'disabled');
                     $("#div_warning").remove();

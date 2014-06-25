@@ -133,7 +133,7 @@ class Egreso extends CI_Controller {
             if (($t_beneficiario == 1) || ($t_beneficiario == 2) || ($t_beneficiario == 3) || ($t_beneficiario == 4) || ($t_beneficiario == 5)) {
                 $nombre_beneficiario = NULL;
             } else {
-                $nombre_beneficiario = ucwords(strtolower($this->input->post('nombre_beneficiario')));
+                $nombre_beneficiario = ucwords(mb_strtolower($this->input->post('nombre_beneficiario')));
             }
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
@@ -151,7 +151,7 @@ class Egreso extends CI_Controller {
                 $t_caja_origen = NULL;
                 $efectivo_retirado = NULL;
             }
-            $descripcion = ucfirst(strtolower($this->input->post('descripcion')));
+            $descripcion = ucfirst(mb_strtolower($this->input->post('descripcion')));
             
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');

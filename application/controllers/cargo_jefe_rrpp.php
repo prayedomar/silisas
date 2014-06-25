@@ -65,7 +65,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
                     list($genero, $cargo_old) = explode("-", $this->input->post('genero_cargo'));
                     $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
                     $sede = $empleado->sede_ppal;
-                    $observacion = ucfirst(strtolower($this->input->post('observacion')));
+                    $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
                     
                     $id_responsable = $this->session->userdata('idResponsable');
                     $dni_responsable = $this->session->userdata('dniResponsable');
@@ -125,7 +125,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
                         'mensaje' => '<p>' . $error . '</p>'
                     );
                 } else {
-                    $observacion = ucfirst(strtolower($this->input->post('observacion')));
+                    $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
                     
                     $id_responsable = $this->session->userdata('idResponsable');
                     $dni_responsable = $this->session->userdata('dniResponsable');

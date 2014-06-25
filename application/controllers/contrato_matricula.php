@@ -74,9 +74,9 @@ class Contrato_matricula extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
         $this->escapar($_POST);            
-            $contrato_inicial = ucwords(strtolower($this->input->post('contrato_inicial')));
-            $contrato_final = ucwords(strtolower($this->input->post('contrato_final')));
-            $sede_actual = ucwords(strtolower($this->input->post('sede_actual')));
+            $contrato_inicial = ucwords(mb_strtolower($this->input->post('contrato_inicial')));
+            $contrato_final = ucwords(mb_strtolower($this->input->post('contrato_final')));
+            $sede_actual = ucwords(mb_strtolower($this->input->post('sede_actual')));
             $estado = 1; //1:Vacio
             
             $id_responsable = $this->session->userdata('idResponsable');
