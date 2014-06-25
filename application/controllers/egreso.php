@@ -11,7 +11,7 @@ class Egreso extends CI_Controller {
 //Crear: Egreso
     function crear() {
         $data["tab"] = "crear_egreso";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
@@ -102,7 +102,7 @@ class Egreso extends CI_Controller {
                 }
             }
 
-            if ((($this->input->post('t_egreso')) == "8") || (($this->input->post('t_egreso')) == "9")) { //t_egreso = 8: Otros
+            if ($this->input->post('t_egreso') == "9") { //t_egreso = 9: Otros
                 $this->form_validation->set_rules('descripcion', 'Descripcion', 'required|trim|xss_clean|max_length[255]');
             } else {
                 $this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|max_length[255]');
@@ -152,7 +152,7 @@ class Egreso extends CI_Controller {
                 $efectivo_retirado = NULL;
             }
             $descripcion = ucfirst(mb_strtolower($this->input->post('descripcion')));
-            
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -162,7 +162,7 @@ class Egreso extends CI_Controller {
             $credito_debito = 0; //Debito            
 
             $data["tab"] = "crear_egreso";
-            $this->isLogin($data["tab"]);               
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "egreso/crear";
             $data['msn_recrear'] = "Crear otro Egreso";
@@ -244,13 +244,13 @@ class Egreso extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     function consultar() {
         $data["tab"] = "consultar_egreso";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
-        $data['error_consulta'] = "";        
+        $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "egreso/consultar_validar";
         $data['action_recargar'] = base_url() . "egreso/consultar";
         $this->parser->parse('egreso/consultar', $data);
@@ -272,7 +272,7 @@ class Egreso extends CI_Controller {
                 }
             } else {
                 $error_transaccion = "El egreso, no existe en la base de datos.";
-            }            
+            }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_egreso";
@@ -447,6 +447,5 @@ class Egreso extends CI_Controller {
             redirect(base_url() . 'egreso/consultar/');
         }
     }
-    
 
 }

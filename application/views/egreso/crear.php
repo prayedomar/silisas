@@ -204,7 +204,7 @@
     //Mostramos el obligatorio de descripcion si en t_egreso selecciona "otro" o "transaccion intersede de difereente pais"
     $(".form-group").delegate("#t_egreso", "change", function() {
         t_egreso = $('#t_egreso').val();
-        if ((t_egreso == '8') || (t_egreso == '9')) {
+        if (t_egreso == '9') {
             $("#label_descripcion_required").css("display", "block");
             $("#label_descripcion").css("display", "none");
         } else {

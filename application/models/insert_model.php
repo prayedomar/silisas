@@ -935,7 +935,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function pago_proveedor($prefijo, $id, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable) {
+    public function pago_proveedor($prefijo, $id, $id_proveedor, $dni_proveedor, $t_egreso, $factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
             'id' => $id,
@@ -943,6 +943,7 @@ class Insert_model extends CI_Model {
             'credito_debito' => '0',
             'id_proveedor' => $id_proveedor,
             'dni_proveedor' => $dni_proveedor,
+            't_egreso' => $t_egreso,
             'factura' => $factura,
             'total' => $total,
             'cuenta_origen' => $cuenta_origen,

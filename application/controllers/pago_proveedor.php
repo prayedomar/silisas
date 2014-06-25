@@ -17,6 +17,7 @@ class Pago_proveedor extends CI_Controller {
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['proveedor'] = $this->select_model->proveedor();
+        $data['t_egreso'] = $this->select_model->t_egreso();
         $data['action_validar'] = base_url() . "pago_proveedor/validar";
         $data['action_crear'] = base_url() . "pago_proveedor/insertar";
         $data['action_llena_cuenta_responsable'] = base_url() . "pago_proveedor/llena_cuenta_responsable";
@@ -29,6 +30,7 @@ class Pago_proveedor extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             $this->form_validation->set_rules('proveedor', 'Proveedor', 'required|callback_select_default');
+            $this->form_validation->set_rules('t_egreso', 'Tipo de Egreso', 'required|callback_select_default');
             $this->form_validation->set_rules('factura', 'Código de factura', 'required|trim|xss_clean|max_length[40]');
             $this->form_validation->set_rules('total', 'Valor del pago', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
@@ -52,9 +54,13 @@ class Pago_proveedor extends CI_Controller {
                     $error_valores = "<p>La suma del valor retirado de una cuenta y el efectivo retirado de una caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_retirado + $efectivo_retirado), 2, '.', ',') . ".</p>";
                 }
             }
-
+            if ($this->input->post('t_egreso') == "9") { //t_egreso = 9: Otros
+                $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            } else {
+                $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
+            }
             if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('proveedor') . form_error('factura') . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
+                echo form_error('proveedor') . form_error('t_egreso') . form_error('factura') . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -67,6 +73,7 @@ class Pago_proveedor extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             list($id_proveedor, $dni_proveedor) = explode("_", $this->input->post('proveedor'));
+            $t_egreso = $this->input->post('t_egreso');
             $factura = $this->input->post('factura');
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
             if (($this->input->post('cuenta')) && ($this->input->post('valor_retirado')) && ($this->input->post('valor_retirado') != 0)) {
@@ -105,7 +112,7 @@ class Pago_proveedor extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->pago_proveedor($prefijo_pago_proveedor, $id_pago_proveedor, $id_proveedor, $dni_proveedor, $factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->pago_proveedor($prefijo_pago_proveedor, $id_pago_proveedor, $id_proveedor, $dni_proveedor, $t_egreso, $factura, $total, $cuenta_origen, $valor_retirado, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $sede, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -230,6 +237,7 @@ class Pago_proveedor extends CI_Controller {
         if ($pago_proveedor == TRUE) {
             $responsable = $this->select_model->empleado($pago_proveedor->id_responsable, $pago_proveedor->dni_responsable);
             $proveedor = $this->select_model->proveedor_id_dni($pago_proveedor->id_proveedor, $pago_proveedor->dni_proveedor);
+            $tipo_egreso = $this->select_model->t_egreso_id($pago_proveedor->t_egreso)->tipo;
             $dni_abreviado_proveedor = $this->select_model->t_dni_id($proveedor->dni)->abreviacion;
             if (($proveedor->d_v) == (NULL)) {
                 $d_v = "";
@@ -325,6 +333,9 @@ class Pago_proveedor extends CI_Controller {
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Nombre proveedor:</b></td><td colspan="3" class="c23 c12 c25 c26 c27 c28">' . $proveedor->razon_social . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Tipo de egreso:</b></td><td colspan="3" class="c23 c12 c25 c26 c27 c28">' . $tipo_egreso . '</td>'
                     . '</tr>';
             if (($pago_proveedor->observacion) != "") {
                 $html .= '<tr>'

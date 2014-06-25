@@ -22,7 +22,16 @@
                                             <option value="{id}_{dni}">{razon_social} - {id}</option>
                                             {/proveedor}
                                         </select>
-                                    </div>  
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tipo de Egreso<em class="required_asterisco">*</em></label>
+                                        <select name="t_egreso" id="t_egreso" class="form-control exit_caution">
+                                            <option value="default">Seleccione Tipo de Egreso</option>
+                                            {t_egreso}
+                                            <option value="{id}">{tipo}</option>
+                                            {/t_egreso}
+                                        </select>
+                                    </div>                                     
                                     <div class="form-group">
                                         <label>Código de factura<em class="required_asterisco">*</em></label> 
                                         <input name="factura" id="factura" type="text" class="form-control letras_numeros" placeholder="Código de factura a pagar" maxlength="40">
@@ -115,6 +124,17 @@
     </div>
 </div>
 <script type="text/javascript">
+    //Mostramos el obligatorio de descripcion si en t_egreso selecciona "otro" o "transaccion intersede de difereente pais"
+    $(".form-group").delegate("#t_egreso", "change", function() {
+        t_egreso = $('#t_egreso').val();
+        if (t_egreso == '9') {
+            $("#label_descripcion_required").css("display", "block");
+            $("#label_descripcion").css("display", "none");
+        } else {
+            $("#label_descripcion_required").css("display", "none");
+            $("#label_descripcion").css("display", "block");
+        }
+    });    
 
     //Llenamos la cajas del responsable
     $.post('{action_llena_caja_responsable}', {
