@@ -18,63 +18,17 @@ class Login extends CI_Controller {
         $data['action_validar'] = base_url() . "login/validar_user";
         $data['action_crear'] = base_url() . "login/new_user";
         //para recuperar los datos del formulario anterior.
-        switch ($this->session->userdata('perfil')) {
-            case '':
-                //Este case se ejecuta en el caso en que no exista una variable de session llamada perfil.
-                $this->parser->parse('login', $data);
-                break;
-            case 'admon_sede':
-                redirect(base_url() . 'index');
-                break;
-            case 'admon_sistema':
-                redirect(base_url() . 'index');
-                break;
-            case 'aux_admon':
-                redirect(base_url() . 'index');
-                break;
-            case 'calidad':
-                redirect(base_url() . 'index');
-                break;  
-            case 'cartera':
-                redirect(base_url() . 'index');
-                break;             
-            case 'contador':
-                redirect(base_url() . 'index');
-                break;
-            case 'directivo':
-                redirect(base_url() . 'index');
-                break;
-            case 'docente':
-                redirect(base_url() . 'index');
-                break;
-            case 'empleado_admon':
-                redirect(base_url() . 'index');
-                break;
-            case 'empleado_rrpp':
-                redirect(base_url() . 'index');
-                break;
-            case 'secretaria':
-                redirect(base_url() . 'index');
-                break;
-            case 'titular':
-                redirect(base_url() . 'index');
-                break;
-            case 'alumno':
-                redirect(base_url() . 'index');
-                break;
-            case 'cliente':
-                redirect(base_url() . 'index');
-                break;
-            default:
-                $this->parser->parse('login', $data);
-                break;
+        if ($this->session->userdata('perfil') == '') {
+            $this->parser->parse('login', $data);
+        } else {
+            redirect(base_url() . 'index');
         }
     }
 
 //new_user se ejecuta cuando la vista manda los datos por post aqui.
     public function validar_user() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('token') && ($this->input->post('token') == $this->session->userdata('token'))) {
                 $this->form_validation->set_rules('t_usuario', 'T.U', 'required|callback_select_default');
                 $this->form_validation->set_rules('dni', 'T.I', 'required|callback_select_default');
@@ -104,7 +58,7 @@ class Login extends CI_Controller {
     }
 
     public function new_user() {
-        $this->escapar($_POST);        
+        $this->escapar($_POST);
         if (($this->input->post('token') && $this->input->post('token') == $this->session->userdata('token')) && ($this->input->post('submit'))) {
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');

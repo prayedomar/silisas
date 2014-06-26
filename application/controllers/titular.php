@@ -141,8 +141,8 @@ class Titular extends CI_Controller {
             $data["tab"] = "crear_titular";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "titular/crear";
-            $data['msn_recrear'] = "Crear otro Titular";
+            $data['url_recrear'] = base_url() . "matricula/crear";
+            $data['msn_recrear'] = "Crear matrícula";
             $nombres = $nombre1 . " " . $nombre2;
 
             $error1 = $this->insert_model->new_usuario($id, $dni, $genero, $nombres, $t_usuario, $password, $email, $perfil, $vigente);

@@ -106,37 +106,27 @@ class MAtricula extends CI_Controller {
 
             $data["tab"] = "crear_matricula";
             $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "alumno/crear";
+            $data['msn_recrear'] = "Crear alumnos";
 
             $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado_matricula, $observacion, $id_responsable, $dni_responsable);
 
             if (isset($error)) {
-                $data["tab"] = "crear_matricula";
-                $this->load->view("header", $data);
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                $data['url_recrear'] = base_url() . "matricula/crear";
-                $data['msn_recrear'] = "Crear otra Matrícula";
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Si todo salió bien, entonces cambiamos el estado del contrato fisico, de 1:vacío a 2:Activo
                 $new_estado = 2;
                 $error1 = $this->update_model->contrato_matricula_estado($contrato, $new_estado);
                 if (isset($error1)) {
-                    $data["tab"] = "crear_matricula";
-                    $this->load->view("header", $data);
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                    $data['url_recrear'] = base_url() . "matricula/crear";
-                    $data['msn_recrear'] = "Crear otra Matrícula";
                     $this->parser->parse('trans_error', $data);
                     return;
                 }
                 //Sí todo salió bien, Enviamos al formulario de liquidar_matricula
 //                redirect(base_url() . 'liquidar_comisiones/crear/' . $contrato);
                 //Temporalemnte mejor mostraremos el ok y listo. Boorar todo el parrafo siguiente y listo
-                $data["tab"] = "crear_matricula";
-                $this->load->view("header", $data);
-                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                $data['url_recrear'] = base_url() . "matricula/crear";
-                $data['msn_recrear'] = "Crear otra Matrícula";
                 $this->parser->parse('trans_success', $data);
             }
         } else {
@@ -645,7 +635,6 @@ class MAtricula extends CI_Controller {
             $id_matricula = $this->input->post('id');
             $matricula = $this->matriculam->matricula_id($id_matricula);
             if ($matricula == TRUE) {
-                $saldo = $this->select_model->saldo_matricula($id_matricula);
                 $dni_abreviado_titular = $this->select_model->t_dni_id($matricula->dni_titular)->abreviacion;
                 $response = array(
                     'respuesta' => 'OK',
@@ -655,8 +644,9 @@ class MAtricula extends CI_Controller {
                     'titular' => $matricula->titular,
                     'plan' => $matricula->nombre_plan,
                     'costo' => number_format($matricula->valor_total, 2, '.', ','),
-                    'abonado' => number_format(($matricula->valor_total - $saldo->saldo), 2, '.', ','),
-                    'saldo' => number_format($saldo->saldo, 2, '.', ','),
+                    'abonado' => number_format(($matricula->valor_total - $matricula->saldo - $matricula->descuentos), 2, '.', ','),
+                    'descuentos' => number_format(($matricula->descuentos), 2, '.', ','),
+                    'saldo' => number_format($matricula->saldo, 2, '.', ','),
                     'html_pagos' => ''
                 );
                 $pagos = $this->matriculam->pagos_matricula_id($id_matricula);

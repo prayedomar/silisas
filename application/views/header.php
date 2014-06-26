@@ -219,13 +219,13 @@
                     <ul>
                         <li class="dropdown-header"><u> Transacciones</u></li>
                 <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>        
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>abono_matricula/crear">ABONO A MATRÍCULA</a></li>
                 <?php } ?>                                    
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/crear">Factura de venta</a></li>
                 <?php } ?>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>recibo_caja/crear">Recibo de Caja</a></li>     
                 <?php } ?>        
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
@@ -250,7 +250,7 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>nota_credito/crear">Nota crédito</a></li>
                 <?php } ?>     
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>transferencia/crear">Transferencia intersede</a></li>
                 <?php } ?>       
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
@@ -285,7 +285,7 @@
                                                     <li><a href="#">Linea Celular</a></li>
                                                     <li><a href="#">Pedido de Insumos</a></li>
                                                     <li class="divider"></li>                                    -->
-                <li class="dropdown-header"><u> Matrículas</u></li>
+                <li class="dropdown-header"><u> Matrículas</u></li>        
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                     <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li> 
                 <?php } ?>                                    
@@ -294,7 +294,10 @@
                 <?php } ?>                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                     <li><a href="<?= base_url() ?>liquidar_comisiones/crear/new">Liquidar Matrícula</a></li>
-                <?php } ?>                                    
+                <?php } ?> 
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera", "cartera"))) { ?>                                       
+                    <li><a href="<?= base_url() ?>descuento_matricula/crear">Descuento de pagos</a></li> 
+                <?php } ?>                     
                 <!--                                    <li><a href="#">Referido</a></li>
                                                     <li><a href="#">Consolidar Referido</a></li>
                                                     <li><a href="#">Material de Estudio</a></li>
@@ -366,7 +369,7 @@
                         <?php } ?>                             
                         <li class="divider"></li>                      
                         <li class="dropdown-header"><u> Transacciones</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>transferencia/aprobar">Transferencia intersede</a></li>
                 <?php } ?>                       
                 </ul>
@@ -479,10 +482,10 @@
                         <li class="col-sm-4">
                             <ul>
                                 <li class="dropdown-header"><u> Sedes</u></li>
-                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                             <li><a href="<?= base_url() ?>sede/consultar">Sedes</a></li>
                         <?php } ?>                           
-                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "calidad", "docente", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                             <li><a href="<?= base_url() ?>salon/consultar">Salones</a></li>
                         <?php } ?>                                    
                         <li class="divider"></li>                                            
@@ -504,10 +507,10 @@
                 <?php } ?>                                    
                 <li class="divider"></li>
                 <li class="dropdown-header"><u> Clientes</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                     <li><a href="<?= base_url() ?>titular/consultar">Titulares</a></li>
                 <?php } ?>                              
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "calidad", "docente", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
                     <li><a href="<?= base_url() ?>alumno/consultar">Alumnos</a></li>
                 <?php } ?>                            
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
@@ -527,10 +530,10 @@
                     <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
                 <?php } ?>         
                 <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>         
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "contador", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/consultar">Factura de venta</a></li>
                 <?php } ?>   
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "contador", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "contador", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>recibo_caja/consultar">Recibo de caja</a></li>
                 <?php } ?>                                               
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
@@ -562,7 +565,7 @@
                     <li><a href="<?= base_url() ?>egreso/consultar">Egreso</a></li>
                 <?php } ?>   
                 <li class="dropdown-header" style="font-size:16px;"><u>Crédito/Débito</u>:</li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>transferencia/consultar">Transferencia intersede</a></li>
                 <?php } ?>                     
                 </ul>
@@ -577,16 +580,16 @@
                                                             <li class="divider"></li>                                    -->
                         <li class="dropdown-header"><u> Matrículas</u></li>
                 <!--<li><a href="#">Contratos Físicos</a></li>--> 
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "calidad", "docente", "secretaria"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "calidad", "docente", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>matricula/consultar">Matrícula</a></li>
                 <?php } ?> 
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera"))) { ?>                                       
                     <li><a href="<?= base_url() ?>liquidar_comisiones/consultar">Liquidación de comisiones</a></li>
                 <?php } ?>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>matricula/consultar_plan_pagos">Plan de pagos</a></li>
                 <?php } ?>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "cartera", "secretaria"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>matricula/consultar_pagos_matricula">Pagos realizados</a></li>
                 <?php } ?>                    
                 <li class="divider"></li>                     

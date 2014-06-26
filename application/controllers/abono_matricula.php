@@ -27,7 +27,6 @@ class Abono_matricula extends CI_Controller {
         $data['action_recargar'] = base_url() . "abono_matricula/crear";
 
         $data['action_validar_titular_llena_matriculas'] = base_url() . "abono_matricula/validar_titular_llena_matriculas";
-        $data['action_llena_saldo_matricula'] = base_url() . "abono_matricula/llena_saldo_matricula";
 
         $data['action_llena_cuenta_responsable'] = base_url() . "abono_matricula/llena_cuenta_responsable";
         $data['action_llena_caja_responsable'] = base_url() . "abono_matricula/llena_caja_responsable";
@@ -62,7 +61,7 @@ class Abono_matricula extends CI_Controller {
                 } else {
                     $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
                 }
-                $saldo = round(str_replace(",", "", $this->input->post('saldo')), 2);
+                $saldo = $this->input->post('saldo');
                 if ($total > $saldo) {
                     $error_valores = "<p>El valor del abono, no puede ser mayor al saldo de la matrícula</p>";
                 } else {
@@ -161,7 +160,7 @@ class Abono_matricula extends CI_Controller {
                     );
                     foreach ($matriculas as $fila) {
                         $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '" data-saldo="' . $fila->saldo . '"/></td>
                             <td class="text-center">' . $fila->contrato . '</td>
                             <td>' . $fila->nombre_plan . '</td>
                             <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
@@ -184,38 +183,6 @@ class Abono_matricula extends CI_Controller {
                 $response = array(
                     'respuesta' => 'error',
                     'mensaje' => '<p><strong>El titular no existe en la base de datos.</strong></p>'
-                );
-                echo json_encode($response);
-                return false;
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-    public function llena_saldo_matricula() {
-        if ($this->input->is_ajax_request()) {
-            $this->escapar($_POST);
-            if ($this->input->post('matricula')) {
-                $id_matricula = $this->input->post('matricula');
-                $saldo_matricula = $this->select_model->saldo_matricula($id_matricula);
-                if ($saldo_matricula) {
-                    $response = array(
-                        'respuesta' => 'OK',
-                        'saldo' => $saldo_matricula->saldo
-                    );
-                    echo json_encode($response);
-                    return false;
-                } else {
-                    $response = array(
-                        'respuesta' => 'error'
-                    );
-                    echo json_encode($response);
-                    return false;
-                }
-            } else {
-                $response = array(
-                    'respuesta' => 'error'
                 );
                 echo json_encode($response);
                 return false;

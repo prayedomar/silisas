@@ -1267,7 +1267,7 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function abono_matricula($prefijo, $id, $t_trans, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'prefijo' => $prefijo,
@@ -1300,7 +1300,7 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $t_detalle, $num_cuota, $subtotal, $fecha_esperada, $cant_dias_mora, $int_mora) {
         $data = array(
@@ -1436,6 +1436,23 @@ class Insert_model extends CI_Model {
             'vigente' => '1'
         );
         $this->db->insert('ejercicio_ensenanza', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function descuento_matricula($id_matricula, $valor, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'matricula' => $id_matricula,
+            'valor' => $valor,
+            'observacion' => $observacion,
+            'vigente' => '1',
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('descuento_matricula');
         if ($error = $this->db->_error_message()) {
             return $error;
         }

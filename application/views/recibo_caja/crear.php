@@ -90,7 +90,7 @@
                                         <th class="text-center">Escojer</th>
                                         <th class="text-center">Contrato</th>
                                         <th class="text-center">Plan</th>
-                                        <th class="text-center">Valor Inicial</th>
+                                        <th class="text-center">Valor total</th>
                                         <th class="text-center">Saldo</th>
                                         <th class="text-center">Sede Origen</th>
                                         <th class="text-center">Fecha inicial</th>

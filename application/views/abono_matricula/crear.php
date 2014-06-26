@@ -85,7 +85,7 @@
                                         <th class="text-center">Escojer</th>
                                         <th class="text-center">Contrato</th>
                                         <th class="text-center">Plan</th>
-                                        <th class="text-center">Valor Inicial</th>
+                                        <th class="text-center">Valor total</th>
                                         <th class="text-center">Saldo</th>
                                         <th class="text-center">Sede Origen</th>
                                         <th class="text-center">Fecha inicial</th>
@@ -195,24 +195,9 @@
 <script type="text/javascript">
     //Cargar div de valor abono y cuotas  de matricula escogida     
     $(".tabla-matriculas").delegate("#matricula", "change", function() {
-        matricula = $("input[name='matricula']:checked").val();
-        $.post('{action_llena_saldo_matricula}', {
-            matricula: matricula
-        }, function(data) {
-            var obj = JSON.parse(data);
-            $("#total").attr("value", '0.00');
-            if (obj.respuesta == 'OK') {
-                $("#saldo").attr("value", obj.saldo);
-                if (obj.saldo > 0) {
-                    $("#total").removeAttr("readonly", "readonly");
-                } else {
-                    $("#total").attr("readonly", "readonly");
-                }
-            } else {
-                $("#saldo").attr("value", '0');
-                $("#total").attr("readonly", "readonly");
-            }
-        });
+        $("#saldo").attr("value", $(this).data('saldo'));
+        $("#total").attr("value", '');
+        $("#total").removeAttr("readonly", "readonly");
     });
 
     //Llenamos la informacion de las matriculas y los pagos.
@@ -237,8 +222,8 @@
                     $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
                     $("#id_a_nombre_de").attr("value", $('#id').val());
                     $("#a_nombre_de").attr("value", obj.nombreTitular);
-                    $("#direccion_a_nombre_de").attr("value", obj.direccion);                    
-                    $("#div_warning").remove();                    
+                    $("#direccion_a_nombre_de").attr("value", obj.direccion);
+                    $("#div_warning").remove();
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);
