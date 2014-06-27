@@ -199,10 +199,10 @@
                     <?php } ?>                                    
                     <li class="divider"></li>
                     <li class="dropdown-header"><u> Clientes</u></li>
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
                         <li><a href="<?= base_url() ?>titular/crear">Titular</a></li>
                     <?php } ?>                            
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
                         <li><a href="<?= base_url() ?>alumno/crear">Alumno</a></li>
                     <?php } ?>                        
                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
@@ -260,10 +260,10 @@
                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                 <?php } ?>                                       
                 <!--<?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                                                                                         <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
+                                                                                                                             <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                 <?php } ?>                                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                                                                                         <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
+                                                                                                                             <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
                 <?php } ?>-->
                 </ul>
                 </li>
@@ -289,62 +289,32 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                     <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li> 
                 <?php } ?>                                    
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
                     <li><a href="<?= base_url() ?>matricula/crear">Matrícula</a></li>
                 <?php } ?>                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                     <li><a href="<?= base_url() ?>liquidar_comisiones/crear/new">Liquidar Matrícula</a></li>
                 <?php } ?> 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera", "cartera"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>descuento_matricula/crear">Descuento de pagos</a></li> 
-                <?php } ?>                     
-                <!--                                    <li><a href="#">Referido</a></li>
-                                                    <li><a href="#">Consolidar Referido</a></li>
-                                                    <li><a href="#">Material de Estudio</a></li>
-                                                    <li><a href="#">Entrega de Material</a></li>
-                                                    <li><a href="#">Comisión de Escala</a></li>
-                                                    <li><a href="#">Comisión de Matrícula</a></li>
-                                                    <li class="divider"></li>
-                                                    <li class="dropdown-header">Permisos</li>
-                                                    <li><a href="#">Código de Autorización</a></li>                                    -->
-                <li class="divider"></li>                                                        
-                <!--                                    <li class="dropdown-header">Inventario</li>
-                                                    <li><a href="#">Articulo Inventario</a></li>
-                                                    <li><a href="#">Articulo Insumo</a></li>
-                                                    <li><a href="#">Linea Celular</a></li>
-                                                    <li><a href="#">Pedido de Insumos</a></li>
-                                                    <li class="divider"></li>                                    -->
+                    <li><a href="<?= base_url() ?>descuento_matricula/crear">Descuento especial</a></li> 
+                <?php } ?>
+                <li class="divider"></li>
                 <li class="dropdown-header"><u> Enseñanza</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("docente", "secretaria"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "docente", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>reporte_alumno/crear">Reporte de alumno</a></li> 
                 <?php } ?>
                 <li class="divider"></li>  
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "traslado"))) { ?>                                           
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                           
                     <li class="dropdown-header"><u> Traslados</u></li>                                
                     <li><a href="<?= base_url() ?>traslado_contrato_matricula/crear">Contratos Físicos</a></li>
-                <?php } ?>                                    
-                <!--                                    <li><a href="#">Material de Estudio</a></li>
-                                                    <li><a href="#">Articulo de Inventario</a></li>                                   -->
-                <!--                                    <li class="divider"></li>
-                                                    <li class="dropdown-header">Enseñanza</li>-->
-                <!--                                    <li><a href="#">Horario de Clase</a></li>
-                                                    <li><a href="#">Reserva de Clase</a></li>-->
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "docente"))) { ?> 
-                    <!--<li><a href="#">Reporte de Alumno</a></li>-->
-                <?php } ?>                                    
+                <?php } ?>
+                <li class="divider"></li>
+                <li class="dropdown-header"><u> Permisos</u></li>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "jefe_cartera"))) { ?>                                       
+                    <li><a href="<?= base_url() ?>cod_autorizacion/crear">Cód. de autorización</a></li> 
+                <?php } ?>                    
                 </ul>
                 </li>
-                <!--<li class="col-sm-3">-->
-                <!--<ul>-->
-                <!--                                    <li><a href="#">Grados</a></li>                                  
-                                                    <li><a href="#">Descargar Certificado</a></li>-->
-                <!--                                    <li class="divider"></li>
-                                                    <li class="dropdown-header">Servicio al cliente</li>
-                                                    <li><a href="#">Acuerdo de Pago</a></li>
-                                                    <li><a href="#">Registro PQR</a></li>
-                                                    <li><a href="#">Respuesta PQR</a></li>-->
-                <!--</ul>-->
-                <!--</li>-->
                 </ul>
                 </li>
                 <li class="dropdown dropdown-large">
@@ -601,38 +571,14 @@
                 <?php } ?>                                 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
                     <li><a href="<?= base_url() ?>cuenta/consultar">Cuenta Bancaria</a></li>
+                <?php } ?>
+                <li class="divider"></li>
+                <li class="dropdown-header"><u> Permisos</u></li>                               
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
+                    <li><a href="<?= base_url() ?>cod_autorizacion/consultar">Cód. de autorización</a></li>
                 <?php } ?>                    
-                <!--                                    <li><a href="#">Referido</a></li>
-                                                    <li><a href="#">Consolidar Referido</a></li>
-                                                    <li><a href="#">Material de Estudio</a></li>
-                                                    <li><a href="#">Entrega de Material</a></li>
-                                                    <li><a href="#">Comisión de Escala</a></li>
-                                                    <li><a href="#">Comisión de Matrícula</a></li>
-                                                    <li class="divider"></li>
-                                                    <li class="dropdown-header">Permisos</li>
-                                                    <li><a href="#">Código de Autorización</a></li>                                    -->
                 </ul>
                 </li>
-                <!--                            <li class="col-sm-3">
-                                               <ul>
-                                                   <li class="dropdown-header">Traslados</li>
-                                                   <li><a href="#">Contratos Físicos</a></li>
-                                                   <li><a href="#">Material de Estudio</a></li>
-                                                   <li><a href="#">Articulo de Inventario</a></li>                                   
-                                                   <li class="divider"></li>
-                                                   <li class="dropdown-header">Enseñanza</li>
-                                                   <li><a href="#">Horario de Clase</a></li>
-                                                   <li><a href="#">Reserva de Clase</a></li>
-                                                   <li><a href="#">Reporte de Alumno</a></li>
-                                                   <li><a href="#">Grados</a></li>                                  
-                                                   <li><a href="#">Descargar Certificado</a></li>
-                                                   <li class="divider"></li>
-                                                   <li class="dropdown-header">Servicio al cliente</li>
-                                                   <li><a href="#">Acuerdo de Pago</a></li>
-                                                   <li><a href="#">Registro PQR</a></li>
-                                                   <li><a href="#">Respuesta PQR</a></li>
-                                               </ul>
-                                           </li>-->
                 </ul>
                 </li>                    
                 </ul>

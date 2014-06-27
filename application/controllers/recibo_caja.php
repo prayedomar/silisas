@@ -519,11 +519,11 @@ class Recibo_caja extends CI_Controller {
             //preparamos y maquetamos el contenido a crear
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:40px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:8px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:418px;}td.c1000{line-height:85px;}';
+            $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';
@@ -607,7 +607,7 @@ class Recibo_caja extends CI_Controller {
                         . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
                         . '</tr>';
             }
-            for ($i = $cont_filas; $i < 13; $i++) {
+            for ($i = $cont_filas; $i < 10; $i++) {
                 $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
             }
             $html .= '</table>'
@@ -640,11 +640,11 @@ class Recibo_caja extends CI_Controller {
             $pdf->AddPage();
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:8px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:418px;}td.c1000{line-height:85px;}';
+            $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';
@@ -728,7 +728,7 @@ class Recibo_caja extends CI_Controller {
                         . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
                         . '</tr>';
             }
-            for ($i = $cont_filas; $i < 13; $i++) {
+            for ($i = $cont_filas; $i < 10; $i++) {
                 $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
             }
             $html .= '</table>'

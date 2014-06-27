@@ -4,11 +4,6 @@
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
                     <legend>Crear recibo de caja</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
-                                                <div class="row">
-                                <div class="col-xs-10 col-xs-offset-1"> 
-                                    <p style="text-align:justify;"><B>Nota: </B>Recuerde que cuando es un pago con datáfono, consignación o a nombre de empresa, <b>No</b> lo puede hacer por la opción <br><b>crear->Recibo de Caja</b>, sino por la opción: <b>crear->factura</b>.</p><br>
-                                </div>
-                            </div>
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Titular</legend>
@@ -294,7 +289,7 @@
             $("#div_dv").css("display", "none");
         }
     });
-    
+
     $(".input-group").delegate("#descuento", "blur", function() {
         var descuento = new Number($('#descuento').val().split(",").join(""));
         $('#descuento_hidden').attr('value', ((descuento).toFixed(2)));
@@ -302,9 +297,9 @@
         $("#div_descuento").html("<h4>$ " + $('#descuento_hidden').val() + "</h4>");
         if ($('#descuento').val() == '') {
             $('#descuento').attr('value', '0.00');
-        }        
+        }
         calcular_total();
-    });    
+    });
 
     //Calculamos total devengado, deducido y total nomina
     function calcular_total() {
@@ -360,7 +355,7 @@
         });
         calcular_total();
         $("#descuento").removeAttr("readonly", "readonly");
-        $('#descuento').attr('value', '0.00');        
+        $('#descuento').attr('value', '0.00');
     });
 
     //Llenamos la informacion de las matriculas y los pagos.
@@ -385,7 +380,7 @@
                     $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
                     $("#id_a_nombre_de").attr("value", $('#id').val());
                     $("#a_nombre_de").attr("value", obj.nombreTitular);
-                    $("#direccion_a_nombre_de").attr("value", obj.direccion); 
+                    $("#direccion_a_nombre_de").attr("value", obj.direccion);
                     $("#div_warning").remove();
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');

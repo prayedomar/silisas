@@ -519,11 +519,11 @@ class Factura extends CI_Controller {
             //preparamos y maquetamos el contenido a crear
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:418px;}td.c1000{line-height:85px;}';
+            $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';
@@ -640,11 +640,11 @@ class Factura extends CI_Controller {
             $pdf->AddPage();
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:418px;}td.c1000{line-height:85px;}';
+            $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:112px;}';
             $html .= 'td.c4{width:306px;}';

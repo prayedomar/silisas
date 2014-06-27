@@ -722,6 +722,7 @@ class Cuenta extends CI_Controller {
     }
     public function consultar() {
         $this->load->model('t_cuentam');
+        $this->load->model('cuentam');
         $this->load->model('bancom');
         $data["tab"] = "consultar_cuenta";
         $this->isLogin($data["tab"]);        

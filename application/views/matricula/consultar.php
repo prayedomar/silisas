@@ -25,11 +25,11 @@
                         </div>
                         <div class="col-xs-2">
                             <label>ID titular</label>
-                            <input type='text' id="id_titular" class='form-control' placeholder="ID titular" value="<?= isset($_GET["id_titular"]) ? $_GET["id_titular"] : "" ?>">
+                            <input type='text' id="id_titular" class='form-control numerico' placeholder="ID titular" value="<?= isset($_GET["id_titular"]) ? $_GET["id_titular"] : "" ?>">
                         </div>
                         <div class="col-xs-2">
                             <label>ID ejecutivo</label>
-                            <input type='text' id="id_ejecutivo" class='form-control' placeholder="ID ejecutivo" value="<?= isset($_GET["id_ejecutivo"]) ? $_GET["id_ejecutivo"] : "" ?>">
+                            <input type='text' id="id_ejecutivo" class='form-control numerico' placeholder="ID ejecutivo" value="<?= isset($_GET["id_ejecutivo"]) ? $_GET["id_ejecutivo"] : "" ?>">
                         </div>
                         <div class="col-xs-1">
                             <br>

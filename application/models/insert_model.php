@@ -1457,5 +1457,24 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function cod_autorizacion($tabla_autorizada, $registro_autorizado, $id_empleado_autorizado, $dni_empleado_autorizado, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'tabla_autorizada' => $tabla_autorizada,
+            'registro_autorizado' => $registro_autorizado,
+            'id_empleado_autorizado' => $id_empleado_autorizado,
+            'dni_empleado_autorizado' => $dni_empleado_autorizado,            
+            'observacion' => $observacion,
+            'vigente' => '1',
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('cod_autorizacion');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
 }
