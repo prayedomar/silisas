@@ -557,7 +557,7 @@
                     <li><a href="<?= base_url() ?>liquidar_comisiones/consultar">Liquidación de comisiones</a></li>
                 <?php } ?>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>matricula/consultar_plan_pagos">Plan de pagos</a></li>
+                    <li><a href="<?= base_url() ?>matricula/consultar_plan_pagos">Cronograma de pagos</a></li>
                 <?php } ?>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>matricula/consultar_pagos_matricula">Pagos realizados</a></li>

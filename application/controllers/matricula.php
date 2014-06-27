@@ -528,7 +528,7 @@ class MAtricula extends CI_Controller {
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="a2 c24" colspan="2">PLAN DE PAGOS DE MATRÍCULA<br></td>'
+                    . '<td class="a2 c24" colspan="2">CRONOGRAMA DE PAGOS DE MATRÍCULA<br></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Contrato:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . $id . '</td>'
@@ -601,7 +601,7 @@ class MAtricula extends CI_Controller {
                     . '<td colspan="2" class="d10 c20 a2 c25 c26 c27 c28 a2"><br><br><b>"Transcurridos 4 días después de la fecha límite de pago, el sistema empezará a generar intereses por mora en base a la tasa maxíma de usura definida por la superintendencia financiera de Colombia, por lo cual le invitamos a dar cumplimiento oportuno al compromiso comercial adquirido con nuestra compañía"</b><br></td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="d8 c20 a2 c25 c26 c27 c28">Certifico que estoy de acuerdo con éste plan de pagos.<br><br><br><br><br>______________________________________<br>Firma y documento titular</td>'
+                    . '<td class="d8 c20 a2 c25 c26 c27 c28">Certifico que acepto éste cronograma de pagos.<br><br><br><br><br>______________________________________<br>Firma y documento titular</td>'
                     . '<td class="d8 c20 a2 c25 c26 c27 c28"><br><br><br><br><br><br>______________________________________<br>Firma y sello empresa</td>'
                     . '</tr></table><p class="b3">- Copia para el titular -</p>';
             // Imprimimos el texto con writeHTMLCell()
@@ -824,7 +824,7 @@ class MAtricula extends CI_Controller {
                     . '<td class="c2 a2 c1000"  colspan="2"></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="a2 c24" colspan="2">PLAN DE PAGOS DE MATRÍCULA<br></td>'
+                    . '<td class="a2 c24" colspan="2">CRONOGRAMA DE PAGOS DE MATRÍCULA<br></td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Contrato:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . $id . '</td>'
@@ -897,7 +897,7 @@ class MAtricula extends CI_Controller {
                     . '<td colspan="2" class="d10 c20 a2 c25 c26 c27 c28 a2"><br><br><b>"Transcurridos 4 días después de la fecha límite de pago, el sistema empezará a generar intereses por mora en base a la tasa maxíma de usura definida por la superintendencia financiera de Colombia, por lo cual le invitamos a dar cumplimiento oportuno al compromiso comercial adquirido con nuestra compañía"</b><br></td>'
                     . '</tr>'
                     . '<tr>'
-                    . '<td class="d8 c20 a2 c25 c26 c27 c28">Certifico que estoy de acuerdo con éste plan de pagos.<br><br><br><br><br>______________________________________<br>Firma y documento titular</td>'
+                    . '<td class="d8 c20 a2 c25 c26 c27 c28">Certifico que estoy de acuerdo con éste cronograma de pagos.<br><br><br><br><br>______________________________________<br>Firma y documento titular</td>'
                     . '<td class="d8 c20 a2 c25 c26 c27 c28"><br><br><br><br><br><br>______________________________________<br>Firma y sello empresa</td>'
                     . '</tr></table><p class="b3">- Copia para el titular -</p>';
             // Imprimimos el texto con writeHTMLCell()
