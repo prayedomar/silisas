@@ -21,7 +21,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="div_matriculas" style="display: none">      
+                <div id="div_matriculas" style="display: none">
                     <div class="row">
                         <legend>Información de la matrícula</legend>
                         <div class="overflow_tabla separar_div">
@@ -43,8 +43,15 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-4 col-xs-offset-4">
+                                <?php if (isset($cod_required)) { ?>
+                                    <div class="form-group">
+                                        <label>Código de autorización<em class="required_asterisco">*</em></label>
+                                        <p class="help-block"><b>> </b>Éste código de autorización, lo debe solicitar a los directivos encargados.</p>
+                                        <input name="cod_autorizacion" id="cod_autorizacion" type="text" class="form-control numerico" placeholder="Código de autorización" maxlength="13" <?php if (isset($id)) { ?> value="<?php echo $id ?>" <?php } ?>>
+                                    </div> 
+                                <?php } ?>
                                 <div class="form-group">
-                                    <label>Valor del descuento</label>                            
+                                    <label>Valor del descuento<em class="required_asterisco">*</em></label>                            
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
                                         <input type="text" name="total" id="total" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12">
@@ -56,6 +63,8 @@
                             <label>Observación<em class="required_asterisco">*</em></label>
                             <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Motivo del descuento, quien autorizó, etc..."  style="max-width:100%;"></textarea>
                         </div>
+                        <div id="validacion_alert">
+                        </div>                        
                         <div class="form-group separar_submit">
                             <input type="hidden" id="action_validar" value={action_validar} />
                             <input type="hidden" name="id_responsable" value={id_responsable} />
@@ -69,8 +78,6 @@
                                 <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                             </center>
                         </div>   
-                        <div id="validacion_alert">
-                        </div>
                     </div>
                 </div>
             </form>

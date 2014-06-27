@@ -607,7 +607,7 @@ class Factura extends CI_Controller {
                         . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
                         . '</tr>';
             }
-            for ($i = $cont_filas; $i < 13; $i++) {
+            for ($i = $cont_filas; $i < 10; $i++) {
                 $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
             }
             $html .= '</table>'
@@ -728,7 +728,7 @@ class Factura extends CI_Controller {
                         . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
                         . '</tr>';
             }
-            for ($i = $cont_filas; $i < 13; $i++) {
+            for ($i = $cont_filas; $i < 10; $i++) {
                 $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
             }
             $html .= '</table>'

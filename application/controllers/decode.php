@@ -9,7 +9,7 @@ class Decode extends CI_Controller {
     function index() {
         $encode = $this->encrypt->encode("1151939211");
 //        echo $encode . "<br>";
-        $decode = $this->encrypt->decode("K7WGyFFTYiFIRKYsQD9nnCxqG2rFhTOf8SfU+A9dW/pNv5Y71qtREfaL+AQPBGIvpR07CmEjwqj8L88MQ6L4fg==");
+        $decode = $this->encrypt->decode("rh3OFwvRHcMgVJMtGGC/iunrSjOXf/apNHb4+VuNFC06HbJ9Z9yLaPZIA86F4tajPx39l0mMa+dl9/T0i61bbw==");
         echo $decode . "<br>";
     }
 }

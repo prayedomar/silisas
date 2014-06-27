@@ -14,6 +14,10 @@ class Descuento_matricula extends CI_Controller {
         $data["tab"] = "crear_descuento_matricula";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        //Validamos si el responsable necesita cod de autorizacion o no. 
+        if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo" && $_SESSION["perfil"] != "jefe_cartera") {
+            $data['cod_required'] = '1';
+        }
         $data['action_validar'] = base_url() . "descuento_matricula/validar";
         $data['action_crear'] = base_url() . "descuento_matricula/insertar";
         $data['action_recargar'] = base_url() . "descuento_matricula/crear";
@@ -37,9 +41,42 @@ class Descuento_matricula extends CI_Controller {
                     $error_valores = "<p>El valor del descuento, no puede ser mayor al saldo de la matrícula</p>";
                 }
             }
-
-            if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('id') . form_error('total') . $error_valores . form_error('observacion');
+            if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo" && $_SESSION["perfil"] != "jefe_cartera") {
+                $this->form_validation->set_rules('cod_autorizacion', 'Código de autorización', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            }
+            $error_cod = "";
+            if (($this->input->post('id')) && ($this->input->post('cod_autorizacion'))) {
+                $cod_autorizacion = $this->input->post('cod_autorizacion');
+                $this->load->model('cod_autorizacionm');
+                $check_codigo = $this->cod_autorizacionm->cod_autorizacion_id($cod_autorizacion);
+                if ($check_codigo != TRUE) {
+                    $error_cod = "<p>El código de autorización, No existe en la Base de Datos.</p>";
+                } else {
+                    $check_vigente = $this->cod_autorizacionm->cod_autorizacion_id_vigente($cod_autorizacion);
+                    if ($check_vigente != TRUE) {
+                        $error_cod = "<p>El código de autorización, No se encuentra vigente.</p>";
+                    } else {
+                        $tabla_autorizada = '17'; //Crear un descuento especial de matricula                        
+                        $check_autorizado = $this->cod_autorizacionm->cod_autorizacion_id_vigente_empleado_autorizado($cod_autorizacion);
+                        if ($check_autorizado != TRUE) {
+                            $error_cod = "<p>Usted no es el empleado autorizado para utilizar éste código de autorización.</p>";
+                        } else {
+                            $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_tabla($cod_autorizacion, $tabla_autorizada);
+                            if ($check_tabla != TRUE) {
+                                $error_cod = "<p>El código de autorización, no fue creado para este tipo de transacción.</p>";
+                            } else {
+                                $tabla_autorizada = '17'; //Crear un descuento especial de matricula
+                                $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_registro($cod_autorizacion, $this->input->post('id'));
+                                if ($check_tabla != TRUE) {
+                                    $error_cod = "<p>El código de autorización, no fue creado para este número de matricula.</p>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($error_cod != "") || ($error_valores != "")) {
+                echo form_error('id') . form_error('total') . form_error('cod_autorizacion') . $error_cod . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
