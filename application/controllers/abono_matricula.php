@@ -21,7 +21,7 @@ class Abono_matricula extends CI_Controller {
         $dni_responsable = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_titular();
         $data['dni_a_nombre_de'] = $this->select_model->t_dni_todos();
-        $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
+        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($id_responsable, $dni_responsable);
         $data['action_validar'] = base_url() . "abono_matricula/validar";
         $data['action_crear'] = base_url() . "abono_matricula/insertar";
         $data['action_recargar'] = base_url() . "abono_matricula/crear";
@@ -341,6 +341,123 @@ class Abono_matricula extends CI_Controller {
                 }
             } else {
                 echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function anular() {
+        $data["tab"] = "anular_abono_matricula";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "abono_matricula/validar_anular";
+        $data['action_crear'] = base_url() . "abono_matricula/insertar_anular";
+        $data['action_recargar'] = base_url() . "abono_matricula/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "abono_matricula/validar_transaccion_anular";
+        $this->parser->parse('abono_matricula/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '15'; //Abono a matricula       
+            $credito_debito = '1'; //credito
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "anular_abono_matricula";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "abono_matricula/anular";
+            $data['msn_recrear'] = "Anular otro abono a matrícula";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->abono_matricula_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('abono_matriculam');
+            $abono_matricula = $this->abono_matriculam->abono_matricula_prefijo_id($prefijo, $id);
+            if ($abono_matricula == TRUE) {
+                if ($abono_matricula->vigente == 1) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $abono_matricula->matricula . '</td>
+                            <td class="text-center">$' . number_format($abono_matricula->subtotal + $abono_matricula->int_mora, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $abono_matricula->sede_caja . '-' . $abono_matricula->tipo_caja . '</td>
+                            <td class="text-center">$' . number_format($abono_matricula->efectivo_ingresado, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $abono_matricula->cuenta_destino . '</td>
+                            <td class="text-center">$' . number_format($abono_matricula->valor_consignado, 2, '.', ',') . '</td> 
+                            <td class="text-center">' . $abono_matricula->responsable . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($abono_matricula->fecha_trans)) . '</td>
+                        </tr>';
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>El abono a matrícula, ya se encuentra anulado.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>El abono a matrícula, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
             }
         } else {
             redirect(base_url());

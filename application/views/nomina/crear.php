@@ -8,8 +8,8 @@
                         <div class="col-xs-6 col-xs-offset-3">
                             <div class="form-group">
                                 <label>Empleado<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos que pertenecen a su sede principal.</p>
-                                <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado" class="form-control exit_caution">
+                                <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos de cada una de sus sedes autorizadas.</p>
+                                <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado" class="chosen-select form-control exit_caution">
                                     <option value="default">Seleccione Empleado</option>
                                     {empleado}
                                     <option value="{id}-{dni}">{nombre1} {nombre2} {apellido1} {apellido2}</option>

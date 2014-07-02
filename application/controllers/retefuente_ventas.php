@@ -416,4 +416,121 @@ class Retefuente_ventas extends CI_Controller {
         }
     }
 
+    function anular() {
+        $data["tab"] = "anular_retefuente_ventas";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "retefuente_ventas/validar_anular";
+        $data['action_crear'] = base_url() . "retefuente_ventas/insertar_anular";
+        $data['action_recargar'] = base_url() . "retefuente_ventas/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "retefuente_ventas/validar_transaccion_anular";
+        $this->parser->parse('retefuente_ventas/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '14'; //Retefuente por ventas
+            $credito_debito = '0'; //Débito
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "anular_retefuente_ventas";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "retefuente_ventas/anular";
+            $data['msn_recrear'] = "Anular otra retefuente por ventas";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->retefuente_ventas_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('retefuente_ventasm');
+            $retefuente_ventas = $this->retefuente_ventasm->retefuente_ventas_prefijo_id($prefijo, $id);
+            if ($retefuente_ventas == TRUE) {
+                if ($retefuente_ventas->vigente == 1) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $retefuente_ventas->prefijo_factura . '-' . $retefuente_ventas->id_factura . '</td>
+                            <td class="text-center">$' . number_format($retefuente_ventas->total, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $retefuente_ventas->sede_caja . '-' . $retefuente_ventas->tipo_caja . '</td>
+                            <td class="text-center">$' . number_format($retefuente_ventas->efectivo_retirado, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $retefuente_ventas->cuenta_origen . '</td>
+                            <td class="text-center">$' . number_format($retefuente_ventas->valor_retirado, 2, '.', ',') . '</td> 
+                            <td class="text-center">' . $retefuente_ventas->responsable . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($retefuente_ventas->fecha_trans)) . '</td>
+                        </tr>';
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>La retefuente por ventas, ya se encuentra anulada.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>La retefuente por ventas, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
 }

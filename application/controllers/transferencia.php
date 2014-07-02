@@ -7,7 +7,7 @@ class Transferencia extends CI_Controller {
         $this->load->model('select_model');
         $this->load->model('insert_model');
         $this->load->model('update_model');
-        $this->load->model('transferenciam');        
+        $this->load->model('transferenciam');
     }
 
     function crear() {
@@ -491,7 +491,7 @@ class Transferencia extends CI_Controller {
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';            
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
             $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:170px;}';
@@ -550,46 +550,46 @@ class Transferencia extends CI_Controller {
                     . '<tr><td class="a3"><b>Remitente: </b>' . $transferencia->nombre_remitente . '.</td></tr>';
             if ($transferencia->sede_caja_origen != NULL) {
                 $html .= '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Nombre de la caja: </b>' . $transferencia->nombre_caja_origen . '.</td></tr>'
-                    . '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Efectivo retirado de caja: </b>' . number_format($transferencia->efectivo_retirado, 2, '.', ',') . '.</td></tr>';
+                        . '<tr><td class="a3"><b>Nombre de la caja: </b>' . $transferencia->nombre_caja_origen . '.</td></tr>'
+                        . '<tr><td class="c10"> </td></tr>'
+                        . '<tr><td class="a3"><b>Efectivo retirado de caja: </b>' . number_format($transferencia->efectivo_retirado, 2, '.', ',') . '.</td></tr>';
             }
             if ($transferencia->cuenta_origen != NULL) {
                 $html .= '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Número de la cuenta: </b>' . $transferencia->cuenta_origen . '.</td></tr>'
-                    . '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Valor retirado de cuenta: </b>' . number_format($transferencia->valor_retirado, 2, '.', ',') . '.</td></tr>';
+                        . '<tr><td class="a3"><b>Número de la cuenta: </b>' . $transferencia->cuenta_origen . '.</td></tr>'
+                        . '<tr><td class="c10"> </td></tr>'
+                        . '<tr><td class="a3"><b>Valor retirado de cuenta: </b>' . number_format($transferencia->valor_retirado, 2, '.', ',') . '.</td></tr>';
             }
             if (($transferencia->observacion) != "") {
                 $html .= '<tr><td class="c10"> </td></tr>'
-                         .'<tr><td class="a3"><b>Observacion de transferencia: </b>' . $transferencia->observacion . '</td></tr>';
-            }            
+                        . '<tr><td class="a3"><b>Observacion de transferencia: </b>' . $transferencia->observacion . '</td></tr>';
+            }
             $html .= '<tr><td class="c10"> </td></tr></table></td>'
                     . '<td colspan="2" class="c14 c25 c26 c27 c28">'
                     . '<table>'
                     . '<tr><td class="c10"> </td></tr>'
                     . '<tr><td class="a3"><b>Sede destino: </b>' . $transferencia->nombre_sede_destino . '.</td></tr>'
                     . '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Empleado que aprueba: </b>' . $aprobacion_transferencia->empleado_autoriza . '.</td></tr>';                    
+                    . '<tr><td class="a3"><b>Empleado que aprueba: </b>' . $aprobacion_transferencia->empleado_autoriza . '.</td></tr>';
             if ($transferencia->tipo_destino == 1) {
                 $html .= '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Tipo destino: </b> Caja.</td></tr>'
-                    . '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Nombre de la caja: </b>' . $transferencia->nombre_caja_destino . '.</td></tr>'                        
-                    . '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Efectivo enviado a la caja: </b>' . number_format($transferencia->efectivo_ingresado, 2, '.', ',') . '.</td></tr>';
+                        . '<tr><td class="a3"><b>Tipo destino: </b> Caja.</td></tr>'
+                        . '<tr><td class="c10"> </td></tr>'
+                        . '<tr><td class="a3"><b>Nombre de la caja: </b>' . $transferencia->nombre_caja_destino . '.</td></tr>'
+                        . '<tr><td class="c10"> </td></tr>'
+                        . '<tr><td class="a3"><b>Efectivo enviado a la caja: </b>' . number_format($transferencia->efectivo_ingresado, 2, '.', ',') . '.</td></tr>';
             } else {
                 $html .= '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Tipo destino: </b> Cuenta.</td></tr>'
-                    . '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Número de la cuenta: </b>' . $transferencia->cuenta_destino . '.</td></tr>'
-                    . '<tr><td class="c10"> </td></tr>'
-                    . '<tr><td class="a3"><b>Valor enviado a la cuenta: </b>' . number_format($transferencia->valor_consignado, 2, '.', ',') . '.</td></tr>';
+                        . '<tr><td class="a3"><b>Tipo destino: </b> Cuenta.</td></tr>'
+                        . '<tr><td class="c10"> </td></tr>'
+                        . '<tr><td class="a3"><b>Número de la cuenta: </b>' . $transferencia->cuenta_destino . '.</td></tr>'
+                        . '<tr><td class="c10"> </td></tr>'
+                        . '<tr><td class="a3"><b>Valor enviado a la cuenta: </b>' . number_format($transferencia->valor_consignado, 2, '.', ',') . '.</td></tr>';
             }
             if (($aprobacion_transferencia->observacion) != "") {
                 $html .= '<tr><td class="c10"> </td></tr>'
-                         .'<tr><td class="a3"><b>Observacion de aprobación: </b>' . $aprobacion_transferencia->observacion . '</td></tr>';
-            }            
+                        . '<tr><td class="a3"><b>Observacion de aprobación: </b>' . $aprobacion_transferencia->observacion . '</td></tr>';
+            }
             $html .= '<tr><td class="c10"> </td></tr></table></td></tr>'
                     . '</table><p class="b3">- Copia para la empresa -</p>';
             // Imprimimos el texto con writeHTMLCell()
@@ -602,6 +602,161 @@ class Transferencia extends CI_Controller {
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'transferencia/consultar/');
+        }
+    }
+
+    function anular() {
+        $data["tab"] = "anular_transferencia";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "transferencia/validar_anular";
+        $data['action_crear'] = base_url() . "transferencia/insertar_anular";
+        $data['action_recargar'] = base_url() . "transferencia/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "transferencia/validar_transaccion_anular";
+        $this->parser->parse('transferencia/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '13'; //Transferencia intersede    
+            $credito_debito_origen = 0; //Débito            
+            $credito_debito_destino = 1; //Crédito  
+            $est_traslado = '3'; //Anulado
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "anular_transferencia";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "transferencia/anular";
+            $data['msn_recrear'] = "Anular otra retención por compras";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito_origen, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito_destino, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $error2 = $this->update_model->transferencia_est_traslado($prefijo, $id, $est_traslado);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $error3 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                        if (isset($error3)) {
+                            $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                            $this->parser->parse('trans_error', $data);
+                        } else {
+                            $this->parser->parse('trans_success', $data);
+                        }
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('transferenciam');
+            $transferencia = $this->transferenciam->transferencia_prefijo_id($prefijo, $id);
+            if ($transferencia == TRUE) {
+                if ($transferencia->est_traslado == 3) {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>La transferencia intersede, ya se encuentra anulada.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                } else {
+
+                    if ($transferencia->est_traslado == 2) {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p><strong><center>La transferencia intersede, está pendiente por aprobar.</center></strong></p>'
+                        );
+                        echo json_encode($response);
+                        return false;
+                    } else {
+
+                        $response = array(
+                            'respuesta' => 'OK',
+                            'filasTabla' => ''
+                        );
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center">$' . number_format($transferencia->total, 2, '.', ',') . '</td>
+                            <td>
+                            <p><b>Sede origen:</b> ' . $transferencia->nombre_sede_origen . '</p>
+                            <p><b>Remitente:</b> ' . $transferencia->nombre_remitente . '</p>';
+                        if ($transferencia->sede_caja_origen != NULL) {
+                            $response['filasTabla'] .= '<p><b>Nombre de la caja:</b> ' . $transferencia->nombre_caja_origen . '</p>
+                            <p><b>Efectivo retirado de caja:</b> $' . number_format($transferencia->efectivo_retirado, 2, '.', ',') . '</p>';
+                        }
+                        if ($transferencia->cuenta_origen != NULL) {
+                            $response['filasTabla'] .= '<p><b>Número de la cuenta:</b> ' . $transferencia->cuenta_origen . '</p>
+                            <p><b>Valor retirado de cuenta:</b> $' . number_format($transferencia->valor_retirado, 2, '.', ',') . '</p>';
+                        }
+                        $response['filasTabla'] .= '</td>
+                            <td>
+                            <p><b>Sede destino:</b> ' . $transferencia->nombre_sede_destino . '</p>';
+                        if ($transferencia->tipo_destino == 1) {
+                            $response['filasTabla'] .= '<p><b>Tipo destino:</b> Caja</p>
+                              <p><b>Nombre de la caja:</b> ' . $transferencia->nombre_caja_destino . '</p>
+                              <p><b>Efectivo enviado a la caja:</b> $' . number_format($transferencia->efectivo_ingresado, 2, '.', ',') . '</p>';
+                        } else {
+                            $response['filasTabla'] .= '<p><b>Tipo destino:</b> Cuenta</p>
+                              <p><b>Número de la cuenta:</b> ' . $transferencia->cuenta_destino . '</p>
+                              <p><b>Valor enviado a la cuenta:</b> $' . number_format($transferencia->valor_consignado, 2, '.', ',') . '</p>';
+                        }
+                        $response['filasTabla'] .= '</td>
+                            <td class="text-center">' . $transferencia->observacion . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($transferencia->fecha_trans)) . '</td>
+                        </tr>';
+                        echo json_encode($response);
+                        return false;
+                    }
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>La transferencia intersede, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
         }
     }
 

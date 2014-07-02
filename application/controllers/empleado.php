@@ -59,7 +59,7 @@ class Empleado extends CI_Controller {
             $this->form_validation->set_rules('ciudad', 'Ciudad', 'required|callback_select_default');
             $this->form_validation->set_rules('t_domicilio', 'Tipo de Domicilio', 'required|callback_select_default');
             $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'required|trim|xss_clean|max_length[40]');
+            $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'trim|xss_clean|max_length[40]');
             $this->form_validation->set_rules('telefono', 'Teléfono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
@@ -111,7 +111,7 @@ class Empleado extends CI_Controller {
             $this->form_validation->set_rules('ciudad', 'Ciudad', 'required|callback_select_default');
             $this->form_validation->set_rules('t_domicilio', 'Tipo de Domicilio', 'required|callback_select_default');
             $this->form_validation->set_rules('direccion', 'Direccion', 'required|trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'required|trim|xss_clean|max_length[40]');
+            $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'trim|xss_clean|max_length[40]');
             $this->form_validation->set_rules('telefono', 'Teléfono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
@@ -481,7 +481,7 @@ class Empleado extends CI_Controller {
 
     public function excel() {
         header("Content-type: application/vnd.ms-excel; name='excel'");
-        header("Content-Disposition: filename=reporte_titulares_" . date("Y-m-d") . ".xls");
+        header("Content-Disposition: filename=reporte_empleados_" . date("Y-m-d") . ".xls");
         header("Pragma: no-cache");
         header("Expires: 0");
         $lista = $this->empleadom->listar_empleados_excel($_GET);

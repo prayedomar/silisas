@@ -20,7 +20,7 @@ class Abono_prestamo extends CI_Controller {
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');
         $data['t_beneficiario'] = $this->select_model->t_usuario_prestamo();
-        $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
+        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($id_responsable, $dni_responsable);
         $data['dni'] = $this->select_model->t_dni_cliente();
 
         $data['action_validar'] = base_url() . "abono_prestamo/validar";

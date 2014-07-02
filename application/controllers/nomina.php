@@ -20,7 +20,8 @@ class Nomina extends CI_Controller {
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');
-        $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
+        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($id_responsable, $dni_responsable);
+        $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['action_validar'] = base_url() . "nomina/validar";
         $data['action_crear'] = base_url() . "nomina/insertar";
         $data['action_recargar'] = base_url() . "nomina/crear";
@@ -1045,7 +1046,7 @@ class Nomina extends CI_Controller {
             $html .= 'td.c25{border-top-color:#000000;}';
             $html .= 'td.c26{border-bottom-color:#000000;}';
             $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';            
+            $html .= 'td.c28{border-right-color:#000000;}';
             $html .= 'td.c29{background-color:#F5F5F5;}';
             $html .= 'td.c30{font-family:helvetica,sans-serif;font-size:13px;}';
             $html .= 'td.a1{text-align:left;}';
@@ -1053,7 +1054,7 @@ class Nomina extends CI_Controller {
             $html .= 'td.a3{text-align:justify;}';
             $html .= 'th.a1{text-align:left;}';
             $html .= 'th.a2{text-align:center;}';
-            $html .= 'th.a3{background-color:#F5F5F5;}';            
+            $html .= 'th.a3{background-color:#F5F5F5;}';
             $html .= 'th.d1{width:310px;}';
             $html .= 'th.d2{width:80px;}';
             $html .= 'th.d3{width:120px;}';
@@ -1126,9 +1127,9 @@ class Nomina extends CI_Controller {
                     $devengado = "0.00";
                     $deducido = $fila->cantidad * $fila->valor_unitario;
                 }
-                if($fila->detalle){
+                if ($fila->detalle) {
                     $detalle = " - (" . $fila->detalle . ")";
-                }else{
+                } else {
                     $detalle = "";
                 }
                 $cont_filas ++;
@@ -1144,10 +1145,10 @@ class Nomina extends CI_Controller {
                 $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
             }
             $html .= '</table><table>';
-            if($nomina->observacion != ""){
+            if ($nomina->observacion != "") {
                 $html .= '<tr><td class="c10 c25 c27 c28" colspan="4"> </td></tr><tr><td class="a3 c30 c27 c28" colspan="4"><b>Observaciones: </b>' . $nomina->observacion . '.</td></tr>'
                         . '<tr><td class="c10 c26 c27 c28" colspan="4"> </td></tr>';
-            }            
+            }
             $html .= '<tr>'
                     . '<td class="c20 a2 c25 c26 c27 c28" rowspan="3"><br><br><br><br><br>___________________________<br>Firma empleado</td>'
                     . '<td class="c20 a2 c25 c26 c27 c28" rowspan="3"><br><br><br><br><br>___________________________<br>Firma y sello empresa</td>'
@@ -1193,7 +1194,7 @@ class Nomina extends CI_Controller {
             $html .= 'td.c25{border-top-color:#000000;}';
             $html .= 'td.c26{border-bottom-color:#000000;}';
             $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';            
+            $html .= 'td.c28{border-right-color:#000000;}';
             $html .= 'td.c29{background-color:#F5F5F5;}';
             $html .= 'td.c30{font-family:helvetica,sans-serif;font-size:13px;}';
             $html .= 'td.a1{text-align:left;}';
@@ -1201,7 +1202,7 @@ class Nomina extends CI_Controller {
             $html .= 'td.a3{text-align:justify;}';
             $html .= 'th.a1{text-align:left;}';
             $html .= 'th.a2{text-align:center;}';
-            $html .= 'th.a3{background-color:#F5F5F5;}';            
+            $html .= 'th.a3{background-color:#F5F5F5;}';
             $html .= 'th.d1{width:310px;}';
             $html .= 'th.d2{width:80px;}';
             $html .= 'th.d3{width:120px;}';
@@ -1274,9 +1275,9 @@ class Nomina extends CI_Controller {
                     $devengado = "0.00";
                     $deducido = $fila->cantidad * $fila->valor_unitario;
                 }
-                if($fila->detalle){
+                if ($fila->detalle) {
                     $detalle = " - (" . $fila->detalle . ")";
-                }else{
+                } else {
                     $detalle = "";
                 }
                 $cont_filas ++;
@@ -1292,10 +1293,10 @@ class Nomina extends CI_Controller {
                 $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
             }
             $html .= '</table><table>';
-            if($nomina->observacion != ""){
+            if ($nomina->observacion != "") {
                 $html .= '<tr><td class="c10 c25 c27 c28" colspan="4"> </td></tr><tr><td class="a3 c30 c27 c28" colspan="4"><b>Observaciones: </b>' . $nomina->observacion . '.</td></tr>'
                         . '<tr><td class="c10 c26 c27 c28" colspan="4"> </td></tr>';
-            }            
+            }
             $html .= '<tr>'
                     . '<td class="c20 a2 c25 c26 c27 c28" rowspan="3"><br><br><br><br><br>___________________________<br>Firma empleado</td>'
                     . '<td class="c20 a2 c25 c26 c27 c28" rowspan="3"><br><br><br><br><br>___________________________<br>Firma y sello empresa</td>'
@@ -1321,6 +1322,145 @@ class Nomina extends CI_Controller {
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'nomina/consultar/');
+        }
+    }
+
+    function anular() {
+        $data["tab"] = "anular_nomina";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "nomina/validar_anular";
+        $data['action_crear'] = base_url() . "nomina/insertar_anular";
+        $data['action_recargar'] = base_url() . "nomina/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "nomina/validar_transaccion_anular";
+        $this->parser->parse('nomina/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '9'; //Nómina laboral
+            $credito_debito = '0'; //Débito
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "anular_nomina";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "nomina/anular";
+            $data['msn_recrear'] = "Anular otra nómina";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->nomina_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $conceptos_nomina = $this->nominam->concepto_nomina_prefijo_id($prefijo, $id);
+                    foreach ($conceptos_nomina as $fila) {
+                        //Los conceptos que sean de comision de escalas, se pasarán a pendientes para volver a hacer la nomina
+                        if (($fila->t_concepto_nomina != '28') && ($fila->t_concepto_nomina != '29')) {
+                            $est_concepto = '3'; //3: Anulado
+                            $error2 = $this->update_model->concepto_nomina_estado($fila->id, $est_concepto);
+                            if (isset($error2)) {
+                                $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                                $this->parser->parse('trans_error', $data);
+                                return;
+                            }
+                        } else {
+                            $est_concepto = '2'; //2: Pendiente
+                            $error2 = $this->update_model->concepto_nomina_estado($fila->id, $est_concepto);
+                            if (isset($error2)) {
+                                $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                                $this->parser->parse('trans_error', $data);
+                                return;
+                            }
+                        }
+                    }
+                    $error3 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error3)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('nominam');
+            $nomina = $this->nominam->nomina_prefijo_id($prefijo, $id);
+            if ($nomina == TRUE) {
+                if ($nomina->vigente == 1) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $nomina->empleado . '</td>
+                            <td class="text-center">Del ' . $nomina->fecha_inicio . ' al ' . $nomina->fecha_fin . '</td>                                
+                            <td class="text-center">$' . number_format($nomina->total, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $nomina->sede_caja . '-' . $nomina->tipo_caja . '</td>
+                            <td class="text-center">$' . number_format($nomina->efectivo_retirado, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $nomina->cuenta_origen . '</td>
+                            <td class="text-center">$' . number_format($nomina->valor_retirado, 2, '.', ',') . '</td> 
+                            <td class="text-center">' . $nomina->responsable . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($nomina->fecha_trans)) . '</td>
+                        </tr>';
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>La nómina, ya se encuentra anulada.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>La nómina, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
         }
     }
 

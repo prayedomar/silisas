@@ -11,14 +11,14 @@ class Adelanto extends CI_Controller {
 //Crear: Adelanto de nomina
     function crear() {
         $data["tab"] = "crear_adelanto";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['base_url'] = base_url();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');
-        $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
+        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($id_responsable, $dni_responsable);
         $data['t_ausencia'] = $this->select_model->t_ausencia();
         $data['action_validar'] = base_url() . "adelanto/validar";
         $data['action_crear'] = base_url() . "adelanto/insertar";
@@ -37,8 +37,8 @@ class Adelanto extends CI_Controller {
             $this->form_validation->set_rules('total', 'Valor del Adelanto', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('autoriza', 'Quién autoriza', 'required|trim|xss_clean|max_length[50]');            
-            $this->form_validation->set_rules('motivo', 'Motivo del adelanto', 'required|trim|xss_clean|max_length[255]');            
+            $this->form_validation->set_rules('autoriza', 'Quién autoriza', 'required|trim|xss_clean|max_length[50]');
+            $this->form_validation->set_rules('motivo', 'Motivo del adelanto', 'required|trim|xss_clean|max_length[255]');
             $this->form_validation->set_rules('forma_descuento', 'Forma de descuento', 'required|trim|xss_clean|max_length[210]');
             $error_valores = "";
             if ($this->input->post('total')) {
@@ -90,7 +90,7 @@ class Adelanto extends CI_Controller {
             $autoriza = ucfirst(mb_strtolower($this->input->post('autoriza')));
             $motivo = ucfirst(mb_strtolower($this->input->post('motivo')));
             $forma_descuento = ucfirst(mb_strtolower($this->input->post('forma_descuento')));
-            
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -100,13 +100,13 @@ class Adelanto extends CI_Controller {
             $credito_debito = 0; //Debito
 
             $data["tab"] = "crear_adelanto";
-            $this->isLogin($data["tab"]);                
+            $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "adelanto/crear";
             $data['msn_recrear'] = "Crear otro Adelanto";
             $data['url_imprimir'] = base_url() . "adelanto/consultar_pdf/" . $prefijo_adelanto . "_" . $id_adelanto . "/I";
-            
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_adelanto, $id_adelanto, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);            
+
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_adelanto, $id_adelanto, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
@@ -182,13 +182,13 @@ class Adelanto extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     function consultar() {
         $data["tab"] = "consultar_adelanto";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
-        $data['error_consulta'] = "";        
+        $data['error_consulta'] = "";
         $data['action_crear'] = base_url() . "adelanto/consultar_validar";
         $data['action_recargar'] = base_url() . "adelanto/consultar";
         $this->parser->parse('adelanto/consultar', $data);
@@ -210,7 +210,7 @@ class Adelanto extends CI_Controller {
                 }
             } else {
                 $error_transaccion = "El adelanto de nómina, no existe en la base de datos.";
-            }            
+            }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
             $data["tab"] = "consultar_adelanto";
@@ -225,7 +225,7 @@ class Adelanto extends CI_Controller {
             $this->load->view('footer');
         } else {
             redirect(base_url() . "adelanto/consultar_pdf/" . $prefijo . "_" . $id . "/I");
-        }        
+        }
     }
 
     function consultar_pdf($id_adelanto, $salida_pdf) {
@@ -235,9 +235,9 @@ class Adelanto extends CI_Controller {
         $adelanto = $this->select_model->adelanto_prefijo_id($prefijo, $id);
         if ($adelanto == TRUE) {
             $empleado = $this->select_model->empleado($adelanto->id_empleado, $adelanto->dni_empleado);
-            $dni_abreviado_empleado = $this->select_model->t_dni_id($adelanto->dni_empleado)->abreviacion;            
+            $dni_abreviado_empleado = $this->select_model->t_dni_id($adelanto->dni_empleado)->abreviacion;
             $responsable = $this->select_model->empleado($adelanto->id_responsable, $adelanto->dni_responsable);
-            
+
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -279,7 +279,7 @@ class Adelanto extends CI_Controller {
             $html .= 'td.c7{font-size:16px;}';
             $html .= 'td.c8{line-height:40px;}';
             $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';            
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';
             $html .= 'td.c11{font-size:12px;}';
             $html .= 'td.c12{line-height:20px;}';
             $html .= 'td.c13{line-height:30px;}';
@@ -331,14 +331,14 @@ class Adelanto extends CI_Controller {
                     . '<td class="a3"><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td class="a3"><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
-                    . '</tr><tr><td class="c10"> </td></tr><tr>'                    
+                    . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td class="a3"><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr>'
                     . '</table>'
                     . '</td>'
                     . '</tr>'
                     . '<tr><td colspan="2" class="c11 a3">Recibí éste dinero de la empresa SILI S.A.S en calidad de anticipo, autorizando que me sea descontado de la forma especificada. Así mismo, autorizo a la empresa SILI S.A.S, para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo pendiente de éste adelanto.<p class="b4 b5">Firma empleado: ______________________________________</p></td>'
-                    . '<td colspan="2"><br><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'                    
+                    . '<td colspan="2"><br><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para el empleado -</p>';
 
             // Imprimimos el texto con writeHTMLCell()
@@ -364,7 +364,7 @@ class Adelanto extends CI_Controller {
             $html .= 'td.c7{font-size:16px;}';
             $html .= 'td.c8{line-height:40px;}';
             $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';            
+            $html .= 'td.c10{font-size:4px;line-height:5px;}';
             $html .= 'td.c11{font-size:12px;}';
             $html .= 'td.c12{line-height:20px;}';
             $html .= 'td.c13{line-height:30px;}';
@@ -416,14 +416,14 @@ class Adelanto extends CI_Controller {
                     . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
-                    . '</tr><tr><td class="c10"> </td></tr><tr>'                    
+                    . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr>'
                     . '</table>'
                     . '</td>'
                     . '</tr>'
                     . '<tr><td colspan="2" class="c11 a3">Recibí éste dinero de la empresa SILI S.A.S en calidad de anticipo, autorizando que me sea descontado de la forma especificada. Así mismo, autorizo a la empresa SILI S.A.S, para que en caso de retiro, descuenten de mis pretaciones sociales, el saldo pendiente de éste adelanto.<p class="b4 b5">Firma empleado: ______________________________________</p></td>'
-                    . '<td colspan="2"><br><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'                    
+                    . '<td colspan="2"><br><br><br><p class="b5 b6">Firma y sello empresa: ____________________</p></td></tr>'
                     . '</table><p class="b3">- Copia para la empresa -</p>';
 //
 // Imprimimos el texto con writeHTMLCell()
@@ -438,6 +438,137 @@ class Adelanto extends CI_Controller {
             redirect(base_url() . 'adelanto/consultar/');
         }
     }
-    
+
+    function anular() {
+        $data["tab"] = "anular_adelanto";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "adelanto/validar_anular";
+        $data['action_crear'] = base_url() . "adelanto/insertar_anular";
+        $data['action_recargar'] = base_url() . "adelanto/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "adelanto/validar_transaccion_anular";
+        $this->parser->parse('adelanto/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '1'; //Adelanto de nómina    
+            $credito_debito = '0'; //Débito
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "anular_adelanto";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "adelanto/anular";
+            $data['msn_recrear'] = "Anular otro adelanto de nómina";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->adelanto_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('adelantom');
+            $adelanto = $this->adelantom->adelanto_prefijo_id($prefijo, $id);
+            if ($adelanto == TRUE) {
+                if ($adelanto->vigente == 1) {
+                    $this->load->model('abono_adelantom');
+                    $abonos_vigentes = $this->abono_adelantom->abono_adelanto_vigente_id_adelanto($prefijo, $id);
+                    if ($abonos_vigentes != TRUE) {
+                        $response = array(
+                            'respuesta' => 'OK',
+                            'filasTabla' => ''
+                        );
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $adelanto->beneficiario . '</td>
+                            <td class="text-center">$' . number_format($adelanto->total, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $adelanto->sede_caja . '-' . $adelanto->tipo_caja . '</td>
+                            <td class="text-center">$' . number_format($adelanto->efectivo_retirado, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $adelanto->cuenta_origen . '</td>
+                            <td class="text-center">$' . number_format($adelanto->valor_retirado, 2, '.', ',') . '</td> 
+                            <td class="text-center">' . $adelanto->responsable . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($adelanto->fecha_trans)) . '</td>
+                        </tr>';
+                        echo json_encode($response);
+                        return false;
+                    } else {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p><strong><center>El adelanto tiene abonos vigentes. <br>Si desea anular éste adelanto, anule primero todos sus adelantos vigentes: '
+                        );
+                        foreach ($abonos_vigentes as $fila) {
+                            $response['mensaje'] .= $fila->prefijo . '-' . $fila->id . ' ';
+                        }
+                        $response['mensaje'] .= '</center></strong></p>';
+                        echo json_encode($response);
+                        return false;
+                    }
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>El adelanto de nómina, ya se encuentra anulado.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>El adelanto de nómina, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
 
 }

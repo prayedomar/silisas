@@ -18,7 +18,7 @@ class Cuenta extends CI_Controller {
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');
-        $data['empleado'] = $this->select_model->empleado_sedes_responsable($id_responsable, $dni_responsable);
+        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($id_responsable, $dni_responsable);
         $data['sede'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['t_cuenta'] = $this->select_model->t_cuenta();
         $data['pais'] = $this->select_model->pais();

@@ -100,7 +100,7 @@ class Matriculam extends CI_Model {
         $query.=(!empty($criterios['sede'])) ? "AND ma.sede = '{$criterios['sede']}'" : "";
         $query.=(!empty($criterios['estado'])) ? "AND ma.estado = '{$criterios['estado']}'" : "";
         $query.=(!empty($criterios['id_alumno'])) ? "AND al.id = '{$criterios['id_alumno']}'" : "";
-        $query.=" LIMIT $inicio,$filasPorPagina";
+        $query.=" order by ma.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
         //   echo $query;
         return $this->db->query($query)->result();
     }

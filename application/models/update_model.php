@@ -300,7 +300,7 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
-    
+
     public function t_curso_alumno($id_alumno, $dni_alumno, $t_curso) {
         $data = array(
             't_curso' => $t_curso
@@ -311,7 +311,7 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function cambio_plan_matricula($id_matricula, $plan_new) {
         $data = array(
@@ -347,7 +347,186 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
-    
-    
+
+    public function movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('t_trans', $t_trans);
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->where('credito_debito', $credito_debito);
+        $this->db->update('movimiento_transaccion', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function abono_matricula_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('abono_matricula', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function factura_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('factura', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function recibo_caja_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('recibo_caja', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function abono_adelanto_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('abono_adelanto', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function retefuente_compras_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('retefuente_compras', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function ingreso_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('ingreso', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function pago_proveedor_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('pago_proveedor', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function nota_credito_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('nota_credito', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function retefuente_ventas_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('retefuente_ventas', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function egreso_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('egreso', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function adelanto_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('adelanto', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function nomina_vigente($prefijo, $id, $vigente) {
+        $data = array(
+            'vigente' => $vigente
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('nomina', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function concepto_nomina_estado($id, $estado) {
+        $data = array(
+            'estado' => $estado
+        );
+        $this->db->where('id', $id);
+        $this->db->update('concepto_nomina', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
+    public function transferencia_est_traslado($prefijo, $id, $est_traslado) {
+        $data = array(
+            'est_traslado' => $est_traslado
+        );
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('transferencia', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
 
 }

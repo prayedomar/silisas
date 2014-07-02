@@ -20,7 +20,7 @@ class Factura extends CI_Controller {
         $dni_responsable = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_titular();
         $data['dni_a_nombre_de'] = $this->select_model->t_dni_todos();
-        $data['empleado'] = $this->select_model->empleado_sede_ppal_responsable($id_responsable, $dni_responsable);
+        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($id_responsable, $dni_responsable);
         $data['action_validar'] = base_url() . "factura/validar";
         $data['action_crear'] = base_url() . "factura/insertar";
         $data['action_recargar'] = base_url() . "factura/crear";
@@ -492,8 +492,8 @@ class Factura extends CI_Controller {
             } else {
                 $d_v = " - " . $factura->d_v_a_nombre_de;
             }
-            
-            
+
+
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -762,6 +762,135 @@ class Factura extends CI_Controller {
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'factura/consultar/');
+        }
+    }
+
+    function anular() {
+        $data["tab"] = "anular_factura";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "factura/validar_anular";
+        $data['action_crear'] = base_url() . "factura/insertar_anular";
+        $data['action_recargar'] = base_url() . "factura/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "factura/validar_transaccion_anular";
+        $this->parser->parse('factura/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '7'; //Factura de venta     
+            $credito_debito = '1'; //credito
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "anular_factura";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "factura/anular";
+            $data['msn_recrear'] = "Anular otra factura de venta";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->factura_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('facturam');
+            $factura = $this->facturam->factura_prefijo_id($prefijo, $id);
+            if ($factura == TRUE) {
+                if ($factura->vigente == 1) {
+                    //Tenemos que validar que no hayan retenciones vigentes para esta factura. 
+                    $this->load->model('retefuente_ventasm');
+                    $retencion_vigente = $this->retefuente_ventasm->retefuente_vigente_ventas_factura($prefijo, $id);
+                    if ($retencion_vigente != TRUE) {
+                        $response = array(
+                            'respuesta' => 'OK',
+                            'filasTabla' => ''
+                        );
+                        $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $factura->matricula . '</td>
+                            <td class="text-center">$' . number_format($factura->subtotal + $factura->int_mora - $factura->descuento, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $factura->sede_caja . '-' . $factura->tipo_caja . '</td>
+                            <td class="text-center">$' . number_format($factura->efectivo_ingresado, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $factura->cuenta_destino . '</td>
+                            <td class="text-center">$' . number_format($factura->valor_consignado, 2, '.', ',') . '</td> 
+                            <td class="text-center">' . $factura->responsable . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>
+                        </tr>';
+                        echo json_encode($response);
+                        return false;
+                    } else {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p><strong><center>La factura tiene una retención por ventas vigente. <br>Si desea anular ésta factura, anule primero dicha retención.</center></strong></p>'
+                        );
+                        echo json_encode($response);
+                        return false;
+                    }
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>La factura de venta, ya se encuentra anulada.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>La factura de venta, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
         }
     }
 

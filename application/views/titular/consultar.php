@@ -295,7 +295,7 @@
                                 <input name="direccion" id="direccion-modal" type="text" class="form-control exit_caution alfanumerico" placeholder="Dirección" maxlength="80">
                             </div>
                             <div class="form-group">
-                                <label>Barrio/Sector<em class="required_asterisco">*</em></label>
+                                <label>Barrio/Sector</label>
                                 <input name="barrio" id="barrio-modal" type="text" class="form-control exit_caution letras_numeros" placeholder="Barrio o Sector" maxlength="40">
                             </div>      
                             <div class="row">

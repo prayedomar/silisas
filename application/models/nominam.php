@@ -10,11 +10,13 @@ class Nominam extends CI_Model {
     }
 
     public function nomina_prefijo_id($prefijo, $id) {
-        $SqlInfo = "SELECT no.*, t_d.tipo departamento, t_c.cargo_masculino cargo_masculino, t_c.cargo_femenino cargo_femenino, t_p.tipo tipo_periodicidad, CONCAT(em.nombre1, ' ', em.nombre2, ' ', em.apellido1, ' ', em.apellido2) empleado, em.genero genero_empleado, CONCAT(re.nombre1, ' ', re.apellido1) responsable "
+        $SqlInfo = "SELECT no.*, s.nombre sede_caja, t_ca.tipo tipo_caja, t_d.tipo departamento, t_c.cargo_masculino cargo_masculino, t_c.cargo_femenino cargo_femenino, t_p.tipo tipo_periodicidad, CONCAT(em.nombre1, ' ', em.nombre2, ' ', em.apellido1, ' ', em.apellido2) empleado, em.genero genero_empleado, CONCAT(re.nombre1, ' ', re.apellido1) responsable "
                 . "FROM nomina no "
                 . "JOIN t_depto t_d ON (no.depto = t_d.id) "
                 . "JOIN t_cargo t_c ON (no.cargo = t_c.id) "
                 . "JOIN t_periodicidad_nomina t_p ON (no.t_periodicidad = t_p.id) "
+                . "LEFT JOIN sede s ON (no.sede_caja_origen = s.id) "
+                . "LEFT JOIN t_caja t_ca ON (no.t_caja_origen = t_ca.id) "               
                 . "JOIN empleado em ON ((no.id_empleado = em.id) and (no.dni_empleado = em.dni)) "
                 . "JOIN empleado re ON ((no.id_responsable = re.id) and (no.dni_responsable = re.dni)) "                
                 . "where ((no.prefijo='" . $prefijo . "')AND(no.id='" . $id . "'))";

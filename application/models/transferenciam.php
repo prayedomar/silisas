@@ -12,7 +12,6 @@ class Transferenciam extends CI_Model {
     public function transferencia_prefijo_id($prefijo, $id) {
         $SqlInfo = "SELECT tr.*, so.nombre nombre_sede_origen, sd.nombre nombre_sede_destino, CONCAT(em.nombre1, ' ', em.nombre2, ' ', em.apellido1) nombre_remitente, t_ca_o.tipo nombre_caja_origen, t_ca_d.tipo nombre_caja_destino "
                 . "FROM transferencia tr "
-                . "LEFT JOIN cuenta cu ON tr.cuenta_destino = cu.id "
                 . "LEFT JOIN caja ca ON ((tr.sede_caja_destino=ca.sede) AND (tr.t_caja_destino=ca.t_caja)) "
                 . "LEFT JOIN t_caja t_ca_o ON tr.t_caja_origen = t_ca_o.id "
                 . "LEFT JOIN t_caja t_ca_d ON tr.t_caja_destino = t_ca_d.id "

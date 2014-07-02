@@ -90,8 +90,8 @@ class Select_model extends CI_Model {
 
     public function t_plan_activo() {
         $this->db->where('vigente', 1);
-        $this->db->order_by('cant_alumnos', 'asc');  
-        $this->db->order_by('valor_total', 'asc');        
+        $this->db->order_by('cant_alumnos', 'asc');
+        $this->db->order_by('valor_total', 'asc');
         $query = $this->db->get('t_plan');
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -641,7 +641,7 @@ class Select_model extends CI_Model {
     }
 
     public function sede_activa_responsable($id_responsable, $dni_responsable) {
-        $where = "((id IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (estado!='3')";
+        $where = "((id IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (id IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (estado!='3') ORDER BY prefijo_trans";
         $this->db->where($where);
         $query = $this->db->get('sede');
         if ($query->num_rows() > 0) {
@@ -753,18 +753,7 @@ class Select_model extends CI_Model {
     }
 
     //Devuelve una lista con los empleados que pertenecen a la sede principal y a las secundarias de un responsable.
-    public function empleado_sede_ppal_responsable($id_responsable, $dni_responsable) {
-        $where = "(sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
-        $this->db->where($where);
-        $this->db->order_by('nombre1', 'asc');
-        $query = $this->db->get('empleado');
-        if ($query->num_rows() > 0) {
-            return $query->result();
-        }
-    }
-
-    //Devuelve una lista con los empleados que pertenecen a la sede principal y a las secundarias de un responsable.
-    public function empleado_sedes_responsable($id_responsable, $dni_responsable) {
+    public function empleado_activo_sedes_responsable($id_responsable, $dni_responsable) {
         $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $this->db->order_by('nombre1', 'asc');
@@ -1195,6 +1184,15 @@ class Select_model extends CI_Model {
         $this->db->where('prefijo', $prefijo);
         $this->db->where('id', $id);
         $query = $this->db->get('factura');
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
+    public function abono_matricula_prefijo_id($prefijo, $id) {
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $query = $this->db->get('abono_matricula');
         if ($query->num_rows() == 1) {
             return $query->row();
         }

@@ -350,4 +350,122 @@ class Retefuente_compras extends CI_Controller {
         }
     }
 
+    function anular() {
+        $data["tab"] = "anular_retefuente_compras";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "retefuente_compras/validar_anular";
+        $data['action_crear'] = base_url() . "retefuente_compras/insertar_anular";
+        $data['action_recargar'] = base_url() . "retefuente_compras/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "retefuente_compras/validar_transaccion_anular";
+        $this->parser->parse('retefuente_compras/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '12'; //Retencion por compras    
+            $credito_debito = '1'; //credito
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "anular_retefuente_compras";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "retefuente_compras/anular";
+            $data['msn_recrear'] = "Anular otra retención por compras";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->retefuente_compras_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('retefuente_comprasm');
+            $retefuente_compras = $this->retefuente_comprasm->retefuente_compras_prefijo_id($prefijo, $id);
+            if ($retefuente_compras == TRUE) {
+                if ($retefuente_compras->vigente == 1) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $retefuente_compras->razon_social . '</td>
+                            <td class="text-center">' . $retefuente_compras->factura . '</td>
+                            <td class="text-center">$' . number_format($retefuente_compras->total, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $retefuente_compras->sede_caja . '-' . $retefuente_compras->tipo_caja . '</td>
+                            <td class="text-center">$' . number_format($retefuente_compras->efectivo_ingresado, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $retefuente_compras->cuenta_destino . '</td>
+                            <td class="text-center">$' . number_format($retefuente_compras->valor_consignado, 2, '.', ',') . '</td> 
+                            <td class="text-center">' . $retefuente_compras->responsable . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($retefuente_compras->fecha_trans)) . '</td>
+                        </tr>';
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>La retención en la fuente, ya se encuentra anulada.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>La retencion en la fuente, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
 }
