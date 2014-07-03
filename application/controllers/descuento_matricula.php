@@ -56,16 +56,15 @@ class Descuento_matricula extends CI_Controller {
                     if ($check_vigente != TRUE) {
                         $error_cod = "<p>El código de autorización, No se encuentra vigente.</p>";
                     } else {
-                        $tabla_autorizada = '17'; //Crear un descuento especial de matricula                        
                         $check_autorizado = $this->cod_autorizacionm->cod_autorizacion_id_vigente_empleado_autorizado($cod_autorizacion);
                         if ($check_autorizado != TRUE) {
                             $error_cod = "<p>Usted no es el empleado autorizado para utilizar éste código de autorización.</p>";
                         } else {
+                            $tabla_autorizada = '17'; //Crear un descuento especial de matricula                               
                             $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_tabla($cod_autorizacion, $tabla_autorizada);
                             if ($check_tabla != TRUE) {
                                 $error_cod = "<p>El código de autorización, no fue creado para este tipo de transacción.</p>";
                             } else {
-                                $tabla_autorizada = '17'; //Crear un descuento especial de matricula
                                 $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_registro($cod_autorizacion, $this->input->post('id'));
                                 if ($check_tabla != TRUE) {
                                     $error_cod = "<p>El código de autorización, no fue creado para este número de matricula.</p>";

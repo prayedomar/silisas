@@ -52,8 +52,8 @@ class Cod_autorizacion extends CI_Controller {
             $data["tab"] = "crear_cod_autorizacion";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "cod_autorizacion/crear";
-            $data['msn_recrear'] = "Crear otro código de autorización";
+            $data['url_recrear'] = base_url() . "cod_autorizacion/consultar";
+            $data['msn_recrear'] = "Consultar códigos de autorización";
 
             $error = $this->insert_model->cod_autorizacion($tabla_autorizada, $registro_autorizado, $id_empleado_autorizado, $dni_empleado_autorizado, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {

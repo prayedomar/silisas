@@ -3,59 +3,41 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
-                    <legend>Anular matrícula</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Anular contrato físico de matrícula</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <div class="row">
                                 <div class="col-xs-8 col-xs-offset-2">
-                                    <label>Número de Matrícula<em class="required_asterisco">*</em></label>
-                                    <input name="id" id="id" type="text" class="form-control numerico" placeholder="Número de Contrato Físico" maxlength="13" <?php if (isset($id)) { ?> value="<?php echo $id ?>" <?php } ?>>
+                                    <label>Número del contrato físico<em class="required_asterisco">*</em></label>
+                                    <input name="id" id="id" type="text" class="form-control numerico" placeholder="Número del contrato físico" maxlength="13" <?php if (isset($id)) { ?> value="<?php echo $id ?>" <?php } ?>>
                                 </div>
                             </div><br>
                             <div id="validacion_inicial">
                             </div>                            
                             <div class="row text-center separar_submit">
-                                <button type="button" class="btn btn-default" id="consultar_matricula"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar matrícula </a>
+                                <button type="button" class="btn btn-default" id="consultar_contrato_matricula"><span class="glyphicon glyphicon-search"></span> Consultar </button>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar contrato de matrícula </a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="div_anular" style="display: none">
                     <div class="row">
-                        <legend>Información de la matrícula</legend>
+                        <legend>Información del contrato físico de matrícula</legend>
                         <div class="overflow_tabla separar_div">
                             <table class="table table-hover tabla-matrículas">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Titular</th>
-                                        <th class="text-center">Plan</th>
-                                        <th class="text-center">Valor total</th>
-                                        <th class="text-center">Saldo pendiente</th>
-                                        <th class="text-center">Observación</th>                                        
+                                        <th class="text-center">Contrato</th>
+                                        <th class="text-center">Sede Actual</th>
+                                        <th class="text-center">Estado del contrato</th>
                                         <th class="text-center">responsable</th>
                                         <th class="text-center">Fecha creación</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbody_info_matricula">
+                                <tbody id="tbody_info_contrato_matricula">
                                 </tbody>
                             </table>
-                        </div>
-                        <center><p class="separar_div"><B>Nota: </B>Los alumnos que estén inscritos con éste número de matrícula también serán anulados.</p></center>
-                        <div class="row">
-                            <div class="col-xs-4 col-xs-offset-4">
-                                <?php if (isset($cod_required)) { ?>
-                                    <div class="form-group">
-                                        <label>Código de autorización<em class="required_asterisco">*</em></label>
-                                        <p class="help-block"><b>> </b>Éste código de autorización, lo debe solicitar a los directivos encargados.</p>
-                                        <input name="cod_autorizacion" id="cod_autorizacion" type="text" class="form-control numerico" placeholder="Código de autorización" maxlength="13" <?php if (isset($id)) { ?> value="<?php echo $id ?>" <?php } ?>>
-                                    </div> 
-                                <?php } ?>                                 
-                                <div class="form-group">
-                                    <label>Cantidad de materiales devueltos<em class="required_asterisco">*</em></label>
-                                    <input name="cant_materiales_devueltos" id="cant_materiales_devueltos" type="text" class="form-control exit_caution numerico" placeholder="Cantidad de materiales devueltos" maxlength="2">
-                                </div>   
-                            </div>
                         </div>
                         <div class="form-group">
                             <label>Observación<em class="required_asterisco">*</em></label>
@@ -67,7 +49,7 @@
                             <input type="hidden" id="action_validar" value={action_validar} />
                             <center>
                                 <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                                <button id="botonValidar" class="btn btn-success">Anular matrícula</button>  
+                                <button id="botonValidar" class="btn btn-success">Anular contrato de matrícula</button>  
                                 <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                 <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                             </center>
@@ -79,23 +61,23 @@
     </div>
 </div>
 <script type="text/javascript">
-    //Llenamos la informacion de las matrículas y los pagos.
-    $("form").delegate("#consultar_matricula", "click", function() {
+    //Llenamos la informacion de las contrato de matrículas y los pagos.
+    $("form").delegate("#consultar_contrato_matricula", "click", function() {
         var prefijo = $('#prefijo').val();
         var id = $('#id').val();
         if ((prefijo != "default") && (id != "")) {
-            $.post('{action_validar_matricula_anular}', {
+            $.post('{action_validar_contrato_matricula_anular}', {
                 prefijo: prefijo,
                 id: id
             }, function(data) {
                 var obj = JSON.parse(data);
                 if (obj.respuesta == "OK")
                 {
-                    $("#tbody_info_matricula").html(obj.filasTabla);
+                    $("#tbody_info_contrato_matricula").html(obj.filasTabla);
                     $("#div_anular").css("display", "block");
                     $('#prefijo').attr('disabled', 'disabled');
                     $('#id').attr('readonly', 'readonly');
-                    $('#consultar_matricula').attr('disabled', 'disabled');
+                    $('#consultar_contrato_matricula').attr('disabled', 'disabled');
                     //Actualizamo la informacion del titular en a nombre de 
                     $("#div_warning").remove();
                 } else {
@@ -106,7 +88,7 @@
             });
         } else {
             $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-            $("#div_warning").html("<p><strong><center>Antes de consultar, ingrese el número de la matrícula.</center></strong></p>");
+            $("#div_warning").html("<p><strong><center>Antes de consultar, ingrese el número del contrato físico.</center></strong></p>");
             $("#div_warning").delay(8000).fadeOut(1000);
         }
     });

@@ -19,6 +19,12 @@ class Alumnom extends CI_Model {
             return $query->row();
         }
     }     
+
+    public function anular_alumnos_matricula_anulada($contrato) {
+        $SqlInfo = "UPDATE alumno SET estado='8' "
+                . "where (matricula='" . $contrato . "')";
+        $query = $this->db->query($SqlInfo);
+    }
     
     public function cantidad_alumnos($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT count(*) cantidad
@@ -41,6 +47,7 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
+        $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";        
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
         return $this->db->query($query)->result();
     }
@@ -68,7 +75,7 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
-        $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
+        $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
         $query.=" order by a.apellido1,a.apellido2 LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
@@ -98,6 +105,7 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
+        $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";        
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
         $query.=" order by a.apellido1,a.apellido2";
         return $this->db->query($query)->result();

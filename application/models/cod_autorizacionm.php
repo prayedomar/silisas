@@ -67,7 +67,7 @@ class Cod_autorizacionm extends CI_Model {
         $query.=(!empty($criterios['tabla_autorizada'])) ? "AND tabla_autorizada = '{$criterios['tabla_autorizada']}'" : "";
         $query.=(!empty($criterios['id_empleado_autorizado'])) ? "AND id_empleado_autorizado = '{$criterios['id_empleado_autorizado']}'" : "";
         $query.=(!empty($criterios['id_responsable'])) ? "AND id_responsable = '{$criterios['id_responsable']}'" : "";
-        $query.=(!empty($criterios['vigente'])) ? "AND vigente = '{$criterios['vigente']}'" : "";
+        $query.=(!isset($criterios['vigente'])) ? "AND vigente= '1' " : "AND vigente='0' ";
         return $this->db->query($query)->result();
     }
 
@@ -82,7 +82,7 @@ class Cod_autorizacionm extends CI_Model {
         $query.=(!empty($criterios['tabla_autorizada'])) ? "AND c_a.tabla_autorizada = '{$criterios['tabla_autorizada']}'" : "";
         $query.=(!empty($criterios['id_empleado_autorizado'])) ? "AND c_a.id_empleado_autorizado = '{$criterios['id_empleado_autorizado']}'" : "";
         $query.=(!empty($criterios['id_responsable'])) ? "AND c_a.id_responsable = '{$criterios['id_responsable']}'" : "";
-        $query.=(isset($criterios['vigente']) && $criterios['vigente'] != "") ? "AND c_a.vigente = '{$criterios['vigente']}'" : "";
+        $query.=(!isset($criterios['vigente'])) ? "AND c_a.vigente= '1' " : "AND c_a.vigente='0' ";
         $query.=" order by c_a.id DESC LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }

@@ -430,7 +430,7 @@
                 <li class="col-sm-6">
                     <ul>
                         <li class="dropdown-header"><u> Matrículas </u></li> 
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
                     <li><a href="<?= base_url() ?>contrato_matricula/anular">Contratos Físicos</a></li> 
                 <?php } ?>                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       

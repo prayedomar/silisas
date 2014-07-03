@@ -451,8 +451,8 @@ class MAtricula extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Factura de Venta ' . $id . ' Sili S.A.S');
-            $pdf->SetSubject('Factura de Venta ' . $id . ' Sili S.A.S');
+            $pdf->SetTitle('Matrícula ' . $id . ' Sili S.A.S');
+            $pdf->SetSubject('Matrícula ' . $id . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -748,7 +748,7 @@ class MAtricula extends CI_Controller {
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
-            $nombre_archivo = utf8_decode('Factura de Venta ' . $id . ' Sili S.A.S.pdf');
+            $nombre_archivo = utf8_decode('Matrícula ' . $id . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'matricula/consultar_plan_pagos/');
@@ -884,8 +884,8 @@ class MAtricula extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Factura de Venta ' . $id . ' Sili S.A.S');
-            $pdf->SetSubject('Factura de Venta ' . $id . ' Sili S.A.S');
+            $pdf->SetTitle('Matrícula ' . $id . ' Sili S.A.S');
+            $pdf->SetSubject('Matrícula ' . $id . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -1044,7 +1044,7 @@ class MAtricula extends CI_Controller {
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
-            $nombre_archivo = utf8_decode('Factura de Venta ' . $id . ' Sili S.A.S.pdf');
+            $nombre_archivo = utf8_decode('Matrícula ' . $id . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'matricula/consultar_plan_pagos/');
@@ -1056,6 +1056,10 @@ class MAtricula extends CI_Controller {
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        //Validamos si el responsable necesita cod de autorizacion o no. 
+        if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo" && $_SESSION["perfil"] != "jefe_cartera") {
+            $data['cod_required'] = '1';
+        }
         $data['action_validar'] = base_url() . "matricula/validar_anular";
         $data['action_crear'] = base_url() . "matricula/insertar_anular";
         $data['action_recargar'] = base_url() . "matricula/anular";
@@ -1068,9 +1072,52 @@ class MAtricula extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             $this->form_validation->set_rules('id', 'Número de Matrícula', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('cant_materiales_devueltos', 'Cantidad de materiales devueltos', 'required|trim|max_length[2]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
-            if ($this->form_validation->run() == FALSE) {
-                echo form_error('id') . form_error('observacion');
+            if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo" && $_SESSION["perfil"] != "jefe_cartera") {
+                $this->form_validation->set_rules('cod_autorizacion', 'Código de autorización', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            }
+            $error_cod = "";
+            if (($this->input->post('id')) && ($this->input->post('cod_autorizacion'))) {
+                $cod_autorizacion = $this->input->post('cod_autorizacion');
+                $this->load->model('cod_autorizacionm');
+                $check_codigo = $this->cod_autorizacionm->cod_autorizacion_id($cod_autorizacion);
+                if ($check_codigo != TRUE) {
+                    $error_cod = "<p>El código de autorización, No existe en la Base de Datos.</p>";
+                } else {
+                    $check_vigente = $this->cod_autorizacionm->cod_autorizacion_id_vigente($cod_autorizacion);
+                    if ($check_vigente != TRUE) {
+                        $error_cod = "<p>El código de autorización, No se encuentra vigente.</p>";
+                    } else {
+                        $check_autorizado = $this->cod_autorizacionm->cod_autorizacion_id_vigente_empleado_autorizado($cod_autorizacion);
+                        if ($check_autorizado != TRUE) {
+                            $error_cod = "<p>Usted no es el empleado autorizado para utilizar éste código de autorización.</p>";
+                        } else {
+                            $tabla_autorizada = '15'; //Anular matricula                             
+                            $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_tabla($cod_autorizacion, $tabla_autorizada);
+                            if ($check_tabla != TRUE) {
+                                $error_cod = "<p>El código de autorización, no fue creado para anular matrículas.</p>";
+                            } else {
+                                $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_registro($cod_autorizacion, $this->input->post('id'));
+                                if ($check_tabla != TRUE) {
+                                    $error_cod = "<p>El código de autorización, no fue creado para anular éste número de matricula.</p>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $error_materiales = "";
+            if ($this->input->post('id') && $this->input->post('cant_materiales_devueltos')) {
+                $this->load->model('matriculam');
+                $cant_materiales_devueltos = $this->input->post('cant_materiales_devueltos');
+                $cant_materiales_entregados = $this->matriculam->matricula_id($this->input->post('id'))->cant_materiales_entregados;
+                if ($cant_materiales_devueltos > $cant_materiales_entregados) {
+                    $error_materiales = "<p>La cantidad de materiales devueltos, no puede ser mayor a la cantidad de materiales entregados al titular: <b>" . $cant_materiales_entregados . "</b>.</p>";
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($error_cod != "") || ($error_materiales != "")) {
+                echo form_error('id') . $error_cod . form_error('cod_autorizacion') . form_error('cant_materiales_devueltos') . $error_materiales . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -1084,6 +1131,7 @@ class MAtricula extends CI_Controller {
             $this->escapar($_POST);
             $this->load->model('update_model');
             $id = $this->input->post('id');
+            $cant_materiales_devueltos = $this->input->post('cant_materiales_devueltos');
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
@@ -1093,18 +1141,20 @@ class MAtricula extends CI_Controller {
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "matricula/anular";
-            $data['msn_recrear'] = "Anular otra matricula de venta";
+            $data['msn_recrear'] = "Anular otra matrícula";
             $error = $this->update_model->matricula_estado($id, $estado);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->update_model->matricula_vigente($prefijo, $id, $vigente);
+                $this->load->model('alumnom');
+                //Si anulo la matricula, anulo los alumnos que esten inscritos en dicha matricula.
+                $error1 = $this->alumnom->anular_alumnos_matricula_anulada($id);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    $error2 = $this->insert_model->anular_matricula($id, $cant_materiales_devueltos, $observacion, $id_responsable, $dni_responsable);
                     if (isset($error2)) {
                         $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);

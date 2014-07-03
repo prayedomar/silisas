@@ -123,7 +123,6 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
-    
 
     public function matricula_estado($id, $estado) {
         $data = array(
@@ -134,7 +133,7 @@ class Update_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
     public function empleado_cargo($id, $dni, $cargo) {
         $data = array(

@@ -1004,8 +1004,8 @@ class Nomina extends CI_Controller {
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Sili S.A.S');
-            $pdf->SetTitle('Factura de Venta ' . $id_nomina_limpio . ' Sili S.A.S');
-            $pdf->SetSubject('Factura de Venta ' . $id_nomina_limpio . ' Sili S.A.S');
+            $pdf->SetTitle('Nómina ' . $id_nomina_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Nómina ' . $id_nomina_limpio . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
 
 
@@ -1318,7 +1318,7 @@ class Nomina extends CI_Controller {
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
-            $nombre_archivo = utf8_decode('Factura de Venta ' . $id_nomina_limpio . ' Sili S.A.S.pdf');
+            $nombre_archivo = utf8_decode('Nómina ' . $id_nomina_limpio . ' Sili S.A.S.pdf');
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'nomina/consultar/');

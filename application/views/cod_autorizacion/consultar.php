@@ -28,8 +28,7 @@
                     <div class="col-xs-2">
                         <label>Pendiente </label>
                         <select id="vigente" class="form-control">
-                            <option value="">Seleccionar...</option>
-                            <option value="1" <?= isset($_GET["vigente"]) && $_GET["vigente"] == 1 ? "selected" : "" ?>>Pendiente</option>
+                            <option value="1" <?= isset($_GET["vigente"]) && $_GET["vigente"] == 1 ? "selected" : "" ?> selected="selected">Pendiente</option>
                             <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == 0 ? "selected" : "" ?>>No pendiente</option>
                         </select>
                     </div>                    
@@ -52,7 +51,7 @@
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
-                                    <th><center>Id</center></th>
+                                    <th><center>Código</center></th>
                             <th><center>Empleado autorizado</center></th>
                             <th><center>Tipo de permiso</center></th>
                             <th><center>Registro</center></th>
@@ -65,10 +64,10 @@
                             <tbody>
                                 <?php foreach ($listaCodigos as $row) { ?>
                                     <tr>
-                                        <td><?= $row->id ?></td>
-                                        <td><?= $row->autorizado ?></td>
-                                        <td><?= $row->nombre_permiso ?></td>
-                                        <td><center><?= $row->registro_autorizado ?></center></td>
+                                        <td><center><?= $row->id ?></center></td>
+                                <td><?= $row->autorizado ?></td>
+                                <td><?= $row->nombre_permiso ?></td>
+                                <td><center><?= $row->registro_autorizado ?></center></td>
                                 <td><?= $row->observacion ?></td>
                                 <td><?= $row->responsable ?></td>
                                 <td><center><?= $row->vigente == 1 ? "Pendiente" : "No pendiente" ?></center></td>                                        
