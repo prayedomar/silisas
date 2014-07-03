@@ -1403,6 +1403,7 @@ class Nomina extends CI_Controller {
                             }
                         }
                     }
+                    //SI se intenta anular una factura 2 veces dará error por primary key duplicate
                     $error3 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
                     if (isset($error3)) {
                         $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";

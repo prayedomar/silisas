@@ -57,7 +57,7 @@
                             <select id="plan" class="form-control">
                                 <option value="">Seleccionar...</option>
                                 <?php foreach ($lista_planes as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["plan"]) && $_GET["plan"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["plan"]) && $_GET["plan"] == $row->id ? "selected" : "" ?>><?= $row->nombre . ' ' . $row->anio ?></option>
                                 <?php } ?>
                             </select>
                         </div>

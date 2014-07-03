@@ -20,7 +20,7 @@ class Salariom extends CI_Model {
     }
 
     public function listar_salarios($criterios, $inicio, $filasPorPagina) {
-        $query = "SELECT *,ts.tipo t_salarios,sl.id id_salario  from salario sl
+        $query = "SELECT sl.*,ts.tipo t_salarios,sl.id id_salario  from salario sl
                   JOIN t_salario ts ON sl.t_salario=ts.id ";
         $query.=(!empty($criterios['nombre'])) ? "AND lower(sl.nombre) LIKE '%" . strtolower($criterios['nombre']) . "%'" : " ";
         $query.=(!empty($criterios['tipo_salario'])) ? "AND sl.t_salario = '{$criterios['tipo_salario']}'" : "";

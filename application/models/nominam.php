@@ -27,7 +27,7 @@ class Nominam extends CI_Model {
     }
 
     public function concepto_nomina_prefijo_id($prefijo, $id) {
-        $SqlInfo = "SELECT *, t_c.tipo, t_c.debito_credito "
+        $SqlInfo = "SELECT c_n.*, t_c.tipo, t_c.debito_credito "
                 . "FROM concepto_nomina c_n "
                 . "JOIN t_concepto_nomina t_c ON (c_n.t_concepto_nomina = t_c.id) "
                 . "where ((c_n.prefijo_nomina='" . $prefijo . "')AND(c_n.id_nomina='" . $id . "'))";
