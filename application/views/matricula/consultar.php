@@ -137,7 +137,7 @@
                                                     data-alumnos="<?= $row->lista_alumnos ?>"
                                                     data-ejecutivo="<?= $row->dni_ejecutivo . " " . $row->id_ejecutivo . " " . $row->nombre1ejecutivo . " " . $row->nombre2ejecutivo . " " . $row->apellido1ejecutivo . " " . $row->apellido2ejecutivo ?>"
                                                     data-cargo-ejecutivo="<?= $row->cargo_masculino ?>"
-                                                    data-cant-materiales="<?= $row->cant_materiales_disponibles ?>"
+                                                    data-cant-materiales="<?= $row->cant_materiales_entregados ?>"
                                                     data-datacredito="<?= $row->datacredito ?>"
                                                     data-juridico="<?= $row->juridico ?>"
                                                     data-liquidacion-escalas="<?= $row->liquidacion_escalas ?>"
@@ -234,7 +234,7 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Cantidad materiales disponibles:</div>   
+                            <div class="text-right">Cantidad materiales entregados:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
