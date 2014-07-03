@@ -90,7 +90,7 @@
                             <label>Estado</label>
                             <select id="estado" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <?php foreach ($estados_alumnos as $row) { ?>
+                                <?php foreach ($estados_matricula as $row) { ?>
                                     <option value="<?= $row->id ?>" <?= isset($_GET["estado"]) && $_GET["estado"] == $row->id ? "selected" : "" ?>><?= $row->estado ?></option>
                                 <?php } ?>
                             </select>

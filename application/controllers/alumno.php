@@ -55,7 +55,7 @@ class Alumno extends CI_Controller {
                 if ($matricula != TRUE) {
                     $error_matricula = "<p>El Número de Matrícula, no existe en la base de datos.</p>";
                 } else {
-                    $cant_alumnos_disponibles = $matricula->cant_alumnos_disponibles;
+                    $cant_alumnos_disponibles = $matricula->cant_cupos_enseñanza - $matricula->cant_alumnos_registrados;
                     if ($cant_alumnos_disponibles <= 0) {
                         $error_matricula = "<p>Ya se registró la cantidad de alumnos disponibles para la matrícula.</p>";
                     }
@@ -127,8 +127,8 @@ class Alumno extends CI_Controller {
                     $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    //Si se crea el alumno, entonces merma la cantidad de alumnos disponibles para esa matrícula
-                    $error3 = $this->update_model->matricula_cant_alumnos_mermar($matricula);
+                    //Si se crea el alumno, entonces aumentamos la cantidad de alumnos registrados para esa matrícula
+                    $error3 = $this->update_model->matricula_cant_alumnos_aumentar($matricula);
                     if (isset($error3)) {
                         $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);

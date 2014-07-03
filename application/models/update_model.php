@@ -115,14 +115,26 @@ class Update_model extends CI_Model {
         }
     }
 
-    public function matricula_cant_alumnos_mermar($matricula) {
-        $this->db->set('cant_alumnos_disponibles', 'cant_alumnos_disponibles-1', FALSE);
+    public function matricula_cant_alumnos_aumentar($matricula) {
+        $this->db->set('cant_alumnos_registrados', 'cant_alumnos_registrados+1', FALSE);
         $this->db->where('contrato', $matricula);
         $this->db->update('matricula');
         if ($error = $this->db->_error_message()) {
             return $error;
         }
     }
+    
+
+    public function matricula_estado($id, $estado) {
+        $data = array(
+            'estado' => $estado
+        );
+        $this->db->where('contrato', $id);
+        $this->db->update('matricula', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function empleado_cargo($id, $dni, $cargo) {
         $data = array(

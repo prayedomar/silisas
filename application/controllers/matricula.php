@@ -92,8 +92,9 @@ class MAtricula extends CI_Controller {
             list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $this->input->post('ejecutivo'));
             $plan = $this->input->post('plan');
             //La cantidad de alumnos y materiales es la misma que la que se describe en el plan comercial seleccionado.
-            $cant_alumnos_disponibles = $this->select_model->t_plan_id($plan)->cant_alumnos;
-            $cant_materiales_disponibles = $cant_alumnos_disponibles;
+            $cant_cupos_enseñanza = $this->select_model->t_plan_id($plan)->cant_alumnos;
+            $cant_alumnos_registrados = '0'; //0 Cantidad de alumnos registrados
+            $cant_materiales_entregados = '0'; //0 Cantidad de materiales entregados
             $datacredito = 1;
             $juridico = 0;
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
@@ -110,7 +111,7 @@ class MAtricula extends CI_Controller {
             $data['url_recrear'] = base_url() . "alumno/crear";
             $data['msn_recrear'] = "Crear alumnos";
 
-            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado_matricula, $observacion, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_cupos_enseñanza, $cant_alumnos_registrados, $cant_materiales_entregados, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado_matricula, $observacion, $id_responsable, $dni_responsable);
 
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
@@ -326,7 +327,7 @@ class MAtricula extends CI_Controller {
         $this->load->model('matriculam');
         $this->load->model('t_cargom');
         $this->load->model('t_planm');
-        $this->load->model('est_alumnom');
+        $this->load->model('est_deudam');
         $this->load->model('sedem');
         $this->load->model('t_cursom');
         $this->load->model('alumnom');
@@ -335,7 +336,7 @@ class MAtricula extends CI_Controller {
         $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_relaciones_publicas();
         $data['lista_planes'] = $this->t_planm->listar_todas_los_planes();
         $data['tipos_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
-        $data['estados_alumnos'] = $this->est_alumnom->listar_todas_los_estados_de_alumno();
+        $data['estados_matricula'] = $this->est_deudam->listar_estados_deuda();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes_sin_resposanble();
         if (!empty($_GET["depto"])) {
             $this->load->model('t_cargom');
@@ -605,10 +606,10 @@ class MAtricula extends CI_Controller {
                     . '</tr></table><p class="b3">- Copia para la empresa -</p>';
             // Imprimimos el texto con writeHTMLCell()
             $pdf->writeHTML($html, true, false, true, false, '');
-            
+
             // reset pointer to the last page
             $pdf->lastPage();
-            $pdf->AddPage();            
+            $pdf->AddPage();
             //preparamos y maquetamos el contenido a crear
             $html = '';
             $html .= '<style type=text/css>';
@@ -743,7 +744,7 @@ class MAtricula extends CI_Controller {
                     . '</tr></table><p class="b3">- Copia para el titular -</p>';
 
 // Imprimimos el texto con writeHTMLCell()
-            $pdf->writeHTML($html, true, false, true, false, '');            
+            $pdf->writeHTML($html, true, false, true, false, '');
 // ---------------------------------------------------------
 // Cerrar el documento PDF y preparamos la salida
 // Este método tiene varias opciones, consulte la documentación para más información.
@@ -1047,6 +1048,117 @@ class MAtricula extends CI_Controller {
             $pdf->Output($nombre_archivo, $salida_pdf);
         } else {
             redirect(base_url() . 'matricula/consultar_plan_pagos/');
+        }
+    }
+
+    function anular() {
+        $data["tab"] = "anular_matricula";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "matricula/validar_anular";
+        $data['action_crear'] = base_url() . "matricula/insertar_anular";
+        $data['action_recargar'] = base_url() . "matricula/anular";
+        $data['action_validar_matricula_anular'] = base_url() . "matricula/validar_matricula_anular";
+        $this->parser->parse('matricula/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('id', 'Número de Matrícula', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_anular() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $estado = '5'; //Anulado
+
+            $data["tab"] = "anular_matricula";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "matricula/anular";
+            $data['msn_recrear'] = "Anular otra matricula de venta";
+            $error = $this->update_model->matricula_estado($id, $estado);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->matricula_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error2)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_matricula_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $id = $this->input->post('id');
+            $this->load->model('matriculam');
+            $matricula = $this->matriculam->matricula_id($id);
+            if ($matricula == TRUE) {
+                if ($matricula->estado != 5) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $matricula->titular . '</td>
+                            <td class="text-center">' . $matricula->nombre_plan . '</td>
+                            <td class="text-center">$' . number_format($matricula->valor_total, 2, '.', ',') . '</td>
+                            <td class="text-center">$' . number_format($matricula->saldo, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $matricula->observacion . '</td>                                
+                            <td class="text-center">' . $matricula->responsable . '</td>       
+                            <td class="text-center">' . date("Y-m-d", strtotime($matricula->fecha_trans)) . '</td>
+                        </tr>';
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>La matrícula, ya se encuentra anulada.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>La matrícula, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
         }
     }
 

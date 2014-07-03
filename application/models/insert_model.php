@@ -1054,7 +1054,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_alumnos_disponibles, $cant_materiales_disponibles, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
+    public function matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_cupos_enseñanza, $cant_alumnos_registrados, $cant_materiales_entregados, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'contrato' => $contrato,
             'fecha_matricula' => $fecha_matricula,
@@ -1064,8 +1064,9 @@ class Insert_model extends CI_Model {
             'dni_ejecutivo' => $dni_ejecutivo,
             'cargo_ejecutivo' => $cargo_ejecutivo,
             'plan' => $plan,
-            'cant_alumnos_disponibles' => $cant_alumnos_disponibles,
-            'cant_materiales_disponibles' => $cant_materiales_disponibles,
+            'cant_cupos_enseñanza' => $cant_cupos_enseñanza,
+            'cant_alumnos_registrados' => $cant_alumnos_registrados,
+            'cant_materiales_entregados' => $cant_materiales_entregados,
             'datacredito' => $datacredito,
             'juridico' => $juridico,
             'liquidacion_escalas' => $liquidacion_escalas,
@@ -1493,5 +1494,21 @@ class Insert_model extends CI_Model {
             return $error;
         }
     }
+
+    public function anular_matricula($id_matricula, $cant_materiales_devueltos, $observacion, $id_responsable, $dni_responsable) {
+        $data = array(
+            'matricula' => $id_matricula,
+            'cant_materiales_devueltos' => $cant_materiales_devueltos,
+            'observacion' => $observacion,
+            'id_responsable' => $id_responsable,
+            'dni_responsable' => $dni_responsable
+        );
+        $this->db->set($data);
+        $this->db->set('fecha_trans', 'DATE_ADD(now(), INTERVAL -5 HOUR)', FALSE);
+        $this->db->insert('anular_matricula');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
 }
