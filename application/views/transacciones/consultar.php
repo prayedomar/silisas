@@ -147,7 +147,7 @@
                                         echo "success";
                                     ?>">
                                         <td><?= $row->fecha_trans ?></td>
-                                        <td><?= $row->tipo_trans ?></td>
+                                        <td><?= $row->tipo_trans . ' (' . $row->ingreso_egreso . ')'?></td>
                                         <td><?= $row->prefijo . " " . $row->id ?></td>
                                         <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
                                         <td><?= ($row->caja != "") ? $row->caja : "--" ?></td>

@@ -31,7 +31,7 @@
                             <hr>
                             <div class="overflow_tabla">
                                 <label>Caja de Efectivo Origen (Punto de venta)</label>
-                                <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
+                                <p class="help-block"><B>> </B>Seleccione una caja en el caso en que halla utilizado dinero de ella para realizar ésta transacción (Sólo aparecerán las cajas previamente autorizadas para usted).</p>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -56,7 +56,7 @@
                             <hr>                            
                             <div class="overflow_tabla">
                                 <label>Cuenta Bancaria Origen</label>
-                                <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla utilizado dinero de ella para realizar el adelanto (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
+                                <p class="help-block"><B>> </B>Seleccione una cuenta en el caso en que halla utilizado dinero de ella para realizar ésta transacción (Sólo aparecerán las cuentas previamente autorizadas para usted).</p>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
