@@ -8,6 +8,16 @@ class Empleadom extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+    
+    public function alumno_id_dni($id, $dni) {
+        $SqlInfo = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
+                . "FROM empleado e "
+                . "where ((e.id='" . $id . "') AND (e.dni='" . $dni . "'))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }     
 
     public function cantidad_empleados($criterios, $inicio, $filasPorPagina) {
         $id_responsable = $_SESSION["idResponsable"];

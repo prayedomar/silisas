@@ -162,7 +162,7 @@ class Empleado extends CI_Controller {
             $t_contrato = $this->input->post('t_contrato');
             $fecha_inicio = $this->input->post('fecha_inicio');
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
 
@@ -205,18 +205,18 @@ class Empleado extends CI_Controller {
                         //Enviamos el correo al usuario con 
                         $t_dni = $this->select_model->t_dni_id($dni)->tipo;
                         $tipo_contrato = $this->select_model->t_contrato_laboral_id($t_contrato)->contrato;
-                        if($cant_meses == NULL){
+                        if ($cant_meses == NULL) {
                             $cant_meses = " -- ";
                             $fecha_fin = " -- ";
                         }
-                        if($genero == 'M'){
+                        if ($genero == 'M') {
                             $prefijo = "Sr.";
                             $nombre_cargo = $this->select_model->t_cargo_id($cargo)->cargo_masculino;
-                            $asunto = "Bienvenido a la familia SILI S.A.S";                            
-                        }else{
+                            $asunto = "Bienvenido a la familia SILI S.A.S";
+                        } else {
                             $prefijo = "Sra.";
                             $nombre_cargo = $this->select_model->t_cargo_id($cargo)->cargo_femenino;
-                            $asunto = "Bienvenida a la familia SILI S.A.S";                                                        
+                            $asunto = "Bienvenida a la familia SILI S.A.S";
                         }
                         $nombre_salario = $this->select_model->t_salario_id($salario)->tipo;
                         $mensaje = '<p>' . $prefijo . ' ' . $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2 . '</p>'
@@ -224,58 +224,58 @@ class Empleado extends CI_Controller {
                                 . '<p>A partir de este momento, usted hace parte de la familia de trabajadores, que conforma nuestra empresa SILI S.A.S.<br/>'
                                 . '<br/>Para ingresar a nuestro sistema y disfrutar de todas las herramientas que hemos diseñado para facilitar sus labores cotidianas al interior de la compañía, ingrese a traves de nuestra pagina web: <a href="http://www.sili.com.co" target="_blank">www.sili.com.co</a> y seleccione la opción "Acceder".</p>'
                                 . '<ul type="disc">'
-                                    . '<li><p>Sus datos para ingresar al sistema son:</p>'
-                                        . '<center>'
-                                        . '<table>'
-                                            . '<tr>'
-                                                . '<td style="width:230px;"><b>Tipo de usuario: </b></td>'
-                                                . '<td>Empleado</td>'
-                                            . '</tr>'
-                                            . '<tr>'
-                                                . '<td><b>Tipo de identificación: </b></td>'
-                                                . '<td>' . $t_dni . '</td>'
-                                            . '</tr>'
-                                            . '<tr>'
-                                                . '<td><b>Identificación de usuario: </b></td>'
-                                                . '<td>' . $id . '</td>'
-                                            . '</tr>'
-                                            . '<tr>'
-                                                . '<td><b>Contraseña: </b></td>'
-                                                . '<td>' . $id . '</td>'
-                                            . '</tr>'
-                                        . '</table>'
-                                        . '</center>'
-                                        . '<br/><p>Para garantizar la seguridad de su cuenta, una vez que ingrese por primera vez, modifique su contraseña a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
-                                    . '</li>'
-                                    . '<li><p>La información de su contrato laboral, es la siguiente:</p>'
-                                        . '<center>'
-                                        . '<table>'
-                                            . '<tr>'
-                                                . '<td style="width:230px;"><b>Tipo de contrato laboral: </b></td>'
-                                                . '<td>' . $tipo_contrato . '</td>'
-                                            . '</tr>'
-                                            . '<tr>'
-                                                . '<td><b>Duración (en meses): </b></td>'
-                                                . '<td>' . $cant_meses . '</td>'
-                                            . '</tr>'
-                                            . '<tr>'
-                                                . '<td><b>Fecha Inicial: </b></td>'
-                                                . '<td>' . $fecha_inicio . '</td>'
-                                            . '</tr>'
-                                            . '<tr>'
-                                                . '<td><b>Fecha Final: </b></td>'
-                                                . '<td>' . $fecha_fin . '</td>'
-                                            . '</tr>'
-                                            . '<tr>'
-                                                . '<td><b>Cargo: </b></td>'
-                                                . '<td>' . $nombre_cargo . '</td>'
-                                            . '</tr>'                                 
-                                            . '<tr>'
-                                                . '<td><b>Salario: </b></td>'
-                                                . '<td>' . $nombre_salario . '</td>'
-                                            . '</tr>'                                
-                                        . '</table>'
-                                    . '</li>'
+                                . '<li><p>Sus datos para ingresar al sistema son:</p>'
+                                . '<center>'
+                                . '<table>'
+                                . '<tr>'
+                                . '<td style="width:230px;"><b>Tipo de usuario: </b></td>'
+                                . '<td>Empleado</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Tipo de identificación: </b></td>'
+                                . '<td>' . $t_dni . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Identificación de usuario: </b></td>'
+                                . '<td>' . $id . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Contraseña: </b></td>'
+                                . '<td>' . $id . '</td>'
+                                . '</tr>'
+                                . '</table>'
+                                . '</center>'
+                                . '<br/><p>Para garantizar la seguridad de su cuenta, una vez que ingrese por primera vez, modifique su contraseña a través de la opción: Opciones de usuario > Cambiar contraseña.</p>'
+                                . '</li>'
+                                . '<li><p>La información de su contrato laboral, es la siguiente:</p>'
+                                . '<center>'
+                                . '<table>'
+                                . '<tr>'
+                                . '<td style="width:230px;"><b>Tipo de contrato laboral: </b></td>'
+                                . '<td>' . $tipo_contrato . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Duración (en meses): </b></td>'
+                                . '<td>' . $cant_meses . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Fecha Inicial: </b></td>'
+                                . '<td>' . $fecha_inicio . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Fecha Final: </b></td>'
+                                . '<td>' . $fecha_fin . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Cargo: </b></td>'
+                                . '<td>' . $nombre_cargo . '</td>'
+                                . '</tr>'
+                                . '<tr>'
+                                . '<td><b>Salario: </b></td>'
+                                . '<td>' . $nombre_salario . '</td>'
+                                . '</tr>'
+                                . '</table>'
+                                . '</li>'
                                 . '</ul>'
                                 . '<center><br/>¡Gracias por darnos la oportunidad de contar con su gran talento!</center>';
                         $this->sendEmail("silisascolombia@gmail.com", $email, $asunto, $mensaje);
@@ -508,7 +508,7 @@ class Empleado extends CI_Controller {
                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                         <td><?= $row->email ?></td>
                         <td><?= utf8_decode($row->sede) ?></td>
-                      
+
                     </tr>
                 <?php } ?>
             </tbody>
@@ -520,12 +520,13 @@ class Empleado extends CI_Controller {
         $data["tab"] = "renovar_contrato_laboral";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
-        $data['action_validar'] = base_url() . "empleado/validar_anular";
-        $data['action_crear'] = base_url() . "empleado/insertar_anular";
-        $data['action_recargar'] = base_url() . "empleado/anular";
-        $data['action_validar_transaccion_anular'] = base_url() . "empleado/validar_transaccion_anular";
-        $this->parser->parse('empleado/anular', $data);
+        $data['action_validar'] = base_url() . "empleado/validar_renovar_contrato";
+        $data['action_crear'] = base_url() . "empleado/insertar_renovar_contrato";
+        $data['action_recargar'] = base_url() . "empleado/renovar_contrato";
+        $data['action_validar_empleado_renovar_contrato'] = base_url() . "empleado/validar_empleado_renovar_contrato";
+        $this->parser->parse('empleado/renovar_contrato', $data);
         $this->load->view('footer');
     }
 
@@ -561,7 +562,7 @@ class Empleado extends CI_Controller {
             $data["tab"] = "renovar_contrato_laboral";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "empleado/anular";
+            $data['url_recrear'] = base_url() . "empleado/renovar_contrato";
             $data['msn_recrear'] = "Anular otra nómina";
             $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
             if (isset($error)) {
@@ -594,8 +595,8 @@ class Empleado extends CI_Controller {
                             }
                         }
                     }
-                    //SI se intenta anular una factura 2 veces dará error por primary key duplicate
-                    $error3 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    //SI se intenta renovar_contrato una factura 2 veces dará error por primary key duplicate
+                    $error3 = $this->insert_model->renovar_contrato_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
                     if (isset($error3)) {
                         $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
@@ -609,11 +610,10 @@ class Empleado extends CI_Controller {
         }
     }
 
-    public function validar_transaccion_anular() {
+    public function validar_empleado_renovar_contrato() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $prefijo = $this->input->post('prefijo');
-            $id = $this->input->post('id');
+            list($id_empleado, $dni_empleado) = explode("+", $this->input->post('empleado'));
             $this->load->model('empleadom');
             $empleado = $this->empleadom->empleado_prefijo_id($prefijo, $id);
             if ($empleado == TRUE) {
@@ -655,6 +655,5 @@ class Empleado extends CI_Controller {
             redirect(base_url());
         }
     }
-    
-    
+
 }
