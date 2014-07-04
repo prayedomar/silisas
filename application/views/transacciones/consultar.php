@@ -49,12 +49,9 @@
                             <br>
                             <a class='btn btn-primary' href="<?= base_url() ?>transacciones/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                         </div>
-
                     </div>
                     <br>
-
                     <div class="row">
-
                         <div class="col-xs-2">
                             <label>Vigente</label>
                             <select id="vigente" class="form-control">

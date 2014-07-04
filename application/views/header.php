@@ -196,7 +196,7 @@
                     <?php } ?>                           
                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                         <li><a href="<?= base_url() ?>llamado_atencion/crear">Llamado de Atención</a></li>
-                    <?php } ?>                                    
+                    <?php } ?>
                     <li class="divider"></li>
                     <li class="dropdown-header"><u> Clientes</u></li>
                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
@@ -357,7 +357,13 @@
                         <?php } ?>                              
                         <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                             <li><a href="<?= base_url() ?>cargo_jefe_rrpp/editar">Cargo y Jefe de RRPP</a></li>
-                        <?php } ?>                                    
+                        <?php } ?> 
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                        <li><a href="<?= base_url() ?>empleado/renovar_contrato">Renovar contrato laboral</a></li>
+                    <?php } ?> 
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
+                        <li><a href="<?= base_url() ?>empleado/anular_contrato">Finalizar contrato laboral</a></li>
+                    <?php } ?>                         
                     </ul>
                 </li>
                 <li class="col-sm-4">
@@ -490,7 +496,7 @@
                 <li class="col-sm-4">
                     <ul>                               
                         <li class="dropdown-header"><u> Transacciones</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador", "aux_admon", "jefe_cartera", "cartera", "contador", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
                 <?php } ?>         
                 <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>         

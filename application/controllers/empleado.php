@@ -516,4 +516,145 @@ class Empleado extends CI_Controller {
         <?php
     }
 
+    function renovar_contrato() {
+        $data["tab"] = "renovar_contrato_laboral";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['action_validar'] = base_url() . "empleado/validar_anular";
+        $data['action_crear'] = base_url() . "empleado/insertar_anular";
+        $data['action_recargar'] = base_url() . "empleado/anular";
+        $data['action_validar_transaccion_anular'] = base_url() . "empleado/validar_transaccion_anular";
+        $this->parser->parse('empleado/anular', $data);
+        $this->load->view('footer');
+    }
+
+    function validar_renovar_contrato() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
+            if ($this->form_validation->run() == FALSE) {
+                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            } else {
+                echo "OK";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    function insertar_renovar_contrato() {
+        if ($this->input->post('submit')) {
+            $this->escapar($_POST);
+            $this->load->model('update_model');
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
+            $id_responsable = $this->session->userdata('idResponsable');
+            $dni_responsable = $this->session->userdata('dniResponsable');
+            $t_trans = '9'; //Nómina laboral
+            $credito_debito = '0'; //Débito
+            $vigente = '0'; //Anulado
+
+            $data["tab"] = "renovar_contrato_laboral";
+            $this->isLogin($data["tab"]);
+            $this->load->view("header", $data);
+            $data['url_recrear'] = base_url() . "empleado/anular";
+            $data['msn_recrear'] = "Anular otra nómina";
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            if (isset($error)) {
+                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $this->parser->parse('trans_error', $data);
+            } else {
+                $error1 = $this->update_model->empleado_vigente($prefijo, $id, $vigente);
+                if (isset($error1)) {
+                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $this->parser->parse('trans_error', $data);
+                } else {
+                    $conceptos_empleado = $this->empleadom->concepto_empleado_prefijo_id($prefijo, $id);
+                    foreach ($conceptos_empleado as $fila) {
+                        //Los conceptos que sean de comision de escalas, se pasarán a pendientes para volver a hacer la empleado
+                        if (($fila->t_concepto_empleado != '28') && ($fila->t_concepto_empleado != '29')) {
+                            $est_concepto = '3'; //3: Anulado
+                            $error2 = $this->update_model->concepto_empleado_estado($fila->id, $est_concepto);
+                            if (isset($error2)) {
+                                $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                                $this->parser->parse('trans_error', $data);
+                                return;
+                            }
+                        } else {
+                            $est_concepto = '2'; //2: Pendiente
+                            $error2 = $this->update_model->concepto_empleado_estado($fila->id, $est_concepto);
+                            if (isset($error2)) {
+                                $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                                $this->parser->parse('trans_error', $data);
+                                return;
+                            }
+                        }
+                    }
+                    //SI se intenta anular una factura 2 veces dará error por primary key duplicate
+                    $error3 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error3)) {
+                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        $this->parser->parse('trans_success', $data);
+                    }
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function validar_transaccion_anular() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $prefijo = $this->input->post('prefijo');
+            $id = $this->input->post('id');
+            $this->load->model('empleadom');
+            $empleado = $this->empleadom->empleado_prefijo_id($prefijo, $id);
+            if ($empleado == TRUE) {
+                if ($empleado->vigente == 1) {
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    $response['filasTabla'] .= '<tr>
+                            <td class="text-center">' . $empleado->empleado . '</td>
+                            <td class="text-center">Del ' . $empleado->fecha_inicio . ' al ' . $empleado->fecha_fin . '</td>                                
+                            <td class="text-center">$' . number_format($empleado->total, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $empleado->sede_caja . '-' . $empleado->tipo_caja . '</td>
+                            <td class="text-center">$' . number_format($empleado->efectivo_retirado, 2, '.', ',') . '</td>
+                            <td class="text-center">' . $empleado->cuenta_origen . '</td>
+                            <td class="text-center">$' . number_format($empleado->valor_retirado, 2, '.', ',') . '</td> 
+                            <td class="text-center">' . $empleado->responsable . '</td>                                
+                            <td class="text-center">' . date("Y-m-d", strtotime($empleado->fecha_trans)) . '</td>
+                        </tr>';
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>La nómina, ya se encuentra anulada.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>La nómina, no existe en la base de datos.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+    
+    
 }
