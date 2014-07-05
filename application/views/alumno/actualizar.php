@@ -202,22 +202,22 @@
                             <div class="form-group">
                                 <label>Observación</label>
                                 <textarea name="observacion" id="observacion" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación..."style="max-width:100%;"></textarea>
-                            </div>
-                            <div class="form-group separar_submit">
-                                <input type="hidden" id="action_validar" value={action_validar} />
-                                <input type="hidden" name="id_responsable" value={id_responsable} />
-                                <input type="hidden" name="dni_responsable" value={dni_responsable} />
-                                <center>
-                                    <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                                    <button id="btn_validar" class="btn btn-success">Actualizar alumno</button> 
-                                    <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
-                                    <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
-                                </center>
-                            </div>                              
+                            </div>                            
                         </div>
                     </div>
                     <div id="validacion_alert">
-                    </div>                    
+                    </div>
+                    <div class="form-group separar_submit">
+                        <input type="hidden" id="action_validar" value={action_validar} />
+                        <input type="hidden" name="id_responsable" value={id_responsable} />
+                        <input type="hidden" name="dni_responsable" value={dni_responsable} />
+                        <center>
+                            <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
+                            <button id="btn_validar" class="btn btn-success">Actualizar alumno</button> 
+                            <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
+                            <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
+                        </center>
+                    </div>                      
                 </div>
             </form>
         </div>

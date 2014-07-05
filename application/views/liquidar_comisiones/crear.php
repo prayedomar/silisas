@@ -60,6 +60,8 @@
                                     </div>
                                 </div>                                
                             </div>
+                            <div id="validacion_alert">
+                            </div>                            
                             <div class="form-group separar_submit">
                                 <input type="hidden" id="action_validar" value={action_validar} />
                                 <input type="hidden" name="id_responsable" value={id_responsable} />
@@ -75,8 +77,6 @@
                                     <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                                 </center>
                             </div>   
-                            <div id="validacion_alert">
-                            </div>
                         </div> 
                     </form>
                 </div>

@@ -76,11 +76,11 @@
                 </fieldset>
                 <fieldset id="actions">
                     <center>
+                        <div id="validacion_alert">
+                        </div>                          
                         <!--                        El submit oculto tiene que estar de segunda, porq sino, cada vez que que den enter en el formulario (en vez de click) activara el submit oculto y sería un caos. Caso puntual: firefox-->
                         <button id="botonValidar" class="btn btn-primary btn-lg active">Iniciar Sesión</button>
-                        <button type="submit" name="submit" value="submit" class="btn btn-primary btn-lg active" style="display:none;" id="btn_submit"></button>
-                        <div id="validacion_alert">
-                        </div>                  
+                        <button type="submit" name="submit" value="submit" class="btn btn-primary btn-lg active" style="display:none;" id="btn_submit"></button>                
                     </center>
                 </fieldset>
             </div>

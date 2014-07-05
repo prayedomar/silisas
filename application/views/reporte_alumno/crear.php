@@ -205,6 +205,8 @@
                                             <textarea name="observacion_titular_alumno" id="observacion_titular_alumno" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación para el titular y/o el alumno..."style="max-width:100%;"></textarea>
                                         </div> 
                                     </div>
+                                </div>  
+                                <div id="validacion_alert">
                                 </div>                                 
                                 <div class="row">
                                     <div class="form-group separar_submit">
@@ -218,8 +220,6 @@
                                         </center>
                                     </div>    
                                 </div>
-                                <div id="validacion_alert">
-                                </div> 
                             </div>
                         </form>
                     </div> 

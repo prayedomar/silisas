@@ -103,6 +103,8 @@
                                 <label  style="display:none;" id="label_descripcion_required">Observacion<em class="required_asterisco">*</em></label>
                                 <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observacion..."  style="max-width:100%;"></textarea>
                             </div>
+                            <div id="validacion_alert">
+                            </div>                            
                             <div class="form-group separar_submit">
                                 <input type="hidden" id="action_validar" value={action_validar} />
                                 <input type="hidden" name="id_responsable" value={id_responsable} />
@@ -114,8 +116,6 @@
                                     <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                                 </center>
                             </div>   
-                            <div id="validacion_alert">
-                            </div>
                         </form>
                     </div> 
                 </div>

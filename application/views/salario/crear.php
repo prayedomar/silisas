@@ -22,8 +22,6 @@
                             <label>Descripción</label>
                             <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Descripción..."  style="max-width:100%;"></textarea>
                         </div>
-                        <div id="validacion_alert">
-                        </div>
                     </div>
                     <div class="col-xs-6">
                         <legend>Conceptos Base para el salario:</legend>
@@ -33,6 +31,8 @@
                 </div>
                 <div class="row">
                     <hr>
+                    <div id="validacion_alert">
+                    </div>                    
                     <div class="form-group">
                         <input type="hidden" id="action_validar" value={action_validar} />
                         <input type="hidden" name="id_responsable" value={id_responsable} />

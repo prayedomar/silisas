@@ -92,6 +92,8 @@
                             <div class="form-group">
                                 <label>Forma de descuento<em class="required_asterisco">*</em></label>
                                 <textarea name="forma_descuento" id="forma_descuento" class="form-control exit_caution alfanumerico" rows="4" maxlength="208" placeholder="Forma de descuento..."  style="max-width:100%;"></textarea>
+                            </div> 
+                            <div id="validacion_alert">
                             </div>                            
                             <div class="form-group separar_submit">
                                 <input type="hidden" id="action_validar" value={action_validar} />
@@ -104,8 +106,6 @@
                                     <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                                 </center>
                             </div>   
-                            <div id="validacion_alert">
-                            </div>
                         </form>
                     </div> 
                 </div>

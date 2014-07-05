@@ -660,12 +660,11 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function contrato_laboral($id_empleado, $dni_empleado, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, $estado, $observacion, $id_responsable, $dni_responsable) {
+    public function contrato_laboral($id_empleado, $dni_empleado, $t_contrato, $fecha_inicio, $fecha_fin, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             't_contrato' => $t_contrato,
-            'cant_meses' => $cant_meses,
             'fecha_inicio' => $fecha_inicio,
             'fecha_fin' => $fecha_fin,
             'estado' => $estado,

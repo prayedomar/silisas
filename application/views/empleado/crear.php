@@ -217,47 +217,14 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-6" id="duracion_contrato" style="display:none;">
-                                    <div class="form-group">
-                                        <label>Duración en Meses<em class="required_asterisco">*</em></label>
-                                        <select name="cant_meses" id="cant_meses" class="form-control exit_caution">
-                                            <option value="default">Seleccione Duración del Contrato</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                            <option value="13">13</option>
-                                            <option value="14">14</option>
-                                            <option value="15">15</option>
-                                            <option value="16">16</option>
-                                            <option value="17">17</option>
-                                            <option value="18">18</option>
-                                            <option value="19">19</option>
-                                            <option value="20">20</option>
-                                            <option value="21">21</option>
-                                            <option value="22">22</option>
-                                            <option value="23">23</option>
-                                            <option value="24">24</option>
-                                            <option value="25">25</option>
-                                            <option value="26">26</option>
-                                            <option value="27">27</option>
-                                            <option value="28">28</option>
-                                            <option value="29">29</option>
-                                            <option value="30">30</option>
-                                            <option value="31">31</option>
-                                            <option value="32">32</option>
-                                            <option value="33">33</option>
-                                            <option value="34">34</option>
-                                            <option value="35">35</option>
-                                            <option value="36">36</option>
-                                        </select>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Fecha Fin último contrato laboral<em class="required_asterisco">*</em></label>
+                                            <div class="input-group">
+                                                <input name="fecha_inicio" id="fecha_inicio" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
+                                                <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -271,6 +238,8 @@
                             <label>Observación</label>
                             <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
                         </div>
+                        <div id="validacion_alert">
+                        </div>                         
                         <div class="form-group separar_submit">
                             <input type="hidden" id="action_validar" value={action_validar} />
                             <input type="hidden" name="id_responsable" value={id_responsable} />
@@ -281,9 +250,7 @@
                                 <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                                 <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
                             </center>
-                        </div>
-                        <div id="validacion_alert">
-                        </div>                             
+                        </div>                            
                     </div> 
                 </div> 
             </form>    
@@ -381,7 +348,7 @@
             });
         }
     });
-    
+
     //Cargar div de sancion segun t_sancion
     $("#t_contrato").live("change", function() {
         t_contrato = $('#t_contrato').val();
@@ -390,7 +357,7 @@
         } else {
             $("#duracion_contrato").css("display", "block");
         }
-    });    
+    });
 
 
 </script>
