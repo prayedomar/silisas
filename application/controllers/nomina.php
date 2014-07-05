@@ -215,32 +215,28 @@ class Nomina extends CI_Controller {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $contrato = $this->select_model->contrato_laboral_empleado($id_empleado, $dni_empleado);
                 if (($contrato == TRUE)) {
-                    if ($contrato->cant_meses == NULL) {
-                        $duracion = "Indefinido";
+                    if ($contrato->fecha_fin == NULL) {
+                        $fecha_fin = "Indefinida";
                     } else {
-                        if ($contrato->cant_meses == 1) {
-                            $duracion = $contrato->cant_meses . " mes";
-                        } else {
-                            $duracion = $contrato->cant_meses . " meses";
-                        }
+                        $fecha_fin = $contrato->fecha_fin;
                     }
                     echo '<div class="overflow_tabla">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Fecha Inicio</th>
                                                 <th class="text-center">Tipo Contrato</th>
-                                                <th class="text-center">Duración</th>
+                                                <th class="text-center">Fecha Inicio</th>                                                
+                                                <th class="text-center">Fecha Fin</th>  
                                                 <th class="text-center">Cargo</th>                                                
                                                 <th class="text-center">Salario</th>
                                                 <th class="text-center">Observación</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>                         
+                                            <tr>                  
+                                            <td class="text-center">' . $contrato->tipo_contrato . '</td>                                            
                                             <td class="text-center">' . $contrato->fecha_inicio . '</td>
-                                            <td class="text-center">' . $contrato->tipo_contrato . '</td>
-                                            <td class="text-center">' . $duracion . '</td> 
+                                            <td class="text-center">' . $fecha_fin . '</td>                                                
                                             <td class="text-center">' . $contrato->cargo . '</td>                                                
                                             <td class="text-center">' . $contrato->nombre_salario . '</td>                                  
                                             <td>' . $contrato->observacion . '</td>  

@@ -65,16 +65,17 @@ class Empleado extends CI_Controller {
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'trim|min_length[11]|max_length[12]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
+            $this->form_validation->set_rules('fecha_ingreso', 'Fecha ingreso a la empresa', 'required|xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('depto', 'Departamento Empresarial', 'required|callback_select_default');
             $this->form_validation->set_rules('cargo', 'Cargo', 'required|callback_select_default');
             $this->form_validation->set_rules('salario', 'Salario', 'required|callback_select_default');
             $this->form_validation->set_rules('jefe', 'Jefe Inmediato', 'required|callback_select_default');
             $this->form_validation->set_rules('t_contrato', 'Tipo de Contrato Laboral', 'required|callback_select_default');
-            $this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio de Labores', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('fecha_inicio', 'Fecha inicio último contrato laboral', 'required|xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             if ((($this->input->post('t_contrato') != "default")) && (($this->input->post('t_contrato') != "1"))) {
-                $this->form_validation->set_rules('cant_meses', 'Duración en Meses', 'required|callback_select_default');
+                $this->form_validation->set_rules('fecha_fin', 'Fecha fin último contrato laboral', 'required|xss_clean|callback_fecha_valida');
             }
 
             //Validamos que la clave primaria no este repetida
@@ -86,8 +87,14 @@ class Empleado extends CI_Controller {
                     $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
                 }
             }
-            if (($this->form_validation->run() == FALSE) || ($duplicate_key != "")) {
-                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('sede_ppal') . form_error('depto') . form_error('cargo') . form_error('salario') . form_error('jefe') . form_error('t_contrato') . form_error('fecha_inicio') . form_error('cant_meses') . form_error('observacion');
+            $error_entre_fechas = "";
+            if (($this->fecha_valida($this->input->post('fecha_inicio'))) && ($this->fecha_valida($this->input->post('fecha_fin')))) {
+                if (($this->dias_entre_fechas($this->input->post('fecha_inicio'), $this->input->post('fecha_fin'))) < 0) {
+                    $error_entre_fechas = "<p>La fecha final del contrato, no puede ser menor que la fecha inicial.</p>";
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($duplicate_key != "") || ($error_entre_fechas != "")) {
+                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('sede_ppal') . form_error('depto') . form_error('fecha_ingreso') . form_error('cargo') . form_error('salario') . form_error('jefe') . form_error('t_contrato') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -116,10 +123,6 @@ class Empleado extends CI_Controller {
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'trim|min_length[12]|max_length[12]|integer|callback_valor_positivo');
-
-
-
-
             if ($this->form_validation->run() == FALSE) {
                 echo form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('observacion');
             } else {
@@ -155,6 +158,7 @@ class Empleado extends CI_Controller {
             $email = mb_strtolower($this->input->post('email'));
             $cuenta = $this->input->post('cuenta');
             $sede_ppal = $this->input->post('sede_ppal');
+            $fecha_ingreso = $this->input->post('fecha_ingreso');
             $depto = $this->input->post('depto');
             list($cargo, $perfil) = explode("-", $this->input->post('cargo'));
             $salario = $this->input->post('salario');
@@ -167,10 +171,8 @@ class Empleado extends CI_Controller {
             $dni_responsable = $this->session->userdata('dniResponsable');
 
             if ($this->input->post('t_contrato') != "1") {
-                $cant_meses = $this->input->post('cant_meses');
-                $fecha_fin = date("Y-m-d", strtotime("$fecha_inicio +$cant_meses month"));
+                $fecha_fin = $this->input->post('fecha_fin');
             } else {
-                $cant_meses = NULL;
                 $fecha_fin = NULL;
             }
 
@@ -190,14 +192,14 @@ class Empleado extends CI_Controller {
                 $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error2 = $this->insert_model->new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $depto, $cargo, $salario, $id_jefe, $dni_jefe, 1, $observacion, $id_responsable, $dni_responsable);
+                $error2 = $this->insert_model->new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $fecha_ingreso, $depto, $cargo, $salario, $id_jefe, $dni_jefe, 1, $observacion, $id_responsable, $dni_responsable);
                 //No se pudo crear el empleado
                 if (isset($error2)) {
                     $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //Creamos el contrato laboral
-                    $error3 = $this->insert_model->contrato_laboral($id, $dni, $t_contrato, $cant_meses, $fecha_inicio, $fecha_fin, 1, $observacion, $id_responsable, $dni_responsable);
+                    $error3 = $this->insert_model->contrato_laboral($id, $dni, $t_contrato, $fecha_inicio, $fecha_fin, 1, $observacion, $id_responsable, $dni_responsable);
                     if (isset($error3)) {
                         $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
@@ -205,8 +207,7 @@ class Empleado extends CI_Controller {
                         //Enviamos el correo al usuario con 
                         $t_dni = $this->select_model->t_dni_id($dni)->tipo;
                         $tipo_contrato = $this->select_model->t_contrato_laboral_id($t_contrato)->contrato;
-                        if ($cant_meses == NULL) {
-                            $cant_meses = " -- ";
+                        if ($fecha_fin == NULL) {
                             $fecha_fin = " -- ";
                         }
                         if ($genero == 'M') {
@@ -253,10 +254,6 @@ class Empleado extends CI_Controller {
                                 . '<tr>'
                                 . '<td style="width:230px;"><b>Tipo de contrato laboral: </b></td>'
                                 . '<td>' . $tipo_contrato . '</td>'
-                                . '</tr>'
-                                . '<tr>'
-                                . '<td><b>Duración (en meses): </b></td>'
-                                . '<td>' . $cant_meses . '</td>'
                                 . '</tr>'
                                 . '<tr>'
                                 . '<td><b>Fecha Inicial: </b></td>'

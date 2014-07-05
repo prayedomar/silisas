@@ -52,7 +52,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $depto, $cargo, $salario, $id_jefe, $dni_jefe, $estado, $observacion, $id_responsable, $dni_responsable) {
+    public function new_empleado($id, $dni, $t_usuario, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $est_civil, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $cuenta, $sede_ppal, $fecha_ingreso, $depto, $cargo, $salario, $id_jefe, $dni_jefe, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id,
             'dni' => $dni,
@@ -75,6 +75,7 @@ class Insert_model extends CI_Model {
             'email' => $email,
             'cuenta' => $cuenta,
             'sede_ppal' => $sede_ppal,
+            'fecha_ingreso' => $fecha_ingreso,
             'depto' => $depto,
             'cargo' => $cargo,
             'salario' => $salario,
@@ -1508,6 +1509,6 @@ class Insert_model extends CI_Model {
         if ($error = $this->db->_error_message()) {
             return $error;
         }
-    }    
+    }
 
 }

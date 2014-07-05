@@ -194,6 +194,17 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-xs-6 col-xs-offset-3">
+                        <div class="form-group">
+                            <label>Fecha ingreso a la empresa<em class="required_asterisco">*</em></label>
+                            <div class="input-group">
+                                <input name="fecha_ingreso" id="fecha_ingreso" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de ingreso a la empresa">
+                                <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div> 
+                        </div>
+                    </div>                    
+                </div>
+                <div class="row">
                     <legend>Último contrato laboral vigente</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-8 col-xs-offset-2">
@@ -209,7 +220,7 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Fecha Inicio último contrato laboral<em class="required_asterisco">*</em></label>
+                                        <label>Fecha inicio último contrato laboral<em class="required_asterisco">*</em></label>
                                         <div class="input-group">
                                             <input name="fecha_inicio" id="fecha_inicio" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
                                             <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -217,14 +228,12 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-6" id="duracion_contrato" style="display:none;">
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label>Fecha Fin último contrato laboral<em class="required_asterisco">*</em></label>
-                                            <div class="input-group">
-                                                <input name="fecha_inicio" id="fecha_inicio" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
-                                                <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
-                                            </div> 
-                                        </div>
+                                    <div class="form-group">
+                                        <label>Fecha fin último contrato laboral<em class="required_asterisco">*</em></label>
+                                        <div class="input-group">
+                                            <input name="fecha_fin" id="fecha_fin" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
+                                            <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
