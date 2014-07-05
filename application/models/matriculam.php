@@ -23,6 +23,17 @@ class Matriculam extends CI_Model {
             return $query->row();
         }
     }
+    
+    public function sede_matricula_id($id) {
+        $SqlInfo = "SELECT ma.sede id_sede, se.nombre nombre_sede "
+                . "FROM matricula ma "
+                . "JOIN sede se ON ma.sede=se.id "
+                . "where (ma.contrato='" . $id . "')";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function pagos_matricula_id($id_matricula) {
         $query = "SELECT fa.prefijo, fa.id, fa.t_trans, fa.subtotal, fa.int_mora, fa.descuento, fa.id_responsable, fa.dni_responsable, fa.fecha_trans, CONCAT(re.nombre1, ' ', re.apellido1) responsable "
@@ -36,7 +47,7 @@ class Matriculam extends CI_Model {
                 . "JOIN matricula ma ON (rc.matricula = ma.contrato) "
                 . "JOIN empleado re ON ((rc.id_responsable = re.id) and (rc.dni_responsable = re.dni)) "
                 . "where ((ma.contrato='" . $id_matricula . "') AND (rc.vigente='1'))"
-                . "UNION "                
+                . "UNION "
                 . "SELECT am.prefijo, am.id, am.t_trans, am.subtotal, am.int_mora, am.descuento, am.id_responsable, am.dni_responsable, am.fecha_trans, CONCAT(re.nombre1, ' ', re.apellido1) responsable  "
                 . "FROM abono_matricula am "
                 . "JOIN matricula ma ON (am.matricula = ma.contrato) "

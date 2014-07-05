@@ -90,6 +90,7 @@ class Liquidar_comisiones extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
+            $this->load->model('matriculam');
             $id_matricula = $this->input->post('matricula');
             list($id_ejecutivo_original, $dni_ejecutivo_original, $cargo_ejecutivo_original) = explode("-", $this->input->post('ejecutivo_original'));
             list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("-", $this->input->post('ejecutivo_directo'));
@@ -109,7 +110,8 @@ class Liquidar_comisiones extends CI_Controller {
             if ($valor_unitario != TRUE) {
                 $valor_unitario = 0.00;
             }
-            $detalle = "Matrícula: " . $id_matricula;
+            $sede_matricula = $this->matriculam->sede_matricula_id($id_matricula);
+            $detalle = "Matrícula: " . $id_matricula . " (" . $sede_matricula->nombre_sede . ")";
 
             $data["tab"] = "crear_liquidar_comisiones";
             $this->isLogin($data["tab"]);
@@ -158,6 +160,25 @@ class Liquidar_comisiones extends CI_Controller {
                             }
                         }
                         $i++;
+                    }
+                }
+                //Colocamos las comisiones de don libardo: 
+                //SEde poblado (Id: 2): gana escala divisional, si el ejecutivo directo de la matricula tiene cargo inferior a regional (Hernan)
+                //Sede floresta (Id: 1): gana escala divisional, si el ejecutivo directo de la matricula tiene cargo inferior a divisional
+                $nivel_jerarquico_ejecutivo_directo = $this->select_model->t_cargo_id($cargo_ejecutivo_directo)->nivel_jerarquico;
+                if ($id_ejecutivo_directo != '98672030') { //Porq si el hizo la matricula se le duplicarias
+                    if (($sede_matricula->id_sede == '2') && ($nivel_jerarquico_ejecutivo_directo > '6')) {
+                        $t_concepto_nomina = '28'; //28, 'Comisión Escala Matricula
+                        $cargo_escala = '16'; //Divisional
+                        $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                        $error2 = $this->insert_model->concepto_nomina('98672030', '1', NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_escala, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
+                    } else {
+                        if (($sede_matricula->id_sede == '1') && ($nivel_jerarquico_ejecutivo_directo > '7')) {
+                            $t_concepto_nomina = '28'; //28, 'Comisión Escala Matricula
+                            $cargo_escala = '16'; //Divisional
+                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                            $error2 = $this->insert_model->concepto_nomina('98672030', '1', NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_escala, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
+                        }
                     }
                 }
                 //ACtualizamos el estado de la matricula a liquidada.
