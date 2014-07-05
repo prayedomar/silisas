@@ -778,7 +778,7 @@ class Select_model extends CI_Model {
 
     //Devuelve una lista con los empleados de RRPPque pertenecen a la sede principal de un responsable.
     public function empleado_RRPP_sedes_responsable($id_responsable, $dni_responsable) {
-        $where = "(sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
+        $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
         $where2 = "cargo IN (SELECT id FROM t_cargo WHERE depto=3)";
         $this->db->where($where2);

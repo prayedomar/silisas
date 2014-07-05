@@ -149,7 +149,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
-                $empleados = $this->select_model->empleado_RRPP_sede_ppal($id_responsable, $dni_responsable);
+                $empleados = $this->select_model->empleado_RRPP_sedes_responsable($id_responsable, $dni_responsable);
                 //Validamos que la consulta devuelva algo
                 if ($empleados == TRUE) {
                     foreach ($empleados as $fila) {
