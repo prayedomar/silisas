@@ -1137,9 +1137,8 @@ class Nomina extends CI_Controller {
                         . '<td class="d5 a2 c30 c27 c28">$' . number_format($deducido, 1, '.', ',') . '</td>'
                         . '</tr>';
             }
-            for ($i = $cont_filas; $i < 28; $i++) {
-                $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
-            }
+//            for ($i = $cont_filas; $i < 5; $i++) {
+            $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
             $html .= '</table><table>';
             if ($nomina->observacion != "") {
                 $html .= '<tr><td class="c10 c25 c27 c28" colspan="4"> </td></tr><tr><td class="a3 c30 c27 c28" colspan="4"><b>Observaciones: </b>' . $nomina->observacion . '.</td></tr>'
@@ -1285,9 +1284,7 @@ class Nomina extends CI_Controller {
                         . '<td class="d5 a2 c30 c27 c28">$' . number_format($deducido, 1, '.', ',') . '</td>'
                         . '</tr>';
             }
-            for ($i = $cont_filas; $i < 28; $i++) {
-                $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
-            }
+            $html .= '<tr><td class="d1 c27 c28 c30"></td><td class="d2 c27 c28 c30"></td><td class="d3 c27 c28 c30"></td><td class="d4 c27 c28 c30"></td><td class="d5 c27 c28 c30"></td></tr>';
             $html .= '</table><table>';
             if ($nomina->observacion != "") {
                 $html .= '<tr><td class="c10 c25 c27 c28" colspan="4"> </td></tr><tr><td class="a3 c30 c27 c28" colspan="4"><b>Observaciones: </b>' . $nomina->observacion . '.</td></tr>'

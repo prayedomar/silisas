@@ -460,7 +460,7 @@ class Select_model extends CI_Model {
         }
     }
 
-    public function t_cargo_id($id) {
+        public function t_cargo_id($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('t_cargo');
         if ($query->num_rows() == 1) {
