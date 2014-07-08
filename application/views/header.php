@@ -260,10 +260,10 @@
                     <li><a href="<?= base_url() ?>egreso/crear">Egreso</a></li>
                 <?php } ?>                                       
                 <!--<?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                                                                                                                                                             <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
+                                                                                                                                                                                     <li><a href="<?= base_url() ?>prestamo/crear">Préstamo</a></li> 
                 <?php } ?>                                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
-                                                                                                                                                                             <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
+                                                                                                                                                                                     <li><a href="<?= base_url() ?>abono_prestamo/crear">Abono préstamo</a></li>
                 <?php } ?>-->
                 </ul>
                 </li>
@@ -358,12 +358,12 @@
                         <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                             <li><a href="<?= base_url() ?>cargo_jefe_rrpp/editar">Cargo y Jefe de RRPP</a></li>
                         <?php } ?> 
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
-                        <li><a href="<?= base_url() ?>empleado/renovar_contrato">Renovar contrato laboral</a></li>
-                    <?php } ?> 
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
-                        <li><a href="<?= base_url() ?>empleado/anular_contrato">Finalizar contrato laboral</a></li>
-                    <?php } ?>                         
+                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                            <li><a href="<?= base_url() ?>empleado/renovar_contrato">Renovar contrato laboral</a></li>
+                        <?php } ?> 
+                        <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
+                            <li><a href="<?= base_url() ?>empleado/anular_contrato">Finalizar contrato laboral</a></li>
+                        <?php } ?>                         
                     </ul>
                 </li>
                 <li class="col-sm-4">
@@ -371,7 +371,10 @@
                         <li class="dropdown-header"><u> Matrículas</u></li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>matricula/editar_plan">Cambio de plan</a></li>  
-                <?php } ?>                                                                 
+                <?php } ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
+                    <li><a href="<?= base_url() ?>plan_matricula/modificar">Plan y comisiones</a></li>
+                <?php } ?>
                 </ul>
                 </li>
                 <li class="col-sm-4">
