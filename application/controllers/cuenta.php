@@ -13,7 +13,7 @@ class Cuenta extends CI_Controller {
         $data["tab"] = "crear_cuenta";
         $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -120,7 +120,7 @@ class Cuenta extends CI_Controller {
         $data["tab"] = "aprobar_cuenta_empleado";
         $this->isLogin($data["tab"]);           
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['cuenta'] = $this->select_model->cuenta_banco();
@@ -215,7 +215,7 @@ class Cuenta extends CI_Controller {
         $data["tab"] = "aprobar_cuenta_empleado";
         $this->isLogin($data["tab"]);           
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['cuenta'] = $this->select_model->cuenta_banco();
@@ -307,7 +307,7 @@ class Cuenta extends CI_Controller {
         $data["tab"] = "aprobar_cuenta_empleado";
         $this->isLogin($data["tab"]);           
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['cuenta'] = $this->select_model->cuenta_banco();
@@ -583,7 +583,7 @@ class Cuenta extends CI_Controller {
         $data["tab"] = "aprobar_cuenta_sede";
         $this->isLogin($data["tab"]);           
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['cuenta'] = $this->select_model->cuenta_banco();

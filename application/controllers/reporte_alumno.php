@@ -15,7 +15,7 @@ class Reporte_alumno extends CI_Controller {
         $data["tab"] = "crear_reporte_alumno";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['dni'] = $this->select_model->t_dni_alumno();
         $data['t_curso'] = $this->select_model->t_curso();
         $data['action_validar'] = base_url() . "reporte_alumno/validar";

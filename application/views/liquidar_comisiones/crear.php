@@ -74,7 +74,7 @@
                                     <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->                                    
                                     <button id="botonValidar" class="btn btn-success">Liquidar Comisiones de Matrícula</button>                                 
                                     <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
-                                    <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
+                                    <a href="<?= base_url() ?>"class="btn btn-danger" role="button"> Cancelar </a>
                                 </center>
                             </div>   
                         </div> 
@@ -92,7 +92,7 @@
                 <div class="modal_loading">
                     <div class="row text-center">
                         <div class="col-xs-2 col-xs-offset-5 separar_div">
-                            <img src="{base_url}images/loading_2.gif" class="img-responsive">
+                            <img src="<?= base_url() ?>images/loading_2.gif" class="img-responsive">
                         </div>
                         <div class="col-xs-12">
                             <h4 class="modal-title" id="myModalLabel">Estamos procesando su solicitud</h4>

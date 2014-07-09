@@ -288,7 +288,10 @@
                 <li class="dropdown-header"><u> Matrículas</u></li>        
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                     <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li> 
-                <?php } ?>                                    
+                <?php } ?> 
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
+                    <li><a href="<?= base_url() ?>plan_matricula/crear">Planes y comisiones</a></li>
+                <?php } ?>                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
                     <li><a href="<?= base_url() ?>matricula/crear">Matrícula</a></li>
                 <?php } ?>                                    
@@ -373,7 +376,7 @@
                     <li><a href="<?= base_url() ?>matricula/editar_plan">Cambio de plan</a></li>  
                 <?php } ?>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
-                    <li><a href="<?= base_url() ?>plan_matricula/modificar">Plan y comisiones</a></li>
+                    <li><a href="<?= base_url() ?>plan_matricula/editar">Planes y comisiones</a></li>
                 <?php } ?>
                 </ul>
                 </li>

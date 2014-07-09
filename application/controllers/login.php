@@ -14,7 +14,7 @@ class Login extends CI_Controller {
         $data['token'] = $this->token();
         $data['dni'] = $this->select_model->t_dni();
         $data['t_usuario'] = $this->select_model->t_usuario_login();
-        $data['base_url'] = base_url();
+        
         $data['action_validar'] = base_url() . "login/validar_user";
         $data['action_crear'] = base_url() . "login/new_user";
         //para recuperar los datos del formulario anterior.

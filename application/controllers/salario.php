@@ -14,7 +14,7 @@ class Salario extends CI_Controller {
         $data["tab"] = "crear_salario";
         $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['t_salario'] = $this->select_model->t_salario();

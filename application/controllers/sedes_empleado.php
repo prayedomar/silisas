@@ -14,7 +14,7 @@ class Sedes_empleado extends CI_Controller {
         $data["tab"] = "editar_sedes_empleado";
         $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['empleado'] = $this->select_model->empleado_activo();

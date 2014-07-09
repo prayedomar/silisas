@@ -14,7 +14,7 @@
                         <div class="form-group separar_submit">
                             <center>
                                 <button id="consultar" type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Consultar</button>
-                                <a href="{base_url}" class="btn btn-default" role="button"> Cancelar </a>
+                                <a href="<?= base_url() ?>"class="btn btn-default" role="button"> Cancelar </a>
                             </center>
                         </div>
                         <div class="row">

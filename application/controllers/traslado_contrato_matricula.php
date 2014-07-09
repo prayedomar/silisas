@@ -13,7 +13,7 @@ class Traslado_contrato_matricula extends CI_Controller {
         $data["tab"] = "crear_traslado_contrato_matricula";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');

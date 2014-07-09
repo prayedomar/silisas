@@ -3,14 +3,14 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link  rel="stylesheet" href="{base_url}libraries/bootstrap_3.0.2/css_cerulean/bootstrap.min.css" />
+        <link  rel="stylesheet" href="<?= base_url() ?>libraries/bootstrap_3.0.2/css_cerulean/bootstrap.min.css" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-        <script src="{base_url}libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>
+        <script src="<?= base_url() ?>libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>
         <script>
             $(function() {
                 $('#botonCalcular').click(function() {
                     $.ajax({
-                        url: "{base_url}/prueba/prueba_ajax",
+                        url: ""<?= base_url() ?>"/prueba/prueba_ajax",
                         type: 'POST',
                         cache: false,
                         data: {

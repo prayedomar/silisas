@@ -90,7 +90,7 @@ class Select_model extends CI_Model {
 
     public function t_plan_activo() {
         $this->db->where('vigente', 1);
-        $this->db->order_by('cant_alumnos', 'asc');
+        $this->db->order_by('anio', 'desc');
         $this->db->order_by('valor_total', 'asc');
         $query = $this->db->get('t_plan');
         if ($query->num_rows() > 0) {
@@ -470,7 +470,7 @@ class Select_model extends CI_Model {
 
     //Devuelve los cargos de rrpp (depto:3) superiores a un cargo ingresado.
     public function t_cargo_superior_rrpp($cargo) {
-        $where = "((depto=3)and (nivel_jerarquico < (SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "'))));";
+        $where = "((depto=3) AND (nivel_jerarquico < (SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "'))) AND (visible_comisiones = '1'))";
         $this->db->where($where);
         $query = $this->db->get('t_cargo');
         if ($query->num_rows() > 0) {

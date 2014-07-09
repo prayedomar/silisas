@@ -13,7 +13,7 @@ class Despachar_placa extends CI_Controller {
         $data["tab"] = "crear_despachar_placa";
         $this->isLogin($data["tab"]);        
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['action_validar'] = base_url() . "despachar_placa/validar";

@@ -13,7 +13,7 @@ class Liquidar_comisiones extends CI_Controller {
         $data["tab"] = "crear_liquidar_comisiones";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['id_matricula'] = "$contrato";
@@ -343,7 +343,7 @@ class Liquidar_comisiones extends CI_Controller {
         $data["tab"] = "consultar_liquidar_comisiones";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
 

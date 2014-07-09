@@ -14,7 +14,7 @@ class Transferencia extends CI_Controller {
         $data["tab"] = "crear_transferencia";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['sede_destino'] = $this->select_model->sede_activa();
@@ -271,7 +271,7 @@ class Transferencia extends CI_Controller {
         $data["tab"] = "aprobar_transferencia";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['action_validar'] = base_url() . "transferencia/validar_aprobar";
         $data['action_crear'] = base_url() . "transferencia/insertar_aprobar";
         $data['action_llena_transferencias'] = base_url() . "transferencia/llena_transferencias";

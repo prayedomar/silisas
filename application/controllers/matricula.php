@@ -14,7 +14,7 @@ class MAtricula extends CI_Controller {
         $data["tab"] = "crear_matricula";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni_titular'] = $this->select_model->t_dni_titular();
@@ -140,7 +140,7 @@ class MAtricula extends CI_Controller {
         $data["tab"] = "editar_plan_matricula";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        $data['base_url'] = base_url();
+        
         $data['dni_titular'] = $this->select_model->t_dni_titular();
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');

@@ -35,7 +35,7 @@
                 <hr>
                 <div class="col-xs-6 col-xs-offset-3">
                     <center>
-                        <a href="{base_url}" class="btn btn-info" role="button"> Volver a la pagina principal </a>
+                        <a href="<?= base_url() ?>"class="btn btn-info" role="button"> Volver a la pagina principal </a>
                     </center>
                 </div>
             </div>

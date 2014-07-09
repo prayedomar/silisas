@@ -7,15 +7,15 @@
         <meta name="description" content="Login siliSAS" />
         <meta name="author" content="Omar Stevenson Rivera Correa" />
         <!-- Favicon -->        
-        <link rel="shortcut icon" href="{base_url}images/favicon3.ico" />        
+        <link rel="shortcut icon" href="<?= base_url() ?>images/favicon3.ico" />        
         <!-- CSS -->        
-        <link rel=StyleSheet href="{base_url}libraries/bootstrap_3.0.2/css_cerulean/bootstrap.min.css" TYPE="text/css" />
-        <link rel=StyleSheet href="{base_url}css/login.css" TYPE="text/css" />
+        <link rel=StyleSheet href="<?= base_url() ?>libraries/bootstrap_3.0.2/css_cerulean/bootstrap.min.css" TYPE="text/css" />
+        <link rel=StyleSheet href="<?= base_url() ?>css/login.css" TYPE="text/css" />
         <!-- Js -->
-        <script src="{base_url}libraries/html5shim/html5.js"></script>
-        <script src="{base_url}libraries/respond/respond.min.js"></script>
-        <script src="{base_url}libraries/jquery/jquery-1.9.0.js"></script>
-        <script src="{base_url}libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>  
+        <script src="<?= base_url() ?>libraries/html5shim/html5.js"></script>
+        <script src="<?= base_url() ?>libraries/respond/respond.min.js"></script>
+        <script src="<?= base_url() ?>libraries/jquery/jquery-1.9.0.js"></script>
+        <script src="<?= base_url() ?>libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>  
         <script type="text/javascript">
             $(document).ready(function() {
                 //validar con ajax
@@ -49,7 +49,7 @@
         <form method="post" action="login/new_user" id="login">
             <!--            <h1>SILI SAS</h1>-->
             <div id="div_img">
-                <img src="{base_url}images/logo_login_2.png" style="max-width:100%;" class="sun">
+                <img src="<?= base_url() ?>images/logo_login_2.png" style="max-width:100%;" class="sun">
             </div>
             <div class="div_inputs">
                 <fieldset id="inputs">

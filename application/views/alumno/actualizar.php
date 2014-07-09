@@ -215,7 +215,7 @@
                             <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
                             <button id="btn_validar" class="btn btn-success">Actualizar alumno</button> 
                             <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
-                            <a href="{base_url}" class="btn btn-danger" role="button"> Cancelar </a>
+                            <a href="<?= base_url() ?>"class="btn btn-danger" role="button"> Cancelar </a>
                         </center>
                     </div>                      
                 </div>
