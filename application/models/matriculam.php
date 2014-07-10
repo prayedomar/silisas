@@ -148,5 +148,16 @@ class Matriculam extends CI_Model {
         // echo $query;
         return $this->db->query($query)->result();
     }
+    
+    public function matricula_iliquida_responsable($id_responsable, $dni_responsable) {
+       $query = "SELECT ma.*, t_p.* "
+                . "FROM matricula ma "
+                . "JOIN t_plan t_p ON t_p.id=ma.plan  "
+                . "where ((ma.estado != '5') AND (ma.liquidacion_escalas='0') AND (ma.sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) AND ((((SELECT COALESCE(SUM(subtotal), 0) FROM factura WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(valor), 0) FROM descuento_matricula WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM recibo_caja WHERE ((matricula=ma.contrato) AND (vigente=1)))+(SELECT COALESCE(SUM(subtotal), 0) FROM abono_matricula WHERE ((matricula=ma.contrato) AND (vigente=1))))-(SELECT COALESCE(SUM(total), 0) FROM nota_credito WHERE ((matricula=ma.contrato) AND (vigente=1))))>=t_p.valor_inicial)) ORDER BY contrato";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }      
+    
 
 }

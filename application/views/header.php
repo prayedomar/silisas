@@ -296,7 +296,7 @@
                     <li><a href="<?= base_url() ?>matricula/crear">Matrícula</a></li>
                 <?php } ?>                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>liquidar_comisiones/crear/new">Liquidar Matrícula</a></li>
+                    <li><a href="<?= base_url() ?>liquidar_comisiones/crear">Liquidar comisiones de Matrícula</a></li>
                 <?php } ?> 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera", "cartera"))) { ?>                                       
                     <li><a href="<?= base_url() ?>descuento_matricula/crear">Descuento especial</a></li> 

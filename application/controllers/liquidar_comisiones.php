@@ -9,23 +9,21 @@ class Liquidar_comisiones extends CI_Controller {
         $this->load->model('update_model');
     }
 
-    function crear($contrato) {
+    function crear() {
         $data["tab"] = "crear_liquidar_comisiones";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+        $this->load->model('matriculam');
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
-        $data['id_matricula'] = "$contrato";
         $data['action_validar'] = base_url() . "liquidar_comisiones/validar";
         $data['action_crear'] = base_url() . "liquidar_comisiones/insertar";
-
-        $data['action_llena_matricula_iliquidada'] = base_url() . "liquidar_comisiones/llena_matricula_iliquidada";
+        $data['matriculas_iliquidadas'] = $this->matriculam->matricula_iliquida_responsable($_SESSION['idResponsable'], $_SESSION['dniResponsable']);
+        $data['ejecutivo_directo'] = $this->select_model->empleado_RRPP_sede_ppal($_SESSION['idResponsable'], $_SESSION['dniResponsable']);
         $data['action_llena_detalle_matricula'] = base_url() . "liquidar_comisiones/llena_detalle_matricula_liquidar";
-        $data['action_llena_ejecutivo'] = base_url() . "liquidar_comisiones/llena_empleado_rrpp_sedePpal";
         $data['action_llena_cargo_comision_faltante'] = base_url() . "liquidar_comisiones/llena_cargo_comision_faltante";
         $data['action_llena_cargo_ejecutivo_directo'] = base_url() . "liquidar_comisiones/llena_cargo_ejecutivo_directo";
-
         $this->parser->parse('liquidar_comisiones/crear', $data);
         $this->load->view('footer');
     }
@@ -35,7 +33,6 @@ class Liquidar_comisiones extends CI_Controller {
             $this->escapar($_POST);
             $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|callback_select_default');
             $this->form_validation->set_rules('ejecutivo_directo', 'Comisión Directa', 'required|callback_select_default');
-
             $error_escalas = "";
             if (($this->input->post('escalas')) && ($this->input->post('cargos_escalas'))) {
                 $cargos_escalas = $this->input->post('cargos_escalas');
@@ -43,7 +40,7 @@ class Liquidar_comisiones extends CI_Controller {
                 $i = 0;
                 foreach ($escalas as $fila) {
                     if ($fila == "default") {
-                        list($id_cargo, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
+                        list($id_cargo, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
                         $error_escalas .= "<p>La Escala: " . $nombre_cargo . ", es obligatoria.</p>";
                     }
                     $i++;
@@ -53,11 +50,11 @@ class Liquidar_comisiones extends CI_Controller {
             if ($this->input->post('ejecutivo_directo') && $this->input->post('matricula')) {
                 $id_matricula = $this->input->post('matricula');
                 //Aqui vamos a verificar que si exita la tabla de comisiones para el plan de la matricula.
-                list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("-", $this->input->post('ejecutivo_directo'));
+                list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("+", $this->input->post('ejecutivo_directo'));
                 $plan = $this->select_model->matricula_id($id_matricula)->plan;
                 $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo);
                 if ($valor_unitario != TRUE) {
-                    $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula.</P>';
+                    $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos.</P>';
                 }
                 $cargos_escalas = $this->input->post('cargos_escalas');
                 $escalas = $this->input->post('escalas');
@@ -67,10 +64,10 @@ class Liquidar_comisiones extends CI_Controller {
                     foreach ($escalas as $fila) {
                         //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
                         if ($fila != "nula") {
-                            list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
+                            list($cargo_escala, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
                             $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala);
                             if ($valor_unitario != TRUE) {
-                                $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula.</P>';
+                                $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos.</P>';
                             }
                         }
                         $i++;
@@ -92,8 +89,8 @@ class Liquidar_comisiones extends CI_Controller {
             $this->escapar($_POST);
             $this->load->model('matriculam');
             $id_matricula = $this->input->post('matricula');
-            list($id_ejecutivo_original, $dni_ejecutivo_original, $cargo_ejecutivo_original) = explode("-", $this->input->post('ejecutivo_original'));
-            list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("-", $this->input->post('ejecutivo_directo'));
+            list($id_ejecutivo_original, $dni_ejecutivo_original, $cargo_ejecutivo_original) = explode("+", $this->input->post('ejecutivo_original'));
+            list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("+", $this->input->post('ejecutivo_directo'));
 
             $est_concepto_nomina = 2; //2: Pendiente
 
@@ -145,8 +142,8 @@ class Liquidar_comisiones extends CI_Controller {
                     foreach ($escalas as $fila) {
                         //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
                         if ($fila != "nula") {
-                            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $fila);
-                            list($cargo_escala, $nombre_cargo) = explode("-", $cargos_escalas[$i]);
+                            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("+", $fila);
+                            list($cargo_escala, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
                             //Asumimos que las comisiones ya estan creadas
                             $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
                             if ($valor_unitario != TRUE) {
@@ -195,29 +192,6 @@ class Liquidar_comisiones extends CI_Controller {
         }
     }
 
-    public function llena_matricula_iliquidada() {
-        if ($this->input->is_ajax_request()) {
-            $this->escapar($_POST);
-            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
-                $id_responsable = $this->input->post('idResposable');
-                $dni_responsable = $this->input->post('dniResposable');
-                $matriculas = $this->select_model->matricula_iliquida_responsable($id_responsable, $dni_responsable);
-                //Validamos que la consulta devuelva algo
-                if ($matriculas == TRUE) {
-                    foreach ($matriculas as $fila) {
-                        echo '<option value="' . $fila->contrato . '">' . $fila->contrato . '</option>';
-                    }
-                } else {
-                    echo "";
-                }
-            } else {
-                echo "";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
     public function llena_detalle_matricula_liquidar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
@@ -228,7 +202,7 @@ class Liquidar_comisiones extends CI_Controller {
                     $response = array(
                         'respuesta' => 'OK',
                         'detalleMatricula' => '',
-                        'IdDniEjecutivo' => $detalle->id . "-" . $detalle->dni . "-" . $detalle->cargo,
+                        'IdDniEjecutivo' => $detalle->id . "+" . $detalle->dni . "+" . $detalle->cargo,
                         'CargoEjecutivo' => $detalle->cargo
                     );
                     $response['detalleMatricula'] = '<tr>
@@ -260,48 +234,23 @@ class Liquidar_comisiones extends CI_Controller {
         }
     }
 
-    public function llena_empleado_rrpp_sedePpal() {
-        if ($this->input->is_ajax_request()) {
-            $this->escapar($_POST);
-            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
-                $id_responsable = $this->input->post('idResposable');
-                $dni_responsable = $this->input->post('dniResposable');
-                $empleados = $this->select_model->empleado_RRPP_sede_ppal($id_responsable, $dni_responsable);
-                //Validamos que la consulta devuelva algo
-                if ($empleados == TRUE) {
-                    foreach ($empleados as $fila) {
-                        echo '<option value="' . $fila->id . "-" . $fila->dni . "-" . $fila->cargo . '">' . $fila->nombre1 . " " . $fila->nombre2 . " " . $fila->apellido1 . " " . $fila->apellido2 . '</option>';
-                    }
-                } else {
-                    echo "";
-                }
-            } else {
-                echo "";
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
     public function llena_cargo_comision_faltante() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            if (($this->input->post('idResposable')) && ($this->input->post('dniResposable')) && ($this->input->post('ejecutivoDirecto')) && (($this->input->post('ejecutivoDirecto')) != "default")) {
-                $id_responsable = $this->input->post('idResposable');
-                $dni_responsable = $this->input->post('dniResposable');
-                list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $this->input->post('ejecutivoDirecto'));
+            if (($this->input->post('ejecutivoDirecto')) && (($this->input->post('ejecutivoDirecto')) != "default")) {
+                list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("+", $this->input->post('ejecutivoDirecto'));
                 $t_cargos = $this->select_model->t_cargo_superior_rrpp($cargo_ejecutivo);
                 if ($t_cargos == TRUE) {
                     foreach ($t_cargos as $fila) {
                         echo '<div class="form-group">
                             <label>Escala: ' . $fila->cargo_masculino . '<em class="required_asterisco">*</em></label>
-                            <input name="cargos_escalas[]" type="hidden" value="' . $fila->id . "-" . $fila->cargo_masculino . '">
+                            <input name="cargos_escalas[]" type="hidden" value="' . $fila->id . "+" . $fila->cargo_masculino . '">
                             <select name="escalas[]" class="form-control exit_caution">
                             <option value="default">Seleccione Ejecutivo para la escala</option>';
-                        $ejecutivos = $this->select_model->empleado_rrpp_cargo_superior($fila->id, $id_responsable, $dni_responsable);
+                        $ejecutivos = $this->select_model->empleado_rrpp_cargo_superior($fila->id, $_SESSION['idResponsable'], $_SESSION['dniResponsable']);
                         if ($ejecutivos == TRUE) {
                             foreach ($ejecutivos as $registro) {
-                                echo '<option value="' . $registro->id . "-" . $registro->dni . "-" . $registro->cargo . '">' . $registro->nombre1 . " " . $registro->nombre2 . " " . $registro->apellido1 . " " . $registro->apellido2 . '</option>';
+                                echo '<option value="' . $registro->id . "+" . $registro->dni . "+" . $registro->cargo . '">' . $registro->nombre1 . " " . $registro->nombre2 . " " . $registro->apellido1 . " " . $registro->apellido2 . '</option>';
                             }
                         }
                         echo '<option value="nula">ÉSTA ESCALA NO SE PAGARÁ A NADIE</option>
@@ -323,7 +272,7 @@ class Liquidar_comisiones extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             if (($this->input->post('ejecutivoDirecto')) && ($this->input->post('ejecutivoDirecto') != "default")) {
-                list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("-", $this->input->post('ejecutivoDirecto'));
+                list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("+", $this->input->post('ejecutivoDirecto'));
                 $t_cargo = $this->select_model->t_cargo_id($cargo_ejecutivo);
                 //Validamos que la consulta devuelva algo
                 if ($t_cargo == TRUE) {
@@ -343,7 +292,7 @@ class Liquidar_comisiones extends CI_Controller {
         $data["tab"] = "consultar_liquidar_comisiones";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
 

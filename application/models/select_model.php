@@ -99,7 +99,7 @@ class Select_model extends CI_Model {
     }
 
     public function t_plan_igual_cantAlumnos($id_matricula) {
-        $SqlInfo = "SELECT * FROM t_plan WHERE (cant_alumnos=(SELECT cant_alumnos from t_plan where (id=(SELECT plan FROM matricula WHERE (contrato='" . $id_matricula . "'))))) ORDER BY cant_alumnos ASC, valor_total ASC";
+        $SqlInfo = "SELECT * FROM t_plan WHERE (cant_alumnos=(SELECT cant_alumnos from t_plan where (id=(SELECT plan FROM matricula WHERE (contrato='" . $id_matricula . "'))))) ORDER BY anio DESC, valor_total";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -146,7 +146,7 @@ class Select_model extends CI_Model {
         }
     }
 
-    //MAtriculas no nulas (est<>5), iliquidadas, que pertenezcan a la sede principal del responsable (cada administrador se encarga de las escalas de sus matriculas.
+    //MAtriculas no nulas (est<>5), iliquidadas, que pertenezcan a la sede principal del responsable (cada administrador se encarga de las escalas de sus matriculas y que tengan al menos un pago
     public function matricula_iliquida_responsable($id_responsable, $dni_responsable) {
         $where = "(estado != '5') AND (liquidacion_escalas='0') AND (sede IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))";
         $this->db->where($where);
@@ -763,7 +763,7 @@ class Select_model extends CI_Model {
         }
     }
 
-    //Devuelve una lista con los empleados de RRPPque pertenecen a la sede principal de un responsable.
+    //Devuelve una lista con los empleados activos de RRPP que pertenecen a la sede principal de un responsable.
     public function empleado_RRPP_sede_ppal($id_responsable, $dni_responsable) {
         $where = "(sede_ppal IN(SELECT sede_ppal FROM empleado WHERE ((id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "')))) AND (NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
