@@ -9,7 +9,7 @@ class Empleadom extends CI_Model {
         parent::__construct();
     }
     
-    public function alumno_id_dni($id, $dni) {
+    public function empleado_id_dni($id, $dni) {
         $SqlInfo = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
                 . "FROM empleado e "
                 . "where ((e.id='" . $id . "') AND (e.dni='" . $dni . "'))";
@@ -17,8 +17,19 @@ class Empleadom extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
+    }
+    
+    public function jefe_de_empleado($id_subdito, $dni_subdito) {
+        $SqlInfo = "SELECT jefe.*, CONCAT(jefe.nombre1, ' ', jefe.nombre2, ' ', jefe.apellido1, ' ', jefe.apellido2) nombres "
+                . "FROM empleado jefe "
+                . "JOIN empleado e "
+                . "where ((e.id='" . $id_subdito . "') AND (e.dni='" . $dni_subdito . "') AND (jefe.id=e.id_jefe) AND (jefe.dni=e.dni_jefe))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
     }     
-
+    
     public function cantidad_empleados($criterios, $inicio, $filasPorPagina) {
         $id_responsable = $_SESSION["idResponsable"];
         $dni_responsable = $_SESSION["dniResponsable"];

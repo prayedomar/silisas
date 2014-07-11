@@ -177,7 +177,7 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Departamneto empresarial:</div>   
+                            <div class="text-right">Departamento empresarial:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">

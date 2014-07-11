@@ -9,6 +9,14 @@ class T_cargom extends CI_Model {
         parent::__construct();
     }
 
+    public function t_cargo_id($id_cargo) {
+        $SqlInfo = "SELECT * FROM t_cargo where (id='" . $id_cargo . "')";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }
+
     public function listar_todas_los_cargos() {
         $query = "SELECT * FROM t_cargo order by cargo_masculino";
         return $this->db->query($query)->result();

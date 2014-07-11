@@ -135,14 +135,19 @@
                     $.post('{action_llena_cargo_comision_faltante}', {
                         ejecutivoDirecto: ejecutivoDirecto
                     }, function(data) {
-                        if (data == "") {
-                            $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
-                            $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
-                            $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                        var obj = JSON.parse(data);
+                        if (obj.respuesta == "OK") {
+                            $("#div_comision_escala").html(obj.htmlEscalas);
                         } else {
-                            $("#div_comision_escala").html(data);
-                            $("#div_comision_escala").prepend('<p class="help-block"><B>> </B>Los empleados con cargos que se limitan a una sede (Gerente Encargado e inferiores), solo aparecerán sí pertenecen a su sede principal.</p>');
-                            $("#div_comision_escala").prepend('<p class="help-block"><B>> </B>Sólo aparecerán los empleados de RRPP que ocupan un cargo superior al de la escala.</p>');
+                            if (obj.respuesta == "alert") {
+                                $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
+                                $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
+                                $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                            } else {
+                                $("#div_comision_escala").html('<div class="alert alert-warning" id="div_warning"></div>');
+                                $("#div_warning").html(obj.mensaje);
+                                $("#div_warning").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                            }
                         }
                     });
 
@@ -172,14 +177,19 @@
         $.post('{action_llena_cargo_comision_faltante}', {
             ejecutivoDirecto: ejecutivoDirecto
         }, function(data) {
-            if (data == "") {
-                $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
-                $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
-                $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+            var obj = JSON.parse(data);
+            if (obj.respuesta == "OK") {
+                $("#div_comision_escala").html(obj.htmlEscalas);
             } else {
-                $("#div_comision_escala").html(data);
-                $("#div_comision_escala").prepend('<p class="help-block"><B>> </B>Los empleados con cargos que se limitan a una sede (Gerente Encargado e inferiores), solo aparecerán sí pertenecen a su sede principal.</p>');
-                $("#div_comision_escala").prepend('<p class="help-block"><B>> </B>Sólo aparecerán los empleados de RRPP que ocupan un cargo superior al de la escala.</p>');
+                if (obj.respuesta == "alert") {
+                    $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
+                    $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
+                    $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                } else {
+                    $("#div_comision_escala").html('<div class="alert alert-warning" id="div_warning"></div>');
+                    $("#div_warning").html(obj.mensaje);
+                    $("#div_warning").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                }
             }
         });
         //Cargamos el label del cargo del ejecutivo directo

@@ -469,9 +469,11 @@ class Select_model extends CI_Model {
     }
 
     //Devuelve los cargos de rrpp (depto:3) superiores a un cargo ingresado.
-    public function t_cargo_superior_rrpp($cargo) {
+    //DEvuelve solo los que aparezcan como visible comisiones
+    public function t_cargo_superior_rrpp_comisiones($cargo) {
         $where = "((depto=3) AND (nivel_jerarquico < (SELECT nivel_jerarquico FROM t_cargo WHERE (id='" . $cargo . "'))) AND (visible_comisiones = '1'))";
         $this->db->where($where);
+        $this->db->order_by('nivel_jerarquico', 'desc');        
         $query = $this->db->get('t_cargo');
         if ($query->num_rows() > 0) {
             return $query->result();
