@@ -14,7 +14,6 @@ class Liquidar_comisiones extends CI_Controller {
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
         $this->load->model('matriculam');
-
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['action_validar'] = base_url() . "liquidar_comisiones/validar";
@@ -22,6 +21,7 @@ class Liquidar_comisiones extends CI_Controller {
         $data['matriculas_iliquidadas'] = $this->matriculam->matricula_iliquida_responsable($_SESSION['idResponsable'], $_SESSION['dniResponsable']);
         $data['ejecutivo_directo'] = $this->select_model->empleado_RRPP_sede_ppal($_SESSION['idResponsable'], $_SESSION['dniResponsable']);
         $data['action_llena_detalle_matricula'] = base_url() . "liquidar_comisiones/llena_detalle_matricula_liquidar";
+        $data['action_llena_total_comisiones_pagadas'] = base_url() . "liquidar_comisiones/llena_total_comisiones_pagadas";
         $data['action_llena_cargo_comision_faltante'] = base_url() . "liquidar_comisiones/llena_cargo_comision_faltante";
         $data['action_llena_cargo_ejecutivo_directo'] = base_url() . "liquidar_comisiones/llena_cargo_ejecutivo_directo";
         $this->parser->parse('liquidar_comisiones/crear', $data);
@@ -93,7 +93,6 @@ class Liquidar_comisiones extends CI_Controller {
             list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("+", $this->input->post('ejecutivo_directo'));
 
             $est_concepto_nomina = 2; //2: Pendiente
-
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
@@ -103,12 +102,8 @@ class Liquidar_comisiones extends CI_Controller {
             $plan = $matricula->plan;
             //a continuacion asumimos que las comisiones del tipo de plan estan creadas.
             $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo)->comision;
-            //Si no encuentra en la base de datos la comision, entonces la comision es cero.
-            if ($valor_unitario != TRUE) {
-                $valor_unitario = 0.00;
-            }
             $sede_matricula = $this->matriculam->sede_matricula_id($id_matricula);
-            $detalle = "Matrícula: " . $id_matricula . " (" . $sede_matricula->nombre_sede . ")";
+            $detalle = $id_matricula . " (" . $sede_matricula->nombre_sede . ")";
 
             $data["tab"] = "crear_liquidar_comisiones";
             $this->isLogin($data["tab"]);
@@ -116,9 +111,9 @@ class Liquidar_comisiones extends CI_Controller {
             $data['url_recrear'] = base_url() . "liquidar_comisiones/crear/new";
             $data['msn_recrear'] = "Crear otra Liquidación de Matrícula.";
 
-            //si cambiaron el ejectuivo principal lo cambiamos en la matricula
+            //si cambiaron el ejectuivo principal lo cambiamos en la matricula y tambien tenemos que actualizar el cargo
             if ($id_ejecutivo_original != $id_ejecutivo_directo) {
-                $error = $this->update_model->ejecutivo_matricula($id_matricula, $id_ejecutivo_directo, $dni_ejecutivo_directo);
+                $error = $this->update_model->ejecutivo_matricula($id_matricula, $id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo);
                 if (isset($error)) {
                     $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
@@ -146,9 +141,6 @@ class Liquidar_comisiones extends CI_Controller {
                             list($cargo_escala, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
                             //Asumimos que las comisiones ya estan creadas
                             $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
-                            if ($valor_unitario != TRUE) {
-                                $valor_unitario = 0.00;
-                            }
                             $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
                             if (isset($error2)) {
                                 $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
@@ -192,6 +184,136 @@ class Liquidar_comisiones extends CI_Controller {
         }
     }
 
+    function llena_total_comisiones_pagadas() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->load->model('matriculam');
+            $this->load->model('t_cargom');
+            $id_matricula = $this->input->post('matricula');
+            list($id_ejecutivo_directo, $dni_ejecutivo_directo, $cargo_ejecutivo_directo) = explode("+", $this->input->post('ejecutivo_directo'));
+            $matricula = $this->select_model->matricula_id($id_matricula);
+            $plan = $matricula->plan;
+            $response['htmlTotalPagado'] = "";
+            $total_comisiones = '0';
+
+            $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo)->comision;
+            if ($valor_unitario != TRUE) {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos para que creen correctamente las comisiones.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            } else {
+                $t_cargo_ejecutivo_directo = $this->t_cargom->t_cargo_id($cargo_ejecutivo_directo);
+                $total_comisiones = $valor_unitario;
+                $response['htmlTotalPagado'] .= '<tr>
+                        <td class="text-center">Comisión directa</td>
+                        <td class="text-center">' . $t_cargo_ejecutivo_directo->cargo_masculino . '</td>
+                        <td class="text-center">$' . number_format($valor_unitario, '2', '.', ',') . '</td>
+                    </tr>';
+
+                $cargos_escalas = $this->input->post('cargos_escalas');
+                $escalas = $this->input->post('escalas');
+                //Si hay escalas las pagamos.
+                if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
+                    $i = 0;
+                    foreach ($escalas as $fila) {
+                        //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
+                        if ($fila != "nula") {
+                            list($cargo_escala, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
+                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                            if ($valor_unitario != TRUE) {
+                                $response = array(
+                                    'respuesta' => 'error',
+                                    'mensaje' => '<p><strong><center>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos para que creen correctamente las comisiones.</center></strong></p>'
+                                );
+                                echo json_encode($response);
+                                return false;
+                            } else {
+                                $total_comisiones += $valor_unitario;
+                                $response['htmlTotalPagado'] .= '<tr>
+                                        <td class="text-center">Escala</td>
+                                        <td class="text-center">' . $nombre_cargo . '</td>
+                                        <td class="text-center">$' . number_format($valor_unitario, '2', '.', ',') . '</td>
+                                    </tr>';
+                            }
+                        }
+                        $i++;
+                    }
+                    $response['htmlTotalPagado'] .= '<tr><td colspan="2"><p style="text-align:right;font-size:18px;"><b>Total</b></p></td><td><p style="text-align:center;font-size:18px;">$' . number_format($total_comisiones, 2, '.', ',') . '</p></td></tr>';
+                    $response['respuesta'] = "OK";
+                    echo json_encode($response);
+                    return false;
+                } else {
+                    $response = array(
+                        'respuesta' => 'error',
+                        'mensaje' => '<p><strong><center>Eror al enviar formulario al servidor.</center></strong></p>'
+                    );
+                    echo json_encode($response);
+                    return false;
+                }
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
+    public function llena_cargo_comision_faltante() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            $this->load->model('empleadom');
+            $this->load->model('t_cargom');
+            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("+", $this->input->post('ejecutivoDirecto'));
+            $t_cargos = $this->select_model->t_cargo_superior_rrpp_comisiones($cargo_ejecutivo);
+            if ($t_cargos == TRUE) {
+                //Buscamos el primer jefe por encima del que hizo la matricula.
+                $jefe_actual = $this->empleadom->jefe_de_empleado($id_ejecutivo, $dni_ejecutivo);
+                $response['htmlEscalas'] = "";
+                foreach ($t_cargos as $fila) {
+                    //VAlidamos que el jefe si pertenezcca a relaciones publicas
+                    if ($jefe_actual->depto == '3') {
+                        $response['htmlEscalas'] .= '<div class="form-group">
+                            <label>Escala: ' . $fila->cargo_masculino . '<em class="required_asterisco">*</em></label>
+                            <input name="cargos_escalas[]" type="hidden" value="' . $fila->id . "+" . $fila->cargo_masculino . '">
+                            <select name="escalas[]" id="escalas" class="form-control exit_caution">';
+                        $jerarquia_jefe_catual = $this->t_cargom->t_cargo_id($jefe_actual->cargo)->nivel_jerarquico;
+                        $jerarqui_escala = $this->t_cargom->t_cargo_id($fila->id)->nivel_jerarquico;
+                        if ($jerarqui_escala >= $jerarquia_jefe_catual) {
+                            $response['htmlEscalas'] .= '<option value="' . $jefe_actual->id . "+" . $jefe_actual->dni . "+" . $jefe_actual->cargo . '">' . $jefe_actual->nombre1 . " " . $jefe_actual->nombre2 . " " . $jefe_actual->apellido1 . " " . $jefe_actual->apellido2 . '</option>';
+                        } else {
+                            $jefe_actual = $this->empleadom->jefe_de_empleado($jefe_actual->id, $jefe_actual->dni);
+                            $response['htmlEscalas'] .= '<option value="' . $jefe_actual->id . "+" . $jefe_actual->dni . "+" . $jefe_actual->cargo . '">' . $jefe_actual->nombre1 . " " . $jefe_actual->nombre2 . " " . $jefe_actual->apellido1 . " " . $jefe_actual->apellido2 . '</option>';
+                            //Escala es del jefe actual y siga
+                        }
+                        $response['htmlEscalas'] .= '<option value="nula">ÉSTA ESCALA NO SE PAGARÁ A NADIE</option>
+                        </select>
+                        </div>  ';
+                    } else {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p><strong><center>Alguno de los jefes del organigrama, no pertenece al departamento de relaciones públicas.</center></strong></p>'
+                        );
+                        echo json_encode($response);
+                        return false;
+                    }
+                }
+                $response['respuesta'] = "OK";
+                echo json_encode($response);
+                return false;
+            } else {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p><strong><center>Error al consultar los cargos superiores de RRPP.</center></strong></p>'
+                );
+                echo json_encode($response);
+                return false;
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     public function llena_detalle_matricula_liquidar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
@@ -225,60 +347,6 @@ class Liquidar_comisiones extends CI_Controller {
             } else {
                 $response = array(
                     'respuesta' => 'error'
-                );
-                echo json_encode($response);
-                return false;
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-    public function llena_cargo_comision_faltante() {
-        if ($this->input->is_ajax_request()) {
-            $this->escapar($_POST);
-            $this->load->model('empleadom');
-            $this->load->model('t_cargom');
-            list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("+", $this->input->post('ejecutivoDirecto'));
-            $t_cargos = $this->select_model->t_cargo_superior_rrpp_comisiones($cargo_ejecutivo);
-            if ($t_cargos == TRUE) {
-                //Buscamos el primer jefe por encima del que hizo la matricula.
-                $jefe_actual = $this->empleadom->jefe_de_empleado($id_ejecutivo, $dni_ejecutivo);
-                $response['htmlEscalas'] = "";
-                foreach ($t_cargos as $fila) {
-                    //VAlidamos que el jefe si pertenezcca a relaciones publicas
-                    if ($jefe_actual->depto == '3') {
-                        $response['htmlEscalas'] .= '<div class="form-group">
-                            <label>Escala: ' . $fila->cargo_masculino . '<em class="required_asterisco">*</em></label>
-                            <input name="cargos_escalas[]" type="hidden" value="' . $fila->id . "+" . $fila->cargo_masculino . '">
-                            <select name="escalas[]" class="form-control exit_caution">';
-                        $jerarquia_jefe_catual = $this->t_cargom->t_cargo_id($jefe_actual->cargo)->nivel_jerarquico;
-                        $jerarqui_escala = $this->t_cargom->t_cargo_id($fila->id)->nivel_jerarquico;
-                        if ($jerarqui_escala >= $jerarquia_jefe_catual) {
-                            $response['htmlEscalas'] .= '<option value="' . $jefe_actual->id . "+" . $jefe_actual->dni . "+" . $jefe_actual->cargo . '">' . $jefe_actual->nombre1 . " " . $jefe_actual->nombre2 . " " . $jefe_actual->apellido1 . " " . $jefe_actual->apellido2 . '</option>';
-                        } else {
-                            $jefe_actual = $this->empleadom->jefe_de_empleado($jefe_actual->id, $jefe_actual->dni);
-                            $response['htmlEscalas'] .= '<option value="' . $jefe_actual->id . "+" . $jefe_actual->dni . "+" . $jefe_actual->cargo . '">' . $jefe_actual->nombre1 . " " . $jefe_actual->nombre2 . " " . $jefe_actual->apellido1 . " " . $jefe_actual->apellido2 . '</option>';
-                            //Escala es del jefe actual y siga
-                        }
-                        $response['htmlEscalas'] .= '<option value="nula">ÉSTA ESCALA NO SE PAGARÁ A NADIE</option>
-                        </select>
-                        </div>  ';
-                    } else {
-                        $response = array(
-                            'respuesta' => 'error',
-                            'mensaje' => '<p><strong><center>Alguno de los jefes del organigrama, no pertenece al departamento de relaciones públicas.</center></strong></p>'
-                        );
-                        echo json_encode($response);
-                        return false;
-                    }
-                }
-                $response['respuesta'] = "OK";
-                echo json_encode($response);
-                return false;
-            } else {
-                $response = array(
-                    'respuesta' => 'alert'
                 );
                 echo json_encode($response);
                 return false;
@@ -340,7 +408,7 @@ class Liquidar_comisiones extends CI_Controller {
                                 <td class="text-center">$' . number_format($fila->valor_unitario, 2, '.', ',') . '</td>                                
                             </tr>';
                     }
-                    echo '<tr><td colspan="5"><p style="text-align:right;font-size:18px;"><b>Total</b></p></td><td><p style="text-align:right;font-size:18px;">$' . number_format($total->total, 2, '.', ',') . '</p></td></tr>';
+                    echo '<tr><td colspan="5"><p style="text-align:right;font-size:18px;"><b>Total</b></p></td><td><p style="text-align:center;font-size:18px;">$' . number_format($total->total, 2, '.', ',') . '</p></td></tr>';
                 } else {
                     echo "";
                 }

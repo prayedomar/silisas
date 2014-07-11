@@ -251,10 +251,11 @@ class Update_model extends CI_Model {
         }
     }
 
-    public function ejecutivo_matricula($id_matricula, $id_ejecutivo, $dni_ejecutivo) {
+    public function ejecutivo_matricula($id_matricula, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) {
         $data = array(
             'id_ejecutivo' => $id_ejecutivo,
-            'dni_ejecutivo' => $dni_ejecutivo
+            'dni_ejecutivo' => $dni_ejecutivo,
+            'cargo_ejecutivo' => $cargo_ejecutivo
         );
         $this->db->where('contrato', $id_matricula);
         $this->db->update('matricula', $data);

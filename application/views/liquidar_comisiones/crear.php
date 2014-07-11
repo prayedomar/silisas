@@ -20,9 +20,15 @@
                                         <p class="help-block"><B>> </B>Sólo aparecerán las matrículas no liquidadas, que pertenecen a su sede principal y que completaron el pago de la cuota inicial.</p>
                                         <select name="matricula" id="matricula" class="form-control exit_caution">
                                             <option value="default">Seleccione matrícula a liquidar</option>
-                                            <?php foreach ($matriculas_iliquidadas as $row) { ?>
-                                                <option value="<?= $row->contrato ?>"><?= $row->contrato ?></option>
-                                            <?php } ?> 
+                                            <?php
+                                            if (isset($matriculas_iliquidadas)) {
+                                                foreach ($matriculas_iliquidadas as $row) {
+                                                    ?>
+                                                    <option value="<?= $row->contrato ?>"><?= $row->contrato ?></option>
+                                                    <?php
+                                                }
+                                            }
+                                            ?> 
                                         </select>
                                     </div> 
                                 </div>
@@ -63,16 +69,34 @@
                                             </div>    
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 separar_div">
+                                    <div class="col-xs-6">
                                         <legend>Comisiones por Escala</legend>
                                         <div id="div_comision_escala">  
                                         </div>
+                                    </div>
+                                </div>
+                                <!--<div class="row" id="div_total_pagado"  style="display:none;">-->
+                                <div class="row" id="div_total_pagado"  >
+                                    <div class="col-xs-8 col-xs-offset-2">
+                                        <label>Total comisiones pagadas</label>
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>                                           
+                                                    <th class="text-center">Detalle</th>
+                                                    <th class="text-center">Escala</th>
+                                                    <th class="text-center">Valor</th>                                           
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody_total_pagado">
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <div id="validacion_alert">
                                 </div>                            
                                 <div class="form-group separar_submit">
                                     <input type="hidden" id="action_validar" value={action_validar} />
+                                    <input type="hidden" id="action_total_comisiones" value={action_llena_total_comisiones_pagadas} />
                                     <input type="hidden" name="id_responsable" value={id_responsable} />
                                     <input type="hidden" name="dni_responsable" value={dni_responsable} />
                                     <!--Para seleccionar automaticamente el select de ejecutivos directo, el ejecuivo original de la matricula-->
@@ -130,26 +154,9 @@
                     $("#div_comisiones").css("display", "block");
                     $("#ejecutivo_directo").attr('value', obj.IdDniEjecutivo);
 
+
                     //Llenamos los selects de las comisiones por escala
                     ejecutivoDirecto = $('#ejecutivo_directo').val();
-                    $.post('{action_llena_cargo_comision_faltante}', {
-                        ejecutivoDirecto: ejecutivoDirecto
-                    }, function(data) {
-                        var obj = JSON.parse(data);
-                        if (obj.respuesta == "OK") {
-                            $("#div_comision_escala").html(obj.htmlEscalas);
-                        } else {
-                            if (obj.respuesta == "alert") {
-                                $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
-                                $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
-                                $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-                            } else {
-                                $("#div_comision_escala").html('<div class="alert alert-warning" id="div_warning"></div>');
-                                $("#div_warning").html(obj.mensaje);
-                                $("#div_warning").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-                            }
-                        }
-                    });
 
                     //Cargamos el label del cargo del ejecutivo directo
                     $.post('{action_llena_cargo_ejecutivo_directo}', {
@@ -161,6 +168,51 @@
                             $("#label_ejecutivo_directo").html(data);
                         }
                     });
+
+                    $.post('{action_llena_cargo_comision_faltante}', {
+                        ejecutivoDirecto: ejecutivoDirecto
+                    }, function(data) {
+                        var obj = JSON.parse(data);
+                        if (obj.respuesta == "OK") {
+                            $("#div_comision_escala").html(obj.htmlEscalas);
+//                            Llemanos el total de comisiones pagada   
+                            $.ajax({
+                                type: "POST",
+                                url: $("#action_total_comisiones").attr("value"),
+                                cache: false,
+                                data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+                                success: function(data)
+                                {
+                                    var obj = JSON.parse(data);
+                                    if (obj.respuesta == "OK") {
+                                        $("#tbody_total_pagado").html(obj.htmlTotalPagado);
+                                    } else {
+                                        if (obj.respuesta == "error") {
+                                            $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                                            $('#div_alert').html(obj.mensaje);
+                                        }
+                                    }
+                                },
+                                error: function(data) {
+                                    $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                                    $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                                    $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+
+                                }
+                            });
+                            return false; // Evitar ejecutar el submit del formulario                            
+                        } else {
+                            if (obj.respuesta == "alert") {
+                                $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
+                                $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
+                                $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                            } else {
+                                $("#div_total_pagado").css("display", "none");
+                                $("#div_comision_escala").html('<div class="alert alert-warning" id="div_warning"></div>');
+                                $("#div_warning").html(obj.mensaje);
+                            }
+                        }
+                    });
                 }
             });
         } else {
@@ -170,28 +222,9 @@
             $("#tbody_detalle_matricula  > *").remove();
         }
     });
-
     $(".form-group").delegate("#ejecutivo_directo", "change", function() {
         //Llenamos los selects de las comisiones por escala
         ejecutivoDirecto = $('#ejecutivo_directo').val();
-        $.post('{action_llena_cargo_comision_faltante}', {
-            ejecutivoDirecto: ejecutivoDirecto
-        }, function(data) {
-            var obj = JSON.parse(data);
-            if (obj.respuesta == "OK") {
-                $("#div_comision_escala").html(obj.htmlEscalas);
-            } else {
-                if (obj.respuesta == "alert") {
-                    $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
-                    $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
-                    $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-                } else {
-                    $("#div_comision_escala").html('<div class="alert alert-warning" id="div_warning"></div>');
-                    $("#div_warning").html(obj.mensaje);
-                    $("#div_warning").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-                }
-            }
-        });
         //Cargamos el label del cargo del ejecutivo directo
         $.post('{action_llena_cargo_ejecutivo_directo}', {
             ejecutivoDirecto: ejecutivoDirecto
@@ -202,6 +235,78 @@
                 $("#label_ejecutivo_directo").html(data);
             }
         });
-    });
 
+        $.post('{action_llena_cargo_comision_faltante}', {
+            ejecutivoDirecto: ejecutivoDirecto
+        }, function(data) {
+            var obj = JSON.parse(data);
+            if (obj.respuesta == "OK") {
+                $("#div_comision_escala").html(obj.htmlEscalas);
+//                            Llemanos el total de comisiones pagada   
+                $.ajax({
+                    type: "POST",
+                    url: $("#action_total_comisiones").attr("value"),
+                    cache: false,
+                    data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+                    success: function(data)
+                    {
+                        var obj = JSON.parse(data);
+                        if (obj.respuesta == "OK") {
+                            $("#tbody_total_pagado").html(obj.htmlTotalPagado);
+                        } else {
+                            if (obj.respuesta == "error") {
+                                $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                                $('#div_alert').html(obj.mensaje);
+                            }
+                        }
+                    },
+                    error: function(data) {
+                        $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                        $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                        $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+
+                    }
+                });
+                return false; // Evitar ejecutar el submit del formulario                            
+            } else {
+                if (obj.respuesta == "alert") {
+                    $("#div_comision_escala").html('<div class="alert alert-info" id="div_info_comisiones"></div>');
+                    $("#div_info_comisiones").html("<p>No hay comisiones por escala para liquidar.</p>");
+                    $("#div_info_comisiones").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+                } else {
+                    $("#div_total_pagado").css("display", "none");
+                    $("#div_comision_escala").html('<div class="alert alert-warning" id="div_warning"></div>');
+                    $("#div_warning").html(obj.mensaje);
+                }
+            }
+        });
+    });
+    $("#div_comision_escala").delegate("#escalas", "change", function() {
+        $("#tbody_total_pagado").html("");
+        $.ajax({
+            type: "POST",
+            url: $("#action_total_comisiones").attr("value"),
+            cache: false,
+            data: $("#formulario").serialize(), // Adjuntar los campos del formulario enviado.
+            success: function(data)
+            {
+                var obj = JSON.parse(data);
+                if (obj.respuesta == "OK") {
+                    $("#tbody_total_pagado").html(obj.htmlTotalPagado);
+                } else {
+                    if (obj.respuesta == "error") {
+                        $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                        $('#div_alert').html(obj.mensaje);
+                    }
+                }
+            },
+            error: function(data) {
+                $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
+                $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+
+            }
+        });
+        return false; // Evitar ejecutar el submit del formulario                            
+    });
 </script>
