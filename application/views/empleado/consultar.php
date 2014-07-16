@@ -196,8 +196,6 @@
                              data-cargo="<?= isset($_GET["cargo"]) ? $_GET["cargo"] : "" ?>"
                              data-fechanacimiento="<?= isset($_GET["fecha_nacimiento"]) ? $_GET["fecha_nacimiento"] : "" ?>"
                              data-fechanacimientohasta="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
-
-
                             <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">
                                     <a data-page="1">1</a></li>
@@ -487,6 +485,15 @@
                                     <label>Barrio/Sector</label>
                                     <input name="barrio" id="barrio-modal" type="text" class="form-control letras_numeros" placeholder="Barrio o Sector" maxlength="40">
                                 </div>
+                                <div class="form-group">
+                                    <label>Salario<em class="required_asterisco">*</em></label>
+                                    <select name="salario" id="salario-modal" class="form-control">
+                                        <option value="default">Seleccione salario</option>
+                                        <?php foreach ($salarios as $row) { ?>
+                                            <option value="<?= $row->id ?>"><?= $row->nombre ?></option>
+                                        <?php } ?>                                        
+                                    </select>
+                                </div>                                
                             </div>
                         </div>
                         <div id="validacion_alert">

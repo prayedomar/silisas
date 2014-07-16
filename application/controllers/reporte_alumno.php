@@ -42,8 +42,8 @@ class Reporte_alumno extends CI_Controller {
             $this->form_validation->set_rules('meta_v', 'Meta velocidad', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('meta_c', 'Meta comprensión', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('meta_r', 'Meta Retención', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
-            $this->form_validation->set_rules('cant_practicas', 'Cantidad de prácticas realizadas', 'trim|max_length[5]|integer|callback_valor_positivo');
-            $this->form_validation->set_rules('lectura', 'Lectura', 'trim|xss_clean|max_length[100]');
+            $this->form_validation->set_rules('cant_practicas', 'Cantidad de prácticas realizadas', 'trim|max_length[3]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('lectura', 'Lectura', 'trim|xss_clean|max_length[255]');
             $this->form_validation->set_rules('vlm', 'Velocidad mental actual', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('vlv', 'Velocidad verbal actual', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('c', 'Comprensión actual', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
@@ -276,7 +276,7 @@ class Reporte_alumno extends CI_Controller {
                                                 <th class="text-center">Etapa</th>
                                                 <th class="text-center">Fase</th>
                                                 <th class="text-center"># Prácticas</th>
-                                                <th class="text-center">lectura</th>
+                                                <th class="text-center">lecturas vistas en clase</th>
                                                 <th class="text-center">V. Mental</th>
                                                 <th class="text-center">V. Verbal</th>
                                                 <th class="text-center">Comp.</th>
@@ -285,7 +285,9 @@ class Reporte_alumno extends CI_Controller {
                                             </tr>
                                         </thead>
                                         <tbody>';
+                    $total_practicas = '0';
                     foreach ($reportes_anteriores as $fila) {
+                        $total_practicas += $fila->cant_practicas;
                         $ejercicios = $this->ejercicio_ensenanzam->ejercicio_reporte_ensenanza($fila->id);
                         $lista_ejercicios = "";
                         foreach ($ejercicios as $row) {
@@ -316,7 +318,11 @@ class Reporte_alumno extends CI_Controller {
                     }
                     $html_reportes .= '</tbody>
                         </table>
-                    </div></div>';
+                    <div class="row">
+                                    <div class="col-xs-5 col-xs-offset-7">
+                                        <p><h4>Total prácticas realizadas durante el curso: ' . $total_practicas. '</h4></p>
+                                    </div>
+                                </div></div></div>';
                 } else {
                     $html_reportes = "";
                 }

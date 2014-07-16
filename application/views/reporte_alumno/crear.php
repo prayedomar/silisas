@@ -141,11 +141,11 @@
                                         <div class="col-xs-6">  
                                             <div class="form-group">
                                                 <label>Cantidad de prácticas realizadas</label>
-                                                <input type="text" name="cant_practicas" id="cant_practicas" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                                <input type="text" name="cant_practicas" id="cant_practicas" class="form-control numerico miles" placeholder="0" maxlength="3">
                                             </div>                                             
                                             <div class="form-group">
-                                                <label>Lectura</label>
-                                                <input name="lectura" id="lectura" type="text" class="form-control exit_caution alfanumerico" placeholder="Lectura" maxlength="100">
+                                                <label>Lecturas vistas en clase</label>
+                                                <input name="lectura" id="lectura" type="text" class="form-control exit_caution alfanumerico" placeholder="Lecturas vistas en clas..." maxlength="255">
                                             </div>                                        
                                             <div class="form-group">
                                                 <label>Velocidad mental actual</label>                                

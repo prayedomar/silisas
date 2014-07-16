@@ -35,10 +35,11 @@ class Plan_matricula extends CI_Controller {
             $this->form_validation->set_rules('vigente', 'Vigente para crear nuevas matrículas', 'required|callback_select_default');
             //Validamos los conceptos de nomina
             $error_comisiones = "";
-            if (($this->input->post('comision_directas')) && ($this->input->post('comision_escalas'))) {
+            if (($this->input->post('comision_directas')) && ($this->input->post('comision_escalas')) && ($this->input->post('comision_escalas_encargado'))) {
                 $this->load->model("t_cargom");
                 $comisiones_directas = $this->input->post('comision_directas');
                 $comisiones_escalas = $this->input->post('comision_escalas');
+                $comisiones_escalas_encargado = $this->input->post('comision_escalas_encargado');
 
                 //Cuantos cargos hayan, cuantos input vendrán
                 $depto = '3'; //Relaciones publicas                
@@ -46,14 +47,21 @@ class Plan_matricula extends CI_Controller {
                 $i = 0;
                 foreach ($cargos_rrpp as $fila) {
                     if ($comisiones_directas[$i] == '') {
-                        $error_comisiones .= "<p>El campo comisión directa (" . $fila->cargo_masculino . "), es obligatorio.</p>";
+                        $error_comisiones .= "<p>El campo comisión directa: (" . $fila->cargo_masculino . "), es obligatorio.</p>";
                     }
                     $i++;
                 }
                 $i = 0;
                 foreach ($cargos_rrpp as $fila) {
-                    if ($comisiones_escalas[$i] == '') {
-                        $error_comisiones .= "<p>El campo comisión por escala  (" . $fila->cargo_masculino . "), es obligatorio.</p>";
+                    if (($fila->id != '21') && ($comisiones_escalas[$i] == '')) {
+                        $error_comisiones .= "<p>El campo comisión por escala:  (" . $fila->cargo_masculino . "), es obligatorio.</p>";
+                    }
+                    $i++;
+                }
+                $i = 0;
+                foreach ($cargos_rrpp as $fila) {
+                    if (($fila->id != '21') && ($comisiones_escalas_encargado[$i] == '')) {
+                        $error_comisiones .= "<p>El campo comisión por escala, con Gerente Encargado:  (" . $fila->cargo_masculino . "), es obligatorio.</p>";
                     }
                     $i++;
                 }
@@ -101,6 +109,7 @@ class Plan_matricula extends CI_Controller {
                 $this->load->model("comisiones_matriculam");
                 $comisiones_directas = $this->input->post('comision_directas');
                 $comisiones_escalas = $this->input->post('comision_escalas');
+                $comisiones_escalas_encargado = $this->input->post('comision_escalas_encargado');
                 $depto = '3'; //Relaciones publicas                
                 $cargos_rrpp = $this->t_cargom->cargo_depto($depto);
                 $i = 0;
@@ -112,14 +121,17 @@ class Plan_matricula extends CI_Controller {
                         $this->parser->parse('trans_error', $data);
                         return;
                     }
-                    $comision_escala = round(str_replace(",", "", $comisiones_escalas[$i]), 2);
-                    $error3 = $this->comisiones_matriculam->insertar_comision_escala($id_plan, $fila->id, $comision_escala);
-                    if (isset($error3)) {
-                        $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                        $this->parser->parse('trans_error', $data);
-                        return;
+                    if ($fila->id != '21') {
+                        $comision_escala = round(str_replace(",", "", $comisiones_escalas[$i]), 2);
+                        $comision_escala_encargado = round(str_replace(",", "", $comisiones_escalas_encargado[$i]), 2);
+                        $error3 = $this->comisiones_matriculam->insertar_comision_escala($id_plan, $fila->id, $comision_escala, $comision_escala_encargado);
+                        if (isset($error3)) {
+                            $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                            $this->parser->parse('trans_error', $data);
+                            return;
+                        }
+                        $i++;
                     }
-                    $i++;
                 }
                 $this->parser->parse('trans_success', $data);
             }
@@ -128,8 +140,7 @@ class Plan_matricula extends CI_Controller {
         }
     }
 
-    public
-            function llena_plan_matricula() {
+    public function llena_plan_matricula() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             $this->load->model("t_cargom");
@@ -153,8 +164,8 @@ class Plan_matricula extends CI_Controller {
                     'puntos_real' => $plan->puntos_real,
                     'vigente' => $plan->vigente,
                     'html_directas' => '',
-                    'html_directas' => '',
-                    'html_escalas' => ''
+                    'html_escalas' => '',
+                    'html_escalas_encargado' => ''
                 );
                 foreach ($cargos_rrpp as $fila) {
                     $response['html_directas'] .= '<div class="form-group">
@@ -168,16 +179,30 @@ class Plan_matricula extends CI_Controller {
                     } else {
                         $response['html_directas'] .= '></div></div>';
                     }
-                    $response['html_escalas'] .= '<div class="form-group">
+                    if ($fila->id != '21') {
+                        $response['html_escalas'] .= '<div class="form-group">
                                                     <label>Cargo: ' . $fila->cargo_masculino . '<em class="required_asterisco">*</em></label>
                                                          <div class="input-group">
                                                             <span class="input-group-addon">$</span>
                                                             <input type="text" name="comision_escalas[]" class="form-control exit_caution decimal decimal2 miles" placeholder="0.00" maxlength="12"';
-                    $comision = $this->comisiones_matriculam->comision_escala($id_plan, $fila->id);
-                    if ($comision) {
-                        $response['html_escalas'] .= ' value="' . number_format($comision->comision, '2', '.', ',') . '"></div></div>';
-                    } else {
-                        $response['html_escalas'] .= '></div></div>';
+                        //Si el cargo es de asesor entonces no se le hace escala
+                        $comision = $this->comisiones_matriculam->comision_escala($id_plan, $fila->id);
+                        if ($comision) {
+                            $response['html_escalas'] .= ' value="' . number_format($comision->comision, '2', '.', ',') . '"></div></div>';
+                        } else {
+                            $response['html_escalas'] .= '></div></div>';
+                        }
+                        $response['html_escalas_encargado'] .= '<div class="form-group">
+                                                    <label>Cargo: ' . $fila->cargo_masculino . '<em class="required_asterisco">*</em></label>
+                                                         <div class="input-group">
+                                                            <span class="input-group-addon">$</span>
+                                                            <input type="text" name="comision_escalas_encargado[]" class="form-control exit_caution decimal decimal2 miles" placeholder="0.00" maxlength="12"';
+                        $comision = $this->comisiones_matriculam->comision_escala($id_plan, $fila->id);
+                        if ($comision) {
+                            $response['html_escalas_encargado'] .= ' value="' . number_format($comision->comision_escala_encargado, '2', '.', ',') . '"></div></div>';
+                        } else {
+                            $response['html_escalas_encargado'] .= '></div></div>';
+                        }
                     }
                 }
                 echo json_encode($response);

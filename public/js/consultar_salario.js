@@ -41,7 +41,7 @@ $(function() {
                     var str = "";
                     $.each(data, function(k, l) {
                         console.log(l.tipo);
-                        str += "<div class='row'> <div class='col-xs-6'> <div class='form-group'> <label class='margin_label'>" + l.tipo + "</label> </div> </div> <div class='col-xs-6'> <div class='form-group'> <div class='input-group'> <span class='input-group-addon'>$</span> <input type='hidden' value='20'> <input type='text' class='form-control decimal decimal2 miles' placeholder='0.00' maxlength='12' value='" + l.valor_unitario + "' readonly> </div> </div> </div> </div";
+                        str += "<div class='row'> <div class='col-xs-6'> <div class='form-group'> <label class='margin_label'>" + l.tipo + "</label> </div> </div> <div class='col-xs-6'> <div class='form-group'> <div class='input-group'> <span class='input-group-addon'>$</span> <input type='hidden' value='20'> <input type='text' class='form-control decimal decimal2 miles' placeholder='0.00' maxlength='12' value='" + l.valor_unitario + "' readonly> </div> </div> </div> </div>";
                     });
                     $("#bodyModalDetalles").html(str);
                 } else {

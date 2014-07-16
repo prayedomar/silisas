@@ -75,21 +75,23 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--<div class="row" id="div_total_pagado"  style="display:none;">-->
-                                <div class="row" id="div_total_pagado"  >
-                                    <div class="col-xs-8 col-xs-offset-2">
-                                        <label>Total comisiones pagadas</label>
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>                                           
-                                                    <th class="text-center">Detalle</th>
-                                                    <th class="text-center">Escala</th>
-                                                    <th class="text-center">Valor</th>                                           
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody_total_pagado">
-                                            </tbody>
-                                        </table>
+                                <div class="row">
+                                    <div id="div_total_pagado"  style="display:none;">
+                                        <!--<div class="row" id="div_total_pagado">-->
+                                        <div class="col-xs-8 col-xs-offset-2">
+                                            <label>Total comisiones pagadas</label>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>                                           
+                                                        <th class="text-center">Detalle</th>
+                                                        <th class="text-center">Escala</th>
+                                                        <th class="text-center">Valor</th>                                           
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbody_total_pagado">
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="validacion_alert">
@@ -140,6 +142,7 @@
     //Llena Detalle de la matricula
     $("#div_matricula").delegate("#matricula", "change", function() {
         //Llenamos la informacion al cargar, por si ya hay una matricula seleccionada por post.
+        $("#validacion_alert  > *").remove();
         matricula = $('#matricula').val();
         if (matricula !== 'default') {
             $.post('{action_llena_detalle_matricula}', {
@@ -185,11 +188,14 @@
                                 {
                                     var obj = JSON.parse(data);
                                     if (obj.respuesta == "OK") {
+                                        $("#div_total_pagado").css("display", "block");
                                         $("#tbody_total_pagado").html(obj.htmlTotalPagado);
                                     } else {
                                         if (obj.respuesta == "error") {
+                                            $("#div_total_pagado").css("display", "none");
                                             $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                                             $('#div_alert').html(obj.mensaje);
+                                            
                                         }
                                     }
                                 },
@@ -252,11 +258,14 @@
                     {
                         var obj = JSON.parse(data);
                         if (obj.respuesta == "OK") {
+                            $("#div_total_pagado").css("display", "block");
                             $("#tbody_total_pagado").html(obj.htmlTotalPagado);
                         } else {
                             if (obj.respuesta == "error") {
+                                $("#div_total_pagado").css("display", "none");
                                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                                 $('#div_alert').html(obj.mensaje);
+                                
                             }
                         }
                     },
@@ -292,11 +301,14 @@
             {
                 var obj = JSON.parse(data);
                 if (obj.respuesta == "OK") {
+                    $("#div_total_pagado").css("display", "block");
                     $("#tbody_total_pagado").html(obj.htmlTotalPagado);
                 } else {
                     if (obj.respuesta == "error") {
+                        $("#div_total_pagado").css("display", "none");
                         $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                         $('#div_alert').html(obj.mensaje);
+                        
                     }
                 }
             },

@@ -13,7 +13,7 @@ class Empleado extends CI_Controller {
         $data["tab"] = "crear_empleado";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_empleado();
@@ -427,6 +427,7 @@ class Empleado extends CI_Controller {
         $data["tab"] = "consultar_empleado";
         $this->isLogin($data["tab"]);
         $data['est_civil'] = $this->select_model->t_est_civil();
+        $data['salarios'] = $this->select_model->salario_activo();
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();

@@ -946,7 +946,7 @@ class Select_model extends CI_Model {
     }
 
     public function t_concepto_nomina_cotidiano_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (cotidiano=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "')))))))";
+        $SqlInfo = "SELECT * FROM t_concepto_nomina WHERE ((visible_nomina=1) AND (cotidiano=1) AND (t_salario IN(SELECT t_salario FROM salario WHERE (id=(SELECT salario FROM empleado WHERE ((id='" . $id_empleado . "') AND (dni='" . $dni_empleado . "'))))))) ORDER BY t_concepto_nomina.debito_credito DESC";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

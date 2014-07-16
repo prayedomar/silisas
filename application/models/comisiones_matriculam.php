@@ -37,8 +37,8 @@ class Comisiones_matriculam extends CI_Model {
         }
     }    
     
-    public function insertar_comision_escala($plan, $cargo, $comision) {
-        $query = "INSERT INTO comision_escala (plan, cargo, comision) VALUES('" . $plan . "', '" . $cargo . "', '" . $comision . "') ON DUPLICATE KEY UPDATE plan='" . $plan . "', cargo='" . $cargo . "', comision='" . $comision . "'";
+    public function insertar_comision_escala($plan, $cargo, $comision, $comision_ecargado) {
+        $query = "INSERT INTO comision_escala (plan, cargo, comision, comision_escala_encargado) VALUES('" . $plan . "', '" . $cargo . "', '" . $comision . "', '" . $comision_ecargado . "') ON DUPLICATE KEY UPDATE plan='" . $plan . "', cargo='" . $cargo . "', comision='" . $comision . "', comision_escala_encargado='" . $comision_ecargado . "'";
         $this->db->query($query);
         if ($error = $this->db->_error_message()) {
             return $error;

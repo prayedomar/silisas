@@ -13,7 +13,7 @@ class Factura extends CI_Controller {
         $data["tab"] = "crear_factura";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -44,41 +44,83 @@ class Factura extends CI_Controller {
             $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');
             $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
-            $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
-            $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('descuento', 'Descuento', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
+
             $error_descuento = "";
-            if (($this->input->post('int_mora')) && ($this->input->post('descuento'))) {
-                $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
-                $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
-                if ($descuento > $int_mora) {
-                    $error_descuento = "<p>El descuento ingresado, no puede ser mayor al total de los intereses.</p>";
-                }
-            }
             $error_valores = "";
-            if ($this->input->post('total')) {
-                $total = round(str_replace(",", "", $this->input->post('total')), 2);
-                if (!$this->input->post('valor_consignado')) {
-                    $valor_consignado = 0;
+            if ($this->input->post('matricula')) {
+                $saldo = $this->input->post('saldo');
+                if ($saldo > '0') {
+                    if ($this->input->post('tipo_pago')) {
+                        if ($this->input->post('tipo_pago') == "default") {
+                            $this->form_validation->set_rules('tipo_pago', 'Tipo de pago', 'required|callback_select_default');
+                        } else {
+                            if ($this->input->post('tipo_pago') == "1") {
+                                $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
+                                $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+                                $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+                                $this->form_validation->set_rules('descuento', 'Descuento', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+                                $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+                                if (($this->input->post('int_mora')) && ($this->input->post('descuento'))) {
+                                    $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
+                                    $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
+                                    if ($descuento > $int_mora) {
+                                        $error_descuento = "<p>El descuento ingresado, no puede ser mayor al total de los intereses.</p>";
+                                    }
+                                }
+                                if ($this->input->post('total')) {
+                                    $total = round(str_replace(",", "", $this->input->post('total')), 2);
+                                    if (!$this->input->post('valor_consignado')) {
+                                        $valor_consignado = 0;
+                                    } else {
+                                        $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+                                    }
+                                    if (!$this->input->post('efectivo_ingresado')) {
+                                        $efectivo_ingresado = 0;
+                                    } else {
+                                        $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+                                    }
+                                    if (round(($valor_consignado + $efectivo_ingresado), 2) != $total) {
+                                        $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                                    }
+                                }
+                            } else {
+                                $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+                                if ($this->input->post('total_abono')) {
+                                    $total_abono = round(str_replace(",", "", $this->input->post('total_abono')), 2);
+                                    if (!$this->input->post('valor_consignado')) {
+                                        $valor_consignado = 0;
+                                    } else {
+                                        $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+                                    }
+                                    if (!$this->input->post('efectivo_ingresado')) {
+                                        $efectivo_ingresado = 0;
+                                    } else {
+                                        $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+                                    }
+                                    if (round(($valor_consignado + $efectivo_ingresado), 2) != $total_abono) {
+                                        $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $total_abono . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                                    }
+                                    $saldo = $this->input->post('saldo');
+                                    if ($total_abono > $saldo) {
+                                        $error_valores = "<p>El valor del abono: " . number_format($total_abono, 2, '.', ',') . ", no puede ser mayor al saldo de la matrícula: " . number_format($saldo, 2, '.', ',') . "</p>";
+                                    } else {
+                                        if (round(($valor_consignado + $efectivo_ingresado), 2) != $total_abono) {
+                                            $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $total_abono . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else {
-                    $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
-                }
-                if (!$this->input->post('efectivo_ingresado')) {
-                    $efectivo_ingresado = 0;
-                } else {
-                    $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
-                }
-                if (round(($valor_consignado + $efectivo_ingresado), 2) != $total) {
-                    $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                    $error_valores = "<p>La matrícula seleccionada, se encuentra a paz y salvo.</p>";
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_descuento != "")) {
-                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . $error_descuento . form_error('descuento') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
+                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('tipo_pago') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . $error_descuento . form_error('descuento') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -100,9 +142,16 @@ class Factura extends CI_Controller {
             }
             $a_nombre_de = $this->input->post('a_nombre_de');
             $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');
-            $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
-            $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
-            $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
+            $tipo_pago = $this->input->post('tipo_pago');
+            if ($tipo_pago == '1') {
+                $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
+                $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
+                $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
+            } else {
+                $subtotal = round(str_replace(",", "", $this->input->post('total')), 2);
+                $int_mora = '0';
+                $descuento = '0';
+            }
             if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
                 list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
                 $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
@@ -140,28 +189,51 @@ class Factura extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $retefuente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->factura($prefijo_factura, $id_factura, $tipo_pago, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $retefuente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //traemos los checxbox de las cuotas canceladas
-                    $checkbox_cuotas = $this->input->post('cuotas');
-                    if ($checkbox_cuotas == TRUE) {
-                        foreach ($checkbox_cuotas as $fila) {
-                            list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("_", $fila);
-                            $error3 = $this->insert_model->detalle_factura($prefijo_factura, $id_factura, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
-                            if (isset($error3)) {
-                                $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                                $this->parser->parse('trans_error', $data);
-                                return FALSE;
+                    if ($tipo_pago == '1') {
+                        $checkbox_cuotas = $this->input->post('cuotas');
+                        if ($checkbox_cuotas == TRUE) {
+                            foreach ($checkbox_cuotas as $fila) {
+                                list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("_", $fila);
+                                $error3 = $this->insert_model->detalle_factura($prefijo_factura, $id_factura, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
+                                if (isset($error3)) {
+                                    $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                                    $this->parser->parse('trans_error', $data);
+                                    return FALSE;
+                                }
                             }
+                            $this->parser->parse('trans_success_print', $data);
+                        } else {
+                            $data['trans_error'] = "<p>No llegaron correctamente las cuotas al servidor. Comuníque éste error al departamento de sistemas.</p>";
+                            $this->parser->parse('trans_error', $data);
+                            return;
                         }
-                        $this->parser->parse('trans_success_print', $data);
                     } else {
-                        $data['trans_error'] = "<p>No llegaron correctamente las cuotas al servidor. Comuníque éste error al departamento de sistemas.</p>";
-                        $this->parser->parse('trans_error', $data);
-                        return;
+                        //Insertamos un solo detalle de factura
+                        $saldo = $this->input->post('saldo');
+                        //Es porque pagó todo el saldo pendiente
+                        if ($subtotal == $saldo) {
+                            $id_t_detalle = '3';
+                        } else {
+                            $id_t_detalle = '2';
+                        }
+                        $num_cuota = NULL;
+                        $fecha_esperada = NULL;
+                        $cant_dias_mora = '0';
+                        $int_mora_cuota = '0.00';
+                        $error3 = $this->insert_model->detalle_factura($prefijo_factura, $id_factura, $matricula, $id_t_detalle, $num_cuota, $subtotal, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
+                        if (isset($error3)) {
+                            $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                            $this->parser->parse('trans_error', $data);
+                            return FALSE;
+                        } else {
+                            $this->parser->parse('trans_success_print', $data);
+                        }
                     }
                 }
             }
@@ -187,7 +259,7 @@ class Factura extends CI_Controller {
                     );
                     foreach ($matriculas as $fila) {
                         $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '" data-saldo="' . $fila->saldo . '"/></td>
                             <td class="text-center">' . $fila->contrato . '</td>
                             <td>' . $fila->nombre_plan . '</td>
                             <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>

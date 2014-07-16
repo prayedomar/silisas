@@ -205,7 +205,7 @@ $(function() {
         $("#telefono-modal").val($(this).data("telefono"));
         $("#celular-modal").val($(this).data("celular"));
         $("#email-modal").val($(this).data("email"));
-
+        $("#salario-modal").val($(this).data("salario"));
         $("#modal-editar-empleado").modal("show");
     });
     $('#botonValidarEmpleado').live('click', function() {

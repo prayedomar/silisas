@@ -30,7 +30,7 @@
                             </div>                            
                             <div class="row text-center">
                                 <button type="button" class="btn btn-default" id="consultar_titular"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Titular </a>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Seleccionar otro titular </a>
                             </div>
                         </div>
                     </div>
@@ -95,54 +95,89 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="overflow_tabla">
-                            <label>Cuotas a cancelar<em class="required_asterisco">*</em></label>
-                            <table class="table table-hover tabla-cuotas">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Escojer</th>
-                                        <th class="text-center"># Cuota</th>
-                                        <th class="text-center">Detalle</th>
-                                        <th class="text-center">Abono pendiente</th>
-                                        <th class="text-center">Fecha esperada</th>
-                                        <th class="text-center">Cantidad Mora</th>
-                                        <th class="text-center">Int. Mora</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_cuotas">
-                                </tbody>
-                            </table>
-                        </div>
                         <div class="row">
-                            <div class="col-xs-4 col-xs-offset-4">
-                                <div class="form-group">
-                                    <label>Descuento</label>    
-                                    <p class="help-block"><B>> </B>Para descontar sólo intereses de mora.</p>                                    
-                                    <div class="input-group">
-                                        <span class="input-group-addon">$</span>
-                                        <input type="text" name="descuento" id="descuento" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
-                                    </div>
+                            <div class="col-xs-8 col-xs-offset-2">
+                                <div id="validacion_saldo">
                                 </div>
                             </div>
-                        </div>                        
-                        <div class="row">
-                            <div class="col-xs-6 col-xs-offset-4">
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <p><h4>Total abonos (+)</h4></p>
-                                        <p><h4>Total intereses (+)</h4></p>
-                                        <p><h4>Total descuento (-)</h4></p>
-                                        <p><h3>Pago total</h3></p>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <div id="div_subtotal"><h4>$ 0.00</h4></div>
-                                        <div id="div_intereses"><h4>$ 0.00</h4></div>
-                                        <div id="div_descuento"><h4>$ 0.00</h4></div>
-                                        <div id="div_total"><h3>$ 0.00</h3></div>
-                                    </div>
-                                </div>   
-                            </div>
                         </div>
+                        <div id="div_tipo_pago" class="separar_div" style="display:none;"> 
+                            <div class="row">
+                                <div class="col-xs-6 col-xs-offset-3">
+                                    <div class="form-group">
+                                        <label>Tipo de pago<em class="required_asterisco">*</em></label>
+                                        <select name="tipo_pago" id="tipo_pago" class="form-control exit_caution">
+                                            <option value="default">Seleccione tipo de pago</option>
+                                            <option value="1">Pago de cuotas exactas del plan de la matrícula (Generalmente)</option>
+                                            <option value="2">Abono distinto a las cuotas del plan de la matrícula (Casos especiales)</option>
+                                        </select>
+                                    </div>                        
+                                </div>  
+                            </div>
+                            <div id="div_cuota_abono" style="display:none;">
+                                <div class="row">
+                                    <div class="col-xs-4 col-xs-offset-4">
+                                        <div class="form-group">
+                                            <label>Valor del abono</label>                            
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" name="total" id="total" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                        
+                            </div>  
+                            <div id="div_cuotas_fijas" style="display:none;">
+                                <div class="overflow_tabla">
+                                    <label>Cuotas a cancelar<em class="required_asterisco">*</em></label>
+                                    <table class="table table-hover tabla-cuotas">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Escojer</th>
+                                                <th class="text-center"># Cuota</th>
+                                                <th class="text-center">Detalle</th>
+                                                <th class="text-center">Abono pendiente</th>
+                                                <th class="text-center">Fecha esperada</th>
+                                                <th class="text-center">Cantidad Mora</th>
+                                                <th class="text-center">Int. Mora</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody_cuotas">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4 col-xs-offset-4">
+                                        <div class="form-group">
+                                            <label>Descuento</label>    
+                                            <p class="help-block"><B>> </B>Para descontar sólo intereses de mora.</p>                                    
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" name="descuento" id="descuento" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                        
+                                <div class="row">
+                                    <div class="col-xs-6 col-xs-offset-4">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <p><h4>Total abonos (+)</h4></p>
+                                                <p><h4>Total intereses (+)</h4></p>
+                                                <p><h4>Total descuento (-)</h4></p>
+                                                <p><h3>Pago total</h3></p>
+                                            </div>
+                                            <div class="col-xs-8">
+                                                <div id="div_subtotal"><h4>$ 0.00</h4></div>
+                                                <div id="div_intereses"><h4>$ 0.00</h4></div>
+                                                <div id="div_descuento"><h4>$ 0.00</h4></div>
+                                                <div id="div_total"><h3>$ 0.00</h3></div>
+                                            </div>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div> 
                         <hr>
                         <div class="overflow_tabla">
                             <label>Caja de Efectivo Destino (Punto de venta)</label>
@@ -217,8 +252,8 @@
                             <!--Datos adicionales para ocultar del formulario-->
                             <input type="hidden" name="subtotal" id="subtotal" class="decimal decimal2 miles"/>
                             <input type="hidden" name="int_mora" id="int_mora" class="decimal decimal2 miles"/>
-                            <input type="hidden" name="total" id="total" class="decimal decimal2 miles"/>
                             <input type="hidden" name="descuento_hidden" id="descuento_hidden" class="decimal decimal2 miles"/>
+                            <input type="hidden" name="saldo" id="saldo" value="0" />                            
                             <center>
                                 <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
                                 <button id="btn_validar" class="btn btn-success">Crear factura</button>  
@@ -233,6 +268,85 @@
     </div>
 </div>
 <script type="text/javascript">
+    //Llenamos la informacion de las matriculas y los pagos.
+    $("form").delegate("#consultar_titular", "click", function() {
+        var dni = $('#dni').val();
+        var id = $('#id').val();
+        if ((dni != "default") && (id != "")) {
+            $.post('{action_validar_titular_llena_matriculas}', {dni: dni,
+                id: id
+            }, function(data) {
+                var obj = JSON.parse(data);
+                if (obj.respuesta == "OK")
+                {
+                    $("#nombre_titular").html('<center><table><th><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.nombreTitular + '</h4></td></th></table></center>');
+                    $("#tbody_matricula_vigente").html(obj.filasTabla);
+                    $("#div_matriculas").css("display", "block");
+                    $('#dni').attr('disabled', 'disabled');
+                    $('#id').attr('readonly', 'readonly');
+                    $('#consultar_titular').attr('disabled', 'disabled');
+                    //Actualizamo la informacion del titular en a nombre de 
+                    $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
+                    $("#id_a_nombre_de").attr("value", $('#id').val());
+                    $("#a_nombre_de").attr("value", obj.nombreTitular);
+                    $("#direccion_a_nombre_de").attr("value", obj.direccion);
+                    $("#div_warning").remove();
+                } else {
+                    $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+                    $("#div_warning").html(obj.mensaje);
+                    $("#div_warning").delay(8000).fadeOut(1000);
+                }
+            });
+        } else {
+            $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
+            $("#div_warning").html("<p><strong>Antes de consultar, ingrese el tipo y número de identificación del titular.</strong></p>");
+            $("#div_warning").delay(8000).fadeOut(1000);
+        }
+    });
+
+
+    //Cargar div de valor abono y cuotas  de matricula escogida     
+    $(".tabla-matriculas").delegate("#matricula", "click", function() {
+        saldo = $("input[name='matricula']:checked").data('saldo');
+        $("#saldo").attr("value", saldo);
+        if (saldo > '0') {
+            $("#div_warning").remove();
+            $("#div_tipo_pago").css("display", "block");
+        } else {
+            $("#div_tipo_pago").css("display", "none");
+            $("#validacion_saldo").html('<div class="alert alert-info" id="div_warning"></div>');
+            $("#div_warning").html("<p><strong><center>La matrícula seleccionada, se encuentra a paz y salvo.</center></strong></p>");
+        }
+    });
+
+    //Cargar div de valor abono y cuotas  de matricula escogida     
+    $(".form-group").delegate("#tipo_pago", "change", function() {
+        tipo_pago = $("#tipo_pago").val();
+        if (tipo_pago == "1") {
+            $("#div_cuota_abono").css("display", "none");
+            $("#div_cuotas_fijas").css("display", "block");
+            matricula = $("input[name='matricula']:checked").val();
+            $.post('{action_llena_cuotas_matricula}', {
+                matricula: matricula
+            }, function(data) {
+                var obj = JSON.parse(data);
+                if (obj.respuesta == 'OK') {
+                    $("#tbody_cuotas").html(obj.filasTabla);
+                    calcular_total();
+                }
+            });
+        } else {
+            if (tipo_pago == "2") {
+                $("#total").attr("value", '');
+                $("#div_cuota_abono").css("display", "block");
+                $("#div_cuotas_fijas").css("display", "none");
+            } else {
+                $("#div_cuota_abono").css("display", "none");
+                $("#div_cuotas_fijas").css("display", "none");
+            }
+        }
+    });
+
 
     $(".form-group").delegate("#id_a_nombre_de", "blur", function() {
         var vpri, x, y, z, i, nit1, dv1;
@@ -264,8 +378,7 @@
             {
                 y = (nit1.substr(i, 1));
                 //document.write(y+"x"+ vpri[z-i] +":");
-                x += (y * vpri[z - i]);
-                //document.write(x+"<br>");		
+                x += (y * vpri[z - i]);                 //document.write(x+"<br>");		
             }
             y = x % 11
             //document.write(y+"<br>");
@@ -278,7 +391,6 @@
             $("#d_v_a_nombre_de").attr('value', dv1);
         }
     });
-
     //Cargar div de d.v segun t_dni
     $(".form-group").delegate("#dni_a_nombre_de", "change", function() {
         dni = $(this).val();
@@ -289,6 +401,13 @@
         }
     });
 
+
+    $(".input-group").delegate("#descuento", "focus", function() {
+        if ($('#descuento').val() == '0.00') {
+            $('#descuento').attr('value', '');
+        }
+    });
+
     $(".input-group").delegate("#descuento", "blur", function() {
         var descuento = new Number($('#descuento').val().split(",").join(""));
         $('#descuento_hidden').attr('value', ((descuento).toFixed(2)));
@@ -296,7 +415,7 @@
         $("#div_descuento").html("<h4>$ " + $('#descuento_hidden').val() + "</h4>");
         if ($('#descuento').val() == '') {
             $('#descuento').attr('value', '0.00');
-        }        
+        }
         calcular_total();
     });
 
@@ -327,20 +446,6 @@
         $("#div_total").html("<h3>$ " + $('#total').val() + "</h3>");
     }
 
-    //Cargar div de valor abono y cuotas  de matricula escogida     
-    $(".tabla-matriculas").delegate("#matricula", "click", function() {
-        matricula = $("input[name='matricula']:checked").val();
-        $.post('{action_llena_cuotas_matricula}', {
-            matricula: matricula
-        }, function(data) {
-            var obj = JSON.parse(data);
-            if (obj.respuesta == 'OK') {
-                $("#tbody_cuotas").html(obj.filasTabla);
-                calcular_total();
-            }
-        });
-    });
-
     //Cargar div de valor abono y cuotas  de matricula escogida 
     //Cuando seleccione una cuota debo verificar que lo haga en orden de arriba hacia abajo. No permite que salte cuotas.     
     $(".tabla-cuotas").delegate("#cuotas", "change", function() {
@@ -353,44 +458,7 @@
         });
         calcular_total();
         $("#descuento").removeAttr("readonly", "readonly");
-        $('#descuento').attr('value', '0.00');        
-    });
-
-    //Llenamos la informacion de las matriculas y los pagos.
-    $("form").delegate("#consultar_titular", "click", function() {
-        var dni = $('#dni').val();
-        var id = $('#id').val();
-        if ((dni != "default") && (id != "")) {
-            $.post('{action_validar_titular_llena_matriculas}', {
-                dni: dni,
-                id: id
-            }, function(data) {
-                var obj = JSON.parse(data);
-                if (obj.respuesta == "OK")
-                {
-                    $("#nombre_titular").html('<center><table><th><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.nombreTitular + '</h4></td></th></table></center>');
-                    $("#tbody_matricula_vigente").html(obj.filasTabla);
-                    $("#div_matriculas").css("display", "block");
-                    $('#dni').attr('disabled', 'disabled');
-                    $('#id').attr('readonly', 'readonly');
-                    $('#consultar_titular').attr('disabled', 'disabled');
-                    //Actualizamo la informacion del titular en a nombre de 
-                    $("#dni_a_nombre_de option[value=" + $('#dni').val() + "]").attr("selected", true);
-                    $("#id_a_nombre_de").attr("value", $('#id').val());
-                    $("#a_nombre_de").attr("value", obj.nombreTitular);
-                    $("#direccion_a_nombre_de").attr("value", obj.direccion);
-                    $("#div_warning").remove();
-                } else {
-                    $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-                    $("#div_warning").html(obj.mensaje);
-                    $("#div_warning").delay(8000).fadeOut(1000);
-                }
-            });
-        } else {
-            $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
-            $("#div_warning").html("<p><strong>Antes de consultar, ingrese el tipo y número de identificación del titular.</strong></p>");
-            $("#div_warning").delay(8000).fadeOut(1000);
-        }
+        $('#descuento').attr('value', '0.00');
     });
 
     //Llenamos la cajas del responsable
@@ -434,7 +502,6 @@
         $('#valor_consignado').change();
         $("#valor_consignado").removeAttr("readonly");
     });
-
     //Calcula el valor contrario al modificar el valor retirado.
     $(".form-group").delegate("#valor_consignado", "blur", function() {
         //Preguntamos si el valor retirado es readonly

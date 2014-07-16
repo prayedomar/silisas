@@ -194,7 +194,7 @@
 </div>
 <script type="text/javascript">
     //Cargar div de valor abono y cuotas  de matricula escogida     
-    $(".tabla-matriculas").delegate("#matricula", "change", function() {
+    $(".tabla-matriculas").delegate("#matricula", "click", function() {
         $("#saldo").attr("value", $(this).data('saldo'));
         $("#total").attr("value", '');
         $("#total").removeAttr("readonly", "readonly");

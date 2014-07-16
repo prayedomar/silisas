@@ -54,7 +54,7 @@ class Liquidar_comisiones extends CI_Controller {
                 $plan = $this->select_model->matricula_id($id_matricula)->plan;
                 $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo);
                 if ($valor_unitario != TRUE) {
-                    $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos.</P>';
+                    $error_comisiones = '<P><center><strong>No se ha definido correctamente las comisiones que corresponden al tipo de plan de ésta matrícula. <br>Comuníquese con los directivos para que creen correctamente las comisiones para éste tipo de plan.</strong></center></P>';
                 }
                 $cargos_escalas = $this->input->post('cargos_escalas');
                 $escalas = $this->input->post('escalas');
@@ -67,7 +67,7 @@ class Liquidar_comisiones extends CI_Controller {
                             list($cargo_escala, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
                             $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala);
                             if ($valor_unitario != TRUE) {
-                                $error_comisiones = '<P>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos.</P>';
+                                $error_comisiones = '<P><center><strong>No se ha definido correctamente las comisiones que corresponden al tipo de plan de ésta matrícula. <br>Comuníquese con los directivos para que creen correctamente las comisiones para éste tipo de plan.</strong></center></P>';
                             }
                         }
                         $i++;
@@ -134,13 +134,21 @@ class Liquidar_comisiones extends CI_Controller {
                 if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
                     $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
                     $i = 0;
+                    $bandera_encargado = '0';
                     foreach ($escalas as $fila) {
                         //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
                         if ($fila != "nula") {
                             list($id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo) = explode("+", $fila);
                             list($cargo_escala, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
+                            if ($cargo_escala == '17') {
+                                $bandera_encargado = '1';
+                            }
                             //Asumimos que las comisiones ya estan creadas
-                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                            if ($bandera_encargado == '0') {
+                                $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                            } else {
+                                $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision_escala_encargado;
+                            }
                             $error2 = $this->insert_model->concepto_nomina($id_ejecutivo, $dni_ejecutivo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_escala, $cargo_ejecutivo, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
                             if (isset($error2)) {
                                 $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
@@ -196,46 +204,56 @@ class Liquidar_comisiones extends CI_Controller {
             $response['htmlTotalPagado'] = "";
             $total_comisiones = '0';
 
-            $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo)->comision;
+            $valor_unitario = $this->select_model->comision_matricula($plan, $cargo_ejecutivo_directo);
             if ($valor_unitario != TRUE) {
                 $response = array(
                     'respuesta' => 'error',
-                    'mensaje' => '<p><strong><center>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos para que creen correctamente las comisiones.</center></strong></p>'
+                    'mensaje' => '<p><strong><center>No se ha definido correctamente las comisiones que corresponden al tipo de plan de ésta matrícula. <br>Comuníquese con los directivos para que creen correctamente las comisiones para éste tipo de plan.</center></strong></p>'
                 );
                 echo json_encode($response);
                 return false;
             } else {
+                $comision = $valor_unitario->comision;
                 $t_cargo_ejecutivo_directo = $this->t_cargom->t_cargo_id($cargo_ejecutivo_directo);
-                $total_comisiones = $valor_unitario;
+                $total_comisiones = $comision;
                 $response['htmlTotalPagado'] .= '<tr>
                         <td class="text-center">Comisión directa</td>
                         <td class="text-center">' . $t_cargo_ejecutivo_directo->cargo_masculino . '</td>
-                        <td class="text-center">$' . number_format($valor_unitario, '2', '.', ',') . '</td>
+                        <td class="text-center">$' . number_format($comision, '2', '.', ',') . '</td>
                     </tr>';
-
                 $cargos_escalas = $this->input->post('cargos_escalas');
                 $escalas = $this->input->post('escalas');
                 //Si hay escalas las pagamos.
                 if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
                     $i = 0;
+                    $bandera_encargado = '0';
                     foreach ($escalas as $fila) {
                         //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
                         if ($fila != "nula") {
+                            //Preguntamos si la escala 17 de gerente encargado entró, activamos la bandera de escalas genrete encargado.
                             list($cargo_escala, $nombre_cargo) = explode("+", $cargos_escalas[$i]);
-                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                            if ($cargo_escala == '17') {
+                                $bandera_encargado = '1';
+                            }
+                            $valor_unitario = $this->select_model->comision_escala($plan, $cargo_escala);
                             if ($valor_unitario != TRUE) {
                                 $response = array(
                                     'respuesta' => 'error',
-                                    'mensaje' => '<p><strong><center>No se ha definido alguna de las comisiones que corresponden al plan de la matrícula. Comuníquese con los directivos para que creen correctamente las comisiones.</center></strong></p>'
+                                    'mensaje' => '<p><strong><center>No se ha definido correctamente las comisiones que corresponden al tipo de plan de ésta matrícula. <br>Comuníquese con los directivos para que creen correctamente las comisiones para éste tipo de plan.</center></strong></p>'
                                 );
                                 echo json_encode($response);
                                 return false;
                             } else {
-                                $total_comisiones += $valor_unitario;
+                                if ($bandera_encargado == '0') {
+                                    $comision = $valor_unitario->comision;
+                                } else {
+                                    $comision = $valor_unitario->comision_escala_encargado;
+                                }
+                                $total_comisiones += $comision;
                                 $response['htmlTotalPagado'] .= '<tr>
                                         <td class="text-center">Escala</td>
                                         <td class="text-center">' . $nombre_cargo . '</td>
-                                        <td class="text-center">$' . number_format($valor_unitario, '2', '.', ',') . '</td>
+                                        <td class="text-center">$' . number_format($comision, '2', '.', ',') . '</td>
                                     </tr>';
                             }
                         }

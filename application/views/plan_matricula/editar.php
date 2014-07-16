@@ -26,7 +26,7 @@
                                             <?php foreach ($t_plan as $row) { ?>
                                                 <tr>
                                                     <td class="text-center"><input type="radio" name="id_plan" id="id_plan" value="<?= $row->id ?>"/></td>
-                                                    <td><?= $row->nombre . ' (' . $row->anio . ')'?></td>
+                                                    <td><?= $row->nombre . ' (' . $row->anio . ')' ?></td>
                                                     <td class="text-center"><?= $row->cant_alumnos ?></td>
                                                     <td class="text-center">$<?= number_format($row->valor_total, 2, '.', ',') ?></td>
                                                     <td class="text-center">$<?= number_format($row->valor_inicial, 2, '.', ',') ?></td>
@@ -115,14 +115,21 @@
                         </div>
                     </div><hr>
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-6 col-xs-offset-3">
                             <legend>Comisiones directas:</legend>
                             <div id="div_comision_directa">
                             </div>
                         </div>
+                    </div>                    
+                    <div class="row">
                         <div class="col-xs-6">
                             <legend>Comisiones por escalas:</legend>
                             <div id="div_comision_escala">
+                            </div>                              
+                        </div>
+                        <div class="col-xs-6">
+                            <legend>Comisiones por escalas (Con Gerente Encargado):</legend>
+                            <div id="div_comision_escala_encargado">
                             </div>                              
                         </div>
                     </div>
@@ -148,6 +155,7 @@
     //Llenamos la informacion de las matriculas y los pagos.
     $("form").delegate("#consultar_plan_matricula", "click", function() {
         var idPlan = $("input:checked").val();
+        
         if (typeof idPlan !== 'undefined') {
             $("input:checked").parent().parent().siblings().remove();
             $("#label_seleccion_plan").css("display", "none");
@@ -162,6 +170,7 @@
                 {
                     $("#div_comision_directa").html(obj.html_directas);
                     $("#div_comision_escala").html(obj.html_escalas);
+                    $("#div_comision_escala_encargado").html(obj.html_escalas_encargado);
                     $("#nombre").attr("value", obj.nombre);
                     $("#cant_alumnos").attr("value", obj.cant_alumnos);
                     $("#anio").attr("value", obj.anio);
