@@ -9,12 +9,11 @@ class Recibo_caja extends CI_Controller {
         $this->load->model('update_model');
     }
 
-//Crear: Nomina
     function crear() {
         $data["tab"] = "crear_recibo_caja";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -45,42 +44,83 @@ class Recibo_caja extends CI_Controller {
             $this->form_validation->set_rules('id_a_nombre_de', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('a_nombre_de', 'Nombre completo / Razón Social', 'required|trim|xss_clean|max_length[100]');
             $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
-            $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
-            $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('descuento', 'Descuento', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
             $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-            $error_descuento = "";
-            if (($this->input->post('int_mora')) && ($this->input->post('descuento'))) {
-                $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
-                $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
-                if ($descuento > $int_mora) {
-                    $error_descuento = "<p>El descuento ingresado, no puede ser mayor al total de los intereses.</p>";
-                }
-            }
-            $error_valores = "";
-            if ($this->input->post('total')) {
-                $total = round(str_replace(",", "", $this->input->post('total')), 2);
-                if (!$this->input->post('valor_consignado')) {
-                    $valor_consignado = 0;
-                } else {
-                    $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
-                }
-                if (!$this->input->post('efectivo_ingresado')) {
-                    $efectivo_ingresado = 0;
-                } else {
-                    $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
-                }
-                if (round(($valor_consignado + $efectivo_ingresado), 2) != $total) {
-                    $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
-                }
-            }
 
-            if (($this->form_validation->run() == FALSE) || ($error_valores != "" || ($error_descuento != ""))) {
-                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . $error_descuento . form_error('descuento') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
+            $error_descuento = "";
+            $error_valores = "";
+            if ($this->input->post('matricula')) {
+                $saldo = $this->input->post('saldo');
+                if ($saldo > '0') {
+                    if ($this->input->post('tipo_pago')) {
+                        if ($this->input->post('tipo_pago') == "default") {
+                            $this->form_validation->set_rules('tipo_pago', 'Tipo de pago', 'required|callback_select_default');
+                        } else {
+                            if ($this->input->post('tipo_pago') == "1") {
+                                $this->form_validation->set_rules('cuotas', 'Cuotas a cancelar', 'required');
+                                $this->form_validation->set_rules('subtotal', 'Total abonos', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+                                $this->form_validation->set_rules('int_mora', 'Total intereses', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+                                $this->form_validation->set_rules('descuento', 'Descuento', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+                                $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+                                if (($this->input->post('int_mora')) && ($this->input->post('descuento'))) {
+                                    $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
+                                    $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
+                                    if ($descuento > $int_mora) {
+                                        $error_descuento = "<p>El descuento ingresado, no puede ser mayor al total de los intereses.</p>";
+                                    }
+                                }
+                                if ($this->input->post('total')) {
+                                    $total = round(str_replace(",", "", $this->input->post('total')), 2);
+                                    if (!$this->input->post('valor_consignado')) {
+                                        $valor_consignado = 0;
+                                    } else {
+                                        $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+                                    }
+                                    if (!$this->input->post('efectivo_ingresado')) {
+                                        $efectivo_ingresado = 0;
+                                    } else {
+                                        $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+                                    }
+                                    if (round(($valor_consignado + $efectivo_ingresado), 2) != $total) {
+                                        $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $this->input->post('total') . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                                    }
+                                }
+                            } else {
+                                $this->form_validation->set_rules('total', 'Valor del abono', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+                                if ($this->input->post('total_abono')) {
+                                    $total_abono = round(str_replace(",", "", $this->input->post('total')), 2);
+                                    if (!$this->input->post('valor_consignado')) {
+                                        $valor_consignado = 0;
+                                    } else {
+                                        $valor_consignado = round(str_replace(",", "", $this->input->post('valor_consignado')), 2);
+                                    }
+                                    if (!$this->input->post('efectivo_ingresado')) {
+                                        $efectivo_ingresado = 0;
+                                    } else {
+                                        $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
+                                    }
+                                    if (round(($valor_consignado + $efectivo_ingresado), 2) != $total_abono) {
+                                        $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $total_abono . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                                    }
+                                    $saldo = $this->input->post('saldo');
+                                    if ($total_abono > $saldo) {
+                                        $error_valores = "<p>El valor del abono: " . number_format($total_abono, 2, '.', ',') . ", no puede ser mayor al saldo de la matrícula: " . number_format($saldo, 2, '.', ',') . "</p>";
+                                    } else {
+                                        if (round(($valor_consignado + $efectivo_ingresado), 2) != $total_abono) {
+                                            $error_valores = "<p>La suma del valor consignado a la cuenta y el efectivo ingresado a la caja, deben sumar exactamente: $" . $total_abono . ", en vez de: $" . number_format(($valor_consignado + $efectivo_ingresado), 2, '.', ',') . ".</p>";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $error_valores = "<p>La matrícula seleccionada, se encuentra a paz y salvo.</p>";
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($error_valores != "") || ($error_descuento != "")) {
+                echo form_error('dni') . form_error('id') . form_error('dni_a_nombre_de') . form_error('id_a_nombre_de') . form_error('direccion_a_nombre_de') . form_error('matricula') . form_error('tipo_pago') . form_error('cuotas') . form_error('subtotal') . form_error('int_mora') . $error_descuento . form_error('descuento') . form_error('total') . form_error('valor_consignado') . form_error('efectivo_ingresado') . $error_valores . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -102,9 +142,16 @@ class Recibo_caja extends CI_Controller {
             }
             $a_nombre_de = $this->input->post('a_nombre_de');
             $direccion_a_nombre_de = $this->input->post('direccion_a_nombre_de');
-            $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
-            $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
-            $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
+            $tipo_pago = $this->input->post('tipo_pago');
+            if ($tipo_pago == '1') {
+                $subtotal = round(str_replace(",", "", $this->input->post('subtotal')), 2);
+                $int_mora = round(str_replace(",", "", $this->input->post('int_mora')), 2);
+                $descuento = round(str_replace(",", "", $this->input->post('descuento')), 2);
+            } else {
+                $subtotal = round(str_replace(",", "", $this->input->post('total')), 2);
+                $int_mora = '0';
+                $descuento = '0';
+            }
             if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
                 list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
                 $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
@@ -128,7 +175,8 @@ class Recibo_caja extends CI_Controller {
             $prefijo_recibo_caja = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_recibo_caja = ($this->select_model->nextId_recibo_caja($prefijo_recibo_caja)->id) + 1;
             $t_trans = 8; //Recibo de caja
-            $credito_debito = 1; //Credito            
+            $credito_debito = 1; //Credito   
+            $retefuente = 0; //Significa que al momento de crearla no se ha hecho retencion del 11% a dicha recibo_caja
 
             $data["tab"] = "crear_recibo_caja";
             $this->load->view("header", $data);
@@ -141,28 +189,51 @@ class Recibo_caja extends CI_Controller {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $t_trans, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                $error1 = $this->insert_model->recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $tipo_pago, $matricula, $id_a_nombre_de, $dni_a_nombre_de, $d_v_a_nombre_de, $a_nombre_de, $direccion_a_nombre_de, $subtotal, $int_mora, $descuento, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //traemos los checxbox de las cuotas canceladas
-                    $checkbox_cuotas = $this->input->post('cuotas');
-                    if ($checkbox_cuotas == TRUE) {
-                        foreach ($checkbox_cuotas as $fila) {
-                            list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("_", $fila);
-                            $error3 = $this->insert_model->detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
-                            if (isset($error3)) {
-                                $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
-                                $this->parser->parse('trans_error', $data);
-                                return FALSE;
+                    if ($tipo_pago == '1') {
+                        $checkbox_cuotas = $this->input->post('cuotas');
+                        if ($checkbox_cuotas == TRUE) {
+                            foreach ($checkbox_cuotas as $fila) {
+                                list($num_cuota, $id_t_detalle, $t_detalle, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota) = explode("_", $fila);
+                                $error3 = $this->insert_model->detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_t_detalle, $num_cuota, $valor_pendiente, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
+                                if (isset($error3)) {
+                                    $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                                    $this->parser->parse('trans_error', $data);
+                                    return FALSE;
+                                }
                             }
+                            $this->parser->parse('trans_success_print', $data);
+                        } else {
+                            $data['trans_error'] = "<p>No llegaron correctamente las cuotas al servidor. Comuníque éste error al departamento de sistemas.</p>";
+                            $this->parser->parse('trans_error', $data);
+                            return;
                         }
-                        $this->parser->parse('trans_success_print', $data);
                     } else {
-                        $data['trans_error'] = "<p>No llegaron correctamente las cuotas al servidor. Comuníque éste error al departamento de sistemas.</p>";
-                        $this->parser->parse('trans_error', $data);
-                        return;
+                        //Insertamos un solo detalle de recibo_caja
+                        $saldo = $this->input->post('saldo');
+                        //Es porque pagó todo el saldo pendiente
+                        if ($subtotal == $saldo) {
+                            $id_t_detalle = '3';
+                        } else {
+                            $id_t_detalle = '2';
+                        }
+                        $num_cuota = NULL;
+                        $fecha_esperada = NULL;
+                        $cant_dias_mora = '0';
+                        $int_mora_cuota = '0.00';
+                        $error3 = $this->insert_model->detalle_recibo_caja($prefijo_recibo_caja, $id_recibo_caja, $matricula, $id_t_detalle, $num_cuota, $subtotal, $fecha_esperada, $cant_dias_mora, $int_mora_cuota);
+                        if (isset($error3)) {
+                            $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                            $this->parser->parse('trans_error', $data);
+                            return FALSE;
+                        } else {
+                            $this->parser->parse('trans_success_print', $data);
+                        }
                     }
                 }
             }
@@ -188,7 +259,7 @@ class Recibo_caja extends CI_Controller {
                     );
                     foreach ($matriculas as $fila) {
                         $response['filasTabla'] .= '<tr>
-                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '"/></td>
+                            <td class="text-center"><input type="radio" class="exit_caution" name="matricula" id="matricula" value="' . $fila->contrato . '" data-saldo="' . $fila->saldo . '"/></td>
                             <td class="text-center">' . $fila->contrato . '</td>
                             <td>' . $fila->nombre_plan . '</td>
                             <td class="text-center">$' . number_format($fila->valor_total, 2, '.', ',') . '</td>
@@ -327,8 +398,8 @@ class Recibo_caja extends CI_Controller {
             if ($dias_mora > 4) {
                 $matriz_matricula[0][8] = $dias_mora;
                 if ($tasa_mora_anual) {
-                    $Int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $matriz_matricula[0][5]), 2);
-                    $matriz_matricula[0][9] = $Int_mora;
+                    $int_mora = round(((((pow((1 + ($tasa_mora_anual / 100)), (1 / 360))) - 1) * $dias_mora) * $matriz_matricula[0][5]), 2);
+                    $matriz_matricula[0][9] = $int_mora;
                 }
             }
         }
@@ -457,10 +528,10 @@ class Recibo_caja extends CI_Controller {
             $recibo_caja = $this->select_model->recibo_caja_prefijo_id($prefijo, $id);
             if ($recibo_caja == TRUE) {
                 if ($recibo_caja->vigente == 0) {
-                    $error_transaccion = "El recibo de caja, se encuentra anulado.";
+                    $error_transaccion = "La recibo_caja de venta, se encuentra anulada.";
                 }
             } else {
-                $error_transaccion = "El recibo de caja, no existe en la base de datos.";
+                $error_transaccion = "La recibo_caja de venta, no existe en la base de datos.";
             }
         }
         if (($this->form_validation->run() == FALSE) || ($error_transaccion != "")) {
@@ -494,6 +565,7 @@ class Recibo_caja extends CI_Controller {
                 $d_v = " - " . $recibo_caja->d_v_a_nombre_de;
             }
 
+
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
             $pdf->SetCreator(PDF_CREATOR);
@@ -519,8 +591,8 @@ class Recibo_caja extends CI_Controller {
             //preparamos y maquetamos el contenido a crear
             $html = '';
             $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:40px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:8px;}';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
             $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
@@ -551,7 +623,7 @@ class Recibo_caja extends CI_Controller {
             $html .= 'table.t1{text-align:left;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución de recibo_cajación DIAN No. 110000581182 del 28/05/2014</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -641,7 +713,7 @@ class Recibo_caja extends CI_Controller {
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:8px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
             $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
@@ -672,7 +744,7 @@ class Recibo_caja extends CI_Controller {
             $html .= 'table.t1{text-align:left;}';
             $html .= '</style>';
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución de recibo_cajación DIAN No. 110000581182 del 28/05/2014</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -764,7 +836,7 @@ class Recibo_caja extends CI_Controller {
             redirect(base_url() . 'recibo_caja/consultar/');
         }
     }
-    
+
     function anular() {
         $data["tab"] = "anular_recibo_caja";
         $this->isLogin($data["tab"]);
@@ -803,7 +875,7 @@ class Recibo_caja extends CI_Controller {
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
-            $t_trans = '8'; //Recibo de caja    
+            $t_trans = '8'; //Recibo de caja     
             $credito_debito = '1'; //credito
             $vigente = '0'; //Anulado
 
@@ -811,7 +883,7 @@ class Recibo_caja extends CI_Controller {
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "recibo_caja/anular";
-            $data['msn_recrear'] = "Anular otro recibo de caja";
+            $data['msn_recrear'] = "Anular otra recibo_caja de venta";
             $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
@@ -845,11 +917,15 @@ class Recibo_caja extends CI_Controller {
             $recibo_caja = $this->recibo_cajam->recibo_caja_prefijo_id($prefijo, $id);
             if ($recibo_caja == TRUE) {
                 if ($recibo_caja->vigente == 1) {
-                    $response = array(
-                        'respuesta' => 'OK',
-                        'filasTabla' => ''
-                    );
-                    $response['filasTabla'] .= '<tr>
+                    //Tenemos que validar que no hayan retenciones vigentes para esta recibo_caja. 
+                    $this->load->model('retefuente_ventasm');
+                    $retencion_vigente = $this->retefuente_ventasm->retefuente_vigente_ventas_recibo_caja($prefijo, $id);
+                    if ($retencion_vigente != TRUE) {
+                        $response = array(
+                            'respuesta' => 'OK',
+                            'filasTabla' => ''
+                        );
+                        $response['filasTabla'] .= '<tr>
                             <td class="text-center">' . $recibo_caja->matricula . '</td>
                             <td class="text-center">$' . number_format($recibo_caja->subtotal + $recibo_caja->int_mora - $recibo_caja->descuento, 2, '.', ',') . '</td>
                             <td class="text-center">' . $recibo_caja->sede_caja . '-' . $recibo_caja->tipo_caja . '</td>
@@ -859,12 +935,20 @@ class Recibo_caja extends CI_Controller {
                             <td class="text-center">' . $recibo_caja->responsable . '</td>                                
                             <td class="text-center">' . date("Y-m-d", strtotime($recibo_caja->fecha_trans)) . '</td>
                         </tr>';
-                    echo json_encode($response);
-                    return false;
+                        echo json_encode($response);
+                        return false;
+                    } else {
+                        $response = array(
+                            'respuesta' => 'error',
+                            'mensaje' => '<p><strong><center>La recibo_caja tiene una retención por ventas vigente. <br>Si desea anular ésta recibo_caja, anule primero dicha retención.</center></strong></p>'
+                        );
+                        echo json_encode($response);
+                        return false;
+                    }
                 } else {
                     $response = array(
                         'respuesta' => 'error',
-                        'mensaje' => '<p><strong><center>El recibo de caja, ya se encuentra anulado.</center></strong></p>'
+                        'mensaje' => '<p><strong><center>La recibo_caja de venta, ya se encuentra anulada.</center></strong></p>'
                     );
                     echo json_encode($response);
                     return false;
@@ -872,7 +956,7 @@ class Recibo_caja extends CI_Controller {
             } else {
                 $response = array(
                     'respuesta' => 'error',
-                    'mensaje' => '<p><strong><center>El recibo de caja, no existe en la base de datos.</center></strong></p>'
+                    'mensaje' => '<p><strong><center>La recibo_caja de venta, no existe en la base de datos.</center></strong></p>'
                 );
                 echo json_encode($response);
                 return false;
@@ -881,6 +965,5 @@ class Recibo_caja extends CI_Controller {
             redirect(base_url());
         }
     }
-    
 
 }

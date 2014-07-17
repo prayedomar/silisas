@@ -87,9 +87,9 @@ class Factura extends CI_Controller {
                                     }
                                 }
                             } else {
-                                $this->form_validation->set_rules('total', 'Pago total', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
-                                if ($this->input->post('total_abono')) {
-                                    $total_abono = round(str_replace(",", "", $this->input->post('total_abono')), 2);
+                                $this->form_validation->set_rules('total', 'Valor del abono', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
+                                if ($this->input->post('total')) {
+                                    $total_abono = round(str_replace(",", "", $this->input->post('total')), 2);
                                     if (!$this->input->post('valor_consignado')) {
                                         $valor_consignado = 0;
                                     } else {

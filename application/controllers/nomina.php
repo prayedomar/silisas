@@ -15,7 +15,7 @@ class Nomina extends CI_Controller {
         $data["tab"] = "crear_nomina";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -985,7 +985,7 @@ class Nomina extends CI_Controller {
         $id_nomina_limpio = str_replace("_", " ", $nomina_prefijo_id);
         list($prefijo, $id) = explode("_", $nomina_prefijo_id);
         $nomina = $this->nominam->nomina_prefijo_id($prefijo, $id);
-        $conceptos_nomina = $this->nominam->concepto_nomina_prefijo_id($prefijo, $id);
+        $conceptos_nomina = $this->nominam->concepto_nomina_group_matricula($prefijo, $id);
         if (($nomina == TRUE) && ($conceptos_nomina == TRUE)) {
             $dni_abreviado_empleado = $this->select_model->t_dni_id($nomina->dni_empleado)->abreviacion;
             if ($nomina->genero_empleado == "M") {
@@ -1117,11 +1117,11 @@ class Nomina extends CI_Controller {
             $cont_filas = 0;
             foreach ($conceptos_nomina as $fila) {
                 if ($fila->debito_credito == 1) {
-                    $devengado = $fila->cantidad * $fila->valor_unitario;
+                    $devengado = $fila->cantidad * $fila->total;
                     $deducido = "0.00";
                 } else {
                     $devengado = "0.00";
-                    $deducido = $fila->cantidad * $fila->valor_unitario;
+                    $deducido = $fila->cantidad * $fila->total;
                 }
                 if ($fila->detalle) {
                     $detalle = " - (" . $fila->detalle . ")";
@@ -1132,7 +1132,7 @@ class Nomina extends CI_Controller {
                 $html .= '<tr>'
                         . '<td class="d1 c30 c27 c28">' . $fila->tipo . $detalle . '</td>'
                         . '<td class="d2 a2 c30 c27 c28">' . $fila->cantidad . '</td>'
-                        . '<td class="d3 a2 c30 c27 c28">$' . number_format($fila->valor_unitario, 1, '.', ',') . '</td>'
+                        . '<td class="d3 a2 c30 c27 c28">$' . number_format($fila->total, 1, '.', ',') . '</td>'
                         . '<td class="d4 a2 c30 c27 c28">$' . number_format($devengado, 1, '.', ',') . '</td>'
                         . '<td class="d5 a2 c30 c27 c28">$' . number_format($deducido, 1, '.', ',') . '</td>'
                         . '</tr>';
@@ -1264,11 +1264,11 @@ class Nomina extends CI_Controller {
             $cont_filas = 0;
             foreach ($conceptos_nomina as $fila) {
                 if ($fila->debito_credito == 1) {
-                    $devengado = $fila->cantidad * $fila->valor_unitario;
+                    $devengado = $fila->cantidad * $fila->total;
                     $deducido = "0.00";
                 } else {
                     $devengado = "0.00";
-                    $deducido = $fila->cantidad * $fila->valor_unitario;
+                    $deducido = $fila->cantidad * $fila->total;
                 }
                 if ($fila->detalle) {
                     $detalle = " - (" . $fila->detalle . ")";
@@ -1279,7 +1279,7 @@ class Nomina extends CI_Controller {
                 $html .= '<tr>'
                         . '<td class="d1 c30 c27 c28">' . $fila->tipo . $detalle . '</td>'
                         . '<td class="d2 a2 c30 c27 c28">' . $fila->cantidad . '</td>'
-                        . '<td class="d3 a2 c30 c27 c28">$' . number_format($fila->valor_unitario, 1, '.', ',') . '</td>'
+                        . '<td class="d3 a2 c30 c27 c28">$' . number_format($fila->total, 1, '.', ',') . '</td>'
                         . '<td class="d4 a2 c30 c27 c28">$' . number_format($devengado, 1, '.', ',') . '</td>'
                         . '<td class="d5 a2 c30 c27 c28">$' . number_format($deducido, 1, '.', ',') . '</td>'
                         . '</tr>';
