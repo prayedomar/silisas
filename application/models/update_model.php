@@ -22,6 +22,24 @@ class Update_model extends CI_Model {
         }
     }
 
+    public function usuario_info($id_old, $dni_old, $id_new, $dni_new, $t_usuario, $new_password, $genero, $nombres, $email) {
+        $data = array(
+            'id' => $id_new,
+            'dni' => $dni_new,
+            'genero' => $genero,
+            'nombres' => $nombres,
+            'email' => $email,
+            'password' => $new_password
+        );
+        $this->db->where('id', $id_old);
+        $this->db->where('dni', $dni_old);
+        $this->db->where('t_usuario', $t_usuario);
+        $this->db->update('usuario', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+
     public function empleado_sede_ppal($id, $dni, $sede_ppal) {
         $data = array(
             'sede_ppal' => $sede_ppal
@@ -277,7 +295,7 @@ class Update_model extends CI_Model {
         }
     }
 
-    public function alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $est_alumno, $observacion, $id_responsable, $dni_responsable) {
+    public function alumno($id, $dni, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $genero, $pais, $provincia, $ciudad, $t_domicilio, $direccion, $barrio, $telefono, $celular, $email, $velocidad_ini, $comprension_ini, $t_curso, $cant_clases, $est_alumno, $observacion) {
         $data = array(
             'nombre1' => $nombre1,
             'nombre2' => $nombre2,
@@ -299,9 +317,7 @@ class Update_model extends CI_Model {
             't_curso' => $t_curso,
             'cant_clases' => $cant_clases,
             'estado' => $est_alumno,
-            'observacion' => $observacion,
-            'id_responsable' => $id_responsable,
-            'dni_responsable' => $dni_responsable
+            'observacion' => $observacion
         );
         $this->db->where('id', $id);
         $this->db->where('dni', $dni);

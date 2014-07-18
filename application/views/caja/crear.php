@@ -8,7 +8,7 @@
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="form-group">
                                 <label>Sede<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes autorizadas.</p>
+                                <p class="help-block"><B>> </B>Sólo aparecerán las sedes autorizadas del responsable.</p>
                                 <select name="sede" id="sede" class="form-control exit_caution">
                                     <option value="default">Seleccione Sede</option>
                                     {sede}

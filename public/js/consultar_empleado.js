@@ -1,5 +1,4 @@
 $(function() {
-
     $("#searchBtn").click(function() {
         $("#coverDisplay").css({
             "opacity": "1",
@@ -53,6 +52,7 @@ $(function() {
             $("#searchBtn").trigger("click");
         }
     });
+
     $("#depto").change(function() {
         if ($(this).val() == "") {
             $("#cargo").html("").prop("disabled", true);
@@ -141,7 +141,6 @@ $(function() {
         }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
-
     });
     $("#pais-modal").live("change", function() {
         pais = $('#pais-modal').val();
@@ -166,7 +165,8 @@ $(function() {
         });
     });
     $("#bodyTabla button.editar").click(function() {
-//        $("#id_sede").val($(this).data("id"));
+        $("#dni_old-modal").val($(this).data("dni"));
+        $("#id_old-modal").val($(this).data("id"));        
         $("#dni-modal").val($(this).data("dni"));
         $("#id-modal").val($(this).data("id"));
         $("#nombre1-modal").val($(this).data("nombre1"));
@@ -181,7 +181,6 @@ $(function() {
         var id_departamento = $(this).data("id_departamento");
         var id_ciudad = $(this).data("id_ciudad");
         $("#pais-modal").val(id_pais);
-
         $.post('llena_provincia', {
             pais: id_pais
         }, function(data) {
@@ -205,7 +204,39 @@ $(function() {
         $("#telefono-modal").val($(this).data("telefono"));
         $("#celular-modal").val($(this).data("celular"));
         $("#email-modal").val($(this).data("email"));
-        $("#salario-modal").val($(this).data("salario"));
+        $("#sede_ppal-modal").val($(this).data("sede_ppal"));
+        $("#depto-modal").val($(this).data("depto"));
+        depto = $(this).data("depto");
+        cargo = $(this).data("cargo");
+        salario = $(this).data("salario");
+        $.post($("#action_llena_cargo_departamento").val(), {
+            depto: depto
+        }, function(data) {
+            $("#cargo-modal").removeAttr("disabled");
+            $("#cargo-modal").html(data);
+            $("#cargo-modal").prepend('<option value="default" selected>Seleccione Cargo</option>');
+            $("#cargo-modal").val(cargo);
+        });
+        $.post($("#action_llena_salario_departamento").val(), {
+            depto: depto
+        }, function(data) {
+            $("#salario-modal").removeAttr("disabled");
+            $("#salario-modal").html(data);
+            $("#salario-modal").prepend('<option value="default" selected>Seleccione Salario</option>');
+            $("#salario-modal").val(salario);
+        });
+        sedePpal = $(this).data("sede_ppal");
+        jefe = $(this).data("jefe");
+        $.post($("#action_llena_jefe_new_empleado").val(), {
+            sedePpal: sedePpal,
+            cargo: cargo,
+            depto: depto
+        }, function(data) {
+            $("#jefe-modal").html(data);
+            $("#jefe-modal").prepend('<option value="default" selected>Seleccione Nuevo Jefe</option>');
+            $("#jefe-modal").removeAttr("disabled");
+            $("#jefe-modal").val(jefe);
+        });
         $("#modal-editar-empleado").modal("show");
     });
     $('#botonValidarEmpleado').live('click', function() {
@@ -284,5 +315,90 @@ $(function() {
         }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
+    });
+//Cargar cargo segun departamento
+    $(".form-group").delegate("#depto-modal", "change", function() {
+        if ($('#depto-modal').val() == "default") {
+            $("#cargo-modal").attr('disabled', 'disabled');
+            $("#salario-modal").attr('disabled', 'disabled');
+            $("#cargo-modal").html('<option value="default" selected>Seleccione primero Departamento</option>');
+            $("#salario-modal").html('<option value="default" selected>Seleccione primero Departamento</option>');
+        } else {
+            depto = $('#depto-modal').val();
+            $.post($("#action_llena_cargo_departamento").val(), {
+                depto: depto
+            }, function(data) {
+                $("#cargo-modal").removeAttr("disabled");
+                $("#cargo-modal").html(data);
+                $("#cargo-modal").prepend('<option value="default" selected>Seleccione Cargo</option>');
+            });
+            $.post($("#action_llena_salario_departamento").val(), {
+                depto: depto
+            }, function(data) {
+                $("#salario-modal").removeAttr("disabled");
+                $("#salario-modal").html(data);
+                $("#salario-modal").prepend('<option value="default" selected>Seleccione Salario</option>');
+            });
+        }
+    });
+    //Si modificamos cargo cargamos los jefes
+    $(".form-group").delegate("#cargo-modal", "change", function() {
+        if (($('#cargo-modal').val() == "default") || ($('#sede_ppal-modal').val() == "default") || ($('#depto-modal').val() == "default")) {
+            $("#jefe-modal").attr('disabled', 'disabled');
+            $("#jefe-modal").html('<option value="default" selected>Seleccione Primero Sede, Departamento y Cargo</option>');
+        } else {
+            sedePpal = $('#sede_ppal-modal').val();
+            cargo = $('#cargo-modal').val();
+            depto = $('#depto-modal').val();
+            $.post($("#action_llena_jefe_new_empleado").val(), {
+                sedePpal: sedePpal,
+                cargo: cargo,
+                depto: depto
+            }, function(data) {
+                $("#jefe-modal").html(data);
+                $("#jefe-modal").prepend('<option value="default" selected>Seleccione Nuevo Jefe</option>');
+                $("#jefe-modal").removeAttr("disabled");
+            });
+        }
+    });
+    //Si modificamos cargo cargamos los jefes
+    $(".form-group").delegate("#depto-modal", "change", function() {
+        if (($('#cargo-modal').val() == "default") || ($('#sede_ppal-modal').val() == "default") || ($('#depto-modal').val() == "default")) {
+            $("#jefe-modal").attr('disabled', 'disabled');
+            $("#jefe-modal").html('<option value="default" selected>Seleccione Primero Sede, Departamento y Cargo</option>');
+        } else {
+            sedePpal = $('#sede_ppal-modal').val();
+            cargo = $('#cargo-modal').val();
+            depto = $('#depto-modal').val();
+            $.post($("#action_llena_jefe_new_empleado").val(), {
+                sedePpal: sedePpal,
+                cargo: cargo,
+                depto: depto
+            }, function(data) {
+                $("#jefe-modal").html(data);
+                $("#jefe-modal").prepend('<option value="default" selected>Seleccione Nuevo Jefe</option>');
+                $("#jefe-modal").removeAttr("disabled");
+            });
+        }
+    });
+    //Si modificamos cargo cargamos los jefes
+    $(".form-group").delegate("#sede_ppal-modal", "change", function() {
+        if (($('#cargo-modal').val() == "default") || ($('#sede_ppal-modal').val() == "default") || ($('#depto-modal').val() == "default")) {
+            $("#jefe-modal").attr('disabled', 'disabled');
+            $("#jefe-modal").html('<option value="default" selected>Seleccione Primero Sede, Departamento y Cargo</option>');
+        } else {
+            sedePpal = $('#sede_ppal-modal').val();
+            cargo = $('#cargo-modal').val();
+            depto = $('#depto-modal').val();
+            $.post($("#action_llena_jefe_new_empleado").val(), {
+                sedePpal: sedePpal,
+                cargo: cargo,
+                depto: depto
+            }, function(data) {
+                $("#jefe-modal").html(data);
+                $("#jefe-modal").prepend('<option value="default" selected>Seleccione Nuevo Jefe</option>');
+                $("#jefe-modal").removeAttr("disabled");
+            });
+        }
     });
 });

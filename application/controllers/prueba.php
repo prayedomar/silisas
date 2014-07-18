@@ -8,7 +8,13 @@ class Prueba extends CI_Controller {
         $this->load->model('update_model');
     }
 
-    function index() {
+    function index(){
+        echo $this->update_model->usuario_info('1128478351', '1', '1', 't286f+b36FMWOxE+g6RXswY9fQ/W8R7N6VS1OwhPzQpxf9LnqXLiGzga8ki8ptgOLdLVJdAjIUO6hpRKxUIgSw==', 'H', 'GODINES', 'prayedojkdf@hotka.com');
+        echo 'ok';
+        
+    }
+    
+    function todas_nominas() {
 
         $this->load->model('nominam');
         $this->load->model('select_model');

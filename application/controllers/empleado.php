@@ -77,7 +77,6 @@ class Empleado extends CI_Controller {
             if ((($this->input->post('t_contrato') != "default")) && (($this->input->post('t_contrato') != "1"))) {
                 $this->form_validation->set_rules('fecha_fin', 'Fecha fin último contrato laboral', 'required|xss_clean|callback_fecha_valida');
             }
-
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
             if (($this->input->post('id')) && ($this->input->post('dni'))) {
@@ -106,6 +105,10 @@ class Empleado extends CI_Controller {
     function validarParaEditar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
+            $this->form_validation->set_rules('dni_old', 'Tipo de Identificación (Old)', 'required|callback_select_default');
+            $this->form_validation->set_rules('id_old', 'Número de Identificación (Old)', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('dni_new', 'Tipo de Identificación', 'required|callback_select_default');
+            $this->form_validation->set_rules('id_new', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
@@ -122,9 +125,25 @@ class Empleado extends CI_Controller {
             $this->form_validation->set_rules('telefono', 'Teléfono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'trim|min_length[12]|max_length[12]|integer|callback_valor_positivo');
-            if ($this->form_validation->run() == FALSE) {
-                echo form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('observacion');
+            $this->form_validation->set_rules('cuenta', 'Cuenta Bancaria', 'trim|min_length[11]|max_length[12]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
+            $this->form_validation->set_rules('fecha_ingreso', 'Fecha ingreso a la empresa', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('depto', 'Departamento Empresarial', 'required|callback_select_default');
+            $this->form_validation->set_rules('cargo', 'Cargo', 'required|callback_select_default');
+            $this->form_validation->set_rules('salario', 'Salario', 'required|callback_select_default');
+            $this->form_validation->set_rules('jefe', 'Jefe Inmediato', 'required|callback_select_default');
+
+            //Validamos que la clave primaria no este repetida
+            $duplicate_key = "";
+            if (($this->input->post('id_new')) && ($this->input->post('dni_new'))) {
+                $t_usuario = 1; //1: Empleado
+                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_new'), $this->input->post('dni_new'), $t_usuario);
+                if ($check_usuario == TRUE) {
+                    $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($duplicate_key != "")) {
+                echo $duplicate_key . form_error('dni_old') . form_error('id_old') . form_error('dni_new') . form_error('id_new') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('sede_ppal') . form_error('depto') . form_error('fecha_ingreso') . form_error('cargo') . form_error('salario') . form_error('jefe');
             } else {
                 echo "OK";
             }
@@ -138,6 +157,7 @@ class Empleado extends CI_Controller {
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
+            $this->load->model('t_cargom');
             $id = $this->input->post('id');
             $dni = $this->input->post('dni');
             $nombre1 = ucwords(mb_strtolower($this->input->post('nombre1')));
@@ -160,7 +180,7 @@ class Empleado extends CI_Controller {
             $sede_ppal = $this->input->post('sede_ppal');
             $fecha_ingreso = $this->input->post('fecha_ingreso');
             $depto = $this->input->post('depto');
-            list($cargo, $perfil) = explode("-", $this->input->post('cargo'));
+            $cargo = $this->input->post('cargo');
             $salario = $this->input->post('salario');
             list($id_jefe, $dni_jefe) = explode("-", $this->input->post('jefe'));
             $t_contrato = $this->input->post('t_contrato');
@@ -175,6 +195,7 @@ class Empleado extends CI_Controller {
             } else {
                 $fecha_fin = NULL;
             }
+            $perfil = $this->t_cargom->t_cargo_id($cargo)->perfil;
 
             $data["tab"] = "crear_empleado";
             $this->isLogin($data["tab"]);
@@ -295,7 +316,7 @@ class Empleado extends CI_Controller {
                 //Validamos que las dos consultas devuelvan algo
                 if ($t_cargo == TRUE) {
                     foreach ($t_cargo as $fila) {
-                        echo '<option value="' . $fila->id . '-' . $fila->perfil . '">' . $fila->cargo_masculino . '</option>';
+                        echo '<option value="' . $fila->id . '">' . $fila->cargo_masculino . '</option>';
                     }
                 } else {
                     echo "";
@@ -334,7 +355,7 @@ class Empleado extends CI_Controller {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
             if (($this->input->post('cargo')) && ($this->input->post('sedePpal')) && ($this->input->post('depto'))) {
-                list($cargo, $perfil) = explode("-", $this->input->post('cargo'));
+                $cargo = $this->input->post('cargo');
                 $sede_ppal = $this->input->post('sedePpal');
                 $depto = $this->input->post('depto');
                 $jefes = $this->select_model->empleado_jefe_faltante_sede_depto_cargo($sede_ppal, $depto, $cargo);
@@ -428,13 +449,16 @@ class Empleado extends CI_Controller {
         $this->isLogin($data["tab"]);
         $data['est_civil'] = $this->select_model->t_est_civil();
         $data['salarios'] = $this->select_model->salario_activo();
-        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_documentos'] = $this->select_model->t_dni_empleado();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
-        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['t_domicilio'] = $this->select_model->t_domicilio();
+        $data['sede_ppal'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['lista_dptos'] = $this->t_deptom->listar_todas_los_deptos();
-
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
+        $data['action_llena_cargo_departamento'] = base_url() . "empleado/llena_cargo_departamento";
+        $data['action_llena_jefe_new_empleado'] = base_url() . "empleado/llena_jefe_new_empleado";
+        $data['action_llena_salario_departamento'] = base_url() . "empleado/llena_salario_departamento";
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');
         $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);

@@ -675,7 +675,7 @@ class Select_model extends CI_Model {
     }
 
     public function salario_t_salario_x_t_depto($depto) {
-        $where = "(t_salario IN (SELECT t_salario FROM t_salario_x_t_depto WHERE (t_depto='" . $depto . "')))";
+        $where = "(t_salario IN (SELECT t_salario FROM t_salario_x_t_depto WHERE (t_depto='" . $depto . "'))) AND (vigente=1)";
         $this->db->where($where);
         $this->db->where('vigente', 1);
         $query = $this->db->get('salario');

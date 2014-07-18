@@ -59,7 +59,7 @@
                             <label>Sede principal</label>
                             <select id="sede" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <?php foreach ($lista_sedes as $row) { ?>
+                                <?php foreach ($sede_ppal as $row) { ?>
                                     <option value="<?= $row->id ?>" <?= isset($_GET["sede"]) && $_GET["sede"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
                                 <?php } ?>
                             </select>
@@ -173,6 +173,7 @@
                                                         data-depto="<?= $row->id_depto ?>"
                                                         data-cargo="<?= $row->cargo ?>"
                                                         data-salario="<?= $row->salario ?>"
+                                                        data-jefe="<?= $row->jefe_id_dni ?>"
                                                         >Editar</button>
                                             <?php } ?></td>
                                     </tr>
@@ -323,6 +324,11 @@
             </div>
             <form role="form" method="post" action="actualizar" id="formulario">
                 <div  class="modal-body">
+                    <input type="hidden" id="action_llena_cargo_departamento" value=<?= $action_llena_cargo_departamento ?> />
+                    <input type="hidden" id="action_llena_jefe_new_empleado" value=<?= $action_llena_jefe_new_empleado ?> />
+                    <input type="hidden" id="action_llena_salario_departamento" value=<?= $action_llena_salario_departamento ?> />
+                    <input type="hidden" name="id_old" id="id_old-modal" />
+                    <input type="hidden" name="dni_old" id="dni_old-modal" />
                     <div class="row ">
                         <div class="row">
                             <div class="col-xs-6">
@@ -330,24 +336,18 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Tipo de Identificación</label>
-                                            <select name="dni" id="dni-modal" class="form-control" readonly>
-                                                <option value="default">Seleccione T.I.</option>
-
-                                                <option value="1">Cedula de Ciudadania</option>
-
-                                                <option value="2">Cedula de Extranjeria</option>
-
-                                                <option value="3">Pasaporte</option>
-
-                                                <option value="4">Tarjeta de Identidad</option>
-
+                                            <select name="dni_new" id="dni-modal" class="form-control">
+                                                <option value="">Seleccionar tipo</option>
+                                                <?php foreach ($tipos_documentos as $row) { ?>
+                                                    <option value="<?= $row->id ?>" <?= isset($_GET["tipo_documento"]) && $_GET["tipo_documento"] == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>   
                                     </div>
                                     <div class="col-xs-6">  
                                         <div class="form-group">
                                             <label>Número de Identificación</label>
-                                            <input name="id" id="id-modal" type="text" class="form-control numerico" placeholder="Número de Identificación" maxlength="13" readonly>
+                                            <input name="id_new" id="id-modal" type="text" class="form-control numerico" placeholder="Número de Identificación" maxlength="13">
                                         </div>
                                     </div>
                                 </div>
@@ -423,7 +423,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Departamento de domiclio<em class="required_asterisco">*</em></label>
-                                            <select name="provincia" id="provincia-modal" class="form-control" readonly="">
+                                            <select name="provincia" id="provincia-modal" class="form-control">
                                                 <option value="default">Seleccione primero País</option>
                                             </select>                                
                                         </div>
@@ -431,15 +431,12 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Ciudad de domiclio<em class="required_asterisco">*</em></label>
-                                            <select name="ciudad" id="ciudad-modal" class="form-control" readonly="">
+                                            <select name="ciudad" id="ciudad-modal" class="form-control">
                                                 <option value="default">Seleccione primero Depto</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="col-xs-6">
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <div class="form-group">
@@ -453,7 +450,7 @@
                                             <input name="celular" id="celular-modal" type="text" class="form-control numerico" placeholder="Celular" maxlength="10">
                                         </div>
                                     </div>
-                                </div>                            
+                                </div>
                                 <div class="form-group">
                                     <label>Correo Electrónico<em class="required_asterisco">*</em></label>
                                     <input name="email" id="email-modal" type="text" class="form-control email" placeholder="Correo Electrónico" maxlength="80">
@@ -461,20 +458,16 @@
                                 <div class="form-group">
                                     <label>Número de Cuenta Bancaria Nomina de Sili</label>
                                     <input name="cuenta" id="cuenta-modal" type="text" class="form-control numerico" placeholder="Cuenta Bancaria de Nómina" maxlength="12">
-                                </div>    
+                                </div>                                  
+                            </div>
+                            <div class="col-xs-6">                             
                                 <div class="form-group">
                                     <label>Tipo de Domicilio<em class="required_asterisco">*</em></label>
                                     <select name="t_domicilio" id="t_domicilio-modal" class="form-control">
-                                        <option value="default">Seleccione T. de Domicilio</option>
-
-                                        <option value="1">Casa</option>
-
-                                        <option value="2">Unidad Cerrada</option>
-
-                                        <option value="3">Oficina</option>
-
-                                        <option value="4">Empresa</option>
-
+                                        <option value="default">Seleccione tipo de domicilio</option>
+                                        <?php foreach ($t_domicilio as $row) { ?>
+                                            <option value="<?= $row->id ?>"><?= $row->tipo ?></option>
+                                        <?php } ?> 
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -486,14 +479,44 @@
                                     <input name="barrio" id="barrio-modal" type="text" class="form-control letras_numeros" placeholder="Barrio o Sector" maxlength="40">
                                 </div>
                                 <div class="form-group">
-                                    <label>Salario<em class="required_asterisco">*</em></label>
-                                    <select name="salario" id="salario-modal" class="form-control">
-                                        <option value="default">Seleccione salario</option>
-                                        <?php foreach ($salarios as $row) { ?>
+                                    <label>Sede Principal<em class="required_asterisco">*</em></label>
+                                    <p class="help-block"><B>> </B>Sólo aparecerán las sedes autorizadas del responsable.</p>                                
+                                    <select name="sede_ppal" id="sede_ppal-modal" class="form-control exit_caution">
+                                        <option value="default">Seleccione Sede Principal</option>
+                                        <?php foreach ($sede_ppal as $row) { ?>
                                             <option value="<?= $row->id ?>"><?= $row->nombre ?></option>
-                                        <?php } ?>                                        
+                                        <?php } ?>                                         
+                                    </select>
+                                </div>                                  
+                                <div class="form-group">
+                                    <label>Departamento Empresarial<em class="required_asterisco">*</em></label>
+                                    <select name="depto" id="depto-modal" class="form-control exit_caution">
+                                        <option value="default">Seleccione Departamento</option>
+                                        <?php foreach ($t_depto as $row) { ?>
+                                            <option value="<?= $row->id ?>"><?= $row->tipo ?></option>
+                                        <?php } ?>                                   
+                                    </select>
+                                </div>                            
+                                <div class="form-group">
+                                    <label>Cargo<em class="required_asterisco">*</em></label>
+                                    <select name="cargo" id="cargo-modal" class="form-control exit_caution" disabled>
+                                        <option value="default">Seleccione primero Departamento</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Salario<em class="required_asterisco">*</em></label>
+                                    <p class="help-block"><B>> </B>Salario que corresponden al departamento escogido.</p>
+                                    <select name="salario" id="salario-modal" class="form-control" disabled>
+                                        <option value="default">Seleccione primero departamento</option>                                    
                                     </select>
                                 </div>                                
+                                <div class="form-group">
+                                    <label>Jefe Inmediato<em class="required_asterisco">*</em></label>
+                                    <p class="help-block"><B>> </B>Empleados del mismo departamento y sede, junto con los altos directivos que tengan un nivel jerárquico superior.</p>
+                                    <select name="jefe" id="jefe-modal" data-placeholder="Seleccione Jefe del Empleado" class="form-control exit_caution" disabled>
+                                        <option value="default" selected>Seleccione Primero Sede, Departamento y Cargo</option>
+                                    </select>
+                                </div>                                                                
                             </div>
                         </div>
                         <div id="validacion_alert">

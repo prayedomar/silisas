@@ -153,7 +153,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Sede Principal<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Sólo aparecerán cada una de sus sedes autorizadas.</p>                                
+                                <p class="help-block"><B>> </B>Sólo aparecerán las sedes autorizadas del responsable.</p>                                
                                 <select name="sede_ppal" id="sede_ppal" class="form-control exit_caution">
                                     <option value="default">Seleccione Sede Principal</option>
                                     {sede_ppal}
@@ -178,14 +178,14 @@
                             </div>
                             <div class="form-group">
                                 <label>Salario<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Sólo aparecerán aquellos que corresponden al Departamento del empleado seleccionado (Admon, Cartera, Enseñanza, RRPP, etc.)</p>
+                                <p class="help-block"><B>> </B>Salario que corresponden al departamento escogido.</p>
                                 <select name="salario" id="salario" class="form-control exit_caution" disabled>
                                     <option value="default" selected>Seleccione Primero Departamento</option>
                                 </select>
                             </div>                             
                             <div class="form-group">
                                 <label>Jefe Inmediato<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Sólo aparecerán los empleados del mismo departamento y sede del empleado, junto con los altos directivos (Nacional, General y Administrador de Sede), siempre y cuando tengan un nivel jerárquico superior.</p>
+                                <p class="help-block"><B>> </B>Empleados del mismo departamento y sede, junto con los altos directivos que tengan un nivel jerárquico superior.</p>
                                 <select name="jefe" id="jefe" data-placeholder="Seleccione Jefe del Empleado" class="form-control exit_caution" disabled>
                                     <option value="default" selected>Seleccione Primero Sede, Departamento y Cargo</option>
                                 </select>
@@ -337,6 +337,46 @@
             });
         }
     });
+    //Si modificamos depto cargamos los jefes
+    $(".form-group").delegate("#depto", "change", function() {
+        if (($('#cargo').val() == "default") || ($('#sede_ppal').val() == "default") || ($('#depto').val() == "default")) {
+            $("#jefe").attr('disabled', 'disabled');
+            $("#jefe").html('<option value="default" selected>Seleccione Primero Sede, Departamento y Cargo</option>');
+        } else {
+            sedePpal = $('#sede_ppal').val();
+            cargo = $('#cargo').val();
+            depto = $('#depto').val();
+            $.post("{action_llena_jefe_new_empleado}", {
+                sedePpal: sedePpal,
+                cargo: cargo,
+                depto: depto
+            }, function(data) {
+                $("#jefe").html(data);
+                $("#jefe").prepend('<option value="default" selected>Seleccione Nuevo Jefe</option>');
+                $("#jefe").removeAttr("disabled");
+            });
+        }
+    });
+    //Si modificamos cargo cargamos los jefes
+    $(".form-group").delegate("#sede_ppal", "change", function() {
+        if (($('#cargo').val() == "default") || ($('#sede_ppal').val() == "default") || ($('#depto').val() == "default")) {
+            $("#jefe").attr('disabled', 'disabled');
+            $("#jefe").html('<option value="default" selected>Seleccione Primero Sede, Departamento y Cargo</option>');
+        } else {
+            sedePpal = $('#sede_ppal').val();
+            cargo = $('#cargo').val();
+            depto = $('#depto').val();
+            $.post("{action_llena_jefe_new_empleado}", {
+                sedePpal: sedePpal,
+                cargo: cargo,
+                depto: depto
+            }, function(data) {
+                $("#jefe").html(data);
+                $("#jefe").prepend('<option value="default" selected>Seleccione Nuevo Jefe</option>');
+                $("#jefe").removeAttr("disabled");
+            });
+        }
+    });    
     //Si modificamos sede ppal cargamos los jefes
     $(".form-group").delegate("#sede_ppal", "change", function() {
         if (($('#cargo').val() == "default") || ($('#sede_ppal').val() == "default") || ($('#depto').val() == "default")) {

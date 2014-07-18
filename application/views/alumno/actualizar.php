@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
-                    <legend>Actualizar alumno</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Modificar alumno</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Alumno</legend>
@@ -30,7 +30,7 @@
                             </div>                            
                             <div class="row text-center separar_submit">
                                 <button type="button" class="btn btn-default" id="consultar_alumno"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Alumno </a>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Consultar otro alumno </a>
                             </div>
                         </div>
                     </div>
@@ -38,6 +38,25 @@
                 <div id="div_alumno" style="display: none">
                     <div class="row">
                         <div class="col-xs-6">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
+                                        <select name="dni_new" id="dni_new" class="form-control exit_caution">
+                                            <option value="default">Seleccione T.I.</option>
+                                            {dni}
+                                            <option value="{id}">{tipo}</option>
+                                            {/dni}
+                                        </select>
+                                    </div>   
+                                </div>
+                                <div class="col-xs-6">  
+                                    <div class="form-group">
+                                        <label>Número de Identificación<em class="required_asterisco">*</em></label>
+                                        <input name="id_new" id="id_new" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
+                                    </div>
+                                </div>
+                            </div>                            
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
@@ -130,7 +149,9 @@
                             <div class="form-group">
                                 <label>Barrio/Sector</label>
                                 <input name="barrio" id="barrio" type="text" class="form-control exit_caution letras_numeros" placeholder="Barrio o Sector" maxlength="40">
-                            </div>
+                            </div>                          
+                        </div>
+                        <div class="col-xs-6">
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
@@ -144,9 +165,7 @@
                                         <input name="celular" id="celular" type="text" class="form-control exit_caution numerico" placeholder="Celular" maxlength="10">
                                     </div>
                                 </div>
-                            </div>                           
-                        </div>
-                        <div class="col-xs-6">                             
+                            </div>                             
                             <div class="form-group">
                                 <label>Correo Electrónico<em class="required_asterisco">*</em></label>
                                 <input name="email" id="email" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
@@ -155,20 +174,26 @@
                                 <label>Número de Matrícula<em class="required_asterisco">*</em></label>
                                 <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" readonly>
                             </div>
-                            <div class="form-group">
-                                <label>Velocidad Inicial<em class="required_asterisco">*</em></label>                                
-                                <div class="input-group">
-                                    <span class="input-group-addon">p.p.m</span>
-                                    <input type="text" name="velocidad_ini" id="velocidad_ini" class="form-control numerico miles" placeholder="0" maxlength="5">
+                            <div class="row">
+                                <div class="col-xs-6">                            
+                                    <div class="form-group">
+                                        <label>Velocidad Inicial<em class="required_asterisco">*</em></label>                                
+                                        <div class="input-group">
+                                            <span class="input-group-addon">p.p.m</span>
+                                            <input type="text" name="velocidad_ini" id="velocidad_ini" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">  
+                                    <div class="form-group">
+                                        <label>Comprensión Inicial<em class="required_asterisco">*</em></label>                                
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <input type="text" name="comprension_ini" id="comprension_ini" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                        </div>
+                                    </div>  
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Comprensión Inicial<em class="required_asterisco">*</em></label>                                
-                                <div class="input-group">
-                                    <span class="input-group-addon">%</span>
-                                    <input type="text" name="comprension_ini" id="comprension_ini" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                </div>
-                            </div>            
                             <div class="form-group">
                                 <label>Tipo de Curso<em class="required_asterisco">*</em></label>
                                 <select name="t_curso" id="t_curso" class="form-control exit_caution">
@@ -213,7 +238,7 @@
                         <input type="hidden" name="dni_responsable" value={dni_responsable} />
                         <center>
                             <!--El boton oculto tiene que estar despues del de ajax, porq si el usuario da enter al final del formulario ejecutara el oculto, por lo menos en firefox-->
-                            <button id="btn_validar" class="btn btn-success">Actualizar alumno</button> 
+                            <button id="btn_validar" class="btn btn-success">Modificar alumno</button> 
                             <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-success" style="display:none;"></button>
                             <a href="<?= base_url() ?>"class="btn btn-danger" role="button"> Cancelar </a>
                         </center>
@@ -265,6 +290,8 @@
                     $('#id').attr('readonly', 'readonly');
                     $('#consultar_alumno').attr('disabled', 'disabled');
                     //Actulizamos los input con valores existentes.
+                    $("#id_new").attr("value", obj.id);
+                    $("#dni_new").attr("value", obj.dni);
                     $("#nombre1").attr("value", obj.nombre1);
                     $("#nombre2").attr("value", obj.nombre2);
                     $("#apellido1").attr("value", obj.apellido1);
