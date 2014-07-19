@@ -8,14 +8,12 @@ class Prueba extends CI_Controller {
         $this->load->model('update_model');
     }
 
-    function index(){
-        echo $this->update_model->usuario_info('1128478351', '1', '1', 't286f+b36FMWOxE+g6RXswY9fQ/W8R7N6VS1OwhPzQpxf9LnqXLiGzga8ki8ptgOLdLVJdAjIUO6hpRKxUIgSw==', 'H', 'GODINES', 'prayedojkdf@hotka.com');
+    function index() {
+        $contrato_laboral = $this->select_model->contrato_laboral_empleado('1128478351', $$nomina->dni_empleado);
         echo 'ok';
-        
     }
-    
-    function todas_nominas() {
 
+    function historico_nominas() {
         $this->load->model('nominam');
         $this->load->model('select_model');
         $nominas_vigentes = $this->nominam->nominas_vigentes();
@@ -52,6 +50,12 @@ class Prueba extends CI_Controller {
             } else {
                 $empleado_a = "a";
                 $cargo = $nomina->cargo_femenino;
+            }
+            $contrato_laboral = $this->select_model->contrato_laboral_empleado($nomina->id_empleado, $nomina->dni_empleado);
+            if ($contrato_laboral->t_contrato == '4') {
+                $titulo = "PAGO POR PRESTACIÓN DE SERVICIOS";
+            } else {
+                $titulo = "NÓMINA LABORAL";
             }
 
 // Este método tiene varias opciones, consulta la documentación para más información.
@@ -115,7 +119,7 @@ class Prueba extends CI_Controller {
                     . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr><tr>'
-                    . '<td class="a2 c24" colspan="2">NÓMINA LABORAL</td>'
+                    . '<td class="a2 c24" colspan="2">' . $titulo . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td class="c23 c25 c26 c27 c28 c12 c5"><b>Número:</b></td><td class="c23 c25 c26 c27 c28 c12 c6">' . $id_nomina_limpio . '</td>'
@@ -130,12 +134,15 @@ class Prueba extends CI_Controller {
                     . '<tr>'
                     . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Periodicidad:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">' . $nomina->tipo_periodicidad . '</td>'
                     . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Periodo:</b></td><td class="c4 c23 c12 c25 c26 c27 c28">Del ' . $nomina->fecha_inicio . ' al ' . $nomina->fecha_fin . '</td>'
-                    . '</tr></table>'
-                    . '<table><tr>'
-                    . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Días nómina:</b></td><td class="c9 c23 c12 c25 c26 c27 c28">' . $nomina->dias_nomina . '</td>'
-                    . '<td class="c11 c23 c12 c25 c26 c27 c28"><b>Días remunerados:</b></td><td class="c3 c23 c12 c25 c26 c27 c28">' . $nomina->dias_remunerados . '</td>'
-                    . '<td class="c11 c23 c12 c25 c26 c27 c28"><b>Ausencias:</b></td><td class="c9 c23 c12 c25 c26 c27 c28">' . $nomina->ausencias . '</td>'
-                    . '</tr></table>'
+                    . '</tr></table>';
+            if ($contrato_laboral->t_contrato != '4') {
+                $html .= '<table><tr>'
+                        . '<td class="c3 c23 c12 c25 c26 c27 c28"><b>Días nómina:</b></td><td class="c9 c23 c12 c25 c26 c27 c28">' . $nomina->dias_nomina . '</td>'
+                        . '<td class="c11 c23 c12 c25 c26 c27 c28"><b>Días remunerados:</b></td><td class="c3 c23 c12 c25 c26 c27 c28">' . $nomina->dias_remunerados . '</td>'
+                        . '<td class="c11 c23 c12 c25 c26 c27 c28"><b>Ausencias:</b></td><td class="c9 c23 c12 c25 c26 c27 c28">' . $nomina->ausencias . '</td>'
+                        . '</tr></table>';
+            }
+            $html .= '<table><tr>'
                     . '<table><tr>'
                     . '<td class="c3 c23 c25 c26 c27 c28"><b>Emplead' . $empleado_a . ':</b></td><td class="c4 c23 c25 c26 c27 c28">' . $nomina->empleado . '</td>'
                     . '<td class="c3 c23 c25 c26 c27 c28"><b>Documento:</b></td><td class="c4 c23 c25 c26 c27 c28">' . $dni_abreviado_empleado . ' ' . $nomina->id_empleado . '</td>'

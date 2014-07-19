@@ -6,7 +6,7 @@
                     <legend>Crear nómina laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
-                            <div class="form-group">
+<!--                            <div class="form-group">
                                 <label>Tipo Nómina<em class="required_asterisco">*</em></label>
                                 <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" readonly>
                                     <option value="default">Seleccione tipo de nómina</option>
@@ -14,7 +14,7 @@
                                     <option value="2">Nómina RRPP </option>
                                     <option value="3">Seleccione tipo de nómina</option>
                                 </select>
-                            </div>                                
+                            </div>                                -->
                             <div class="form-group">
                                 <label>Empleado<em class="required_asterisco">*</em></label>
                                 <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos de cada una de sus sedes autorizadas.</p>

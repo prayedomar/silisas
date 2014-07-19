@@ -12,7 +12,7 @@
                                     <div class="form-group">
                                         <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                         <select name="dni" id="dni" class="form-control exit_caution">
-                                            <option value="default">Seleccione T.I.</option>
+                                            <option value="default">Seleccione...</option>
                                             {dni}
                                             <option value="{id}">{tipo}</option>
                                             {/dni}
@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                 <select name="dni_a_nombre_de" id="dni_a_nombre_de" class="form-control exit_caution">
-                                    <option value="default">Seleccione T.I.</option>
+                                    <option value="default">Seleccione...</option>
                                     {dni_a_nombre_de}
                                     <option value="{id}">{tipo}</option>
                                     {/dni_a_nombre_de}

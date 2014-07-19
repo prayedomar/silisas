@@ -177,7 +177,7 @@
                                     <div class="form-group">
                                         <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                         <select name="dni" id="dni-modal" class="form-control exit_caution" readonly>
-                                            <option value="default">Seleccione T.I.</option>
+                                            <option value="default">Seleccione...</option>
 
                                             <option value="1">Cedula de Ciudadania</option>
 
