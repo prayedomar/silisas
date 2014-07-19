@@ -40,7 +40,7 @@ class Alumno extends CI_Controller {
 
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
-            if (($this->input->post('id')) && ($this->input->post('dni'))) {
+            if (($this->input->post('id')) && ($this->input->post('dni') != "default")) {
                 $t_usuario = 3; //3: Alumno
                 $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
                 if ($check_usuario == TRUE) {
@@ -209,6 +209,8 @@ class Alumno extends CI_Controller {
     function validar_actualizar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
+            $this->form_validation->set_rules('dni', 'Tipo de Identificación (Old)', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Número de Identificación (Old)', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('dni_new', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id_new', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
@@ -234,15 +236,17 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
-            if (($this->input->post('id_new')) && ($this->input->post('dni_new'))) {
-                $t_usuario = 3; //3: Alumno
-                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_new'), $this->input->post('dni_new'), $t_usuario);
-                if ($check_usuario == TRUE) {
-                    $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+            if (($this->input->post('id_old')) && ($this->input->post('dni_old') != "default") && ($this->input->post('id_new')) && ($this->input->post('dni_new') != "default")) {
+                if (($this->input->post('id_old') != $this->input->post('id_new')) || ($this->input->post('dni_old') != $this->input->post('dni_new'))) {
+                    $t_usuario = 3; //3: Alumno
+                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_new'), $this->input->post('dni_new'), $t_usuario);
+                    if ($check_usuario == TRUE) {
+                        $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+                    }
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($duplicate_key != "")) {
-                echo $duplicate_key . form_error('dni_new') . form_error('id_new') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('velocidad_ini') . form_error('comprension_ini') . form_error('t_curso') . form_error('cant_clases') . form_error('observacion');
+                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('dni_new') . form_error('id_new') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('velocidad_ini') . form_error('comprension_ini') . form_error('t_curso') . form_error('cant_clases') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -281,7 +285,10 @@ class Alumno extends CI_Controller {
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
 
             $t_usuario = 3; //Alumno
-            $password = $this->encrypt->encode($id_new); //Encriptamos el numero de identificacion            
+            if ($id_old != $id_new) {
+                $password = $this->encrypt->encode($id_new); //Encriptamos el numero de identificacion  
+                $this->update_model->cambiar_contraseña($id_old, $dni_old, $t_usuario, $password);
+            }
             $nombres = $nombre1 . " " . $nombre2;
 
             $data["tab"] = "editar_alumno";
@@ -290,7 +297,7 @@ class Alumno extends CI_Controller {
             $data['url_recrear'] = base_url() . "alumno/actualizar";
             $data['msn_recrear'] = "Actualizar otro Alumno";
 
-            $error1 = $this->update_model->usuario_info($id_old, $dni_old, $id_new, $dni_new, $t_usuario, $password, $genero, $nombres, $email);
+            $error1 = $this->update_model->usuario_info($id_old, $dni_old, $id_new, $dni_new, $t_usuario, $genero, $nombres, $email);
             if (isset($error1)) {
                 $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

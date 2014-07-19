@@ -174,6 +174,11 @@
                                                         data-cargo="<?= $row->cargo ?>"
                                                         data-salario="<?= $row->salario ?>"
                                                         data-jefe="<?= $row->jefe_id_dni ?>"
+                                                        data-fecha_ingreso="<?= $row->fecha_ingreso ?>"
+                                                        data-t_contrato="<?= $row->t_contrato ?>"
+                                                        data-fecha_inicio="<?= $row->fecha_inicio ?>"
+                                                        data-fecha_fin="<?= $row->fecha_fin ?>"
+                                                        data-observacion="<?= $row->observacion ?>"
                                                         >Editar</button>
                                             <?php } ?></td>
                                     </tr>
@@ -324,6 +329,7 @@
             </div>
             <form role="form" method="post" action="actualizar" id="formulario">
                 <div  class="modal-body">
+                    <p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <input type="hidden" id="action_llena_cargo_departamento" value=<?= $action_llena_cargo_departamento ?> />
                     <input type="hidden" id="action_llena_jefe_new_empleado" value=<?= $action_llena_jefe_new_empleado ?> />
                     <input type="hidden" id="action_llena_salario_departamento" value=<?= $action_llena_salario_departamento ?> />
@@ -519,6 +525,57 @@
                                 </div>                                                                
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-xs-offset-3">
+                                <div class="form-group">
+                                    <label>Fecha ingreso a la empresa<em class="required_asterisco">*</em></label>
+                                    <div class="input-group">
+                                        <input name="fecha_ingreso" id="fecha_ingreso-modal" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de ingreso a la empresa">
+                                        <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div> 
+                                </div>
+                            </div>                    
+                        </div>
+                        <div class="row separar_div">
+                            <legend>Último contrato laboral vigente</legend>
+                            <div class="row">
+                                <div class="col-xs-8 col-xs-offset-2">
+                                    <div class="form-group">
+                                        <label>Tipo de Contrato Laboral<em class="required_asterisco">*</em></label>
+                                        <select name="t_contrato" id="t_contrato-modal" class="form-control exit_caution">
+                                            <option value="default">Seleccione tipo de contrato laboral</option>
+                                            <?php foreach ($t_contrato as $row) { ?>
+                                                <option value="<?= $row->id ?>"><?= $row->contrato ?></option>
+                                            <?php } ?>                                             
+                                        </select>
+                                    </div>                            
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label>Fecha inicio último contrato laboral<em class="required_asterisco">*</em></label>
+                                                <div class="input-group">
+                                                    <input name="fecha_inicio" id="fecha_inicio-modal" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
+                                                    <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6" id="duracion_contrato" style="display:none;">
+                                            <div class="form-group">
+                                                <label>Fecha fin último contrato laboral<em class="required_asterisco">*</em></label>
+                                                <div class="input-group">
+                                                    <input name="fecha_fin" id="fecha_fin-modal" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
+                                                    <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>                                  
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Observación</label>
+                            <textarea name="observacion" id="observacion-modal" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                        </div>                        
                         <div id="validacion_alert">
                         </div>   
                     </div>

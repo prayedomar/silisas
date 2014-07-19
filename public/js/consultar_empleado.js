@@ -166,7 +166,7 @@ $(function() {
     });
     $("#bodyTabla button.editar").click(function() {
         $("#dni_old-modal").val($(this).data("dni"));
-        $("#id_old-modal").val($(this).data("id"));        
+        $("#id_old-modal").val($(this).data("id"));
         $("#dni-modal").val($(this).data("dni"));
         $("#id-modal").val($(this).data("id"));
         $("#nombre1-modal").val($(this).data("nombre1"));
@@ -237,6 +237,17 @@ $(function() {
             $("#jefe-modal").removeAttr("disabled");
             $("#jefe-modal").val(jefe);
         });
+        $("#fecha_ingreso-modal").val($(this).data("fecha_ingreso"));
+        $("#t_contrato-modal").val($(this).data("t_contrato"));
+        t_contrato = $(this).data("t_contrato");
+        if ((t_contrato == '1') || (t_contrato == 'default')) {
+            $("#duracion_contrato").css("display", "none");
+        } else {
+            $("#duracion_contrato").css("display", "block");
+        }
+        $("#fecha_inicio-modal").val($(this).data("fecha_inicio"));
+        $("#fecha_fin-modal").val($(this).data("fecha_fin"));
+        $("#observacion-modal").val($(this).data("observacion"));
         $("#modal-editar-empleado").modal("show");
     });
     $('#botonValidarEmpleado').live('click', function() {
@@ -399,6 +410,15 @@ $(function() {
                 $("#jefe-modal").prepend('<option value="default" selected>Seleccione Nuevo Jefe</option>');
                 $("#jefe-modal").removeAttr("disabled");
             });
+        }
+    });
+    //Cargar div de sancion segun t_sancion
+    $(".form-group").delegate("#t_contrato-modal", "change", function() {
+        t_contrato = $('#t_contrato-modal').val();
+        if ((t_contrato == '1') || (t_contrato == 'default')) {
+            $("#duracion_contrato").css("display", "none");
+        } else {
+            $("#duracion_contrato").css("display", "block");
         }
     });
 });

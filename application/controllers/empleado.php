@@ -79,7 +79,7 @@ class Empleado extends CI_Controller {
             }
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
-            if (($this->input->post('id')) && ($this->input->post('dni'))) {
+            if (($this->input->post('id')) && ($this->input->post('dni') != "default")) {
                 $t_usuario = 1; //1: Empleado
                 $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
                 if ($check_usuario == TRUE) {
@@ -132,18 +132,29 @@ class Empleado extends CI_Controller {
             $this->form_validation->set_rules('cargo', 'Cargo', 'required|callback_select_default');
             $this->form_validation->set_rules('salario', 'Salario', 'required|callback_select_default');
             $this->form_validation->set_rules('jefe', 'Jefe Inmediato', 'required|callback_select_default');
+            $this->form_validation->set_rules('t_contrato', 'Tipo de Contrato Laboral', 'required|callback_select_default');
+            $this->form_validation->set_rules('fecha_inicio', 'Fecha inicio último contrato laboral', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
-            if (($this->input->post('id_new')) && ($this->input->post('dni_new'))) {
-                $t_usuario = 1; //1: Empleado
-                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_new'), $this->input->post('dni_new'), $t_usuario);
-                if ($check_usuario == TRUE) {
-                    $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+            if (($this->input->post('id_old')) && ($this->input->post('dni_old') != "default") && ($this->input->post('id_new')) && ($this->input->post('dni_new') != "default")) {
+                if (($this->input->post('id_old') != $this->input->post('id_new')) || ($this->input->post('dni_old') != $this->input->post('dni_new'))) {
+                    $t_usuario = 1; //1: Empleado
+                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_new'), $this->input->post('dni_new'), $t_usuario);
+                    if ($check_usuario == TRUE) {
+                        $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+                    }
                 }
             }
-            if (($this->form_validation->run() == FALSE) || ($duplicate_key != "")) {
-                echo $duplicate_key . form_error('dni_old') . form_error('id_old') . form_error('dni_new') . form_error('id_new') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('sede_ppal') . form_error('depto') . form_error('fecha_ingreso') . form_error('cargo') . form_error('salario') . form_error('jefe');
+            $error_entre_fechas = "";
+            if (($this->fecha_valida($this->input->post('fecha_inicio'))) && ($this->fecha_valida($this->input->post('fecha_fin')))) {
+                if (($this->dias_entre_fechas($this->input->post('fecha_inicio'), $this->input->post('fecha_fin'))) < 0) {
+                    $error_entre_fechas = "<p>La fecha final del contrato, no puede ser menor que la fecha inicial.</p>";
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($duplicate_key != "") || ($error_entre_fechas != "")) {
+                echo $duplicate_key . form_error('dni_old') . form_error('id_old') . form_error('dni_new') . form_error('id_new') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('sede_ppal') . form_error('depto') . form_error('fecha_ingreso') . form_error('cargo') . form_error('salario') . form_error('jefe') . form_error('t_contrato') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -459,9 +470,6 @@ class Empleado extends CI_Controller {
         $data['action_llena_cargo_departamento'] = base_url() . "empleado/llena_cargo_departamento";
         $data['action_llena_jefe_new_empleado'] = base_url() . "empleado/llena_jefe_new_empleado";
         $data['action_llena_salario_departamento'] = base_url() . "empleado/llena_salario_departamento";
-        $id_responsable = $this->session->userdata('idResponsable');
-        $dni_responsable = $this->session->userdata('dniResponsable');
-        $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['t_depto'] = $this->select_model->t_depto();
         $data['t_contrato'] = $this->select_model->t_contrato_laboral();
         if (!empty($_GET["depto"])) {

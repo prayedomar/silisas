@@ -22,14 +22,13 @@ class Update_model extends CI_Model {
         }
     }
 
-    public function usuario_info($id_old, $dni_old, $id_new, $dni_new, $t_usuario, $new_password, $genero, $nombres, $email) {
+    public function usuario_info($id_old, $dni_old, $id_new, $dni_new, $t_usuario, $genero, $nombres, $email) {
         $data = array(
             'id' => $id_new,
             'dni' => $dni_new,
             'genero' => $genero,
             'nombres' => $nombres,
-            'email' => $email,
-            'password' => $new_password
+            'email' => $email
         );
         $this->db->where('id', $id_old);
         $this->db->where('dni', $dni_old);
