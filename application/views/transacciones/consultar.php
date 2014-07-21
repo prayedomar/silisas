@@ -175,8 +175,6 @@
                              data-tipodocumento="<?= isset($_GET["tipo_documento"]) ? $_GET["tipo_documento"] : "" ?>"
                              data-documento="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>"
                              data-tipotrans="<?= isset($_GET["tipo_trans"]) ? $_GET["tipo_trans"] : "" ?>">
-
-
                             <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">
                                     <a data-page="1">1</a></li>

@@ -1399,7 +1399,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $fecha_clase, $asistencia, $etapa, $fase, $meta_v, $meta_c, $meta_r, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $vigente, $observacion_interna, $observacion_titular_alumno, $id_responsable, $dni_responsable) {
+    public function reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $fecha_clase, $asistencia, $etapa, $fase, $meta_v, $meta_c, $meta_r, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $vigente, $observacion_interna, $observacion_titular_alumno, $sede, $id_responsable, $dni_responsable) {
         $data = array(
             'id' => $id_reporte,
             'id_alumno' => $id_alumno,
@@ -1418,6 +1418,7 @@ class Insert_model extends CI_Model {
             'c' => $c,
             'r' => $r,
             'vigente' => $vigente,
+            'sede' => $sede,
             'observacion_interna' => $observacion_interna,
             'observacion_titular_alumno' => $observacion_titular_alumno,
             'id_responsable' => $id_responsable,

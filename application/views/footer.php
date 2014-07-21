@@ -26,6 +26,8 @@
 <script src='<?= base_url() ?>public/js/global.js'></script>
 <?php if (isset($tab) && $tab == "consultar_sede") { ?>
     <script src='<?= base_url() ?>public/js/consultar_sede.js'></script>
+<?php } else if (isset($tab) && $tab == "consultar_reporte_alumno") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_reporte_alumno.js'></script>    
 <?php } else if (isset($tab) && $tab == "consultar_salon") { ?>
     <script src='<?= base_url() ?>public/js/consultar_salon.js'></script>
 <?php } else if (isset($tab) && $tab == "consultar_salario") { ?>

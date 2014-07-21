@@ -15,7 +15,7 @@ class Reporte_alumno extends CI_Controller {
         $data["tab"] = "crear_reporte_alumno";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['dni'] = $this->select_model->t_dni_alumno();
         $data['t_curso'] = $this->select_model->t_curso();
         $data['action_validar'] = base_url() . "reporte_alumno/validar";
@@ -108,16 +108,17 @@ class Reporte_alumno extends CI_Controller {
             $c = $this->input->post('c');
             $r = $this->input->post('r');
             $vigente = 1;
-            $observacion_interna = ucfirst(mb_strtolower($this->input->post('observacion_interna')));
-            $observacion_titular_alumno = ucfirst(mb_strtolower($this->input->post('observacion_titular_alumno')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
+            $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+            $observacion_interna = ucfirst(mb_strtolower($this->input->post('observacion_interna')));
+            $observacion_titular_alumno = ucfirst(mb_strtolower($this->input->post('observacion_titular_alumno')));
             $id_reporte = ($this->select_model->nextId_reporte_alumno()->id) + 1;
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "reporte_alumno/crear";
             $data['msn_recrear'] = "Crear otro reporte de enseñanza";
 
-            $error = $this->insert_model->reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $fecha_clase, $asistencia, $etapa, $fase, $meta_v, $meta_c, $meta_r, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $vigente, $observacion_interna, $observacion_titular_alumno, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $fecha_clase, $asistencia, $etapa, $fase, $meta_v, $meta_c, $meta_r, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $vigente, $observacion_interna, $observacion_titular_alumno, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
@@ -320,7 +321,7 @@ class Reporte_alumno extends CI_Controller {
                         </table>
                     <div class="row">
                                     <div class="col-xs-5 col-xs-offset-7">
-                                        <p><h4>Total prácticas realizadas durante el curso: ' . $total_practicas. '</h4></p>
+                                        <p><h4>Total prácticas realizadas durante el curso: ' . $total_practicas . '</h4></p>
                                     </div>
                                 </div></div></div>';
                 } else {
@@ -443,6 +444,40 @@ class Reporte_alumno extends CI_Controller {
         } else {
             redirect(base_url());
         }
+    }
+
+    public function consultar() {
+        $this->load->model('sedem');
+        $this->load->model('reporte_alumnom');
+        $this->load->model('ejercicio_ensenanzam');
+        $data["tab"] = "consultar_reporte_alumno";
+        $this->isLogin($data["tab"]);
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidadRegistros = $this->reporte_alumnom->cantidad_reportes($_GET);
+        $cantRegistros = $cantidadRegistros[0]->cantidad;
+        $data['cantidadRegistros'] = $cantRegistros;
+        $data['cantidadPaginas'] = ceil($cantRegistros / $filasPorPagina);
+        $data["listaRegistros"] = $this->reporte_alumnom->listar_reportes($_GET, $inicio, $filasPorPagina);
+        foreach ($data["listaRegistros"] as $row) {
+            $ejercicios = $this->ejercicio_ensenanzam->ejercicio_reporte_ensenanza($row->id);
+            $lista = "";
+            foreach ($ejercicios as $row2) {
+                $lista .= "> " . $row2->habilidad . ": " . $row2->ejercicio . ".<br>";
+            }
+            $row->lista_ejercicios = $lista;
+        }
+        $this->load->view("header", $data);
+        $this->load->view("reporte_alumno/consultar");
+        $this->load->view("footer");
     }
 
 }

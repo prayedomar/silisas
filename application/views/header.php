@@ -560,7 +560,7 @@
                         <li class="dropdown-header"><u> Matrículas</u></li>
                 <!--<li><a href="#">Contratos Físicos</a></li>--> 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "calidad", "docente", "secretaria"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>matricula/consultar">Matrícula</a></li>
+                    <li><a href="<?= base_url() ?>matricula/consultar">Matrículas</a></li>
                 <?php } ?> 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera"))) { ?>                                       
                     <li><a href="<?= base_url() ?>liquidar_comisiones/consultar">Liquidación de comisiones</a></li>
@@ -576,11 +576,16 @@
                     <li class="dropdown-header"><u> Cajas y Bancos</u></li>
                 <?php } ?>    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>caja/consultar">Caja (Punto de venta)</a></li> 
+                    <li><a href="<?= base_url() ?>caja/consultar">Cajas (Puntos de venta)</a></li> 
                 <?php } ?>                                 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "contador"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>cuenta/consultar">Cuenta Bancaria</a></li>
+                    <li><a href="<?= base_url() ?>cuenta/consultar">Cuentas Bancarias</a></li>
                 <?php } ?>
+                <li class="divider"></li>
+                <li class="dropdown-header"><u> Enseñanza</u></li>                     
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "calidad", "docente", "secretaria"))) { ?>                                       
+                    <li><a href="<?= base_url() ?>reporte_alumno/consultar">Reportes de alumnos</a></li>
+                <?php } ?>                     
                 <li class="divider"></li>
                 <li class="dropdown-header"><u> Permisos</u></li>                               
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
