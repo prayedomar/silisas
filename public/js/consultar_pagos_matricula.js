@@ -5,7 +5,7 @@ $(function() {
             "width": "100%",
             "height": "100%"
         });
-        var url = "consultar?";
+        var url = "consultar_pagos_matricula?";
         if ($("#desde").val() != "") {
             url += "desde=" + $("#desde").val() + "&";
         }

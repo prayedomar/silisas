@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12 thumbnail">
             <div class="row">
-                <legend>Consultar pagos a matrículas (Facturas, Recibos de caja, Abonos) <span class="help-block pull-right">(<?= $cantidad ?> transacciones encontrados)</span></legend>
+                <legend>Consultar pagos a matrícula (Facturas, Recibos, Abonos) <span class="help-block pull-right">(<?= $cantidad ?> transacciones encontrados)</span></legend>                               
                 <div id="divCriterios">
                     <div  class="row">
                         <div class="col-xs-2">
@@ -41,14 +41,6 @@
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="col-xs-1">
-                            <br>
-                            <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
-                        </div>
-                        <div class="col-xs-1">
-                            <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>transacciones/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
-                        </div>
                     </div>
                     <br>
                     <div class="row">
@@ -60,15 +52,6 @@
                             </select>
                         </div>
                         <div class="col-xs-2">
-                            <label>Tip. doc. responsable</label>
-                            <select id="tipo_documento" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <?php foreach ($tipos_documentos as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["tipo_documento"]) && $_GET["tipo_documento"] == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-xs-2">
                             <label>Doc. responsable</label>
                             <input type='text' id="documento" class='form-control letras_numeros' placeholder="Documento" value="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>">
                         </div>
@@ -76,8 +59,8 @@
                             <label>Tipo de transacción</label>
                             <select id="tipo_trans" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <option value="7" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>>Factura</option>
-                                <option value="8" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>>Recibo de caja</option>
+                                <option value="7" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>>Factura de Venta</option>
+                                <option value="8" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>>Recibo de Caja</option>
                                 <option value="15" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>>Abono a matrícula</option>
                             </select>
                         </div>
@@ -90,20 +73,27 @@
                             </select>
                         </div>
                         <div class="col-xs-2">
+                            <label>Ingreso / Egreso</label>
+                            <select id="credito_debito" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <<option value="1"  <?= isset($_GET["credito_debito"]) && $_GET["credito_debito"] == "1" ? "selected" : "" ?>>Ingreso</option>
+                                <option value="0"  <?= isset($_GET["credito_debito"]) && $_GET["credito_debito"] == "0" ? "selected" : "" ?>>Egreso</option>
+                            </select>
+                        </div>                        
+                        <div class="col-xs-2">
                             <br>
                             <button  title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
                         </div>
-                        <!--               <div class="col-xs-2">
-                            <label>Efectivo / Bancos</label>
-                            <select id="efectivo_bancos" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <<option value="e"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "e" ? "selected" : "" ?>>Efectivo</option>
-                                <option value="b"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "b" ? "selected" : "" ?>>Bancos</option>
-                            </select>
-                        </div>          <div class="col-xs-2">
-                                                    <label>Total</label>
-                                                   <label></label>
-                                                </div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-1 col-xs-offset-5">
+                            <br>
+                            <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
+                        </div>
+                        <div class="col-xs-1">
+                            <br>
+                            <a class='btn btn-primary' href="<?= base_url() ?>transacciones/consultar_pagos_matricula"> <span class="glyphicon glyphicon-refresh"></span></a>
+                        </div>
                     </div>
                 </div>
                 <hr>
@@ -111,7 +101,7 @@
                     <div class="col-xs-2  col-xs-offset-4">
                         <p></p><h4>Total efectivo</h4><p></p>
                         <p></p><h4>Total bancos</h4><p></p>
-                        <p></p><h3>Total COP</h3><p></p>
+                        <p></p><h3>Total</h3><p></p>
                     </div>
                     <div class="col-xs-5">
                         <div id="div_total_devengado"><h4><?= "$" . number_format($totales[0]->efectivo_caja, 2, '.', ',') ?></h4></div>
@@ -129,9 +119,7 @@
                                     <th>Tipo de transacción</th>
                                     <th>Id</th>
                                     <th>Total</th>
-                                    <th>Caja</th>
                                     <th>Efectivo de caja</th>
-                                    <th>Cuenta</th>
                                     <th>Valor de cuenta</th>
                                     <th>Vigente</th>
                                     <th>Sede</th>
@@ -150,9 +138,7 @@
                                         <td><?= $row->tipo_trans . ' (' . $row->ingreso_egreso . ')' ?></td>
                                         <td><?= $row->prefijo . " " . $row->id ?></td>
                                         <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
-                                        <td><?= ($row->caja != "") ? $row->caja : "--" ?></td>
                                         <td><?= ($row->efectivo_caja != "") ? "$" . number_format($row->efectivo_caja, 2, '.', ',') : "--" ?></td>
-                                        <td><?= ($row->cuenta != "") ? $row->cuenta : "--" ?></td>
                                         <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
                                         <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
                                         <td><?= $row->sede ?></td>
@@ -172,9 +158,10 @@
                              data-id="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>"
                              data-caja="<?= isset($_GET["caja"]) ? $_GET["caja"] : "" ?>"
                              data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>"
-                             data-tipodocumento="<?= isset($_GET["tipo_documento"]) ? $_GET["tipo_documento"] : "" ?>"
                              data-documento="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>"
-                             data-tipotrans="<?= isset($_GET["tipo_trans"]) ? $_GET["tipo_trans"] : "" ?>">
+                             data-tipotrans="<?= isset($_GET["tipo_trans"]) ? $_GET["tipo_trans"] : "" ?>"
+                             data-efectivo_bancos="<?= isset($_GET["efectivo_bancos"]) ? $_GET["efectivo_bancos"] : "" ?>"
+                             data-credito_debito="<?= isset($_GET["credito_debito"]) ? $_GET["credito_debito"] : "" ?>">
                             <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">
                                     <a data-page="1">1</a></li>

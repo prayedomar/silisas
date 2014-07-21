@@ -22,12 +22,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";
             return $this->db->query($query)->result();
         } else { //El caso de la secretaria, cartera y auxiliar administrativo        
             $query = "SELECT COALESCE(SUM(CASE mt.credito_debito WHEN '1' THEN mt.total ELSE (-1 * mt.total) END), 0) total,COALESCE(SUM(CASE mt.credito_debito WHEN '1' THEN mt.efectivo_caja ELSE (-1 * mt.efectivo_caja) END), 0) efectivo_caja,COALESCE(SUM(CASE mt.credito_debito WHEN '1' THEN mt.valor_cuenta ELSE (-1 * mt.valor_cuenta) END), 0) valor_cuenta ";
@@ -41,12 +41,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";            
             return $this->db->query($query)->result();
         }
     }
@@ -64,12 +64,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";            
             return $this->db->query($query)->result();
         } else { //El caso de la secretaria, cartera y auxiliar administrativo
             $query = "SELECT count(*) cantidad ";
@@ -83,12 +83,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";            
             return $this->db->query($query)->result();
         }
     }
@@ -106,12 +106,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";            
             $query.=" ORDER BY mt.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
             return $this->db->query($query)->result();
         } else { //El caso de la secretaria, cartera y auxiliar administrativo        
@@ -126,12 +126,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";            
             $query.=" ORDER BY mt.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
             return $this->db->query($query)->result();
         }
@@ -150,12 +150,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";            
             $query.=" ORDER BY mt.fecha_trans DESC";
             return $this->db->query($query)->result();
         } else { //El caso de la secretaria, cartera y auxiliar administrativo           
@@ -170,12 +170,12 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
-            $query.=(isset($criterios['tipo_documento'])) ? "AND mt.dni_responsable= '{$criterios['tipo_documento']}' " : "";
             $query.=(isset($criterios['documento'])) ? "AND mt.id_responsable= '{$criterios['documento']}' " : "";
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
+            $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";            
             $query.=" ORDER BY mt.fecha_trans DESC";
             return $this->db->query($query)->result();
         }

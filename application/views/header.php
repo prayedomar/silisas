@@ -24,8 +24,6 @@
         <script src="<?= base_url() ?>libraries/bootstrap_3.0.2/js/bootstrap.min.js"></script>
         <script src="<?= base_url() ?>libraries/jqueryUI/jquery-ui-1.10.4.custom.min.js"></script>
         <script src="<?= base_url() ?>libraries/select_chosen/chosen.jquery.js"></script>
-
-
         <!--llenar ciudades y departamentos-->
         <script type="text/javascript">
             $(document).ready(function() {
@@ -218,16 +216,16 @@
                 <li class="col-sm-4">
                     <ul>
                         <li class="dropdown-header"><u> Transacciones</u></li>
-                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>  
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
-                    <li><a href="<?= base_url() ?>abono_matricula/crear">ABONO A MATRÍCULA</a></li>
-                <?php } ?>         
+                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>         
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/crear">Factura de venta</a></li>
                 <?php } ?>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>recibo_caja/crear">Recibo de Caja</a></li>     
-                <?php } ?>                       
+                <?php } ?> 
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
+                    <li><a href="<?= base_url() ?>abono_matricula/crear">Abono a matrícula <br>(Información Vieja)</a></li>
+                <?php } ?>                      
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                     <li><a href="<?= base_url() ?>abono_adelanto/crear">Abono adelanto nómina</a></li> 
                 <?php } ?>             
@@ -504,7 +502,7 @@
                 <?php } ?>         
                 <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>transacciones/consultar_pagos_matricula">Pagos de matrículas</a></li>
+                    <li><a href="<?= base_url() ?>transacciones/consultar_pagos_matricula">Pagos a matrículas</a></li>
                 <?php } ?>         
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "contador", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/consultar">Factura de venta</a></li>
