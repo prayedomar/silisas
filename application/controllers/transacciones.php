@@ -13,7 +13,43 @@ class Transacciones extends CI_Controller {
         $this->load->model('sedem');
         $this->load->model('t_transm');
         $data["tab"] = "consultar_transacciones";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
+        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_trans'] = $this->t_transm->listar_tipos_de_transacciones();
+        if (!empty($_GET["depto"])) {
+            $this->load->model('t_cargom');
+            $data['lista_cargos'] = $this->t_cargom->listar_todas_los_cargos_por_depto($_GET['depto']);
+        }
+        $filasPorPagina = 20;
+        if (empty($_GET["page"])) {
+            $inicio = 0;
+            $paginaActual = 1;
+        } else {
+            $inicio = ($_GET["page"] - 1) * $filasPorPagina;
+            $paginaActual = $_GET["page"];
+        }
+        $data['paginaActiva'] = $paginaActual;
+        $cantidad = $this->transaccionesm->cantidad_transacciones($_GET, $inicio, $filasPorPagina);
+        $cantidad = $cantidad[0]->cantidad;
+        $data['cantidad'] = $cantidad;
+        $data['totales'] = $this->transaccionesm->total_transacciones($_GET, $inicio, $filasPorPagina);
+        $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data["listar_cajas"] = $this->t_cajam->listar_tipos_de_caja();
+        $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);
+        $data["lista"] = $this->transaccionesm->listar_transacciones($_GET, $inicio, $filasPorPagina);
+        $this->load->view("header", $data);
+        $this->load->view("transacciones/consultar");
+        $this->load->view("footer");
+    }
+
+    public function consultar_pagos_matricula() {
+        $this->load->model('t_dnim');
+        $this->load->model('t_cajam');
+        $this->load->model('sedem');
+        $this->load->model('t_transm');
+        $data["tab"] = "consultar_pagos_matricula";
+        $this->isLogin($data["tab"]);
         $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $data['lista_trans'] = $this->t_transm->listar_tipos_de_transacciones();
@@ -62,7 +98,7 @@ class Transacciones extends CI_Controller {
         }
         $data["lista"] = $this->transaccionesm->listar_transacciones_excel($_GET);
         ?>
-       <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
             <thead>
                 <tr>
                     <th>Fecha</th>

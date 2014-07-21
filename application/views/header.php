@@ -502,7 +502,10 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador", "aux_admon", "jefe_cartera", "cartera", "contador", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>transacciones/consultar">Flujo de Transacciones</a></li>
                 <?php } ?>         
-                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>         
+                <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>                                       
+                    <li><a href="<?= base_url() ?>transacciones/consultar_pagos_matricula">Pagos de matrícula</a></li>
+                <?php } ?>         
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "contador", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/consultar">Factura de venta</a></li>
                 <?php } ?>   
