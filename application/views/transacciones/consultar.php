@@ -29,8 +29,8 @@
                             </select>
                         </div>
                         <div class="col-xs-2">
-                            <label>Id</label>
-                            <input type='text' id="id" class='form-control numerico' placeholder="Id" value="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>">
+                            <label>Consecutivo ID</label>
+                            <input type='text' id="id" class='form-control numerico' placeholder="Consecutivo ID" value="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>">
                         </div>
                         <div class="col-xs-2">
                             <label>Caja</label>
@@ -156,7 +156,7 @@
                                         <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
                                         <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
                                         <td><?= $row->sede ?></td>
-                                        <td><?= $row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2 ?></td>
+                                        <td><?= $row->nombre1 . " " . $row->apellido1 ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>

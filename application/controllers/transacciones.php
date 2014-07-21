@@ -75,7 +75,7 @@ class Transacciones extends CI_Controller {
         $data['cantidad_paginas'] = ceil($cantidad / $filasPorPagina);
         $data["lista"] = $this->transaccionesm->listar_transacciones($_GET, $inicio, $filasPorPagina);
         $this->load->view("header", $data);
-        $this->load->view("transacciones/consultar");
+        $this->load->view("transacciones/consultar_pagos_matricula");
         $this->load->view("footer");
     }
 
