@@ -35,7 +35,7 @@ $(function() {
         }
         if ($("#credito_debito").val() != "") {
             url += "credito_debito=" + $("#credito_debito").val() + "&";
-        }        
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
     });
@@ -66,7 +66,7 @@ $(function() {
         }
         if ($("#paginacion").data("id") != "") {
             url += "id=" + $("#paginacion").data("id") + "&";
-        }        
+        }
         if ($("#paginacion").data("caja") != "") {
             url += "caja=" + $("#paginacion").data("caja") + "&";
         }
@@ -81,9 +81,14 @@ $(function() {
         }
         if ($("#paginacion").data("credito_debito") != "") {
             url += "credito_debito=" + $("#paginacion").data("credito_debito") + "&";
-        }        
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
+    });
+    $("#bodyTabla button").click(function() {
+        $("#divVigente").html($(this).data("vigente"));
+        $("#detalles_html").html($(this).data("detalles_html"));
+        $("#modalDetalles").modal("show");
     });
     $("#toExcel").click(function() {
         var url = "excel?";
@@ -117,7 +122,7 @@ $(function() {
         }
         if ($("#credito_debito").val() != "") {
             url += "credito_debito=" + $("#credito_debito").val() + "&";
-        }         
+        }
         url = url.substr(0, url.length - 1);
         window.location.href = url;
     });

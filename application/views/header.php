@@ -298,7 +298,7 @@
                 <?php } ?>
                 <li class="divider"></li>
                 <li class="dropdown-header"><u> Enseñanza</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "docente", "secretaria"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "docente", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>reporte_alumno/crear">Reporte de alumno</a></li> 
                 <?php } ?>
                 <li class="divider"></li>  

@@ -18,14 +18,14 @@ class Alumnom extends CI_Model {
         if ($query->num_rows() == 1) {
             return $query->row();
         }
-    }     
+    }
 
     public function anular_alumnos_matricula_anulada($contrato) {
         $SqlInfo = "UPDATE alumno SET estado='8' "
                 . "where (matricula='" . $contrato . "')";
         $query = $this->db->query($SqlInfo);
     }
-    
+
     public function cantidad_alumnos($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT count(*) cantidad
                   FROM alumno a
@@ -33,9 +33,11 @@ class Alumnom extends CI_Model {
                   LEFT JOIN  pais pa ON a.pais=pa.id
                   LEFT JOIN  provincia pro ON a.provincia=pro.id
                   LEFT JOIN  ciudad ciu ON a.ciudad=ciu.id
-                  LEFT JOIN  t_domicilio tdom ON a.t_domicilio=tdom.id
-                  JOIN est_alumno ealum ON a.estado=ealum.id
+                 LEFT JOIN t_domicilio tdom ON a.t_domicilio=tdom.id
+                LEFT  JOIN est_alumno ealum ON a.estado=ealum.id
                   JOIN sede s ON a.sede_ppal=s.id
+                 LEFT JOIN t_curso tc ON a.t_curso=tc.id
+                  LEFT JOIN grados gr ON a.grados=gr.id
                   where true ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND a.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND a.id = '{$criterios['numero_documento']}'" : "";
@@ -47,7 +49,7 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
-        $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";        
+        $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
         return $this->db->query($query)->result();
     }
@@ -75,6 +77,7 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
+        $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
         $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
         $query.=" order by a.apellido1,a.apellido2 LIMIT $inicio,$filasPorPagina";
@@ -105,7 +108,7 @@ class Alumnom extends CI_Model {
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(a.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
         $query.=(isset($criterios['matricula'])) ? "AND a.matricula = '{$criterios['matricula']}'" : "";
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
-        $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";        
+        $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
         $query.=" order by a.apellido1,a.apellido2";
         return $this->db->query($query)->result();

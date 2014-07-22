@@ -113,17 +113,17 @@
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Tipo de transacción</th>
-                                    <th>Id</th>
-                                    <th>Total</th>
-                                    <th>Caja</th>
-                                    <th>Efectivo de caja</th>
-                                    <th>Cuenta</th>
-                                    <th>Valor de cuenta</th>
-                                    <th>Vigente</th>
-                                    <th>Sede</th>
-                                    <th>Responsable</th>
+                                    <th class="text-center">Fecha</th>
+                                    <th class="text-center">Tipo de transacción</th>
+                                    <th class="text-center">Total</th>
+                                    <th class="text-center">Caja</th>
+                                    <th class="text-center">Efectivo de caja</th>
+                                    <th class="text-center">Cuenta</th>
+                                    <th class="text-center">Valor de cuenta</th>
+                                    <th class="text-center">Sede</th>
+                                    <th class="text-center">Responsable</th>
+                                    <th class="text-center">Acciones</th>
+
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
@@ -135,18 +135,20 @@
                                         echo "success";
                                     ?>">
                                         <td><?= $row->fecha_trans ?></td>
-                                        <td><?= $row->tipo_trans . ' (' . $row->ingreso_egreso . ')' ?></td>
-                                        <td><?= $row->prefijo . " " . $row->id ?></td>
+                                        <td><?= $row->tipo_trans . ' ' . $row->prefijo . $row->id ?></td>
                                         <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
                                         <td><?= ($row->caja != "") ? $row->caja : "--" ?></td>
                                         <td><?= ($row->efectivo_caja != "") ? "$" . number_format($row->efectivo_caja, 2, '.', ',') : "--" ?></td>
                                         <td><?= ($row->cuenta != "") ? $row->cuenta : "--" ?></td>
                                         <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
-                                        <td><?= $row->vigente == 1 || $row->vigente == 2 ? "Vigente" : "No vigente" ?></td>
                                         <td><?= $row->sede ?></td>
                                         <td><?= $row->nombre1 . " " . $row->apellido1 ?></td>
-                                    </tr>
-                                <?php } ?>
+                                        <td><center><button class="btn btn-primary btn-sm" 
+                                                    data-vigente="<?= $row->vigente == 1 ? "Vigente" : "Anulada" ?>"
+                                                    data-detalles_html="<?= htmlentities($row->html_detalles, ENT_QUOTES, 'UTF-8') ?>"
+                                                    >Ver detalles</button></center></td>
+                                </tr>
+                            <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -190,91 +192,16 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Matrícula:</div>   
+                            <div class="text-right">Estado de la transacción:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divMatricula"></div></b>
+                            <b><div id="divVigente"></div></b>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Velocidad inicial:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divVelocidadInicial"></div></b>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Comprensión inicial:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divComprensionInicial"></div></b>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Curso:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divCurso"></div></b>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Estado:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divEstado"></div></b>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Fecha grados:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divFechaGrados"></div></b>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Observación:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divObservacion"></div></b>
-                        </div>
-                    </div>
-                </div>
+                <div id="detalles_html"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>

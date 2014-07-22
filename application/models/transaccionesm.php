@@ -95,7 +95,7 @@ class Transaccionesm extends CI_Model {
 
     public function listar_transacciones($criterios, $inicio, $filasPorPagina) {
         if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "admon_sede" || $_SESSION["perfil"] == "contador" || $_SESSION["perfil"] == "jefe_cartera") {
-            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'Ingreso' ELSE 'Egreso' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
+            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'ing' ELSE 'egre' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
             $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
             $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
             $query.="JOIN sede s ON mt.sede=s.id AND s.id IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='{$_SESSION["idResponsable"]}' AND dni='{$_SESSION["dniResponsable"]}' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='{$_SESSION["idResponsable"]}' AND dni_empleado='{$_SESSION["dniResponsable"]}' AND vigente=1) as T1)";
@@ -115,7 +115,7 @@ class Transaccionesm extends CI_Model {
             $query.=" ORDER BY mt.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
             return $this->db->query($query)->result();
         } else { //El caso de la secretaria, cartera y auxiliar administrativo        
-            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'Ingreso' ELSE 'Egreso' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
+            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'ing' ELSE 'egre' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
             $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
             $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
             $query.="JOIN sede s ON mt.sede=s.id AND s.id IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='{$_SESSION["idResponsable"]}' AND dni='{$_SESSION["dniResponsable"]}' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='{$_SESSION["idResponsable"]}' AND dni_empleado='{$_SESSION["dniResponsable"]}' AND vigente=1) as T1)";
@@ -139,7 +139,7 @@ class Transaccionesm extends CI_Model {
 
     public function listar_transacciones_excel($criterios) {
         if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "admon_sede" || $_SESSION["perfil"] == "contador" || $_SESSION["perfil"] == "jefe_cartera") {
-            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'Ingreso' ELSE 'Egreso' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
+            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'ing' ELSE 'egre' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
             $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
             $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
             $query.="JOIN sede s ON mt.sede=s.id AND s.id IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='{$_SESSION["idResponsable"]}' AND dni='{$_SESSION["dniResponsable"]}' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='{$_SESSION["idResponsable"]}' AND dni_empleado='{$_SESSION["dniResponsable"]}' AND vigente=1) as T1)";
@@ -159,7 +159,7 @@ class Transaccionesm extends CI_Model {
             $query.=" ORDER BY mt.fecha_trans DESC";
             return $this->db->query($query)->result();
         } else { //El caso de la secretaria, cartera y auxiliar administrativo           
-            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'Ingreso' ELSE 'Egreso' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
+            $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'ing' ELSE 'egre' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
             $query.="FROM movimiento_transaccion mt  JOIN t_trans ts ON mt.t_trans=ts.id ";
             $query.="LEFT JOIN t_caja tc ON mt.t_caja=tc.id ";
             $query.="JOIN sede s ON mt.sede=s.id AND s.id IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='{$_SESSION["idResponsable"]}' AND dni='{$_SESSION["dniResponsable"]}' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='{$_SESSION["idResponsable"]}' AND dni_empleado='{$_SESSION["dniResponsable"]}' AND vigente=1) as T1)";
