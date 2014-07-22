@@ -100,7 +100,7 @@ class Retefuente_compras extends CI_Controller {
             $data['msn_recrear'] = "Crear otra retención";
             $data['url_imprimir'] = base_url() . "retefuente_compras/consultar_pdf/" . $prefijo_retefuente_compras . "_" . $id_retefuente_compras . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_compras, $id_retefuente_compras, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_compras, $id_retefuente_compras, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '', $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

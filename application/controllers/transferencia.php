@@ -320,13 +320,13 @@ class Transferencia extends CI_Controller {
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Hacemos el movimiento de la sede origen
-                $error1 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_origen, $transferencia->total, $transferencia->sede_caja_origen, $transferencia->t_caja_origen, $transferencia->efectivo_retirado, $transferencia->cuenta_origen, $transferencia->valor_retirado, 1, $transferencia->sede_origen, $transferencia->id_responsable, $transferencia->dni_responsable);
+                $error1 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_origen, $transferencia->total, $transferencia->sede_caja_origen, $transferencia->t_caja_origen, $transferencia->efectivo_retirado, $transferencia->cuenta_origen, $transferencia->valor_retirado, 1, '', $transferencia->sede_origen, $transferencia->id_responsable, $transferencia->dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //Hacemos el movimiento de la sede destino
-                    $error2 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_destino, $transferencia->total, $transferencia->sede_caja_destino, $transferencia->t_caja_destino, $transferencia->efectivo_ingresado, $transferencia->cuenta_destino, $transferencia->valor_consignado, 1, $transferencia->sede_destino, $id_responsable, $dni_responsable);
+                    $error2 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_destino, $transferencia->total, $transferencia->sede_caja_destino, $transferencia->t_caja_destino, $transferencia->efectivo_ingresado, $transferencia->cuenta_destino, $transferencia->valor_consignado, 1, '', $transferencia->sede_destino, $id_responsable, $dni_responsable);
                     if (isset($error2)) {
                         $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);

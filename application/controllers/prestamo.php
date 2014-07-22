@@ -135,7 +135,7 @@ class Prestamo extends CI_Controller {
             $data['url_recrear'] = base_url() . "prestamo/crear";
             $data['msn_recrear'] = "Crear otro Prestamo";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_prestamo, $id_prestamo, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_prestamo, $id_prestamo, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, '', $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

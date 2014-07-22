@@ -171,7 +171,7 @@ class Ingreso extends CI_Controller {
             $data['msn_recrear'] = "Crear otro Ingreso";
             $data['url_imprimir'] = base_url() . "ingreso/consultar_pdf/" . $prefijo_ingreso . "_" . $id_ingreso . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_ingreso, $id_ingreso, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_ingreso, $id_ingreso, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '', $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

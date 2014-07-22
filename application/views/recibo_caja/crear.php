@@ -249,6 +249,7 @@
                             <input type="hidden" id="action_validar" value={action_validar} />
                             <input type="hidden" name="id_responsable" value={id_responsable} />
                             <input type="hidden" name="dni_responsable" value={dni_responsable} />
+                            <input type="hidden" name="titular_name" id="titular_name" value="" />
                             <!--Datos adicionales para ocultar del formulario-->
                             <input type="hidden" name="subtotal" id="subtotal" class="decimal decimal2 miles"/>
                             <input type="hidden" name="int_mora" id="int_mora" class="decimal decimal2 miles"/>
@@ -281,6 +282,7 @@
                 if (obj.respuesta == "OK")
                 {
                     $("#nombre_titular").html('<center><table><th><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.nombreTitular + '</h4></td></th></table></center>');
+                    $("#titular_name").val(obj.nombreTitular);
                     $("#tbody_matricula_vigente").html(obj.filasTabla);
                     $("#div_matriculas").css("display", "block");
                     $('#dni').attr('disabled', 'disabled');

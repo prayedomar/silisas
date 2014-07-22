@@ -177,6 +177,7 @@
                             <input type="hidden" id="action_validar" value={action_validar} />
                             <input type="hidden" name="id_responsable" value={id_responsable} />
                             <input type="hidden" name="dni_responsable" value={dni_responsable} />
+                            <input type="hidden" name="titular_name" id="titular_name" value="" />
                             <!--aqui hiran los datos ocultos-->
                             <input type="hidden" name="saldo" id="saldo" value="0" />
                             <center>
@@ -213,6 +214,7 @@
                 if (obj.respuesta == "OK")
                 {
                     $("#nombre_titular").html('<center><table><th><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.nombreTitular + '</h4></td></th></table></center>');
+                    $("#titular_name").val(obj.nombreTitular);
                     $("#tbody_matricula_vigente").html(obj.filasTabla);
                     $("#div_matriculas").css("display", "block");
                     $('#dni').attr('disabled', 'disabled');

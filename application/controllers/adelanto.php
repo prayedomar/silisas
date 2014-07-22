@@ -106,7 +106,7 @@ class Adelanto extends CI_Controller {
             $data['msn_recrear'] = "Crear otro Adelanto";
             $data['url_imprimir'] = base_url() . "adelanto/consultar_pdf/" . $prefijo_adelanto . "_" . $id_adelanto . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_adelanto, $id_adelanto, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_adelanto, $id_adelanto, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, '', $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

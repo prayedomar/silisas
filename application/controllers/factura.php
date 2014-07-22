@@ -132,6 +132,8 @@ class Factura extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
+            $id_titular = $this->input->post('id');
+            $titular = $this->input->post('titular_name');
             $matricula = $this->input->post('matricula');
             $id_a_nombre_de = $this->input->post('id_a_nombre_de');
             $dni_a_nombre_de = $this->input->post('dni_a_nombre_de');
@@ -184,7 +186,7 @@ class Factura extends CI_Controller {
             $data['msn_recrear'] = "Crear otra factura";
             $data['url_imprimir'] = base_url() . "factura/consultar_pdf/" . $prefijo_factura . "_" . $id_factura . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_factura, $id_factura, $credito_debito, (($subtotal + $int_mora) - $descuento), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_factura, $id_factura, $credito_debito, (($subtotal + $int_mora) - $descuento), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '<div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Matrícula: </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $matricula . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Titular: </div></div></div><div class="col-xs-7"><div class="form-group"><b>'. $titular . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Id. del titular: </div></div></div><div class="col-xs-7"><div class="form-group"><b>'. $id_titular . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Observación: </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $observacion . '</b></div></div></div>', $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
