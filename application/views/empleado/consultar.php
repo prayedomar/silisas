@@ -320,7 +320,7 @@
         </div>
     </div>
 </div>
-<div class="modal" id="modal-editar-empleado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal" id="modal-editar-empleado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content modal-content-minimo">
             <div class="modal-header">

@@ -170,7 +170,12 @@ $(function() {
         $("#tel2-modal").val($(this).data("tel2"));
         $("#prefijo_trans-modal").val($(this).data("prefijo_trans"));
         $("#observacion-modal").val($(this).data("observacion"));
-        $("#modal-editar").modal("show");
+//        $("#modal-editar").modal("show");
+        $('#modal-editar').modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        });         
     });
 
     $('#botonValidarSede').live('click', function() {

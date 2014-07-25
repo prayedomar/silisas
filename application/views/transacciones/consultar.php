@@ -145,7 +145,15 @@
                                         <td><?= $row->nombre1 . " " . $row->apellido1 ?></td>
                                         <td><center><button class="btn btn-primary btn-sm" 
                                                     data-vigente="<?= $row->vigente == 1 ? "Vigente" : "Anulada" ?>"
-                                                    data-detalles_html="<?= htmlentities($row->html_detalles, ENT_QUOTES, 'UTF-8') ?>"
+                                                    <?php
+                                                    $detalles_json = "";
+                                                        if (is_object(json_decode($row->detalle_json))) {
+                                                            foreach (json_decode($row->detalle_json) as $key => $value) {
+                                                                $detalles_json .= '<div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">' . $key . ': </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $value . '</b></div></div></div>';
+                                                            }
+                                                        }
+                                                        ?>                                                    
+                                                    data-detalle_json="<?= htmlentities($detalles_json, ENT_QUOTES, 'UTF-8') ?>"
                                                     >Ver detalles</button></center></td>
                                 </tr>
                             <?php } ?>
@@ -201,7 +209,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="detalles_html"></div>
+                <div id="detalle_json"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>

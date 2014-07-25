@@ -109,7 +109,12 @@ $(function() {
         $("#celular-modal").val($(this).data("celular"));
         $("#email-modal").val($(this).data("email"));
         $("#observacion-modal").val($(this).data("observacion"));
-        $("#modal-editar-titular").modal("show");
+//        $("#modal-editar-titular").modal("show");
+        $('#modal-editar-titular').modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        });
     });
     $("#paginacion li.noActive a").click(function() {
         $("#coverDisplay").css({

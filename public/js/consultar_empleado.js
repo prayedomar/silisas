@@ -248,17 +248,15 @@ $(function() {
         $("#fecha_inicio-modal").val($(this).data("fecha_inicio"));
         $("#fecha_fin-modal").val($(this).data("fecha_fin"));
         $("#observacion-modal").val($(this).data("observacion"));
-        $("#modal-editar-empleado").modal("show");
+//        $("#modal-editar-empleado").modal("show");
+        //PAra mostrar el modal y desactivar el click al lado del modal para cerrarlo
+        $('#modal-editar-empleado').modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        });
     });
     $('#botonValidarEmpleado').live('click', function() {
-        //PAra desactivar el click al lado del modal para cerrarlo
-        $(function() {
-            $('#modal_loading').modal({
-                show: true,
-                keyboard: false,
-                backdrop: 'static'
-            });
-        });
         $.ajax({
             type: "POST",
             url: "validarParaEditar",

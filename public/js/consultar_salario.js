@@ -47,7 +47,12 @@ $(function() {
                 } else {
                     $("#bodyModalDetalles").html("No se econtraron detalles");
                 }
-                $("#modalDetalles").modal("show");
+//                $("#modalDetalles").modal("show");
+                $('#modalDetalles').modal({
+                    show: true,
+                    keyboard: false,
+                    backdrop: 'static'
+                });
             }
         });
     });
@@ -70,7 +75,7 @@ $(function() {
         if ($("#paginacion").data("tipo_salario") != "") {
             url += "tipo_salario=" + $("#paginacion").data("tipo_salario") + "&";
         }
-       if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0" ) {
+        if ($("#paginacion").data("vigente") != "" || $("#paginacion").data("vigente") == "0") {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";
         }
 

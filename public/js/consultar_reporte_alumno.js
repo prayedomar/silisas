@@ -74,6 +74,11 @@ $(function() {
         $("#divEjercicios").html($(this).data("ejercicios"));
         $("#divObsTitular").html($(this).data("observacion_titular_alumno"));
         $("#divFecha_trans").html($(this).data("fecha_trans"));
-        $("#modalDetalles").modal("show");
+//        $("#modalDetalles").modal("show");
+        $('#modalDetalles').modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        });
     });
 });

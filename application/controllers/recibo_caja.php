@@ -133,7 +133,7 @@ class Recibo_caja extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             $id_titular = $this->input->post('id');
-            $titular = $this->input->post('titular_name');            
+            $titular = $this->input->post('titular_name');
             $matricula = $this->input->post('matricula');
             $id_a_nombre_de = $this->input->post('id_a_nombre_de');
             $dni_a_nombre_de = $this->input->post('dni_a_nombre_de');
@@ -178,7 +178,14 @@ class Recibo_caja extends CI_Controller {
             $id_recibo_caja = ($this->select_model->nextId_recibo_caja($prefijo_recibo_caja)->id) + 1;
             $t_trans = 8; //Recibo de caja
             $credito_debito = 1; //Credito   
-            $retefuente = 0; //Significa que al momento de crearla no se ha hecho retencion del 11% a dicha recibo_caja
+
+            $detalle_array = array(
+                "Matrícula" => $matricula,
+                "Titular" => $titular,
+                "Identificación" => $id_titular,
+                "Observación" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);
 
             $data["tab"] = "crear_recibo_caja";
             $this->load->view("header", $data);
@@ -186,7 +193,7 @@ class Recibo_caja extends CI_Controller {
             $data['msn_recrear'] = "Crear otro recibo de caja";
             $data['url_imprimir'] = base_url() . "recibo_caja/consultar_pdf/" . $prefijo_recibo_caja . "_" . $id_recibo_caja . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_recibo_caja, $id_recibo_caja, $credito_debito, (($subtotal + $int_mora) - $descuento), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '<div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Matrícula: </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $matricula . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Titular: </div></div></div><div class="col-xs-7"><div class="form-group"><b>'. $titular . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Id. del titular: </div></div></div><div class="col-xs-7"><div class="form-group"><b>'. $id_titular . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Observación: </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $observacion . '</b></div></div></div>', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_recibo_caja, $id_recibo_caja, $credito_debito, (($subtotal + $int_mora) - $descuento), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

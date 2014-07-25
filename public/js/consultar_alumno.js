@@ -68,7 +68,12 @@ $(function() {
             $("#divFechaGrados").html($(this).data("fechagrados"));
         }
         $("#divObservacion").html($(this).data("observacion"));
-        $("#modalDetalles").modal("show");
+//        $("#modalDetalles").modal("show");
+        $('#modalDetalles').modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        }); 
     });
     $("#paginacion li.noActive a").click(function() {
         $("#coverDisplay").css({

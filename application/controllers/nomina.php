@@ -143,7 +143,28 @@ class Nomina extends CI_Controller {
             $prefijo_nomina = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_nomina = ($this->select_model->nextId_nomina($prefijo_nomina)->id) + 1;
             $t_trans = 9; //Nomina Laboral
-            $credito_debito = 0; //Debito             
+            $credito_debito = 0; //Debito  
+
+            $this->load->model('t_deptom');
+            $this->load->model('t_cargom');
+            $nombre_empleado = $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1;
+            $nombre_depto = $this->t_deptom->t_depto_id($depto)->tipo;
+            if ($empleado->genero == "M") {
+                $nombre_cargo = $this->t_cargom->t_cargo_id($cargo)->cargo_masculino;
+            } else {
+                $nombre_cargo = $this->t_cargom->t_cargo_id($cargo)->cargo_femenino;
+            }
+            $detalle_array = array(
+                "Empleado" => $nombre_empleado,
+                "Identificación" => $id_empleado,
+                "Departamento" => $nombre_depto,
+                "Cargo" => $nombre_cargo,
+                "Devengado" => "$" . number_format($total_devengado, '2', '.', ','),
+                "Deducido" => "$" . number_format($total_deducido, '2', '.', ','),
+                "Observación" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);
+
             $data["tab"] = "crear_nomina";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
@@ -151,7 +172,7 @@ class Nomina extends CI_Controller {
             $data['msn_recrear'] = "Crear otra Nómina";
             $data['url_imprimir'] = base_url() . "nomina/consultar_pdf/" . $prefijo_nomina . "_" . $id_nomina . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nomina, $id_nomina, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nomina, $id_nomina, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

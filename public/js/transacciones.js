@@ -87,8 +87,14 @@ $(function() {
     });
     $("#bodyTabla button").click(function() {
         $("#divVigente").html($(this).data("vigente"));
-        $("#detalles_html").html($(this).data("detalles_html"));
-        $("#modalDetalles").modal("show");
+        $("#detalle_json").html($(this).data("detalle_json"));
+//        $("#modalDetalles").modal("show");
+        //PAra mostrar el modal y desactivar el click al lado del modal para cerrarlo
+        $('#modalDetalles').modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        });        
     });
     $("#toExcel").click(function() {
         var url = "excel?";

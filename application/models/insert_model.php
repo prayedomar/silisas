@@ -1341,7 +1341,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function movimiento_transaccion($t_trans, $prefijo, $id, $credito_debito, $total, $sede_caja, $t_caja, $efectivo_caja, $cuenta, $valor_cuenta, $vigente, $html_detalles, $sede, $id_responsable, $dni_responsable) {
+    public function movimiento_transaccion($t_trans, $prefijo, $id, $credito_debito, $total, $sede_caja, $t_caja, $efectivo_caja, $cuenta, $valor_cuenta, $vigente, $detalle_json, $sede, $id_responsable, $dni_responsable) {
         $data = array(
             't_trans' => $t_trans,
             'prefijo' => $prefijo,
@@ -1354,7 +1354,7 @@ class Insert_model extends CI_Model {
             'cuenta' => $cuenta,
             'valor_cuenta' => $valor_cuenta,
             'vigente' => $vigente,
-            'html_detalles' => $html_detalles,
+            'detalle_json' => $detalle_json,
             'sede' => $sede,
             'id_responsable' => $id_responsable,
             'dni_responsable' => $dni_responsable

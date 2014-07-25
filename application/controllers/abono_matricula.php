@@ -121,13 +121,20 @@ class Abono_matricula extends CI_Controller {
             $prefijo_abono_matricula = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_abono_matricula = ($this->select_model->nextId_abono_matricula($prefijo_abono_matricula)->id) + 1;
             $t_trans = 15; //Abono a matricula
-            $credito_debito = 1; //Credito            
+            $credito_debito = 1; //Credito   
+            $detalle_array = array(
+                "Matrícula" => $matricula,
+                "Titular" => $titular,
+                "Identificación" => $id_titular,
+                "Observación" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);            
 
             $data["tab"] = "crear_abono_matricula";
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_matricula/crear";
             $data['msn_recrear'] = "Crear otro abono a matrícula";
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono_matricula, $id_abono_matricula, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '<div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Matrícula: </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $matricula . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Titular: </div></div></div><div class="col-xs-7"><div class="form-group"><b>'. $titular . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Id. del titular: </div></div></div><div class="col-xs-7"><div class="form-group"><b>'. $id_titular . '</b></div></div></div><div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">Observación: </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $observacion . '</b></div></div></div>', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono_matricula, $id_abono_matricula, $credito_debito, ($subtotal + $int_mora), $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
