@@ -16,6 +16,14 @@ class Nominam extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function todas_las_nominas() {
+        $SqlInfo = "SELECT * FROM nomina";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function nomina_prefijo_id($prefijo, $id) {
         $SqlInfo = "SELECT no.*, s.nombre sede_caja, t_ca.tipo tipo_caja, t_d.tipo departamento, t_c.cargo_masculino cargo_masculino, t_c.cargo_femenino cargo_femenino, t_p.tipo tipo_periodicidad, CONCAT(em.nombre1, ' ', em.nombre2, ' ', em.apellido1, ' ', em.apellido2) empleado, em.genero genero_empleado, CONCAT(re.nombre1, ' ', re.apellido1) responsable "

@@ -191,12 +191,13 @@
 </div>
 <div class="modal" id="modalDetalles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content modal-content-minimo">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="modal-title" id="myModalLabel">Detalles</h3>
             </div>
             <div id="bodyModalDetalles" class="modal-body">
+                <div id="detalle_json"></div>
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
@@ -208,8 +209,7 @@
                             <b><div id="divVigente"></div></b>
                         </div>
                     </div>
-                </div>
-                <div id="detalle_json"></div>
+                </div>                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>

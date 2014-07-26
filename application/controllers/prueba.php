@@ -13,6 +13,193 @@ class Prueba extends CI_Controller {
         echo 'ok';
     }
 
+    function detalle_transacciones_matricula() {
+        $this->load->model('facturam');
+        $this->load->model('select_model');
+        $facturas = $this->facturam->todas_las_facturas();
+        foreach ($facturas as $fila) {
+            $matricula = $this->select_model->matricula_id($fila->matricula);
+            $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);
+            $nombre_titular = $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2;
+            $detalle_array = array(
+                "Matrícula" => $fila->matricula,
+                "Titular" => $nombre_titular,
+                "Identificación" => $matricula->id_titular,
+                "Observación" => $fila->observacion
+            );
+            $detalle_json = json_encode($detalle_array);
+            $data = array(
+                'detalle_json' => $detalle_json
+            );
+            $this->db->where('t_trans', '7');
+            $this->db->where('prefijo', $fila->prefijo);
+            $this->db->where('id', $fila->id);
+            $this->db->where('credito_debito', '1');
+            $this->db->update('movimiento_transaccion', $data);
+            if ($error = $this->db->_error_message()) {
+                var_dump($error);
+            }
+        }
+        echo 'ok';
+    }
+
+    function detalle_transacciones_recibo_caja() {
+        $this->load->model('recibo_cajam');
+        $this->load->model('select_model');
+        $facturas = $this->recibo_cajam->todos_los_recibos();
+        foreach ($facturas as $fila) {
+            $matricula = $this->select_model->matricula_id($fila->matricula);
+            $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);
+            $nombre_titular = $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2;
+            $detalle_array = array(
+                "Matrícula" => $fila->matricula,
+                "Titular" => $nombre_titular,
+                "Identificación" => $matricula->id_titular,
+                "Observación" => $fila->observacion
+            );
+            $detalle_json = json_encode($detalle_array);
+            $data = array(
+                'detalle_json' => $detalle_json
+            );
+            $this->db->where('t_trans', '8');
+            $this->db->where('prefijo', $fila->prefijo);
+            $this->db->where('id', $fila->id);
+            $this->db->where('credito_debito', '1');
+            $this->db->update('movimiento_transaccion', $data);
+            if ($error = $this->db->_error_message()) {
+                var_dump($error);
+            }
+        }
+        echo 'ok';
+    }
+
+    function detalle_transacciones_abono_matricula() {
+        $this->load->model('abono_matriculam');
+        $this->load->model('select_model');
+        $facturas = $this->abono_matriculam->todos_los_abonos();
+        foreach ($facturas as $fila) {
+            $matricula = $this->select_model->matricula_id($fila->matricula);
+            $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);
+            $nombre_titular = $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2;
+            $detalle_array = array(
+                "Matrícula" => $fila->matricula,
+                "Titular" => $nombre_titular,
+                "Identificación" => $matricula->id_titular,
+                "Observación" => $fila->observacion
+            );
+            $detalle_json = json_encode($detalle_array);
+            $data = array(
+                'detalle_json' => $detalle_json
+            );
+            $this->db->where('t_trans', '15');
+            $this->db->where('prefijo', $fila->prefijo);
+            $this->db->where('id', $fila->id);
+            $this->db->where('credito_debito', '1');
+            $this->db->update('movimiento_transaccion', $data);
+            if ($error = $this->db->_error_message()) {
+                var_dump($error);
+            }
+        }
+        echo 'ok';
+    }
+
+    function detalle_transacciones_nomina() {
+        $this->load->model('nominam');
+        $this->load->model('select_model');
+        $facturas = $this->nominam->todas_las_nominas();
+        foreach ($facturas as $fila) {
+            $empleado = $this->select_model->empleado($fila->id_empleado, $fila->dni_empleado);
+            $this->load->model('t_deptom');
+            $this->load->model('t_cargom');
+            $nombre_empleado = $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1;
+            $nombre_depto = $this->t_deptom->t_depto_id($fila->depto)->tipo;
+            if ($empleado->genero == "M") {
+                $nombre_cargo = $this->t_cargom->t_cargo_id($fila->cargo)->cargo_masculino;
+            } else {
+                $nombre_cargo = $this->t_cargom->t_cargo_id($fila->cargo)->cargo_femenino;
+            }
+            $detalle_array = array(
+                "Empleado" => $nombre_empleado,
+                "Identificación" => $fila->id_empleado,
+                "Departamento" => $nombre_depto,
+                "Cargo" => $nombre_cargo,
+                "Devengado" => "$" . number_format($fila->total_devengado, '2', '.', ','),
+                "Deducido" => "$" . number_format($fila->total_deducido, '2', '.', ','),
+                "Observación" => $fila->observacion
+            );
+            $detalle_json = json_encode($detalle_array);
+            ;
+            $data = array(
+                'detalle_json' => $detalle_json
+            );
+            $this->db->where('t_trans', '9');
+            $this->db->where('prefijo', $fila->prefijo);
+            $this->db->where('id', $fila->id);
+            $this->db->where('credito_debito', '0');
+            $this->db->update('movimiento_transaccion', $data);
+            if ($error = $this->db->_error_message()) {
+                var_dump($error);
+            }
+        }
+        echo 'ok';
+    }
+
+    function detalle_transacciones_transferencia() {
+        $this->load->model('transferenciam');
+        $this->load->model('select_model');
+        $facturas = $this->transferenciam->todas_las_aprobaciones();
+        foreach ($facturas as $fila) {
+            $transferencia = $this->transferenciam->transferencia_prefijo_id($fila->prefijo_transferencia, $fila->id_transferencia);
+            $empleado_autoriza = $this->select_model->empleado($fila->id_responsable, $fila->dni_responsable);
+            $detalle_array = array(
+                "Sede_Origen" => $transferencia->nombre_sede_origen,
+                "Remitente" => $transferencia->nombre_remitente
+            );
+            if ($transferencia->sede_caja_origen != NULL) {
+                $detalle_array['Caja_de_origen'] = $transferencia->nombre_caja_origen;
+                $detalle_array['Efectivo_retirado'] = '$' . number_format($transferencia->efectivo_retirado, 2, '.', ',');
+            }
+            if ($transferencia->cuenta_origen != NULL) {
+                $detalle_array['Cuenta_de_origen'] = $transferencia->cuenta_origen;
+                $detalle_array['Valor_retirado'] = '$' . number_format($transferencia->valor_retirado, 2, '.', ',');
+            }
+            $detalle_array['Fecha_envío'] = $transferencia->fecha_trans;
+            $detalle_array['Observacion_transferencia'] = $transferencia->observacion;
+            $detalle_array['Sede_Destino'] = $transferencia->nombre_sede_destino;
+            $detalle_array['Aprueba'] = $empleado_autoriza->nombre1 . " " . $empleado_autoriza->nombre2 . " " . $empleado_autoriza->apellido1;
+            if ($transferencia->tipo_destino == 1) {
+                $detalle_array['Caja_destino'] = $transferencia->nombre_caja_destino;
+                $detalle_array['Efectivo_ingresado'] = '$' . number_format($transferencia->efectivo_ingresado, 2, '.', ',');
+            } else {
+                $detalle_array['Cuenta_de_origen'] = $transferencia->cuenta_destino;
+                $detalle_array['Valor_consignado'] = '$' . number_format($transferencia->valor_consignado, 2, '.', ',');
+            }
+            $detalle_array['Observacion_aprobación'] = $fila->observacion;
+            $detalle_json = json_encode($detalle_array);
+            ;
+            $data = array(
+                'detalle_json' => $detalle_json
+            );
+            $this->db->where('t_trans', '13');
+            $this->db->where('prefijo', $fila->prefijo_transferencia);
+            $this->db->where('id', $fila->id_transferencia);
+            $this->db->where('credito_debito', '1');
+            $this->db->update('movimiento_transaccion', $data);
+            if ($error = $this->db->_error_message()) {
+                var_dump($error);
+            }
+            $this->db->where('t_trans', '13');
+            $this->db->where('prefijo', $fila->prefijo_transferencia);
+            $this->db->where('id', $fila->id_transferencia);
+            $this->db->where('credito_debito', '0');
+            $this->db->update('movimiento_transaccion', $data);
+            if ($error = $this->db->_error_message()) {
+                var_dump($error);
+            }
+        }
+        echo 'ok';
+    }
+
     function historico_nominas() {
         $this->load->model('nominam');
         $this->load->model('select_model');

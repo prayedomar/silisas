@@ -22,4 +22,15 @@ class Recibo_cajam extends CI_Model {
         }
     }
 
+    public function todos_los_recibos() {
+        $query = "SELECT r_c.*, s.nombre sede_caja, t_ca.tipo tipo_caja, CONCAT(em.nombre1, ' ', em.apellido1) responsable "
+                . "FROM recibo_caja r_c "
+                . "LEFT JOIN sede s ON (r_c.sede_caja_destino = s.id) "
+                . "LEFT JOIN t_caja t_ca ON (r_c.t_caja_destino = t_ca.id) "
+                . "JOIN empleado em ON ((r_c.id_responsable = em.id) and (r_c.dni_responsable = em.dni)) ";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }
+
 }

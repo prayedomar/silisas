@@ -14,7 +14,7 @@ class Transferencia extends CI_Controller {
         $data["tab"] = "crear_transferencia";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['sede_destino'] = $this->select_model->sede_activa();
@@ -271,7 +271,7 @@ class Transferencia extends CI_Controller {
         $data["tab"] = "aprobar_transferencia";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['action_validar'] = base_url() . "transferencia/validar_aprobar";
         $data['action_crear'] = base_url() . "transferencia/insertar_aprobar";
         $data['action_llena_transferencias'] = base_url() . "transferencia/llena_transferencias";
@@ -298,7 +298,6 @@ class Transferencia extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             list($prefijo_transferencia, $id_transferencia) = explode("+", $this->input->post('transferencia_prefijo_id'));
-            $transferencia = $this->transferenciam->transferencia_prefijo_id($prefijo_transferencia, $id_transferencia);
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
@@ -306,6 +305,34 @@ class Transferencia extends CI_Controller {
             $credito_debito_destino = 1; //Crédito   
             $est_traslado = 1; //OK
             $t_trans = 13; //Transferencia intersede
+
+            $transferencia = $this->transferenciam->transferencia_prefijo_id($prefijo_transferencia, $id_transferencia);
+            $empleado_autoriza = $this->select_model->empleado($id_responsable, $dni_responsable);
+            $detalle_array = array(
+                "Sede_Origen" => $transferencia->nombre_sede_origen,
+                "Remitente" => $transferencia->nombre_remitente
+            );
+            if ($transferencia->sede_caja_origen != NULL) {
+                $detalle_array['Caja_de_origen'] = $transferencia->nombre_caja_origen;
+                $detalle_array['Efectivo_retirado'] = '$' . number_format($transferencia->efectivo_retirado, 2, '.', ',');
+            }
+            if ($transferencia->cuenta_origen != NULL) {
+                $detalle_array['Cuenta_de_origen'] = $transferencia->cuenta_origen;
+                $detalle_array['Valor_retirado'] = '$' . number_format($transferencia->valor_retirado, 2, '.', ',');
+            }
+            $detalle_array['Fecha_envío'] = $transferencia->fecha_trans;
+            $detalle_array['Observacion_transferencia'] = $transferencia->observacion;
+            $detalle_array['Sede_Destino'] = $transferencia->nombre_sede_destino;
+            $detalle_array['Aprueba'] = $empleado_autoriza->nombre1 . " " . $empleado_autoriza->nombre2 . " " . $empleado_autoriza->apellido1;
+            if ($transferencia->tipo_destino == 1) {
+                $detalle_array['Caja_destino'] = $transferencia->nombre_caja_destino;
+                $detalle_array['Efectivo_ingresado'] = '$' . number_format($transferencia->efectivo_ingresado, 2, '.', ',');
+            } else {
+                $detalle_array['Cuenta_de_origen'] = $transferencia->cuenta_destino;
+                $detalle_array['Valor_consignado'] = '$' . number_format($transferencia->valor_consignado, 2, '.', ',');
+            }
+            $detalle_array['Observacion_aprobación'] = $observacion;
+            $detalle_json = json_encode($detalle_array);
 
             $data["tab"] = "aprobar_transferencia";
             $this->isLogin($data["tab"]);
@@ -320,13 +347,13 @@ class Transferencia extends CI_Controller {
                 $this->parser->parse('trans_error', $data);
             } else {
                 //Hacemos el movimiento de la sede origen
-                $error1 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_origen, $transferencia->total, $transferencia->sede_caja_origen, $transferencia->t_caja_origen, $transferencia->efectivo_retirado, $transferencia->cuenta_origen, $transferencia->valor_retirado, 1, '', $transferencia->sede_origen, $transferencia->id_responsable, $transferencia->dni_responsable);
+                $error1 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_origen, $transferencia->total, $transferencia->sede_caja_origen, $transferencia->t_caja_origen, $transferencia->efectivo_retirado, $transferencia->cuenta_origen, $transferencia->valor_retirado, 1, $detalle_json, $transferencia->sede_origen, $transferencia->id_responsable, $transferencia->dni_responsable);
                 if (isset($error1)) {
                     $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
                     //Hacemos el movimiento de la sede destino
-                    $error2 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_destino, $transferencia->total, $transferencia->sede_caja_destino, $transferencia->t_caja_destino, $transferencia->efectivo_ingresado, $transferencia->cuenta_destino, $transferencia->valor_consignado, 1, '', $transferencia->sede_destino, $id_responsable, $dni_responsable);
+                    $error2 = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_transferencia, $id_transferencia, $credito_debito_destino, $transferencia->total, $transferencia->sede_caja_destino, $transferencia->t_caja_destino, $transferencia->efectivo_ingresado, $transferencia->cuenta_destino, $transferencia->valor_consignado, 1, $detalle_json, $transferencia->sede_destino, $id_responsable, $dni_responsable);
                     if (isset($error2)) {
                         $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
