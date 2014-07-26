@@ -6,28 +6,25 @@
                     <legend>Crear nómina laboral</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
-<!--                            <div class="form-group">
+                            <div class="form-group">
                                 <label>Tipo Nómina<em class="required_asterisco">*</em></label>
-                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" readonly>
+                                <select name="tipo_nomina" id="tipo_nomina" data-placeholder="Seleccione tipo de nómina" class="form-control exit_caution">
                                     <option value="default">Seleccione tipo de nómina</option>
-                                    <option value="1">Nómina RRPP Conceptos pendientes</option>
-                                    <option value="2">Nómina RRPP </option>
-                                    <option value="3">Seleccione tipo de nómina</option>
+                                    <option value="1">Nómina RRPP: Conceptos pendientes</option>
+                                    <option value="2">Nómina RRPP: Otros conceptos</option>
+                                    <option value="3">Nómina Administrativa</option>
                                 </select>
-                            </div>                                -->
+                            </div>                                
                             <div class="form-group">
                                 <label>Empleado<em class="required_asterisco">*</em></label>
                                 <p class="help-block"><B>> </B>Sólo aparecerán los empleados activos de cada una de sus sedes autorizadas.</p>
-                                <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado" class="chosen-select form-control exit_caution">
-                                    <option value="default">Seleccione Empleado</option>
-                                    {empleado}
-                                    <option value="{id}-{dni}">{nombre1} {nombre2} {apellido1} {apellido2}</option>
-                                    {/empleado}
+                                <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado" class="form-control exit_caution" disabled>
+                                    <option value="default">Seleccione primero tipo de nómina</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Periodicidad<em class="required_asterisco">*</em></label>
-                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" readonly>
+                                <select name="periodicidad" id="periodicidad" data-placeholder="Seleccione Empleado" class="form-control exit_caution" disabled>
                                     <option value="default">Seleccione primero Empleado</option>
                                 </select>
                             </div>                            
@@ -198,6 +195,23 @@
     </div>
 </div>
 <script type="text/javascript">
+    //Cargar empleado segun tipo de nomina
+    $(".form-group").delegate("#tipo_nomina", "change", function() {
+        if ($("#tipo_nomina").val() == "default") {
+            $("#empleado").attr('disabled', 'disabled');
+            $("#empleado").html('<option value="default" selected>Seleccione primero tipo de nomina</option>');
+        } else {
+            tipoNomina = $('#tipo_nomina').val();
+            $.post("{action_llena_empleados_t_nomina}", {
+                tipoNomina: tipoNomina
+            }, function(data) {
+                $("#empleado").removeAttr("disabled");
+                $("#empleado").html(data);
+                $("#empleado").prepend('<option value="default" selected>Seleccione empleado</option>');
+            });
+        }
+    });    
+    
     //Colocamos el contador de nuevos conceptos en 1
     $('#contador_new_concepto').attr('value', '1');
 
@@ -238,7 +252,7 @@
         $.post('{action_llena_periodicidad_nomina}', {
             empleado: empleado
         }, function(data) {
-            $("#periodicidad").removeAttr("readonly");
+            $("#periodicidad").removeAttr("disabled");
             $("#periodicidad").html(data);
             $("#periodicidad").prepend('<option value="default" selected>Seleccione Periodicidad</option>');
         });

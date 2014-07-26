@@ -9,8 +9,9 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $contrato_laboral = $this->select_model->contrato_laboral_empleado('1128478351', $$nomina->dni_empleado);
-        echo 'ok';
+        $this->load->model('empleadom');
+        $empleados = $this->empleadom->empleados_rrpp_concepto_pdte();
+        var_dump($empleados);
     }
 
     function detalle_transacciones_matricula() {

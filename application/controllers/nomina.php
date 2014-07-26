@@ -19,11 +19,11 @@ class Nomina extends CI_Controller {
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');
-        $data['empleado'] = $this->select_model->empleado_activo_sedes_responsable($id_responsable, $dni_responsable);
         $data['sede_ppal'] = $this->select_model->sede_activa_responsable($id_responsable, $dni_responsable);
         $data['action_validar'] = base_url() . "nomina/validar";
         $data['action_crear'] = base_url() . "nomina/insertar";
         $data['action_recargar'] = base_url() . "nomina/crear";
+        $data['action_llena_empleados_t_nomina'] = base_url() . "nomina/llena_empleados_t_nomina";
         $data['action_llena_info_contrato_laboral'] = base_url() . "nomina/llena_info_contrato_laboral";
         $data['action_llena_info_ultimas_nominas'] = base_url() . "nomina/llena_info_ultimas_nominas";
         $data['action_llena_info_adelantos'] = base_url() . "nomina/llena_info_adelantos";
@@ -228,6 +228,57 @@ class Nomina extends CI_Controller {
         }
     }
 
+    public function llena_empleados_t_nomina() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            if ($this->input->post('tipoNomina')) {
+                $this->load->model('empleadom');
+                $tipo_nomina = $this->input->post('tipoNomina');
+                if ($tipo_nomina == '1') {
+                    $empleados = $this->empleadom->empleados_rrpp_concepto_pdte_responsable();
+                    //Validamos que las dos consultas devuelvan algo
+                    if ($empleados == TRUE) {
+                        foreach ($empleados as $fila) {
+                            echo '<option value="' . $fila->id . '-' . $fila->dni . '">' . $fila->nombres . '</option>';
+                        }
+                    } else {
+                        echo "";
+                    }
+                } else {
+                    if ($tipo_nomina == '2') {
+                        $empleados = $this->empleadom->empleados_rrpp_responsable();
+                        //Validamos que las dos consultas devuelvan algo
+                        if ($empleados == TRUE) {
+                            foreach ($empleados as $fila) {
+                                echo '<option value="' . $fila->id . '-' . $fila->dni . '">' . $fila->nombres . '</option>';
+                            }
+                        } else {
+                            echo "";
+                        }
+                    } else {
+                        if ($tipo_nomina == '3') {
+                            $empleados = $this->empleadom->empleados_administracion_responsable();
+                            //Validamos que las dos consultas devuelvan algo
+                            if ($empleados == TRUE) {
+                                foreach ($empleados as $fila) {
+                                    echo '<option value="' . $fila->id . '-' . $fila->dni . '">' . $fila->nombres . '</option>';
+                                }
+                            } else {
+                                echo "";
+                            }
+                        } else {
+                            echo "";
+                        }
+                    }
+                }
+            } else {
+                echo "";
+            }
+        } else {
+            redirect(base_url());
+        }
+    }
+
     public function llena_info_contrato_laboral() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
@@ -335,7 +386,7 @@ class Nomina extends CI_Controller {
                                                 <th class="text-center">Sede</th>
                                                 <th class="text-center">Valor Inicial</th>                                            
                                                 <th class="text-center">Saldo Pdte.</th>
-                                                <th class="text-center">Observación</th>
+                                                <th class="text-center">Forma de descuento</th>
                                             </tr>
                                         </thead>
                                         <tbody>';
@@ -346,7 +397,7 @@ class Nomina extends CI_Controller {
                                 <td class="text-center">' . $fila->sede . '</td>
                                 <td class="text-center">$' . number_format($fila->total, 2, '.', ',') . '</td>  
                                 <td class="text-center">$' . number_format($fila->saldo, 2, '.', ',') . '</td>                                
-                                <td>' . $fila->observacion . '</td>  
+                                <td>' . $fila->forma_descuento . '</td>  
                             </tr>';
                     }
                     echo '</tbody>

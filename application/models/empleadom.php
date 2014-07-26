@@ -19,6 +19,33 @@ class Empleadom extends CI_Model {
         }
     }
 
+    public function empleados_rrpp_concepto_pdte_responsable() {
+        $query = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
+                . "FROM empleado e "
+                . "where ((e.id IN(SELECT id_empleado FROM concepto_nomina WHERE (estado=2))) AND (e.dni IN(SELECT dni_empleado FROM concepto_nomina WHERE (estado=2)))AND((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $_SESSION['idResponsable'] . "') AND (dni='" . $_SESSION['dniResponsable'] . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $_SESSION['idResponsable'] . "') AND (dni_empleado='" . $_SESSION['dniResponsable'] . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1'))) ORDER BY nombres";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }
+    
+    public function empleados_rrpp_responsable() {
+        $query = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
+                . "FROM empleado e "
+                . "where ((e.depto='3')AND(e.estado!='3'AND((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $_SESSION['idResponsable'] . "') AND (dni='" . $_SESSION['dniResponsable'] . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $_SESSION['idResponsable'] . "') AND (dni_empleado='" . $_SESSION['dniResponsable'] . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')))) ORDER BY nombres";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }    
+    
+    public function empleados_administracion_responsable() {
+        $query = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
+                . "FROM empleado e "
+                . "where ((e.depto!='3')AND(e.estado!='3')AND((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $_SESSION['idResponsable'] . "') AND (dni='" . $_SESSION['dniResponsable'] . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $_SESSION['idResponsable'] . "') AND (dni_empleado='" . $_SESSION['dniResponsable'] . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1'))) ORDER BY nombres";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }     
+
     public function jefe_de_empleado($id_subdito, $dni_subdito) {
         $SqlInfo = "SELECT jefe.*, CONCAT(jefe.nombre1, ' ', jefe.nombre2, ' ', jefe.apellido1, ' ', jefe.apellido2) nombres "
                 . "FROM empleado jefe "
