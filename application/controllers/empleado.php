@@ -515,6 +515,7 @@ class Empleado extends CI_Controller {
         header("Pragma: no-cache");
         header("Expires: 0");
         $lista = $this->empleadom->listar_empleados_excel($_GET);
+        //Enun controlador de php puro puedo cerrar codigo php en cualquier momento y lo que seguiria seria html sin necesidad de especificarlos explicitamente
         ?>
         <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
             <thead>

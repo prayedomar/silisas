@@ -588,7 +588,20 @@ class Ingreso extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "ingreso/anular";
             $data['msn_recrear'] = "Anular otro ingreso";
-            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+            
+            $this->load->model('transaccionesm');            
+            $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
+            //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+            if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {
+                $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+            }
+            $responsable = $this->select_model->empleado($id_responsable, $dni_responsable);
+            $array_detalles['Observación_Anulación'] = $observacion;
+            $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+            $array_detalles['Id_Responsable_Anulación'] = $id_responsable;
+            $detalle_json = json_encode($array_detalles);
+
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente, $detalle_json);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

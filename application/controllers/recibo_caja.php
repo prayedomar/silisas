@@ -893,7 +893,20 @@ class Recibo_caja extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "recibo_caja/anular";
             $data['msn_recrear'] = "Anular otra recibo_caja de venta";
-            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+
+            $this->load->model('transaccionesm');
+            $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
+            //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+            if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {
+                $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+            }
+            $responsable = $this->select_model->empleado($id_responsable, $dni_responsable);
+            $array_detalles['Observación_Anulación'] = $observacion;
+            $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+            $array_detalles['Id_Responsable_Anulación'] = $id_responsable;
+            $detalle_json = json_encode($array_detalles);
+
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente, $detalle_json);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
@@ -926,15 +939,11 @@ class Recibo_caja extends CI_Controller {
             $recibo_caja = $this->recibo_cajam->recibo_caja_prefijo_id($prefijo, $id);
             if ($recibo_caja == TRUE) {
                 if ($recibo_caja->vigente == 1) {
-                    //Tenemos que validar que no hayan retenciones vigentes para esta recibo_caja. 
-                    $this->load->model('retefuente_ventasm');
-                    $retencion_vigente = $this->retefuente_ventasm->retefuente_vigente_ventas_recibo_caja($prefijo, $id);
-                    if ($retencion_vigente != TRUE) {
-                        $response = array(
-                            'respuesta' => 'OK',
-                            'filasTabla' => ''
-                        );
-                        $response['filasTabla'] .= '<tr>
+                    $response = array(
+                        'respuesta' => 'OK',
+                        'filasTabla' => ''
+                    );
+                    $response['filasTabla'] .= '<tr>
                             <td class="text-center">' . $recibo_caja->matricula . '</td>
                             <td class="text-center">$' . number_format($recibo_caja->subtotal + $recibo_caja->int_mora - $recibo_caja->descuento, 2, '.', ',') . '</td>
                             <td class="text-center">' . $recibo_caja->sede_caja . '-' . $recibo_caja->tipo_caja . '</td>
@@ -944,20 +953,12 @@ class Recibo_caja extends CI_Controller {
                             <td class="text-center">' . $recibo_caja->responsable . '</td>                                
                             <td class="text-center">' . date("Y-m-d", strtotime($recibo_caja->fecha_trans)) . '</td>
                         </tr>';
-                        echo json_encode($response);
-                        return false;
-                    } else {
-                        $response = array(
-                            'respuesta' => 'error',
-                            'mensaje' => '<p><strong><center>La recibo_caja tiene una retención por ventas vigente. <br>Si desea anular ésta recibo_caja, anule primero dicha retención.</center></strong></p>'
-                        );
-                        echo json_encode($response);
-                        return false;
-                    }
+                    echo json_encode($response);
+                    return false;
                 } else {
                     $response = array(
                         'respuesta' => 'error',
-                        'mensaje' => '<p><strong><center>La recibo_caja de venta, ya se encuentra anulada.</center></strong></p>'
+                        'mensaje' => '<p><strong><center>El recibo de caja, ya se encuentra anulado.</center></strong></p>'
                     );
                     echo json_encode($response);
                     return false;
@@ -965,7 +966,7 @@ class Recibo_caja extends CI_Controller {
             } else {
                 $response = array(
                     'respuesta' => 'error',
-                    'mensaje' => '<p><strong><center>La recibo_caja de venta, no existe en la base de datos.</center></strong></p>'
+                    'mensaje' => '<p><strong><center>El recibo de caja, no existe en la base de datos.</center></strong></p>'
                 );
                 echo json_encode($response);
                 return false;

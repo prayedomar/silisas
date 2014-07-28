@@ -46,7 +46,7 @@ class Factura extends CI_Controller {
             $this->form_validation->set_rules('direccion_a_nombre_de', 'Direccion', 'trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
+            $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
 
             $error_descuento = "";
             $error_valores = "";
@@ -880,6 +880,8 @@ class Factura extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             $this->load->model('update_model');
+            $this->load->model('transaccionesm');
+
             $prefijo = $this->input->post('prefijo');
             $id = $this->input->post('id');
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
@@ -894,7 +896,19 @@ class Factura extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "factura/anular";
             $data['msn_recrear'] = "Anular otra factura de venta";
-            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente);
+
+            $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
+            //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+            if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {
+                $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+            }
+            $responsable = $this->select_model->empleado($id_responsable, $dni_responsable);
+            $array_detalles['Observación_Anulación'] = $observacion;
+            $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+            $array_detalles['Id_Responsable_Anulación'] = $id_responsable;
+            $detalle_json = json_encode($array_detalles);
+
+            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente, $detalle_json);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

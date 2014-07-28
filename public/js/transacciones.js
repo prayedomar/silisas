@@ -70,6 +70,9 @@ $(function() {
         if ($("#paginacion").data("caja") != "") {
             url += "caja=" + $("#paginacion").data("caja") + "&";
         }
+        if ($("#paginacion").data("vigente") != "") {
+            url += "vigente=" + $("#paginacion").data("vigente") + "&";
+        }           
         if ($("#paginacion").data("documento") != "") {
             url += "documento=" + $("#paginacion").data("documento") + "&";
         }

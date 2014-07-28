@@ -173,9 +173,9 @@
                             </div>
                             <hr>                            
                             <div class="form-group">
-                                <label id="label_descripcion">Observación</label>
+                                <label id="label_descripcion">Observación<em class="required_asterisco">*</em></label>
                                 <label  style="display:none;" id="label_descripcion_required">Observación<em class="required_asterisco">*</em></label>
-                                <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
+                                <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Observación: Procedencia del dinero que va a enviar, etc..."  style="max-width:100%;"></textarea>
                             </div>
                             <div id="validacion_alert">
                             </div>                            

@@ -8,6 +8,16 @@ class Transaccionesm extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+    
+    public function movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito) {
+        $SqlInfo = "SELECT * "
+                . "FROM movimiento_transaccion "
+                . "WHERE ((t_trans='" . $t_trans . "') AND (prefijo='" . $prefijo . "') AND (id='" . $id . "') AND (credito_debito='" . $credito_debito . "'))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
 
     public function total_transacciones($criterios, $inicio, $filasPorPagina) {
         if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "admon_sede" || $_SESSION["perfil"] == "contador" || $_SESSION["perfil"] == "jefe_cartera") {

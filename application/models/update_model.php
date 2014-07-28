@@ -375,9 +375,10 @@ class Update_model extends CI_Model {
         }
     }
 
-    public function movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente) {
+    public function movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente, $detalle_json) {
         $data = array(
-            'vigente' => $vigente
+            'vigente' => $vigente,
+            'detalle_json' => $detalle_json
         );
         $this->db->where('t_trans', $t_trans);
         $this->db->where('prefijo', $prefijo);
