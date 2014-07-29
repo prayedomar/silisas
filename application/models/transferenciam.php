@@ -31,7 +31,16 @@ class Transferenciam extends CI_Model {
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    }     
+    }  
+    
+    
+    public function todas_las_transferencias() {
+        $SqlInfo = "SELECT * FROM transferencia";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    }    
 
     public function aprobar_transferencia_prefijo_id($prefijo, $id) {
         $SqlInfo = "SELECT a_tr.*, CONCAT(em.nombre1, ' ', em.nombre2, ' ', em.apellido1) empleado_autoriza "

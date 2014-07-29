@@ -9,6 +9,16 @@ class Transaccionesm extends CI_Model {
         parent::__construct();
     }
     
+    public function anular_transaccion_id($t_trans, $prefijo_transaccion, $id_transaccion) {
+        $SqlInfo = "SELECT * "
+                . "FROM anular_transaccion "
+                . "WHERE ((t_trans='" . $t_trans . "') AND (prefijo_transaccion='" . $prefijo_transaccion . "') AND (id_transaccion='" . $id_transaccion . "'))";
+        $query = $this->db->query($SqlInfo);
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        }
+    }    
+    
     public function movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito) {
         $SqlInfo = "SELECT * "
                 . "FROM movimiento_transaccion "

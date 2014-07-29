@@ -80,6 +80,161 @@ class Prueba extends CI_Controller {
         echo 'ok';
     }
 
+    function detalle_trans_anular_factura() {
+        $this->load->model('facturam');
+        $this->load->model('select_model');
+        $this->load->model('update_model');
+        $this->load->model('transaccionesm');
+        $facturas = $this->facturam->todas_las_facturas();
+        foreach ($facturas as $fila) {
+            if ($fila->vigente == '0') {
+                $vigente = '0';
+                $t_trans = '7';
+                $credito_debito = '1';
+                $anulacion = $this->transaccionesm->anular_transaccion_id($t_trans, $fila->prefijo, $fila->id);
+
+                $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $fila->prefijo, $fila->id, $credito_debito);
+                //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+                if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {
+                    $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+                }
+                $responsable = $this->select_model->empleado($anulacion->id_responsable, $anulacion->dni_responsable);
+                $array_detalles['Observación_Anulación'] = $anulacion->observacion;
+                $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+                $array_detalles['Id_Responsable_Anulación'] = $anulacion->id_responsable;
+                $detalle_json = json_encode($array_detalles);
+
+                $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $fila->prefijo, $fila->id, $credito_debito, $vigente, $detalle_json);
+            }
+        }
+        echo 'ok';
+    }
+
+    function detalle_trans_anular_recibo_caja() {
+        $this->load->model('update_model');
+        $this->load->model('transaccionesm');
+        $this->load->model('recibo_cajam');
+        $this->load->model('select_model');
+        $facturas = $this->recibo_cajam->todos_los_recibos();
+        foreach ($facturas as $fila) {
+            if ($fila->vigente == '0') {
+                echo '1';
+                $vigente = '0';
+                $t_trans = '8';
+                $credito_debito = '1';
+                $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $fila->prefijo, $fila->id, $credito_debito);
+                //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+                $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+                if (!isset($array_detalles['Observación_Anulación'])) {
+                    $anulacion = $this->transaccionesm->anular_transaccion_id($t_trans, $fila->prefijo, $fila->id);
+                    $responsable = $this->select_model->empleado($anulacion->id_responsable, $anulacion->dni_responsable);
+                    $array_detalles['Observación_Anulación'] = $anulacion->observacion;
+                    $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+                    $array_detalles['Id_Responsable_Anulación'] = $anulacion->id_responsable;
+                    $detalle_json = json_encode($array_detalles);
+
+                    $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $fila->prefijo, $fila->id, $credito_debito, $vigente, $detalle_json);
+                    echo 'ok';
+                }
+            }
+        }
+    }
+
+    function detalle_trans_anular_abono() {
+        $this->load->model('update_model');
+        $this->load->model('transaccionesm');
+        $this->load->model('abono_matriculam');
+        $this->load->model('select_model');
+        $facturas = $this->abono_matriculam->todos_los_abonos();
+        foreach ($facturas as $fila) {
+            if ($fila->vigente == '0') {
+                echo '1';
+                $vigente = '0';
+                $t_trans = '15';
+                $credito_debito = '1';
+                $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $fila->prefijo, $fila->id, $credito_debito);
+                //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+                $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+                var_dump($array_detalles);
+                $anulacion = $this->transaccionesm->anular_transaccion_id($t_trans, $fila->prefijo, $fila->id);
+                if ((!isset($array_detalles['Observación_Anulación'])) && (isset($anulacion))) {
+                    $responsable = $this->select_model->empleado($anulacion->id_responsable, $anulacion->dni_responsable);
+                    $array_detalles['Observación_Anulación'] = $anulacion->observacion;
+                    $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+                    $array_detalles['Id_Responsable_Anulación'] = $anulacion->id_responsable;
+                    $detalle_json = json_encode($array_detalles);
+
+                    $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $fila->prefijo, $fila->id, $credito_debito, $vigente, $detalle_json);
+                    echo 'ok';
+                }
+            }
+        }
+    }
+
+    function detalle_trans_anular_nomina() {
+        $this->load->model('update_model');
+        $this->load->model('transaccionesm');
+        $this->load->model('nominam');
+        $this->load->model('select_model');
+        $facturas = $this->nominam->todas_las_nominas();
+        foreach ($facturas as $fila) {
+            if ($fila->vigente == '0') {
+                echo '1';
+                $vigente = '0';
+                $t_trans = '9';
+                $credito_debito = '0';
+                $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $fila->prefijo, $fila->id, $credito_debito);
+                //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+                $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+                var_dump($array_detalles);
+                $anulacion = $this->transaccionesm->anular_transaccion_id($t_trans, $fila->prefijo, $fila->id);
+                if ((!isset($array_detalles['Observación_Anulación'])) && (isset($anulacion))) {
+                    $responsable = $this->select_model->empleado($anulacion->id_responsable, $anulacion->dni_responsable);
+                    $array_detalles['Observación_Anulación'] = $anulacion->observacion;
+                    $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+                    $array_detalles['Id_Responsable_Anulación'] = $anulacion->id_responsable;
+                    $detalle_json = json_encode($array_detalles);
+
+                    $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $fila->prefijo, $fila->id, $credito_debito, $vigente, $detalle_json);
+                    echo 'ok';
+                }
+            }
+        }
+    }
+
+    function detalle_trans_anular_transferencia() {
+        $this->load->model('update_model');
+        $this->load->model('transaccionesm');
+        $this->load->model('transferenciam');
+        $this->load->model('select_model');
+        $facturas = $this->transferenciam->todas_las_transferencias();
+        foreach ($facturas as $fila) {
+            if ($fila->est_traslado == '3') {
+                echo '1';
+                $vigente = '0';
+                $t_trans = '13';
+                $credito_debito_orgien = '0';
+                $credito_debito_destino = '1';
+                $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $fila->prefijo, $fila->id, $credito_debito_orgien);
+                //Con el segundo argumento de jsondecode el true, convierto de objeto a array
+                $array_detalles = json_decode($movimiento_transaccion->detalle_json, true);
+                var_dump($array_detalles);
+                $anulacion = $this->transaccionesm->anular_transaccion_id($t_trans, $fila->prefijo, $fila->id);
+                if ((!isset($array_detalles['Observación_Anulación'])) && (isset($anulacion))) {
+                    $responsable = $this->select_model->empleado($anulacion->id_responsable, $anulacion->dni_responsable);
+                    $array_detalles['Observación_Anulación'] = $anulacion->observacion;
+                    $array_detalles['Responsable_Anulación'] = $responsable->nombre1 . " " . $responsable->nombre2 . " " . $responsable->apellido1;
+                    $array_detalles['Id_Responsable_Anulación'] = $anulacion->id_responsable;
+                    $detalle_json = json_encode($array_detalles);
+
+                    $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $fila->prefijo, $fila->id, $credito_debito_orgien, $vigente, $detalle_json);
+                    $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $fila->prefijo, $fila->id, $credito_debito_destino, $vigente, $detalle_json);
+                    echo 'ok';
+                }
+            }
+        }
+    }
+
     function detalle_transacciones_recibo_caja() {
         $this->load->model('recibo_cajam');
         $this->load->model('select_model');
