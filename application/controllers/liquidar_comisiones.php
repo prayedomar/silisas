@@ -259,6 +259,43 @@ class Liquidar_comisiones extends CI_Controller {
                         }
                         $i++;
                     }
+                    $sede_matricula = $this->matriculam->sede_matricula_id($id_matricula);
+                    //Colocamos las comisiones de don libardo: 
+                    //SEde poblado (Id: 2): gana escala divisional, si el ejecutivo directo de la matricula tiene cargo inferior a regional (Hernan)
+                    //Sede floresta (Id: 1): gana escala divisional, si el ejecutivo directo de la matricula tiene cargo inferior a divisional
+                    $nivel_jerarquico_ejecutivo_directo = $this->select_model->t_cargo_id($cargo_ejecutivo_directo)->nivel_jerarquico;
+                    if ($id_ejecutivo_directo != '98672030') { //Porq si el hizo la matricula se le duplicarias
+                        if (($sede_matricula->id_sede == '2') && ($nivel_jerarquico_ejecutivo_directo > '6')) {
+                            $cargo_escala = '16'; //Divisional
+                            if ($bandera_encargado == '0') {
+                                $comision = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                            } else {
+                                $comision = $this->select_model->comision_escala($plan, $cargo_escala)->comision_escala_encargado;
+                            }
+                            $total_comisiones += $comision;
+                            $response['htmlTotalPagado'] .= '<tr>
+                                        <td class="text-center">Escala</td>
+                                        <td class="text-center">Director Divisional de Relaciones Públicas</td>
+                                        <td class="text-center">$' . number_format($comision, '2', '.', ',') . '</td>
+                                    </tr>';
+                        } else {
+                            if (($sede_matricula->id_sede == '1') && ($nivel_jerarquico_ejecutivo_directo > '7')) {
+                                $cargo_escala = '16'; //Divisional
+                                if ($bandera_encargado == '0') {
+                                    $comision = $this->select_model->comision_escala($plan, $cargo_escala)->comision;
+                                } else {
+                                    $comision = $this->select_model->comision_escala($plan, $cargo_escala)->comision_escala_encargado;
+                                }
+                                $total_comisiones += $comision;
+                                $response['htmlTotalPagado'] .= '<tr>
+                                        <td class="text-center">Escala</td>
+                                        <td class="text-center">Director Divisional de Relaciones Públicas</td>
+                                        <td class="text-center">$' . number_format($comision, '2', '.', ',') . '</td>
+                                    </tr>';
+                            }
+                        }
+                    }
+
                     $response['htmlTotalPagado'] .= '<tr><td colspan="2"><p style="text-align:right;font-size:18px;"><b>Total</b></p></td><td><p style="text-align:center;font-size:18px;">$' . number_format($total_comisiones, 2, '.', ',') . '</p></td></tr>';
                     $response['respuesta'] = "OK";
                     echo json_encode($response);

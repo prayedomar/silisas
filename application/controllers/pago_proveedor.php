@@ -98,7 +98,18 @@ class Pago_proveedor extends CI_Controller {
             $prefijo_pago_proveedor = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_pago_proveedor = ($this->select_model->nextId_pago_proveedor($prefijo_pago_proveedor)->id) + 1;
             $t_trans = 11; //Pago a proveedor
-            $credito_debito = 0; //Debito            
+            $credito_debito = 0; //Debito  
+            //Para tirar array a json utilizar comillas dobles, decodificar en utf8         
+            $proveedor = $this->select_model->proveedor_id_dni($id_proveedor, $dni_proveedor);
+            $tipo_egreso = $this->select_model->t_egreso_id($t_egreso)->tipo;
+            $detalle_array = array(
+                "Proveedor" => $proveedor->razon_social,
+                "Id_Proveedor" => $proveedor->id . "-" . $proveedor->d_v,
+                "Código_Factura" => $factura,
+                "Tipo_Egreso" => $tipo_egreso,
+                "Observación" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);             
 
             $data["tab"] = "crear_pago_proveedor";
             $this->isLogin($data["tab"]);
@@ -107,7 +118,7 @@ class Pago_proveedor extends CI_Controller {
             $data['msn_recrear'] = "Crear otro pago";
             $data['url_imprimir'] = base_url() . "pago_proveedor/consultar_pdf/" . $prefijo_pago_proveedor . "_" . $id_pago_proveedor . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_pago_proveedor, $id_pago_proveedor, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_pago_proveedor, $id_pago_proveedor, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

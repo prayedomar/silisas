@@ -71,7 +71,7 @@
                         <p class="help-block"><B>> </B>Sólo aperecerán los cargos de RRPP.</p>
                         <select name="cargo" id="cargo" class="form-control input_modal_1">
                         </select>
-                    </div>
+                    </div>  
                     <div class="form-group">
                         <label>Observación</label>
                         <textarea name="observacion" id="observacion_1" class="form-control exit_caution alfanumerico" rows="2" maxlength="250" placeholder="Observación..."  style="max-width:100%;"></textarea>
@@ -81,6 +81,19 @@
                             <label><input type="checkbox" name="checkbox_placa" id="checkbox_placa" value="' . $fila->id . '"/><h4 class="h_negrita">Solicitar placa de ascenso</h4><p class="help-block">Con ésta opción realiza el pedido automático de la placa de reconocimiento para el empleado que está modificando.</p></label>
                         </div>
                     </div>
+                    <div id="div_fecha_ascenso" style="display:none;">
+                        <div class="row">
+                            <div class="col-xs-8 col-xs-offset-2">
+                                <div class="form-group">
+                                    <label>Fecha del ascenso<em class="required_asterisco">*</em></label>
+                                    <div class="input-group">
+                                        <input name="fecha_ascenso" id="fecha_ascenso" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha del ascenso">
+                                        <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div> 
+                                </div>    
+                            </div> 
+                        </div> 
+                    </div>                     
                     <input type="hidden" name="id_responsable" value={id_responsable} />
                     <input type="hidden" name="dni_responsable" value={dni_responsable} />                    
                     <input type="hidden" name="empleado" id="empleado_selected"/>
@@ -150,6 +163,15 @@
     </div>
 </div>
 <script type="text/javascript">
+    //Si selecciono solicitar placa, entonces pido la fecha del ascenso
+    $(".form-group").delegate("#checkbox_placa", "click", function() {
+        if ($("#checkbox_placa").is(':checked')) {
+            $("#fecha_ascenso").val("");
+            $("#div_fecha_ascenso").css("display", "block");
+        } else {
+            $("#div_fecha_ascenso").css("display", "none");
+        }
+    });
     //Cargar los empleados
     $.post('{action_llena_empleado_rrpp_sedes_responsable}', {
         idResposable: '{id_responsable}',

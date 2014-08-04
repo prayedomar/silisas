@@ -102,7 +102,19 @@ class Nota_credito extends CI_Controller {
             $prefijo_nota_credito = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_nota_credito = ($this->select_model->nextId_nota_credito($prefijo_nota_credito)->id) + 1;
             $t_trans = 10; //Nota credito
-            $credito_debito = 0; //Debito            
+            $credito_debito = 0; //Debito  
+            //Para tirar array a json utilizar comillas dobles, decodificar en utf8  
+            $matricula_completa = $this->select_model->matricula_id($matricula);
+            $titular = $this->select_model->titular($matricula_completa->id_titular, $matricula_completa->dni_titular);
+            $detalle_array = array(
+                "Matrícula" => $matricula,
+                "Titular" => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1,
+                "Id_Titular" => $titular->id,
+                "Autorizó" => $autoriza,
+                "Motivo" => $motivo,        
+                "Observación" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);                         
 
             $data["tab"] = "crear_nota_credito";
             $this->isLogin($data["tab"]);
@@ -111,7 +123,7 @@ class Nota_credito extends CI_Controller {
             $data['msn_recrear'] = "Crear otra nota crédito";
             $data['url_imprimir'] = base_url() . "nota_credito/consultar_pdf/" . $prefijo_nota_credito . "_" . $id_nota_credito . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nota_credito, $id_nota_credito, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_nota_credito, $id_nota_credito, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

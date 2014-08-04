@@ -14,7 +14,7 @@ class Abono_adelanto extends CI_Controller {
         $data["tab"] = "crear_abono_adelanto";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -106,6 +106,17 @@ class Abono_adelanto extends CI_Controller {
             $id_abono = ($this->select_model->nextId_abono_adelanto($prefijo_abono)->id) + 1;
             $t_trans = 3; //Abono a adelanto
             $credito_debito = 1; //Credito
+            //Para tirar array a json utilizar comillas dobles, decodificar en utf8 
+            $adelanto = $this->select_model->adelanto_prefijo_id($prefijo_adelanto, $id_adelanto);
+            $empleado = $this->select_model->empleado($adelanto->id_empleado, $adelanto->dni_empleado);
+            $detalle_array = array(
+                "Empleado_Depositante" => $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1,
+                "Id_Empleado" => $adelanto->id_empleado,
+                "Código_Adelanto" => $prefijo_adelanto . $id_adelanto,
+                "Saldo_Pendiente" => "$" . number_format($adelanto->saldo, 1, '.', ','),
+                "Observación" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);
 
             $data["tab"] = "crear_abono_adelanto";
             $this->isLogin($data["tab"]);
@@ -114,7 +125,7 @@ class Abono_adelanto extends CI_Controller {
             $data['msn_recrear'] = "Crear otro abono";
             $data['url_imprimir'] = base_url() . "abono_adelanto/consultar_pdf/" . $prefijo_abono . "_" . $id_abono . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
@@ -393,6 +404,9 @@ class Abono_adelanto extends CI_Controller {
                     . '<td colspan="4" class="c23">'
                     . '<table>'
                     . '<tr><td class="c10"> </td></tr><tr>'
+                    . '<td><b>Código del adelanto: </b>' . $adelanto->id . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
@@ -479,6 +493,9 @@ class Abono_adelanto extends CI_Controller {
                     . '<td colspan="4" class="c23">'
                     . '<table>'
                     . '<tr><td class="c10"> </td></tr><tr>'
+                    . '<td><b>Código del adelanto: </b>' . $adelanto->id . '.</td>'
+                    . '</tr><tr><td class="c10"> </td></tr>'
+                    . '<tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Autorizó: </b>' . $adelanto->autoriza . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
@@ -521,7 +538,7 @@ class Abono_adelanto extends CI_Controller {
         $this->parser->parse('abono_adelanto/anular', $data);
         $this->load->view('footer');
     }
-    
+
     function validar_anular() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
@@ -556,8 +573,8 @@ class Abono_adelanto extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_adelanto/anular";
             $data['msn_recrear'] = "Anular otro abono a adelanto de nómina";
-            
-            $this->load->model('transaccionesm');            
+
+            $this->load->model('transaccionesm');
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
             if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {
@@ -639,6 +656,5 @@ class Abono_adelanto extends CI_Controller {
             redirect(base_url());
         }
     }
-    
 
 }

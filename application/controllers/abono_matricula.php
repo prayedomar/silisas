@@ -403,6 +403,7 @@ class Abono_matricula extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_matricula/anular";
             $data['msn_recrear'] = "Anular otro abono a matrícula";
+            $data['url_imprimir'] = base_url() . "abono_matricula/consultar_pdf/" . $prefijo . "_" . $id . "/I";   
             
             $this->load->model('transaccionesm');            
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
@@ -431,7 +432,7 @@ class Abono_matricula extends CI_Controller {
                         $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
                     } else {
-                        $this->parser->parse('trans_success', $data);
+                        $this->parser->parse('trans_success_print', $data);
                     }
                 }
             }
@@ -485,5 +486,147 @@ class Abono_matricula extends CI_Controller {
             redirect(base_url());
         }
     }
+    
+function consultar_pdf($id_abono_matricula, $salida_pdf) {
+        $abono_matricula_prefijo_id = $id_abono_matricula;
+        $id_abono_matricula_limpio = str_replace("_", " ", $abono_matricula_prefijo_id);
+        list($prefijo, $id) = explode("_", $abono_matricula_prefijo_id);
+        $abono_matricula = $this->select_model->abono_matricula_prefijo_id($prefijo, $id);
+        if ($abono_matricula == TRUE) {
+            $responsable = $this->select_model->empleado($abono_matricula->id_responsable, $abono_matricula->dni_responsable);
+            $dni_abreviado = $this->select_model->t_dni_id($abono_matricula->dni_a_nombre_de)->abreviacion;
+            if (($abono_matricula->d_v_a_nombre_de) == (NULL)) {
+                $d_v = "";
+            } else {
+                $d_v = " - " . $abono_matricula->d_v_a_nombre_de;
+            }
+
+
+            $this->load->library('Pdf');
+            $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Sili S.A.S');
+            $pdf->SetTitle('Abono a matrícula ' . $id_abono_matricula_limpio . ' Sili S.A.S');
+            $pdf->SetSubject('Abono a matrícula ' . $id_abono_matricula_limpio . ' Sili S.A.S');
+            $pdf->SetKeywords('sili, sili sas');
+
+
+//// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+//relación utilizada para ajustar la conversión de los píxeles
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+// ---------------------------------------------------------
+// establecer el modo de fuente por defecto            
+            $pdf->setFontSubsetting(true);
+            $pdf->setPrintHeader(false); //no imprime la cabecera ni la linea
+            $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
+// Añadir una página
+// Este método tiene varias opciones, consulta la documentación para más información.
+            $pdf->AddPage();
+
+            //preparamos y maquetamos el contenido a crear
+            $html = '';
+            $html .= '<style type=text/css>';
+            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
+            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
+            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
+            $html .= 'td.c2{width:310px;}';
+            $html .= 'td.c3{width:112px;}';
+            $html .= 'td.c4{width:306px;}';
+            $html .= 'td.c5{width:728px;height:23px;line-height:23px;}';
+            $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:14px;}';
+            $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:14px;}';
+            $html .= 'td.c20{width:418px;height:23px;line-height:23px;}';
+            $html .= 'td.c21{width:190px;height:20px;line-height:20px;font-weight: bold;}';
+            $html .= 'td.c22{width:120px;height:20px;line-height:20px;font-weight: bold;}';
+            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
+            $html .= 'td.c26{background-color:#F5F5F5;}';
+            $html .= 'td.a1{text-align:left;}';
+            $html .= 'td.a2{text-align:center;}';
+            $html .= 'th.c26{background-color:#F5F5F5;}';
+            $html .= 'th.a1{text-align:left;}';
+            $html .= 'th.a2{text-align:center;}';
+            $html .= 'th.d1{width:568px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'th.d5{width:160px;font-weight: bold;height:22px;line-height:20px;}';
+            $html .= 'table{border-spacing: 0;}';
+            $html .= 'table.t1{text-align:left;}';
+            $html .= '</style>';
+            $html .= '<table width="100%"><tr>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución de facturación DIAN No. 110000581182 del 28/05/2014</p>'
+                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                    . '</td>'
+                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<br>'
+                    . '</tr><tr>'
+                    . '<td class="c24 a2" colspan="2">ABONO A MATRÍCULA</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_abono_matricula_limpio . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($abono_matricula->fecha_trans)) . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $abono_matricula->a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $abono_matricula->id_a_nombre_de . $d_v . '</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $abono_matricula->direccion_a_nombre_de . '</td>'
+                    . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $abono_matricula->matricula . '</td>'
+                    . '</tr>'
+                    . '</table><br>'
+                    . '<table border="1" class="t1">'
+                    . '<tr>'
+                    . '<th class="d1 c23 a2 c26">Detalle</th>'
+                    . '<th class="d5 c23 a2 c26">Total</th>'
+                    . '</tr>';
+            $cont_filas = 0;
+                $html .= '<tr>'
+                        . '<td class="c7">Abono modulo enseñanza lectora</td>'
+                        . '<td class="c8 a2">$' . number_format((($abono_matricula->subtotal) + $abono_matricula->int_mora), 1, '.', ',') . '</td>'
+                        . '</tr>';
+            for ($i = $cont_filas; $i < 5; $i++) {
+                $html .= '<tr><td class="c7"></td><td class="c8"></td></tr>';
+            }
+            $html .= '</table>'
+                    . '<table border="1" class="t1">'
+                    . '<tr>';
+                if ($abono_matricula->vigente == "1") {
+                    $html .= '<td class="c5 a2"><br><br><br> ______________________________ <br> Firma y sello empresa</td>';
+                } else {
+                    $html .= '<td class="c5 a2" rowspan="4"><img src="' . base_url() . 'images/anulado.png" class="img-responsive" height="80" /></td>';
+                }
+                $html .= '</tr>'
+                    . '</table><p class="b3">- Copia para la empresa -</p>';
+
+            // Imprimimos el texto con writeHTMLCell()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+           
+// ---------------------------------------------------------
+// Cerrar el documento PDF y preparamos la salida
+// Este método tiene varias opciones, consulte la documentación para más información.
+            $nombre_archivo = utf8_decode('Abono a matrícula ' . $id_abono_matricula_limpio . ' Sili S.A.S.pdf');
+            $pdf->Output($nombre_archivo, $salida_pdf);
+        } else {
+            redirect(base_url() . 'abono_matricula/consultar/');
+        }
+    }    
 
 }

@@ -14,7 +14,7 @@ class Ingreso extends CI_Controller {
         $data["tab"] = "crear_ingreso";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['t_ingreso'] = $this->select_model->t_ingreso();
@@ -163,6 +163,42 @@ class Ingreso extends CI_Controller {
             $id_ingreso = ($this->select_model->nextId_ingreso($prefijo_ingreso)->id) + 1;
             $t_trans = 5; //Ingreso
             $credito_debito = 1; //Credito
+            //Para tirar array a json utilizar comillas dobles, decodificar en utf8
+            $tipo_ingreso = $this->select_model->t_ingreso_id($t_ingreso)->tipo;
+            $tipo_depositante = $this->select_model->t_usuario_id($t_depositante)->tipo;
+            if ($t_depositante == '1') {
+                $depositante = $this->select_model->empleado($id_depositante, $dni_depositante);
+                $name_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+            } else {
+                if ($t_depositante == '2') {
+                    $depositante = $this->select_model->titular($id_depositante, $dni_depositante);
+                    $name_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+                } else {
+                    if ($t_depositante == '3') {
+                        $depositante = $this->select_model->alumno($id_depositante, $dni_depositante);
+                        $name_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+                    } else {
+                        if ($t_depositante == '4') {
+                            $depositante = $this->select_model->cliente_id_dni($id_depositante, $dni_depositante);
+                            $name_depositante = $depositante->nombre1 . " " . $depositante->nombre2 . " " . $depositante->apellido1 . " " . $depositante->apellido2;
+                        } else {
+                            if ($t_depositante == '5') {
+                                $name_depositante = $this->select_model->proveedor_id_dni($id_depositante, $dni_depositante)->razon_social;
+                            } else {
+                                $name_depositante = $nombre_depositante;
+                            }
+                        }
+                    }
+                }
+            }
+            $detalle_array = array(
+                "Tipo_Ingreso" => $tipo_ingreso,
+                "Tipo_Depositante" => $tipo_depositante,
+                "Nombre_Depositante" => $name_depositante,
+                "Id_Depositante" => $id_depositante,
+                "Descripción" => $descripcion
+            );
+            $detalle_json = json_encode($detalle_array);
 
             $data["tab"] = "crear_ingreso";
             $this->isLogin($data["tab"]);
@@ -171,7 +207,7 @@ class Ingreso extends CI_Controller {
             $data['msn_recrear'] = "Crear otro Ingreso";
             $data['url_imprimir'] = base_url() . "ingreso/consultar_pdf/" . $prefijo_ingreso . "_" . $id_ingreso . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_ingreso, $id_ingreso, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_ingreso, $id_ingreso, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
@@ -588,8 +624,8 @@ class Ingreso extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "ingreso/anular";
             $data['msn_recrear'] = "Anular otro ingreso";
-            
-            $this->load->model('transaccionesm');            
+
+            $this->load->model('transaccionesm');
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
             if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {

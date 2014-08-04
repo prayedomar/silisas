@@ -208,7 +208,7 @@
                     <?php } ?>                                    
                     <li class="divider"></li>
                     <li class="dropdown-header"><u> Proveedores</u></li>
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
                         <li><a href="<?= base_url() ?>proveedor/crear">Proveedor</a></li>
                     <?php } ?>                                    
                 </ul>
@@ -367,7 +367,7 @@
                 <li class="col-sm-4">
                     <ul>
                         <li class="dropdown-header"><u> Matrículas</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera"))) { ?>
                     <li><a href="<?= base_url() ?>matricula/editar_plan">Cambio de plan</a></li>  
                 <?php } ?>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>

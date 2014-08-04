@@ -92,7 +92,16 @@ class Retefuente_compras extends CI_Controller {
             $prefijo_retefuente_compras = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_retefuente_compras = ($this->select_model->nextId_retefuente_compras($prefijo_retefuente_compras)->id) + 1;
             $t_trans = 12; //Retencion en la fuente
-            $credito_debito = 1; //Credito            
+            $credito_debito = 1; //Credito  
+            //Para tirar array a json utilizar comillas dobles, decodificar en utf8         
+            $proveedor = $this->select_model->proveedor_id_dni($id_proveedor, $dni_proveedor);
+            $detalle_array = array(
+                "Proveedor" => $proveedor->razon_social,
+                "Id_Proveedor" => $proveedor->id . "-" . $proveedor->d_v,
+                "Código_Factura" => $factura,
+                "Descripsión" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);              
 
             $data["tab"] = "crear_retefuente_compras";
             $this->load->view("header", $data);
@@ -100,7 +109,7 @@ class Retefuente_compras extends CI_Controller {
             $data['msn_recrear'] = "Crear otra retención";
             $data['url_imprimir'] = base_url() . "retefuente_compras/consultar_pdf/" . $prefijo_retefuente_compras . "_" . $id_retefuente_compras . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_compras, $id_retefuente_compras, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_compras, $id_retefuente_compras, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

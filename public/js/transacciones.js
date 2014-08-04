@@ -70,7 +70,7 @@ $(function() {
         if ($("#paginacion").data("caja") != "") {
             url += "caja=" + $("#paginacion").data("caja") + "&";
         }
-        if ($("#paginacion").data("vigente") != "") {
+        if ($("#paginacion").data("vigente") == "0") {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";
         }           
         if ($("#paginacion").data("documento") != "") {

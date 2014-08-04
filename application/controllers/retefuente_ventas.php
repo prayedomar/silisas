@@ -94,6 +94,19 @@ class Retefuente_ventas extends CI_Controller {
             $id_retefuente_ventas = ($this->select_model->nextId_retefuente_ventas($prefijo_retefuente_ventas)->id) + 1;
             $t_trans = 14; //Retencion en la fuente ventas
             $credito_debito = 0; //Débito
+            //Para tirar array a json utilizar comillas dobles, decodificar en utf8    
+            $factura = $this->select_model->factura_prefijo_id($prefijo_factura, $id_factura);
+            $matricula = $this->select_model->matricula_id($factura->matricula);
+            $titular = $this->select_model->titular($matricula->id_titular, $matricula->dni_titular);          
+            $detalle_array = array(
+                "Factura" => $prefijo_factura . $id_factura,
+                "Valor_Factura" => "$" . number_format($factura->subtotal, 1, '.', ','),
+                "Titular" => $titular->nombre1 . " " . $titular->nombre2 . " " . $titular->apellido1 . " " . $titular->apellido2,
+                "Id_Titular" => $titular->id,
+                "Observación_Factura" => $factura->observacion,
+                "Observación_Retención" => $observacion
+            );
+            $detalle_json = json_encode($detalle_array);            
 
             $data["tab"] = "crear_retefuente_ventas";
             $this->load->view("header", $data);
@@ -101,7 +114,7 @@ class Retefuente_ventas extends CI_Controller {
             $data['msn_recrear'] = "Crear otra retención";
             $data['url_imprimir'] = base_url() . "retefuente_ventas/consultar_pdf/" . $prefijo_retefuente_ventas . "_" . $id_retefuente_ventas . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_ventas, $id_retefuente_ventas, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_retefuente_ventas, $id_retefuente_ventas, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

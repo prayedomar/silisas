@@ -159,7 +159,43 @@ class Egreso extends CI_Controller {
             $prefijo_egreso = $this->select_model->sede_id($sede)->prefijo_trans;
             $id_egreso = ($this->select_model->nextId_egreso($prefijo_egreso)->id) + 1;
             $t_trans = 6; //Egreso
-            $credito_debito = 0; //Debito            
+            $credito_debito = 0; //Debito 
+            //Para tirar array a json utilizar comillas dobles, decodificar en utf8
+            $tipo_egreso = $this->select_model->t_egreso_id($t_egreso)->tipo;
+            $tipo_beneficiario = $this->select_model->t_usuario_id($t_beneficiario)->tipo;
+            if ($t_beneficiario == '1') {
+                $beneficiario = $this->select_model->empleado($id_beneficiario, $dni_beneficiario);
+                $name_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
+            } else {
+                if ($t_beneficiario == '2') {
+                    $beneficiario = $this->select_model->titular($id_beneficiario, $dni_beneficiario);
+                    $name_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
+                } else {
+                    if ($t_beneficiario == '3') {
+                        $beneficiario = $this->select_model->alumno($id_beneficiario, $dni_beneficiario);
+                        $name_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
+                    } else {
+                        if ($t_beneficiario == '4') {
+                            $beneficiario = $this->select_model->cliente_id_dni($id_beneficiario, $dni_beneficiario);
+                            $name_beneficiario = $beneficiario->nombre1 . " " . $beneficiario->nombre2 . " " . $beneficiario->apellido1 . " " . $beneficiario->apellido2;
+                        } else {
+                            if ($t_beneficiario == '5') {
+                                $name_beneficiario = $this->select_model->proveedor_id_dni($id_beneficiario, $dni_beneficiario)->razon_social;
+                            } else {
+                                $name_beneficiario = $nombre_beneficiario;
+                            }
+                        }
+                    }
+                }
+            }
+            $detalle_array = array(
+                "Tipo_Egreso" => $tipo_egreso,
+                "Tipo_Beneficiario" => $tipo_beneficiario,
+                "Nombre_Beneficiario" => $name_beneficiario,
+                "Id_Depositante" => $id_beneficiario,
+                "Descripción" => $descripcion
+            );
+            $detalle_json = json_encode($detalle_array);            
 
             $data["tab"] = "crear_egreso";
             $this->isLogin($data["tab"]);
@@ -168,7 +204,7 @@ class Egreso extends CI_Controller {
             $data['msn_recrear'] = "Crear otro Egreso";
             $data['url_imprimir'] = base_url() . "egreso/consultar_pdf/" . $prefijo_egreso . "_" . $id_egreso . "/I";
 
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_egreso, $id_egreso, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, '', $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_egreso, $id_egreso, $credito_debito, $total, $sede_caja_origen, $t_caja_origen, $efectivo_retirado, $cuenta_origen, $valor_retirado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);

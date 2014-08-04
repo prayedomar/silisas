@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-xs-2">
                             <label>Num. de documento</label>
-                            <input type='text' id="numero_documento" class='form-control letras_numeros' placeholder="Num. de documento<" value="<?= isset($_GET["numero_documento"]) ? $_GET["numero_documento"] : "" ?>">
+                            <input type='text' id="numero_documento" class='form-control numerico' placeholder="Num. de documento<" value="<?= isset($_GET["numero_documento"]) ? $_GET["numero_documento"] : "" ?>">
                         </div>
                         <div class="col-xs-2">
                             <label>Razon social</label>

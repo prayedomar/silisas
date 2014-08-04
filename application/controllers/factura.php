@@ -536,11 +536,7 @@ class Factura extends CI_Controller {
         $error_transaccion = "";
         if (($this->input->post('prefijo') != "default") && ($this->input->post('id'))) {
             $factura = $this->select_model->factura_prefijo_id($prefijo, $id);
-            if ($factura == TRUE) {
-                if ($factura->vigente == 0) {
-                    $error_transaccion = "La factura de venta, se encuentra anulada.";
-                }
-            } else {
+            if ($factura != TRUE) {
                 $error_transaccion = "La factura de venta, no existe en la base de datos.";
             }
         }
@@ -596,9 +592,135 @@ class Factura extends CI_Controller {
             $pdf->setPrintFooter(false); //no imprime el pie ni la linea        
 // Añadir una página
 // Este método tiene varias opciones, consulta la documentación para más información.
-            $pdf->AddPage();
+            if ($factura->vigente == "1") {
+                $pdf->AddPage();
 
-            //preparamos y maquetamos el contenido a crear
+                //preparamos y maquetamos el contenido a crear
+                $html = '';
+                $html .= '<style type=text/css>';
+                $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
+                $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
+                $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
+                $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+                $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
+                $html .= 'td.c2{width:310px;}';
+                $html .= 'td.c3{width:112px;}';
+                $html .= 'td.c4{width:306px;}';
+                $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+                $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+                $html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
+                $html .= 'td.c21{width:190px;height:20px;line-height:20px;font-weight: bold;}';
+                $html .= 'td.c22{width:120px;height:20px;line-height:20px;font-weight: bold;}';
+                $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+                $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+                $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
+                $html .= 'td.c26{background-color:#F5F5F5;}';
+                $html .= 'td.a1{text-align:left;}';
+                $html .= 'td.a2{text-align:center;}';
+                $html .= 'th.c26{background-color:#F5F5F5;}';
+                $html .= 'th.a1{text-align:left;}';
+                $html .= 'th.a2{text-align:center;}';
+                $html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
+                $html .= 'th.d2{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+                $html .= 'th.d3{width:85px;font-weight: bold;height:22px;line-height:20px;}';
+                $html .= 'th.d4{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+                $html .= 'th.d5{width:120px;font-weight: bold;height:22px;line-height:20px;}';
+                $html .= 'th.d6{width:50px;font-weight: bold;height:22px;line-height:20px;}';
+                $html .= 'table{border-spacing: 0;}';
+                $html .= 'table.t1{text-align:left;}';
+                $html .= '</style>';
+                $html .= '<table width="100%"><tr>'
+                        . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución de facturación DIAN No. 110000581182 del 28/05/2014</p>'
+                        . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
+                        . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
+                        . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
+                        . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
+                        . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
+                        . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
+                        . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
+                        . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
+                        . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
+                        . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
+                        . '</td>'
+                        . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                        . '<br>'
+                        . '</tr><tr>'
+                        . '<td class="c24 a2" colspan="2">FACTURA DE VENTA</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_factura_limpio . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $factura->a_nombre_de . '</td>'
+                        . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . $d_v . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $factura->direccion_a_nombre_de . '</td>'
+                        . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $factura->matricula . '</td>'
+                        . '</tr>'
+                        . '</table><br>'
+                        . '<table border="1" class="t1">'
+                        . '<tr>'
+                        . '<th class="d1 c23 a2 c26">Detalle</th>'
+                        . '<th class="d6 c23 a2 c26">Cuota</th>'
+                        . '<th class="d2 c23 a2 c26">Abono</th>'
+                        . '<th class="d3 c23 a2 c26">Dias Mora</th>'
+                        . '<th class="d4 c23 a2 c26">Int. Mora</th>'
+                        . '<th class="d5 c23 a2 c26">Subtotal</th>'
+                        . '</tr>';
+                $cont_filas = 0;
+                foreach ($detalles_factura as $fila) {
+                    $cont_filas ++;
+                    $html .= '<tr>'
+                            . '<td class="c7">' . $this->select_model->t_detalle($fila->t_detalle)->tipo . '</td>'
+                            . '<td class="c8 a2">' . $fila->num_cuota . '</td>'
+                            . '<td class="c8 a2">$' . number_format($fila->subtotal, 1, '.', ',') . '</td>'
+                            . '<td class="c8 a2">' . $fila->cant_dias_mora . '</td>'
+                            . '<td class="c8 a2">$' . number_format($fila->int_mora, 1, '.', ',') . '</td>'
+                            . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
+                            . '</tr>';
+                }
+                for ($i = $cont_filas; $i < 10; $i++) {
+                    $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
+                }
+                $html .= '</table>'
+                        . '<table border="1" class="t1">'
+                        . '<tr>';
+                if ($factura->vigente == "1") {
+                    $html .= '<td class="c20" rowspan="4"><br><br><br><br>Firma y sello empresa: ______________________________</td>';
+                } else {
+                    $html .= '<td class="c20 a2" rowspan="4"><img src="' . base_url() . 'images/anulada.png" class="img-responsive" height="80" /></td>';
+                }
+                $html .= '<td class="c21 c23 c26">Total Abonos (+)</td>'
+                        . '<td class="c22 c23 a2 c26">$' . number_format($factura->subtotal, 1, '.', ',') . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c21 c23 c26">Total Int. Mora (+)</td>'
+                        . '<td class="c22 c23 a2 c26">$' . number_format($factura->int_mora, 1, '.', ',') . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c21 c23 c26">Total Descuento (-)</td>'
+                        . '<td class="c22 c23 a2 c26">$' . number_format($factura->descuento, 1, '.', ',') . '</td>'
+                        . '</tr>'
+                        . '<tr>'
+                        . '<td class="c21 c23 c26">Total a Pagar (=)</td>'
+                        . '<td class="c22 c23 a2 c26">$' . number_format((($factura->subtotal + $factura->int_mora) - ($factura->descuento)), 1, '.', ',') . '</td>'
+                        . '</tr>'
+                        . '</table><p class="b3">- Copia para el cliente -</p>';
+
+                // Imprimimos el texto con writeHTMLCell()
+                $pdf->writeHTML($html, true, false, true, false, '');
+
+                // reset pointer to the last page
+                $pdf->lastPage();
+            }
+            $pdf->AddPage();
             $html = '';
             $html .= '<style type=text/css>';
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
@@ -694,130 +816,13 @@ class Factura extends CI_Controller {
             }
             $html .= '</table>'
                     . '<table border="1" class="t1">'
-                    . '<tr>'
-                    . '<td class="c20" rowspan="4"><br><br><br><br>Firma y sello empresa: ______________________________</td>'
-                    . '<td class="c21 c23 c26">Total Abonos (+)</td>'
-                    . '<td class="c22 c23 a2 c26">$' . number_format($factura->subtotal, 1, '.', ',') . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c21 c23 c26">Total Int. Mora (+)</td>'
-                    . '<td class="c22 c23 a2 c26">$' . number_format($factura->int_mora, 1, '.', ',') . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c21 c23 c26">Total Descuento (-)</td>'
-                    . '<td class="c22 c23 a2 c26">$' . number_format($factura->descuento, 1, '.', ',') . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c21 c23 c26">Total a Pagar (=)</td>'
-                    . '<td class="c22 c23 a2 c26">$' . number_format((($factura->subtotal + $factura->int_mora) - ($factura->descuento)), 1, '.', ',') . '</td>'
-                    . '</tr>'
-                    . '</table><p class="b3">- Copia para el cliente -</p>';
-
-            // Imprimimos el texto con writeHTMLCell()
-            $pdf->writeHTML($html, true, false, true, false, '');
-
-            // reset pointer to the last page
-            $pdf->lastPage();
-
-            $pdf->AddPage();
-            $html = '';
-            $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
-            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
-            $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:112px;}';
-            $html .= 'td.c4{width:306px;}';
-            $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
-            $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
-            $html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
-            $html .= 'td.c21{width:190px;height:20px;line-height:20px;font-weight: bold;}';
-            $html .= 'td.c22{width:120px;height:20px;line-height:20px;font-weight: bold;}';
-            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-            $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
-            $html .= 'td.c26{background-color:#F5F5F5;}';
-            $html .= 'td.a1{text-align:left;}';
-            $html .= 'td.a2{text-align:center;}';
-            $html .= 'th.c26{background-color:#F5F5F5;}';
-            $html .= 'th.a1{text-align:left;}';
-            $html .= 'th.a2{text-align:center;}';
-            $html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
-            $html .= 'th.d2{width:105px;font-weight: bold;height:22px;line-height:20px;}';
-            $html .= 'th.d3{width:85px;font-weight: bold;height:22px;line-height:20px;}';
-            $html .= 'th.d4{width:105px;font-weight: bold;height:22px;line-height:20px;}';
-            $html .= 'th.d5{width:120px;font-weight: bold;height:22px;line-height:20px;}';
-            $html .= 'th.d6{width:50px;font-weight: bold;height:22px;line-height:20px;}';
-            $html .= 'table{border-spacing: 0;}';
-            $html .= 'table.t1{text-align:left;}';
-            $html .= '</style>';
-            $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución de facturación DIAN No. 110000581182 del 28/05/2014</p>'
-                    . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
-                    . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
-                    . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
-                    . 'Cali Norte: Calle 25 # Norte 6A – 32 (Santa Mónica) / Tels.: 3816803 – 3816734<br>'
-                    . 'Bucaramanga: Carrera 33 # 54 – 91 (Cabecera) / Tels.: 6832612 – 6174057<br>'
-                    . 'Montería: Calle 58 # 6 – 39 (Castellana) / Tels.:7957110 – 7957110<br>'
-                    . 'Montelíbano: Calle 17 # 13 2do piso / Tels.: 7625202 – 7625650<br>'
-                    . 'Santa Marta: Carrera 13 B # 27 B – 84  (B. Bavaria) / Tels.: 4307566 – 4307570<br>'
-                    . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
-                    . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
-                    . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
-                    . '<br>'
-                    . '</tr><tr>'
-                    . '<td class="c24 a2" colspan="2">FACTURA DE VENTA</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25"><b>Número:</b></td><td class="c23 c25">' . $id_factura_limpio . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25"><b>Fecha de emisión:</b></td><td class="c23 c25">' . date("Y-m-d", strtotime($factura->fecha_trans)) . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25"><b>Responsable empresa:</b></td><td class="c23 c25">' . $responsable->nombre1 . " " . $responsable->apellido1 . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c3 c23 c25"><b>Cliente:</b></td><td class="c4 c23 c25">' . $factura->a_nombre_de . '</td>'
-                    . '<td class="c23 c25"><b>Documento cliente:</b></td><td class="c23 c25">' . $dni_abreviado . ' ' . $factura->id_a_nombre_de . $d_v . '</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $factura->direccion_a_nombre_de . '</td>'
-                    . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $factura->matricula . '</td>'
-                    . '</tr>'
-                    . '</table><br>'
-                    . '<table border="1" class="t1">'
-                    . '<tr>'
-                    . '<th class="d1 c23 a2 c26">Detalle</th>'
-                    . '<th class="d6 c23 a2 c26">Cuota</th>'
-                    . '<th class="d2 c23 a2 c26">Abono</th>'
-                    . '<th class="d3 c23 a2 c26">Dias Mora</th>'
-                    . '<th class="d4 c23 a2 c26">Int. Mora</th>'
-                    . '<th class="d5 c23 a2 c26">Subtotal</th>'
-                    . '</tr>';
-            $cont_filas = 0;
-            foreach ($detalles_factura as $fila) {
-                $cont_filas ++;
-                $html .= '<tr>'
-                        . '<td class="c7">' . $this->select_model->t_detalle($fila->t_detalle)->tipo . '</td>'
-                        . '<td class="c8 a2">' . $fila->num_cuota . '</td>'
-                        . '<td class="c8 a2">$' . number_format($fila->subtotal, 1, '.', ',') . '</td>'
-                        . '<td class="c8 a2">' . $fila->cant_dias_mora . '</td>'
-                        . '<td class="c8 a2">$' . number_format($fila->int_mora, 1, '.', ',') . '</td>'
-                        . '<td class="c8 a2">$' . number_format((($fila->subtotal) + $fila->int_mora), 1, '.', ',') . '</td>'
-                        . '</tr>';
+                    . '<tr>';
+            if ($factura->vigente == "1") {
+                $html .= '<td class="c20" rowspan="4"><br><br><br><br>Firma y sello empresa: ______________________________</td>';
+            } else {
+                $html .= '<td class="c20 a2" rowspan="4"><img src="' . base_url() . 'images/anulada.png" class="img-responsive" height="80" /></td>';
             }
-            for ($i = $cont_filas; $i < 10; $i++) {
-                $html .= '<tr><td class="c7"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td><td class="c8"></td></tr>';
-            }
-            $html .= '</table>'
-                    . '<table border="1" class="t1">'
-                    . '<tr>'
-                    . '<td class="c20" rowspan="4"><br><br><br><br>Firma y sello empresa: ______________________________</td>'
-                    . '<td class="c21 c23 c26">Total Abonos (+)</td>'
+            $html .= '<td class="c21 c23 c26">Total Abonos (+)</td>'
                     . '<td class="c22 c23 a2 c26">$' . number_format($factura->subtotal, 1, '.', ',') . '</td>'
                     . '</tr>'
                     . '<tr>'
@@ -896,6 +901,7 @@ class Factura extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "factura/anular";
             $data['msn_recrear'] = "Anular otra factura de venta";
+            $data['url_imprimir'] = base_url() . "factura/consultar_pdf/" . $prefijo . "_" . $id . "/I";   
 
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
@@ -923,7 +929,7 @@ class Factura extends CI_Controller {
                         $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
                     } else {
-                        $this->parser->parse('trans_success', $data);
+                        $this->parser->parse('trans_success_print', $data);
                     }
                 }
             }

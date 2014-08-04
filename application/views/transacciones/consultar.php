@@ -147,14 +147,17 @@
                                                     data-vigente="<?= $row->vigente == 1 ? "Vigente" : "Anulada" ?>"
                                                     <?php
                                                     $detalles_json = "";
-                                                        if (is_object(json_decode($row->detalle_json))) {
-                                                            foreach (json_decode($row->detalle_json) as $key => $value) {
-                                                                $detalles_json .= '<div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">' . $key . ': </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $value . '</b></div></div></div>';
-                                                            }
+                                                    if (is_object(json_decode($row->detalle_json))) {
+                                                        foreach (json_decode($row->detalle_json) as $key => $value) {
+                                                            $detalles_json .= '<div class="row"><div class="col-xs-5"><div class="form-group"><div class="text-right">' . $key . ': </div></div></div><div class="col-xs-7"><div class="form-group"><b>' . $value . '</b></div></div></div>';
                                                         }
-                                                        ?>                                                    
+                                                    }
+                                                    ?>                                                    
                                                     data-detalle_json="<?= htmlentities($detalles_json, ENT_QUOTES, 'UTF-8') ?>"
-                                                    >Ver detalles</button></center></td>
+                                                    >Detalles</button>
+                                                    <?php if (($row->vigente == 1) || ($row->t_trans == "7") || ($row->t_trans == "8") || ($row->t_trans == "15")) { ?>
+                                        <a href="<?= base_url() . $row->nombre_controlador . '/consultar_pdf/' . $row->prefijo . '_' . $row->id . '/I' ?>"  target="_blank" style="border-style: none;" ><img src="<?= base_url() ?>images/pdf_down.png" class="img-responsive"  width="58" height="41"/></a></center></td>
+                                <?php } ?>        
                                 </tr>
                             <?php } ?>
                             </tbody>
@@ -169,7 +172,7 @@
                              data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
                              data-id="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>"
                              data-caja="<?= isset($_GET["caja"]) ? $_GET["caja"] : "" ?>"
-                             data-vigente="<?= isset($_GET["vigente"]) ? $_GET["vigente"] : "" ?>"
+                             data-vigente="<?= !isset($_GET["vigente"]) ? "1" : "0" ?>"
                              data-documento="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>"
                              data-tipotrans="<?= isset($_GET["tipo_trans"]) ? $_GET["tipo_trans"] : "" ?>"
                              data-efectivo_bancos="<?= isset($_GET["efectivo_bancos"]) ? $_GET["efectivo_bancos"] : "" ?>"
