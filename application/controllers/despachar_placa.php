@@ -11,9 +11,9 @@ class Despachar_placa extends CI_Controller {
 
     function crear() {
         $data["tab"] = "crear_despachar_placa";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['action_validar'] = base_url() . "despachar_placa/validar";
@@ -25,7 +25,7 @@ class Despachar_placa extends CI_Controller {
 
     function validar() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             $placas_checkbox = $this->input->post('placas_checkbox');
             $error_check_placas = "";
@@ -46,10 +46,10 @@ class Despachar_placa extends CI_Controller {
         //si se ha pulsado el botón submit validamos el formulario con codeIgniter
         //Esto es muy importante, porq de lo contrario, podrian haber accedido aqui por la url directamente y daria error porq no vienen datos.
         if ($this->input->post('submit')) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $placas_checkbox = $this->input->post('placas_checkbox');
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
-            
+
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
 
@@ -86,6 +86,7 @@ class Despachar_placa extends CI_Controller {
                             <td class="text-center"><input type="checkbox" class="exit_caution" name="placas_checkbox[]"  value="' . $fila->id_solicitud . '"/></td>
                             <td>' . $fila->nombre1 . " " . $fila->nombre2 . " " . $fila->apellido1 . " " . $fila->apellido2 . '</td>
                             <td>' . $fila->cargo . '</td>
+                            <td class="text-center">' . $fila->fecha_ascenso . '</td>
                             <td class="text-center">' . $fila->sede . '</td>
                             <td>' . $fila->observacion . '</td>
                             <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_trans)) . '</td>
@@ -98,6 +99,5 @@ class Despachar_placa extends CI_Controller {
             redirect(base_url());
         }
     }
-     
 
 }

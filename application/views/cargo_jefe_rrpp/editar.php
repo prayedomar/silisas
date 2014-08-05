@@ -237,9 +237,9 @@
                 var obj = JSON.parse(data);
                 if (obj.respuesta == 'error')
                 {
-                    $("#alert_modal_2").attr('class', 'alert alert-danger');
-                    $("#alert_modal_2").html(obj.mensaje);
-                    return false;
+                    $("#alert_modal_2").html('<div class="alert alert-danger" id="div_warning"></div>');
+                    $("#div_warning").html(obj.mensaje);
+                    $("#div_warning").delay(8000).fadeOut(1000);
                 } else {
                     if (obj.respuesta == "OK")
                     {
@@ -247,7 +247,6 @@
                         $("#cerrar_modal_2").click();
                         $("#trans_success").modal('show');
                         $("#jefe > *").remove();
-                        return false;
                     }
                 }
                 return false;
@@ -289,9 +288,9 @@
                 var obj = JSON.parse(data);
                 if (obj.respuesta == 'error')
                 {
-                    $("#alert_modal_1").attr('class', 'alert alert-danger');
-                    $("#alert_modal_1").html(obj.mensaje);
-                    return false;
+                    $("#alert_modal_1").html('<div class="alert alert-danger" id="div_warning"></div>');
+                    $("#div_warning").html(obj.mensaje);
+                    $("#div_warning").delay(8000).fadeOut(1000);
                 } else {
                     if (obj.respuesta == "OK")
                     {
@@ -299,10 +298,8 @@
                         $("#cerrar_modal_1").click();
                         $("#trans_success").modal('show');
                         $("#cargo > *").remove();
-                        return false;
                     }
                 }
-                return false;
             },
             error: function(data) {
                 $("#alert_modal_1").attr('class', 'alert alert-danger');

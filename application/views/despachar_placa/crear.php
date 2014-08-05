@@ -14,9 +14,10 @@
                                             <th class="text-center">Escojer</th>                                            
                                             <th class="text-center">Empleado</th>
                                             <th class="text-center">Cargo Obtenido</th>
+                                            <th class="text-center">Fecha Ascenso</th>
                                             <th class="text-center">Sede</th>
                                             <th class="text-center">Observación</th>
-                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Fecha solicitud</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody_solicitudes">

@@ -1429,7 +1429,7 @@ class Select_model extends CI_Model {
     }
 
     public function solicitud_placa() {
-        $SqlInfo = "SELECT DISTINCT so.id AS id_solicitud, e.nombre1, e.nombre2, e.apellido1, e.apellido2, CASE e.genero WHEN 'F' THEN t.cargo_femenino ELSE t.cargo_masculino END AS cargo, se.nombre AS sede, so.observacion, so.fecha_trans FROM solicitud_placa AS so, empleado AS e, t_cargo AS t, sede AS se WHERE (so.id_empleado=e.id) AND (so.dni_empleado=e.dni) AND (so.pendiente=1) AND (so.cargo_obtenido=t.id) AND (so.sede=se.id) ORDER BY so.fecha_trans";
+        $SqlInfo = "SELECT DISTINCT so.id AS id_solicitud, e.nombre1, e.nombre2, e.apellido1, e.apellido2, CASE e.genero WHEN 'F' THEN t.cargo_femenino ELSE t.cargo_masculino END AS cargo, se.nombre AS sede, so.* FROM solicitud_placa AS so, empleado AS e, t_cargo AS t, sede AS se WHERE (so.id_empleado=e.id) AND (so.dni_empleado=e.dni) AND (so.pendiente=1) AND (so.cargo_obtenido=t.id) AND (so.sede=se.id) ORDER BY so.fecha_trans";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

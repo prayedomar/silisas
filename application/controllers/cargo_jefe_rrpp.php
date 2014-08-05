@@ -12,9 +12,9 @@ class Cargo_jefe_rrpp extends CI_Controller {
     //Editar: Cargo y Jefe
     function editar() {
         $data["tab"] = "editar_cargo_jefe_rrpp";
-        $this->isLogin($data["tab"]);        
+        $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -37,14 +37,18 @@ class Cargo_jefe_rrpp extends CI_Controller {
 
     public function editar_cargo_empleado() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('cargo', 'Nuevo Cargo', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
+            $check_placa = $this->input->post('checkbox_placa');
+            if ($check_placa == TRUE) {
+                $this->form_validation->set_rules('fecha_ascenso', 'Fecha del ascenso', 'required|xss_clean|callback_fecha_valida');
+            }
             if ($this->form_validation->run() == FALSE) {
                 //de esta forma devolvemos los errores de formularios
                 //con ajax desde codeigniter, aunque con php es lo mismo
                 $errors = array(
-                    'mensaje' => '<p>' . form_error('cargo') . form_error('observacion') . '</p>',
+                    'mensaje' => '<p>' . form_error('cargo') . form_error('observacion') . form_error('fecha_ascenso') . '</p>',
                     'respuesta' => 'error'
                 );
                 //y lo devolvemos así para parsearlo con JSON.parse
@@ -65,15 +69,16 @@ class Cargo_jefe_rrpp extends CI_Controller {
                     list($genero, $cargo_old) = explode("-", $this->input->post('genero_cargo'));
                     $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
                     $sede = $empleado->sede_ppal;
+                    $fecha_ascenso = $this->input->post('fecha_ascenso');
                     $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
-                    
+
                     $id_responsable = $this->session->userdata('idResponsable');
                     $dni_responsable = $this->session->userdata('dniResponsable');
                     //comprobamos si seleccionó el cheked de la placa
                     $check_placa = $this->input->post('checkbox_placa');
                     if ($check_placa == TRUE) {
                         $solicitar_placa = 1;
-                        $error1 = $this->insert_model->solicitar_placa($id_empleado, $dni_empleado, $cargo, $sede, $observacion, $id_responsable, $dni_responsable);
+                        $error1 = $this->insert_model->solicitar_placa($id_empleado, $dni_empleado, $cargo, $fecha_ascenso, $sede, $observacion, $id_responsable, $dni_responsable);
                         if (isset($error1)) {
                             $response = array(
                                 'respuesta' => 'error',
@@ -100,7 +105,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
 
     public function editar_jefe_empleado() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             $this->form_validation->set_rules('jefe', 'Nuevo Jefe', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             if ($this->form_validation->run() == FALSE) {
@@ -126,7 +131,7 @@ class Cargo_jefe_rrpp extends CI_Controller {
                     );
                 } else {
                     $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
-                    
+
                     $id_responsable = $this->session->userdata('idResponsable');
                     $dni_responsable = $this->session->userdata('dniResponsable');
 
@@ -142,10 +147,10 @@ class Cargo_jefe_rrpp extends CI_Controller {
             redirect(base_url());
         }
     }
-    
+
     public function llena_empleado_rrpp_sedes_responsable() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if (($this->input->post('idResposable')) && ($this->input->post('dniResposable'))) {
                 $id_responsable = $this->input->post('idResposable');
                 $dni_responsable = $this->input->post('dniResposable');
@@ -164,11 +169,11 @@ class Cargo_jefe_rrpp extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }  
-    
+    }
+
     public function llena_cargo_empleado() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
@@ -198,11 +203,11 @@ class Cargo_jefe_rrpp extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    } 
-    
+    }
+
     public function llena_jefe_empleado() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado')) {
                 list($id_empleado, $dni_empleado) = explode("-", $this->input->post('empleado'));
                 $jefe = $this->select_model->empleado_jefe($id_empleado, $dni_empleado);
@@ -222,11 +227,11 @@ class Cargo_jefe_rrpp extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }   
-    
+    }
+
     public function llena_jefe_faltante() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('empleado_jefe')) {
                 list($id_empleado, $dni_empleado, $id_jefe, $dni_jefe) = explode("-", $this->input->post('empleado_jefe'));
                 //Sacamos el empleado de las lista de jefes
@@ -246,11 +251,11 @@ class Cargo_jefe_rrpp extends CI_Controller {
         } else {
             redirect(base_url());
         }
-    }    
-    
+    }
+
     public function llena_cargo_genero_cargo_old() {
         if ($this->input->is_ajax_request()) {
-        $this->escapar($_POST);            
+            $this->escapar($_POST);
             if ($this->input->post('genero_cargo')) {
                 list($genero, $cargo_old) = explode("-", $this->input->post('genero_cargo'));
                 //Sacamos el cargo que ya tiene para no mostrarlo
@@ -281,6 +286,5 @@ class Cargo_jefe_rrpp extends CI_Controller {
             redirect(base_url());
         }
     }
-    
 
 }

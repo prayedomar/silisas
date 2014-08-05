@@ -551,11 +551,12 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function solicitar_placa($id_empleado, $dni_empleado, $cargo_obtenido, $sede, $observacion, $id_responsable, $dni_responsable) {
+    public function solicitar_placa($id_empleado, $dni_empleado, $cargo_obtenido, $fecha_ascenso, $sede, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             'cargo_obtenido' => $cargo_obtenido,
+            'fecha_ascenso' => $fecha_ascenso,
             'sede' => $sede,
             'pendiente' => 1,
             'observacion' => $observacion,
