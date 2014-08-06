@@ -1055,7 +1055,7 @@ class Insert_model extends CI_Model {
         }
     }
 
-    public function matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_cupos_enseñanza, $cant_alumnos_registrados, $cant_materiales_entregados, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
+    public function matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_cupos_enseñanza, $cant_alumnos_registrados, $cant_materiales_entregados, $datacredito, $juridico, $pagaran_escalas, $liquidacion_escalas, $sede, $estado, $observacion, $id_responsable, $dni_responsable) {
         $data = array(
             'contrato' => $contrato,
             'fecha_matricula' => $fecha_matricula,
@@ -1070,6 +1070,7 @@ class Insert_model extends CI_Model {
             'cant_materiales_entregados' => $cant_materiales_entregados,
             'datacredito' => $datacredito,
             'juridico' => $juridico,
+            'pagaran_escalas' => $pagaran_escalas,
             'liquidacion_escalas' => $liquidacion_escalas,
             'sede' => $sede,
             'estado' => $estado,

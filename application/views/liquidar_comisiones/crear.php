@@ -14,10 +14,10 @@
                     <form role="form" method="post" action="{action_crear}" id="formulario">
                         <div class="col-xs-12">
                             <div class="row">
-                                <div class="col-xs-4 col-xs-offset-4">
+                                <div class="col-xs-6 col-xs-offset-3">
                                     <div class="form-group" id="div_matricula">
                                         <label>Número de Matrícula<em class="required_asterisco">*</em></label>
-                                        <p class="help-block"><B>> </B>Sólo aparecerán las matrículas no liquidadas, que pertenecen a su sede principal y que completaron el pago de la cuota inicial.</p>
+                                        <p class="help-block"><B>> </B>Sólo aparecerán las matrículas destinadas para pagar en nómina por sistema, que hayan sido liquidadas, que pertenecen a su sede principal y que completaron el pago de la cuota inicial.</p>
                                         <select name="matricula" id="matricula" class="form-control exit_caution">
                                             <option value="default">Seleccione matrícula a liquidar</option>
                                             <?php

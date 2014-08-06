@@ -1916,7 +1916,7 @@ class TCPDF {
 		$this->linestyleJoin = '0 j';
 		$this->linestyleDash = '[] 0 d';
 		// automatic page break
-		$this->SetAutoPageBreak(true, (2 * $margin));
+		$this->SetAutoPageBreak(true, 2);
 		// full width display mode
 		$this->SetDisplayMode('fullwidth');
 		// compression

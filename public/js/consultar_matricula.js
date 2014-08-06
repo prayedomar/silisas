@@ -116,6 +116,11 @@ $(function() {
         } else {
             $("#divJuridico").html("No");
         }
+        if ($(this).data("pagaran_escalas") == "1") {
+            $("#divPagaranEscalas").html("Si");
+        } else {
+            $("#divPagaranEscalas").html("No");
+        }        
         if ($(this).data("liquidacion-escalas") == "1") {
             $("#divLiquidacionEscalas").html("Si");
         } else {

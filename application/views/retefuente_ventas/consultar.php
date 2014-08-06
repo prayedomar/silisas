@@ -34,7 +34,7 @@
                             </div>                            
                             <div class="row text-center separar_submit">
                                 <button id="btn_submit" type="submit" name="submit" value="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar retención en la fuente </a>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Seleccionar otra reteventas</a>
                             </div>
                         </div>
                     </div>

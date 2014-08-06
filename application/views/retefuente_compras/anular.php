@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <form role="form" method="post" action="{action_crear}" id="formulario">
                 <div class="row">
-                    <legend>Anular retención en la fuente por compras</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <legend>Anular retención en la fuente por compras o servicios</legend><p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
                     <div class="row">
                         <div class="col-xs-6 col-xs-offset-3">
                             <legend>Retención por compras que se anulará</legend>
@@ -31,7 +31,7 @@
                             </div>                            
                             <div class="row text-center separar_submit">
                                 <button type="button" class="btn btn-default" id="consultar_transaccion"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar retención por compras </a>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Seleccionar otra retecompras </a>
                             </div>
                         </div>
                     </div>

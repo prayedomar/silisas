@@ -14,7 +14,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Fecha de pago de la cuota inicial<em class="required_asterisco">*</em></label>
-                                        <p class="help-block"><B>> </B>Ingrese la fecha en que el titular realizó el pago inicial (Si no ha realizado ningún pago, coloque la fecha que aprece en el contrato físico de matrícula).</p>
+                                        <p class="help-block"><B>> </B>Ingrese la fecha en que el titular realizó el pago inicial (Si no ha realizado ningún pago, coloque la fecha que aparece en el contrato físico de matrícula).</p>
                                         <div class="input-group">
                                             <input name="fecha_matricula" id="fecha_matricula" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Inicio">
                                             <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -54,6 +54,19 @@
                                             <option value="{id}">{nombre}</option>
                                             {/sede_ppal}
                                         </select>
+                                    </div>  
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-2">
+                                            <div class="form-group">
+                                                <label>¿Se pagaran comisiones de nómina por ésta matrícula?<em class="required_asterisco">*</em></label>
+                                                <p class="help-block"><B>> </B>En el caso en que vayan a pagar comisiones de nomina <u>por sistema.</u></p>  
+                                                <select name="pagaran_escalas" id="pagaran_escalas" class="form-control exit_caution">
+                                                    <option value="default" selected>Seleccione...</option>
+                                                    <option value="1">Si se pagaran comisiones</option>
+                                                    <option value="0">No se pagaran comisiones</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>                                    
                                 </div> 
                             </div>

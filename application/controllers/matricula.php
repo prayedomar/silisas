@@ -40,6 +40,7 @@ class MAtricula extends CI_Controller {
             $this->form_validation->set_rules('fecha_matricula', 'Fecha de Inicio', 'required|xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('ejecutivo', 'Ejecutivo', 'required|callback_select_default');
             $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
+            $this->form_validation->set_rules('pagaran_escalas', '¿Se pagaran comisiones de nómina por ésta matrícula?', 'required|callback_select_default');
             $this->form_validation->set_rules('plan', 'Plan Comercial', 'required');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             //Validamos que el número de contrato físico exista en dicha sede
@@ -73,7 +74,7 @@ class MAtricula extends CI_Controller {
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($error_contrato != "") || ($error_titular != "")) {
-                echo form_error('contrato') . $error_contrato . form_error('fecha_matricula') . form_error('dni_titular') . form_error('id_titular') . $error_titular . form_error('ejecutivo') . form_error('sede_ppal') . form_error('plan') . form_error('observacion');
+                echo form_error('contrato') . $error_contrato . form_error('fecha_matricula') . form_error('dni_titular') . form_error('id_titular') . $error_titular . form_error('ejecutivo') . form_error('sede_ppal') . form_error('pagaran_escalas') . form_error('plan') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -97,6 +98,7 @@ class MAtricula extends CI_Controller {
             $cant_materiales_entregados = '0'; //0 Cantidad de materiales entregados
             $datacredito = 1;
             $juridico = 0;
+            $pagaran_escalas = $this->input->post('pagaran_escalas');            
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
             $estado_matricula = 1; //1:Vigente Pago Voluntario           
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
@@ -104,14 +106,13 @@ class MAtricula extends CI_Controller {
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
             $sede = $this->input->post('sede_ppal');
-
             $data["tab"] = "crear_matricula";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "alumno/crear";
             $data['msn_recrear'] = "Crear alumnos";
 
-            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_cupos_enseñanza, $cant_alumnos_registrados, $cant_materiales_entregados, $datacredito, $juridico, $liquidacion_escalas, $sede, $estado_matricula, $observacion, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->matricula($contrato, $fecha_matricula, $id_titular, $dni_titular, $id_ejecutivo, $dni_ejecutivo, $cargo_ejecutivo, $plan, $cant_cupos_enseñanza, $cant_alumnos_registrados, $cant_materiales_entregados, $datacredito, $juridico, $pagaran_escalas, $liquidacion_escalas, $sede, $estado_matricula, $observacion, $id_responsable, $dni_responsable);
 
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";

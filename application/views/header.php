@@ -177,7 +177,7 @@
                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                    
                         <li><a href="<?= base_url() ?>salario/crear">Salario Laboral</a></li>  
                     <?php } ?>                                    
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "secretaria"))) { ?>                                       
                         <li><a href="<?= base_url() ?>empleado/crear">Empleado</a></li>
                     <?php } ?>                                    
                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
@@ -197,10 +197,10 @@
                     <?php } ?>
                     <li class="divider"></li>
                     <li class="dropdown-header"><u> Clientes</u></li>
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "secretaria"))) { ?>                                       
                         <li><a href="<?= base_url() ?>titular/crear">Titular</a></li>
                     <?php } ?>                            
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "secretaria"))) { ?>                                       
                         <li><a href="<?= base_url() ?>alumno/crear">Alumno</a></li>
                     <?php } ?>                        
                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
@@ -208,7 +208,7 @@
                     <?php } ?>                                    
                     <li class="divider"></li>
                     <li class="dropdown-header"><u> Proveedores</u></li>
-                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
+                    <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "secretaria"))) { ?>                                       
                         <li><a href="<?= base_url() ?>proveedor/crear">Proveedor</a></li>
                     <?php } ?>                                    
                 </ul>
@@ -287,7 +287,7 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
                     <li><a href="<?= base_url() ?>contrato_matricula/crear">Contratos Físicos</a></li> 
                 <?php } ?>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>matricula/crear">Matrícula</a></li>
                 <?php } ?>                                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
@@ -464,7 +464,7 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
                     <li><a href="<?= base_url() ?>salario/consultar">Salarios Laborales</a></li> 
                 <?php } ?>                                
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "contador"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "contador", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>empleado/consultar">Empleados</a></li>
                 <?php } ?>                           
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
@@ -489,7 +489,7 @@
                 <?php } ?>                                    
                 <li class="divider"></li>
                 <li class="dropdown-header"><u> Proveedores</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "contador"))) { ?>                                       
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "contador", "secretaria"))) { ?>                                       
                     <li><a href="<?= base_url() ?>proveedor/consultar">Proveedores</a></li>  
                 <?php } ?>                                    
                 </ul>

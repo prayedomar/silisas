@@ -9,45 +9,8 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $prefijo = 'pbld';
-        $id = '1';
-        $this->load->model('recibo_cajam');
-        $recibo_caja = $this->recibo_cajam->recibo_caja_prefijo_id($prefijo, $id);
-        if ($recibo_caja == TRUE) {
-            if ($recibo_caja->vigente == 1) {
-                $response = array(
-                    'respuesta' => 'OK',
-                    'filasTabla' => ''
-                );
-                $response['filasTabla'] .= '<tr>
-                            <td class="text-center">' . $recibo_caja->matricula . '</td>
-                            <td class="text-center">$' . number_format($recibo_caja->subtotal + $recibo_caja->int_mora - $recibo_caja->descuento, 2, '.', ',') . '</td>
-                            <td class="text-center">' . $recibo_caja->sede_caja . '-' . $recibo_caja->tipo_caja . '</td>
-                            <td class="text-center">$' . number_format($recibo_caja->efectivo_ingresado, 2, '.', ',') . '</td>
-                            <td class="text-center">' . $recibo_caja->cuenta_destino . '</td>
-                            <td class="text-center">$' . number_format($recibo_caja->valor_consignado, 2, '.', ',') . '</td> 
-                            <td class="text-center">' . $recibo_caja->responsable . '</td>                                
-                            <td class="text-center">' . date("Y-m-d", strtotime($recibo_caja->fecha_trans)) . '</td>
-                        </tr>';
-                echo json_encode($response);
-                return false;
-            } else {
-                $response = array(
-                    'respuesta' => 'error',
-                    'mensaje' => '<p><strong><center>La recibo_caja de venta, ya se encuentra anulada.</center></strong></p>'
-                );
-                echo json_encode($response);
-                return false;
-            }
-        } else {
-            $response = array(
-                'respuesta' => 'error',
-                'mensaje' => '<p><strong><center>La recibo_caja de venta, no existe en la base de datos.</center></strong></p>'
-            );
-            echo json_encode($response);
-            return false;
-        }
-        var_dump($response);
+        $this->insert_model->movimiento_transaccion('13', 'pbld', '1', '1', '2323', '2', '1', '232323', NULL, NULL, 1, 'JSON', '2', '1128478351', '1');
+        echo 'ok';
     }
 
     function detalle_transacciones_matricula() {

@@ -52,7 +52,7 @@
                             </div>                            
                             <div class="row text-center separar_submit">
                                 <button type="button" class="btn btn-default" id="consultar_empleado"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Modificar Empleado </a>
+                                <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Seleccionar otro Empleado </a>
                             </div>
                         </div>
                     </div>

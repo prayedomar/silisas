@@ -54,10 +54,15 @@ class Nominam extends CI_Model {
     }
 
     public function concepto_nomina_group_matricula($prefijo, $id) {
-        $SqlInfo = "SELECT c_n.*, t_c.tipo, t_c.debito_credito, sum(valor_unitario) total "
+        $SqlInfo = "(SELECT c_n.*, t_c.tipo, t_c.debito_credito, sum(valor_unitario) total "
                 . "FROM concepto_nomina c_n "
                 . "JOIN t_concepto_nomina t_c ON (c_n.t_concepto_nomina = t_c.id) "
-                . "where ((c_n.prefijo_nomina='" . $prefijo . "')AND(c_n.id_nomina='" . $id . "')) group by c_n.detalle order by c_n.id";
+                . "where ((c_n.prefijo_nomina='" . $prefijo . "')AND(c_n.id_nomina='" . $id . "')AND((c_n.t_concepto_nomina='28')or(c_n.t_concepto_nomina='29'))) group by c_n.detalle order by c_n.id) "
+                . "UNION "
+                . "(SELECT c_n.*, t_c.tipo, t_c.debito_credito, c_n.valor_unitario total "
+                . "FROM concepto_nomina c_n "
+                . "JOIN t_concepto_nomina t_c ON (c_n.t_concepto_nomina = t_c.id) "
+                . "where ((c_n.prefijo_nomina='" . $prefijo . "')AND(c_n.id_nomina='" . $id . "')AND(c_n.t_concepto_nomina!='28')AND(c_n.t_concepto_nomina!='29')) order by c_n.id)";        
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

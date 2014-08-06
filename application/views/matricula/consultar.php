@@ -140,6 +140,7 @@
                                                     data-cant-materiales="<?= $row->cant_materiales_entregados ?>"
                                                     data-datacredito="<?= $row->datacredito ?>"
                                                     data-juridico="<?= $row->juridico ?>"
+                                                    data-pagaran_escalas="<?= $row->pagaran_escalas ?>"
                                                     data-liquidacion-escalas="<?= $row->liquidacion_escalas ?>"
                                                     data-estado="<?= $row->nombre_estado ?>"
                                                     data-observacion="<?= $row->observacion_matricula ?>"
@@ -270,11 +271,22 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right"> Liquidacion escalas:</div>   
+                            <div class="text-right"> ¿Se pagarán comisiones?:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divPagaranEscalas"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right"> ¿Se pagaron comisiones?:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
@@ -283,9 +295,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
