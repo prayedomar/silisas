@@ -64,7 +64,7 @@
                         },
                         error: function(data) {
                             $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
-                            $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                            $('#div_alert').html('<p>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</p>');
                             $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
 
                         }
@@ -161,7 +161,7 @@
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Crear <b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large row">
-                            <li class="col-sm-4">
+                            <li class="col-xs-4">
                                 <ul>
                                     <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
                                         <li class="dropdown-header"><u> Sedes</u></li>
@@ -213,7 +213,7 @@
                     <?php } ?>                                    
                 </ul>
                 </li>
-                <li class="col-sm-4">
+                <li class="col-xs-4">
                     <ul>
                         <li class="dropdown-header"><u> Transacciones</u></li>
                 <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>         
@@ -265,7 +265,7 @@
                 <?php } ?>-->
                 </ul>
                 </li>
-                <li class="col-sm-4">
+                <li class="col-xs-4">
                     <ul>
                         <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>   
                             <li class="dropdown-header"><u> Cajas y Bancos</u></li>
@@ -318,7 +318,7 @@
                 <li class="dropdown dropdown-large">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;"> Autorizar <b class="caret"></b></a>
                     <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 310px;">
-                        <li class="col-sm-12">
+                        <li class="col-xs-12">
                             <ul>                           
                                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>   
                                     <li class="dropdown-header"><u> Cajas y Bancos</u></li>
@@ -347,7 +347,7 @@
                 <li class="dropdown dropdown-large">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;"> Modificar <b class="caret"></b></a>
                     <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 426px;">
-                        <li class="col-sm-4">
+                        <li class="col-xs-4">
                             <ul>
                                 <li class="dropdown-header"><u> Empleados</u></li>
                         <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                       
@@ -364,7 +364,7 @@
                         <?php } ?>                         
                     </ul>
                 </li>
-                <li class="col-sm-4">
+                <li class="col-xs-4">
                     <ul>
                         <li class="dropdown-header"><u> Matrículas</u></li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera"))) { ?>
@@ -375,7 +375,7 @@
                 <?php } ?>
                 </ul>
                 </li>
-                <li class="col-sm-4">
+                <li class="col-xs-4">
                     <ul>
                         <li class="dropdown-header"><u> Clientes</u></li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "docente", "secretaria"))) { ?>                                       
@@ -388,7 +388,7 @@
                 <li class="dropdown dropdown-large">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;"> Anular <b class="caret"></b></a>
                     <ul class="dropdown-menu dropdown-menu-large row" style="margin-left: 450px;">
-                        <li class="col-sm-6">
+                        <li class="col-xs-6">
                             <ul>
                                 <li class="dropdown-header"><u> Transacciones</u></li> 
                         <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>                                
@@ -434,7 +434,7 @@
                 <?php } ?>
                 </ul>
                 </li>
-                <li class="col-sm-6">
+                <li class="col-xs-6">
                     <ul>
                         <li class="dropdown-header"><u> Matrículas </u></li> 
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon"))) { ?>                                       
@@ -450,7 +450,7 @@
                 <li class="dropdown dropdown-large">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 20px;">Consultar <b class="caret"></b></a>
                     <ul class="dropdown-menu dropdown-menu-large row"  style="margin-left: 500px;">
-                        <li class="col-sm-4">
+                        <li class="col-xs-4">
                             <ul>
                                 <li class="dropdown-header"><u> Sedes</u></li>
                         <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "contador", "calidad", "docente", "empleado_admon", "empleado_rrpp", "secretaria", "titular", "alumno", "cliente"))) { ?>                                       
@@ -494,7 +494,7 @@
                 <?php } ?>                                    
                 </ul>
                 </li>
-                <li class="col-sm-4">
+                <li class="col-xs-4">
                     <ul>                               
                         <li class="dropdown-header"><u> Transacciones</u></li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "contador", "aux_admon", "jefe_cartera", "cartera", "contador", "secretaria"))) { ?>                                       
@@ -547,7 +547,7 @@
                 <?php } ?>                     
                 </ul>
                 </li>
-                <li class="col-sm-4">
+                <li class="col-xs-4">
                     <ul>
                         <!--                                    <li class="dropdown-header">Inventario</li>
                                                             <li><a href="#">Articulo Inventario</a></li>
@@ -601,19 +601,19 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"  style="font-size: 18px;"><span
                                 class="glyphicon glyphicon-user"></span> Opciones de usuario <b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large row">
-                            <li class="col-sm-4">
+                            <li class="col-xs-4">
                                 <ul>
                                     <li><img src="<?= $_SESSION["rutaImg"] ?>"></li>
                                 </ul>
-                            </li>
-                            <li class="col-sm-8">
+                            </li>                          
+                            <li class="col-xs-7 col-xs-offset-1">
                                 <ul>
                                     <!--<li><a href="#">Ver Perfil</a></li>-->
                                     <li><p><b>Usuario: </b><em><?= $_SESSION["nombres"] ?></em></p></li>
                                     <li><p><b>Perfil: </b><em><?= $_SESSION["perfil"] ?></em></p></li>
                                     <li class="divider"></li>
-                                    <li><a href="<?= base_url() ?>password/cambiar"><span
-                                                class="glyphicon glyphicon-lock"></span> Cambiar Contraseña</a></li>
+                                    <li><a href="<?= base_url() ?>foto/cambiar_foto_perfil"><span class="glyphicon glyphicon-camera"></span> Cambiar Foto de perfil</a></li>
+                                    <li><a href="<?= base_url() ?>password/cambiar"><span class="glyphicon glyphicon-lock"></span> Cambiar Contraseña</a></li>
                                     <li class="divider"></li>
                                     <li><a href="<?= base_url() ?>login/logout_ci"><span
                                                 class="glyphicon glyphicon-off"></span> Cerrar Sesión &raquo;</a></li>

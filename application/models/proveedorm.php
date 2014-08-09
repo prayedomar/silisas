@@ -20,7 +20,7 @@ class Proveedorm extends CI_Model {
                   where true ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND pr.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND pr.id = '{$criterios['numero_documento']}'" : "";
-        $query.=(!empty($criterios['reazon_social'])) ? "AND lower(a.reazon_social) LIKE '%" . strtolower($criterios['reazon_social']) . "%'" : " ";
+        $query.=(!empty($criterios['razon_social'])) ? "AND lower(pr.razon_social) LIKE '%" . strtolower($criterios['razon_social']) . "%'" : " ";
         $query.=(!empty($criterios['pais'])) ? "AND pr.pais = '{$criterios['pais']}'" : "";
         $query.=(!empty($criterios['departamento'])) ? "AND pr.provincia = '{$criterios['departamento']}'" : "";
         $query.=(!empty($criterios['ciudad'])) ? "AND pr.ciudad = '{$criterios['ciudad']}'" : "";
@@ -39,7 +39,7 @@ class Proveedorm extends CI_Model {
                   where true ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND pr.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND pr.id = '{$criterios['numero_documento']}'" : "";
-        $query.=(!empty($criterios['reazon_social'])) ? "AND lower(a.reazon_social) LIKE '%" . strtolower($criterios['reazon_social']) . "%'" : " ";
+        $query.=(!empty($criterios['razon_social'])) ? "AND lower(pr.razon_social) LIKE '%" . strtolower($criterios['razon_social']) . "%'" : " ";
         $query.=(!empty($criterios['pais'])) ? "AND pr.pais = '{$criterios['pais']}'" : "";
         $query.=(!empty($criterios['departamento'])) ? "AND pr.provincia = '{$criterios['departamento']}'" : "";
         $query.=(!empty($criterios['ciudad'])) ? "AND pr.ciudad = '{$criterios['ciudad']}'" : "";

@@ -8,9 +8,19 @@
                         <form role="form" method="post" action="{action_crear}" id="formulario">
                             <div class="row">
                                 <div class="col-xs-8 col-xs-offset-2">
-                                    <div class="form-group">
-                                        <label>Número del Contrato Físico de Matrícula<em class="required_asterisco">*</em></label>
-                                        <input name="contrato" id="contrato" type="text" class="form-control exit_caution numerico" placeholder="Número de Contrato Físico" maxlength="13">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label>Número del Contrato Físico<em class="required_asterisco">*</em></label>
+                                                <input name="contrato1" id="contrato1" type="text" class="form-control exit_caution numerico" placeholder="Número de Contrato Físico" maxlength="13" onpaste="return false">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label>Verifique número del Contrato Físico<em class="required_asterisco">*</em></label>
+                                                <input name="contrato2" id="contrato2" type="text" class="form-control exit_caution numerico" placeholder="Verifique número de Contrato Físico" maxlength="13" onpaste="return false">
+                                            </div>
+                                        </div>                                        
                                     </div>
                                     <div class="form-group">
                                         <label>Fecha de pago de la cuota inicial<em class="required_asterisco">*</em></label>
@@ -62,8 +72,8 @@
                                                 <p class="help-block"><B>> </B>En el caso en que vayan a pagar comisiones de nomina <u>por sistema.</u></p>  
                                                 <select name="pagaran_escalas" id="pagaran_escalas" class="form-control exit_caution">
                                                     <option value="default" selected>Seleccione...</option>
-                                                    <option value="1">Si se pagaran comisiones</option>
-                                                    <option value="0">No se pagaran comisiones</option>
+                                                    <option value="1">Si se pagaran comisiones de nomina por sistema</option>
+                                                    <option value="0">No se pagaran comisiones en nomina por sistema</option>
                                                 </select>
                                             </div>
                                         </div>

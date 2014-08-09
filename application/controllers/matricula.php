@@ -14,7 +14,7 @@ class MAtricula extends CI_Controller {
         $data["tab"] = "crear_matricula";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni_titular'] = $this->select_model->t_dni_titular();
@@ -34,7 +34,8 @@ class MAtricula extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $this->form_validation->set_rules('contrato', 'Número de Contrato Físico', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('contrato1', 'Número del contrato físico', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('contrato2', 'Verifique número del contrato físico', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('dni_titular', 'Tipo de Id. del Titular', 'required|callback_select_default');
             $this->form_validation->set_rules('id_titular', 'Número de Id. del Titular', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('fecha_matricula', 'Fecha de Inicio', 'required|xss_clean|callback_fecha_valida');
@@ -45,25 +46,32 @@ class MAtricula extends CI_Controller {
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
             //Validamos que el número de contrato físico exista en dicha sede
             $error_contrato = "";
-            if (($this->input->post('contrato')) && ($this->input->post('sede_ppal') != "default")) {
-                $contrato = $this->input->post('contrato');
-                $id_responsable = $this->session->userdata('idResponsable');
-                $dni_responsable = $this->session->userdata('dniResponsable');
-                $sede = $this->input->post('sede_ppal');
-                $check_contrato = $this->select_model->contrato_matricula_id($contrato);
-                if ($check_contrato != TRUE) {
-                    $error_contrato = "<p>El contrato físico ingresado, no existe en la base de datos.</p>";
+            $error_verique_contrato = "";
+            if (($this->input->post('contrato1')) && ($this->input->post('contrato2'))) {
+                if ($this->input->post('contrato1') != $this->input->post('contrato2')) {
+                    $error_verique_contrato = "<p>El número del contrato fisico y su correspondiente verificación, no coinciden.</p>";
+                } else {
+                    if ($this->input->post('sede_ppal') != "default") {
+                        $contrato = $this->input->post('contrato1');
+                        $id_responsable = $this->session->userdata('idResponsable');
+                        $dni_responsable = $this->session->userdata('dniResponsable');
+                        $sede = $this->input->post('sede_ppal');
+                        $check_contrato = $this->select_model->contrato_matricula_id($contrato);
+                        if ($check_contrato != TRUE) {
+                            $error_contrato = "<p>El contrato físico ingresado, no existe en la base de datos.</p>";
 //                } else {
 //                    $check_contrato = $this->select_model->contrato_matricula_id_sede($contrato, $sede);
 //                    if ($check_contrato != TRUE) {
 //                        $error_contrato = "<p>El contrato físico ingresado, no se encuentra en la sede principal escogida.</p>";
-                } else {
-                    $check_contrato = $this->select_model->contrato_matricula_vacio_id($contrato);
-                    if ($check_contrato != TRUE) {
-                        $error_contrato = "<p>El contrato físico ingresado, no se encuentra vacío.</p>";
+                        } else {
+                            $check_contrato = $this->select_model->contrato_matricula_vacio_id($contrato);
+                            if ($check_contrato != TRUE) {
+                                $error_contrato = "<p>El contrato físico ingresado, no se encuentra vacío.</p>";
+                            }
+                        }
+//                }
                     }
                 }
-//                }
             }
             $error_titular = "";
             if (($this->input->post('id_titular')) && ($this->input->post('dni_titular'))) {
@@ -73,8 +81,8 @@ class MAtricula extends CI_Controller {
                     $error_titular = "<p>El Titular ingresado, no existe en la Base de Datos.</p>";
                 }
             }
-            if (($this->form_validation->run() == FALSE) || ($error_contrato != "") || ($error_titular != "")) {
-                echo form_error('contrato') . $error_contrato . form_error('fecha_matricula') . form_error('dni_titular') . form_error('id_titular') . $error_titular . form_error('ejecutivo') . form_error('sede_ppal') . form_error('pagaran_escalas') . form_error('plan') . form_error('observacion');
+            if (($this->form_validation->run() == FALSE) || ($error_contrato != "") || ($error_titular != "") || ($error_verique_contrato != "")) {
+                echo form_error('contrato1') . form_error('contrato2') . $error_verique_contrato . $error_contrato . form_error('fecha_matricula') . form_error('dni_titular') . form_error('id_titular') . $error_titular . form_error('ejecutivo') . form_error('sede_ppal') . form_error('pagaran_escalas') . form_error('plan') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -86,7 +94,7 @@ class MAtricula extends CI_Controller {
     function insertar() {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
-            $contrato = $this->input->post('contrato');
+            $contrato = $this->input->post('contrato1');
             $fecha_matricula = $this->input->post('fecha_matricula');
             $id_titular = $this->input->post('id_titular');
             $dni_titular = $this->input->post('dni_titular');
@@ -98,7 +106,7 @@ class MAtricula extends CI_Controller {
             $cant_materiales_entregados = '0'; //0 Cantidad de materiales entregados
             $datacredito = 1;
             $juridico = 0;
-            $pagaran_escalas = $this->input->post('pagaran_escalas');            
+            $pagaran_escalas = $this->input->post('pagaran_escalas');
             $liquidacion_escalas = 0;  //Hasta el moemento no se han creados las comisiones de las escalas
             $estado_matricula = 1; //1:Vigente Pago Voluntario           
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
@@ -141,7 +149,7 @@ class MAtricula extends CI_Controller {
         $data["tab"] = "editar_plan_matricula";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['dni_titular'] = $this->select_model->t_dni_titular();
         $id_responsable = $this->session->userdata('idResponsable');
         $dni_responsable = $this->session->userdata('dniResponsable');

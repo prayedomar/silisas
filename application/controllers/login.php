@@ -66,13 +66,13 @@ class Login extends CI_Controller {
             $password = $this->input->post('password');
             $check_user = $this->select_model->login_user($id, $dni, $t_usuario, $password);
             if ($check_user == TRUE) {
-                if (file_exists("images/photos/" . $check_user->id . $check_user->dni . ".jpg")) {
-                    $rutaImg = base_url() . "images/photos/" . $check_user->id . $check_user->dni . ".jpg";
+                if (file_exists("images/photo_perfil/" . $check_user->id . $check_user->dni . ".jpg")) {
+                    $rutaImg = base_url() . "images/photo_perfil/" . $check_user->id . $check_user->dni . ".jpg";
                 } else {
                     if ($check_user->genero == 'M') {
-                        $rutaImg = base_url() . "images/photos/default_men.png";
+                        $rutaImg = base_url() . "images/photo_perfil/default_men.png";
                     } else {
-                        $rutaImg = base_url() . "images/photos/default_woman.png";
+                        $rutaImg = base_url() . "images/photo_perfil/default_woman.png";
                     }
                 }
                 if ($check_user->genero == 'M') {
