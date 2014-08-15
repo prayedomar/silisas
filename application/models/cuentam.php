@@ -8,6 +8,11 @@ class Cuentam extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+    
+    public function listar_todas_las_cuentas() {
+        $query = "SELECT * FROM cuenta";
+        return $this->db->query($query)->result();
+    }    
 
     public function cantidad_cuentas($criterios, $inicio, $filasPorPagina) {
         $query = "SELECT count(*) cantidad

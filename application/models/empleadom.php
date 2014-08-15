@@ -8,7 +8,23 @@ class Empleadom extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-
+    
+    public function empleados_movimiento_transaccion() {
+        $query = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
+                . "FROM empleado e "
+                . "where ((NOT(e.id='1' AND e.dni='1')) AND (e.id IN(SELECT id_responsable FROM movimiento_transaccion where vigente='1')) AND (e.dni IN(SELECT dni_responsable FROM movimiento_transaccion where vigente='1'))) ORDER BY nombres";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }    
+    public function empleados_reporte_alumno() {
+        $query = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
+                . "FROM empleado e "
+                . "where ((NOT(e.id='1' AND e.dni='1')) AND (e.id IN(SELECT id_responsable FROM reporte_alumno where vigente='1')) AND (e.dni IN(SELECT dni_responsable FROM reporte_alumno where vigente='1'))) ORDER BY nombres";
+        if ($this->db->query($query)->num_rows() > 0) {
+            return $this->db->query($query)->result();
+        }
+    }
     public function empleado_id_dni($id, $dni) {
         $SqlInfo = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
                 . "FROM empleado e "

@@ -13,7 +13,6 @@ class Recibo_caja extends CI_Controller {
         $data["tab"] = "crear_recibo_caja";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -24,10 +23,8 @@ class Recibo_caja extends CI_Controller {
         $data['action_validar'] = base_url() . "recibo_caja/validar";
         $data['action_crear'] = base_url() . "recibo_caja/insertar";
         $data['action_recargar'] = base_url() . "recibo_caja/crear";
-
         $data['action_validar_titular_llena_matriculas'] = base_url() . "recibo_caja/validar_titular_llena_matriculas";
         $data['action_llena_cuotas_matricula'] = base_url() . "recibo_caja/llena_cuotas_matricula";
-
         $data['action_llena_cuenta_responsable'] = base_url() . "recibo_caja/llena_cuenta_responsable";
         $data['action_llena_caja_responsable'] = base_url() . "recibo_caja/llena_caja_responsable";
         $this->parser->parse('recibo_caja/crear', $data);
@@ -47,7 +44,6 @@ class Recibo_caja extends CI_Controller {
             $this->form_validation->set_rules('valor_consignado', 'Valor Consignado a la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('efectivo_ingresado', 'Efectivo Ingresado a la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-
             $error_descuento = "";
             $error_valores = "";
             if ($this->input->post('matricula')) {
@@ -154,7 +150,7 @@ class Recibo_caja extends CI_Controller {
                 $int_mora = '0';
                 $descuento = '0';
             }
-            if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
+            if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado'))) {
                 list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
                 $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
             } else {
@@ -178,7 +174,6 @@ class Recibo_caja extends CI_Controller {
             $id_recibo_caja = ($this->select_model->nextId_recibo_caja($prefijo_recibo_caja)->id) + 1;
             $t_trans = 8; //Recibo de caja
             $credito_debito = 1; //Credito   
-
             $detalle_array = array(
                 "Matrícula" => $matricula,
                 "Titular" => $titular,

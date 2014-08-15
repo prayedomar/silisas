@@ -134,7 +134,7 @@
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->sede ?></td>
-                                        <td class="text-center"><button class="detalles btn btn-primary btn-xs" 
+                                        <td class="text-center"  style="line-height:30px;vertical-align:middle;"><button class="detalles btn btn-primary btn-xs" 
                                                                         data-cuenta="<?= $row->cuenta ?>" 
                                                                         data-estadoempleado="<?= $row->estado_empleado ?>" 
                                                                         data-depto="<?= $row->depto ?>"
@@ -147,7 +147,7 @@
                                                                         data-apellido1jefe="<?= $row->apellido1_jefe ?>"
                                                                         data-apellido2jefe="<?= $row->apellido2_jefe ?>"
                                                                         data-observacion="<?= $row->observacion ?>"
-                                                                        >Ver detalles</button><br><br>
+                                                                        >Ver detalles</button>
                                                                         <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "admon_sede") { ?>
                                                 <button class="editar btn btn-success btn-xs"
                                                         data-dni="<?= $row->dni ?>"

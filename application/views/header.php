@@ -17,6 +17,9 @@
         <?php if (isset($tab) && $tab == "consultar_sede") { ?>
             <link href='<?= base_url() ?>public/css/consultar_sede.css' rel='stylesheet'>   
         <?php } ?>
+        <?php if (isset($tab) && $tab == "cambiar_foto_perfil") { ?>
+            <link href='<?= base_url() ?>public/css/jquery.Jcrop.css' rel='stylesheet'>   
+        <?php } ?>            
         <!-- Js -->
         <script src="<?= base_url() ?>libraries/html5shim/html5.js"></script>
         <script src="<?= base_url() ?>libraries/respond/respond.min.js"></script>
@@ -223,7 +226,7 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>recibo_caja/crear">Recibo de Caja</a></li>     
                 <?php } ?> 
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "aux_admon"))) { ?>
                     <li><a href="<?= base_url() ?>abono_matricula/crear">Abono a matrícula <br>(Información Vieja)</a></li>
                 <?php } ?>                      
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
@@ -299,7 +302,7 @@
                 <li class="divider"></li>
                 <li class="dropdown-header"><u> Enseñanza</u></li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "docente", "secretaria"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>reporte_alumno/crear">Reporte de alumno</a></li> 
+                    <li><a href="<?= base_url() ?>reporte_alumno/crear/new">Reporte de alumno</a></li> 
                 <?php } ?>
                 <li class="divider"></li>  
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>                                           
@@ -367,7 +370,7 @@
                 <li class="col-xs-4">
                     <ul>
                         <li class="dropdown-header"><u> Matrículas</u></li>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera", "aux_admon"))) { ?>
                     <li><a href="<?= base_url() ?>matricula/editar_plan">Cambio de plan</a></li>  
                 <?php } ?>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>

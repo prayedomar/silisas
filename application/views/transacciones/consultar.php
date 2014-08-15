@@ -6,21 +6,67 @@
                 <div id="divCriterios">
                     <div  class="row">
                         <div class="col-xs-2">
-                            <label>Desde</label>
+                            <center><label>Fecha: Desde</label></center>
                             <div class="input-group">
                                 <input id="desde"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Desde" value="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>">
                                 <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
                         <div class="col-xs-2">
-                            <label>Hasta</label>
+                            <center><label>Fecha: Hasta</label></center>
                             <div class="input-group">
                                 <input id="hasta"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Hasta" value="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>">
                                 <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
                         <div class="col-xs-2">
-                            <label>Sede</label>
+                            <center><label>Vigente</label></center>
+                            <select id="vigente" class="form-control">
+                                <option value="1">Si</option>
+                                <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "0" ? "selected" : "" ?>>No</option>
+                            </select>
+                        </div>                        
+                        <div class="col-xs-2">
+                            <center><label>Tipo de transacción</label></center>
+                            <select id="tipo_trans" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($lista_trans as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>><?= $row->nombre_tabla ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>                        
+                        <div class="col-xs-2">
+                            <center><label>Consecutivo ID</label></center>
+                            <input type='text' id="id" class='form-control numerico' placeholder="Consecutivo ID" value="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>">
+                        </div> 
+                        <div class="col-xs-2">
+                            <center><label>Ingreso / Egreso</label></center>
+                            <select id="credito_debito" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <<option value="1"  <?= isset($_GET["credito_debito"]) && $_GET["credito_debito"] == "1" ? "selected" : "" ?>>Ingreso</option>
+                                <option value="0"  <?= isset($_GET["credito_debito"]) && $_GET["credito_debito"] == "0" ? "selected" : "" ?>>Egreso</option>
+                            </select>
+                        </div>                         
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <center><label>Empleado responsable</label></center>
+                            <select id="id_dni_responsable" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php
+                                if (!empty($lista_empleados)) {
+                                    foreach ($lista_empleados as $row) {
+                                        ?>
+                                        <option value="<?= $row->id . "_" . $row->dni ?>" <?= isset($_GET["id_dni_responsable"]) && $_GET["id_dni_responsable"] == ($row->id . "_" . $row->dni) ? "selected" : "" ?>><?= $row->nombres ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-xs-2">
+                            <center><label>Sede</label></center>
                             <select id="sede" class="form-control">
                                 <option value="">Seleccionar...</option>
                                 <?php foreach ($lista_sedes as $row) { ?>
@@ -29,11 +75,7 @@
                             </select>
                         </div>
                         <div class="col-xs-2">
-                            <label>Consecutivo ID</label>
-                            <input type='text' id="id" class='form-control numerico' placeholder="Consecutivo ID" value="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>">
-                        </div>
-                        <div class="col-xs-2">
-                            <label>Caja</label>
+                            <center><label>Caja</label></center>
                             <select id="caja" class="form-control">
                                 <option value="">Seleccionar...</option>
                                 <?php foreach ($listar_cajas as $row) { ?>
@@ -41,57 +83,35 @@
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="col-xs-1">
-                            <br>
-                            <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
-                        </div>
-                        <div class="col-xs-1">
-                            <br>
-                            <a class='btn btn-primary' href="<?= base_url() ?>transacciones/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
                         <div class="col-xs-2">
-                            <label>Vigente</label>
-                            <select id="vigente" class="form-control">
-                                <option value="1">Si</option>
-                                <option value="0" <?= isset($_GET["vigente"]) && $_GET["vigente"] == "0" ? "selected" : "" ?>>No</option>
-                            </select>
-                        </div>
-                        <div class="col-xs-2">
-                            <label>Doc. responsable</label>
-                            <input type='text' id="documento" class='form-control letras_numeros' placeholder="Documento" value="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>">
-                        </div>
-                        <div class="col-xs-2">
-                            <label>Tipo de transacción</label>
-                            <select id="tipo_trans" class="form-control">
+                            <center><label>Cuenta</label></center>
+                            <select id="cuenta" class="form-control">
                                 <option value="">Seleccionar...</option>
-                                <?php foreach ($lista_trans as $row) { ?>
-                                    <option value="<?= $row->id ?>" <?= isset($_GET["tipo_trans"]) && $_GET["tipo_trans"] == $row->id ? "selected" : "" ?>><?= $row->nombre_tabla ?></option>
+                                <?php foreach ($lista_cuentas as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["cuenta"]) && $_GET["cuenta"] == $row->id ? "selected" : "" ?>><?= $row->id . ' ' . $row->nombre_cuenta  ?></option>
                                 <?php } ?>
                             </select>
-                        </div>
+                        </div>                          
                         <div class="col-xs-2">
-                            <label>Efectivo / Bancos</label>
+                            <center><label>Efectivo / Bancos</label></center>
                             <select id="efectivo_bancos" class="form-control">
                                 <option value="">Seleccionar...</option>
                                 <<option value="e"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "e" ? "selected" : "" ?>>Efectivo</option>
                                 <option value="b"  <?= isset($_GET["efectivo_bancos"]) && $_GET["efectivo_bancos"] == "b" ? "selected" : "" ?>>Bancos</option>
                             </select>
+                        </div>                       
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-1 col-xs-offset-4">
+                            <button id="searchBtn" class='btn btn-primary'> <span class="glyphicon glyphicon-search"></span></button>
                         </div>
-                        <div class="col-xs-2">
-                            <label>Ingreso / Egreso</label>
-                            <select id="credito_debito" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <<option value="1"  <?= isset($_GET["credito_debito"]) && $_GET["credito_debito"] == "1" ? "selected" : "" ?>>Ingreso</option>
-                                <option value="0"  <?= isset($_GET["credito_debito"]) && $_GET["credito_debito"] == "0" ? "selected" : "" ?>>Egreso</option>
-                            </select>
+                        <div class="col-xs-1">
+                            <a class='btn btn-primary' href="<?= base_url() ?>transacciones/consultar"> <span class="glyphicon glyphicon-refresh"></span></a>
                         </div>                        
                         <div class="col-xs-2">
-                            <br>
                             <button  title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
                 <hr>
@@ -143,7 +163,7 @@
                                         <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
                                         <td><?= $row->sede ?></td>
                                         <td><?= $row->nombre1 . " " . $row->apellido1 ?></td>
-                                        <td><center><button class="btn btn-primary btn-sm" 
+                                        <td style="line-height:30px;vertical-align:middle;"><center><button class="btn btn-primary btn-xs" 
                                                     data-vigente="<?= $row->vigente == 1 ? "Vigente" : "Anulada" ?>"
                                                     <?php
                                                     $detalles_json = "";
@@ -172,8 +192,9 @@
                              data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
                              data-id="<?= isset($_GET["id"]) ? $_GET["id"] : "" ?>"
                              data-caja="<?= isset($_GET["caja"]) ? $_GET["caja"] : "" ?>"
+                             data-cuenta="<?= isset($_GET["cuenta"]) ? $_GET["cuenta"] : "" ?>"
                              data-vigente="<?= !isset($_GET["vigente"]) ? "1" : "0" ?>"
-                             data-documento="<?= isset($_GET["documento"]) ? $_GET["documento"] : "" ?>"
+                             data-id_dni_responsable="<?= isset($_GET["id_dni_responsable"]) ? $_GET["id_dni_responsable"] : "" ?>"
                              data-tipotrans="<?= isset($_GET["tipo_trans"]) ? $_GET["tipo_trans"] : "" ?>"
                              data-efectivo_bancos="<?= isset($_GET["efectivo_bancos"]) ? $_GET["efectivo_bancos"] : "" ?>"
                              data-credito_debito="<?= isset($_GET["credito_debito"]) ? $_GET["credito_debito"] : "" ?>">

@@ -15,16 +15,16 @@
                                                 <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                                 <select name="dni" id="dni" class="form-control exit_caution">
                                                     <option value="default">Seleccione...</option>
-                                                    {dni}
-                                                    <option value="{id}">{tipo}</option>
-                                                    {/dni}
+                                                    <?php foreach ($dni as $row) { ?>
+                                                        <option value="<?= $row->id ?>" <?= isset($dni_alumno) && $dni_alumno == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
+                                                    <?php } ?>                                                    
                                                 </select>
                                             </div>   
                                         </div>
                                         <div class="col-xs-6">  
                                             <div class="form-group">
                                                 <label>Número de Identificación<em class="required_asterisco">*</em></label>
-                                                <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
+                                                <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13"  value="<?= isset($id_alumno) ? $id_alumno : '' ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -36,8 +36,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" id="div_t_curso" style="display: none">
-                                <hr>
+                            <hr>
+                            <div class="row" id="nombre_alumno">
+                            </div>                            
+                            <div class="row" id="div_t_curso" style="display: none;padding-top:19px;">                                  
                                 <div class="col-xs-6 col-xs-offset-3">
                                     <legend>Actualizar tipo de curso del alumno</legend>
                                     <div class="row">
@@ -59,17 +61,16 @@
                                 </div>
                             </div>
                             <div id="div_reporte" style="display: none">
+                                <div class="row" id="curso_alumno">
+                                </div>                                
                                 <!--<div id="div_reporte">-->
-                                <hr>
-                                <div class="row separar_submit" id="info_alumno">
-                                </div>
                                 <div class="row" id="div_reportes_anteriores">
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-10 col-xs-offset-1">
                                         <legend>Nuevo reporte de clase</legend>
                                         <div class="row">
-                                            <div class="col-xs-4 col-xs-offset-4">
+                                            <div class="col-xs-5 col-xs-offset-1">
                                                 <div class="form-group">
                                                     <label>Fecha de la clase<em class="required_asterisco">*</em></label>
                                                     <div class="input-group">
@@ -78,16 +79,35 @@
                                                     </div> 
                                                 </div>
                                             </div>
+                                            <div class="col-xs-5">
+                                                <div class="form-group">
+                                                    <label>Sede del reporte de clase<em class="required_asterisco">*</em></label>
+                                                    <select name="sede" id="sede" class="form-control exit_caution">
+                                                        <option value="default">Seleccione sede del reporte</option>
+                                                        {sedes}
+                                                        <option value="{id}">{nombre}</option>
+                                                        {/sedes}
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>¿Asistió a la clase?<em class="required_asterisco">*</em></label>
                                                 <select name="asistencia" id="asistencia" class="form-control exit_caution">
-                                                    <option value="default"  selected="selected">Seleccione sí asistió a la clase</option>
+                                                    <option value="default"  selected="selected">¿El alumno asistió a la clase?</option>
                                                     <option value="1">Si</option>
                                                     <option value="0">No</option>
                                                 </select>
                                             </div>
+                                            <div class="form-group">
+                                                <label>¿Avanzó de etapa?</label>
+                                                <select name="avanzo" id="avanzo" class="form-control exit_caution">
+                                                    <option value="default"  selected="selected">¿El alumno avanzó de etapa?</option>
+                                                    <option value="1">Si</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>                                            
                                             <div class="form-group">
                                                 <label>Etapa al finalizar la clase</label>
                                                 <select name="etapa" id="etapa" class="form-control exit_caution">
@@ -111,34 +131,19 @@
                                                     <option value="17">17</option>
                                                     <option value="18">18</option>
                                                 </select>
-                                            </div>   
+                                            </div>
                                             <div class="form-group">
                                                 <label>Fase</label>
                                                 <input name="fase" id="fase" type="text" class="form-control exit_caution alfanumerico" placeholder="Fase" maxlength="100">
-                                            </div>
+                                            </div>                                            
                                             <div class="form-group">
-                                                <label>Meta velocidad</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">p.p.m</span>
-                                                    <input type="text" name="meta_v" id="meta_v" class="form-control numerico miles" placeholder="0" maxlength="5">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Meta comprensión</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">%</span>
-                                                    <input type="text" name="meta_c" id="meta_c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Meta Retención</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">%</span>
-                                                    <input type="text" name="meta_r" id="meta_r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
-                                                </div>
-                                            </div>                                        
-                                        </div>
-                                        <div class="col-xs-6">  
+                                                <label>¿Realizó las prácticas propuestas en la clase anterior?</label>
+                                                <select name="practicas" id="practicas" class="form-control exit_caution">
+                                                    <option value="default"  selected="selected">¿El alumno realizó las prácticas propuestas?</option>
+                                                    <option value="1">Si</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div> 
                                             <div class="form-group">
                                                 <label>Cantidad de prácticas realizadas</label>
                                                 <input type="text" name="cant_practicas" id="cant_practicas" class="form-control numerico miles" placeholder="0" maxlength="3">
@@ -146,7 +151,9 @@
                                             <div class="form-group">
                                                 <label>Lecturas vistas en clase</label>
                                                 <input name="lectura" id="lectura" type="text" class="form-control exit_caution alfanumerico" placeholder="Lecturas vistas en clas..." maxlength="255">
-                                            </div>                                        
+                                            </div>                                                                              
+                                        </div>
+                                        <div class="col-xs-6">                                                                                     
                                             <div class="form-group">
                                                 <label>Velocidad mental actual</label>                                
                                                 <div class="input-group">
@@ -174,7 +181,28 @@
                                                     <span class="input-group-addon">%</span>
                                                     <input type="text" name="r" id="r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
                                                 </div>
-                                            </div>                         
+                                            </div> 
+                                            <div class="form-group">
+                                                <label>Meta velocidad</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">p.p.m</span>
+                                                    <input type="text" name="meta_v" id="meta_v" class="form-control numerico miles" placeholder="0" maxlength="5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Meta comprensión</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">%</span>
+                                                    <input type="text" name="meta_c" id="meta_c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Meta Retención</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">%</span>
+                                                    <input type="text" name="meta_r" id="meta_r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                                </div>
+                                            </div>                                                   
                                         </div>
                                     </div>
                                 </div>
@@ -200,9 +228,9 @@
                                 <div class="row separar_div">
                                     <div class="col-xs-10 col-xs-offset-1">
                                         <div class="form-group">
-                                            <label class="label_observacion">Observación para el titular y/o el alumno</label>
-                                            <label  style="display:none;" class="label_observacion_required">Observación para el titular y/o el alumno<em class="required_asterisco">*</em></label>
-                                            <textarea name="observacion_titular_alumno" id="observacion_titular_alumno" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación para el titular y/o el alumno..."style="max-width:100%;"></textarea>
+                                            <label class="label_observacion">Observación para el titular y el alumno</label>
+                                            <label  style="display:none;" class="label_observacion_required">Observación para el titular y el alumno<em class="required_asterisco">*</em></label>
+                                            <textarea name="observacion_titular_alumno" id="observacion_titular_alumno" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación para el titular y el alumno..."style="max-width:100%;"></textarea>
                                         </div> 
                                     </div>
                                 </div>  
@@ -230,12 +258,60 @@
 </div>
 <div class="modal" id="modalDetalles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content modal-content-minimo">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="modal-title" id="myModalLabel">Detalles del reporte</h3>
             </div>
             <div id="bodyModalDetalles" class="modal-body">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Tipo de curso:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_t_curso"></div></b>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Fase:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_fase"></div></b>
+                        </div>
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right"># de prácticas realizadas:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_cant_practicas"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <div class="text-right">Lecturas trabajadas:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <b><div id="divM_lectura"></div></b>
+                        </div>
+                    </div>
+                </div>                
                 <div class="row">
                     <div class="col-xs-4">
                         <div class="form-group">
@@ -350,10 +426,8 @@
             $(".label_observacion").css("display", "block");
         }
     });
-
     //Colocamos el contador de nuevos ejercicios en 1
     $('#contador_new_ejercicio').attr('value', '1');
-
     //Llenamos la informacion de las matriculas y los pagos.     
     $("form").delegate("#consultar_alumno", "click", function() {
         var dni = $('#dni').val();
@@ -367,10 +441,13 @@
                 if (obj.respuesta == "OK")
                 {
                     if (obj.t_curso == null) {
+                        $("#nombre_alumno").html('<center><table><tr><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre_alumno + '</h4></td></tr></table></center>');
                         $("#div_t_curso").css("display", "block");
                     } else {
-                        $("#div_t_curso").css("display", "none");
-                        $("#info_alumno").html('<center><table><tr><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre_alumno + '</h4></td></tr><tr><td><h4>Tipo de curso: </h4></td><td><h4 class="h_negrita"> ' + obj.tipo_curso + '</h4></td></tr></table></center>');
+                        $("#div_t_curso").remove();
+                        $("#nombre_alumno").html('');
+                        $("#nombre_alumno").html('<center><table><tr><td><h4>Nombre del alumno: </h4></td><td><h4 class="h_negrita"> ' + obj.nombre_alumno + '</h4></td></tr></table></center>');
+                        $("#curso_alumno").html('<center><table><tr><td><h4>Tipo de curso: </h4></td><td><h4 class="h_negrita"> ' + obj.tipo_curso + '</h4></td></tr></table></center>');
                         $("#div_reportes_anteriores").html(obj.html_reportes);
                         $("#div_reporte").css("display", "block");
                         $('#dni').attr('disabled', 'disabled');
@@ -463,7 +540,10 @@
     });
 
     $("#div_reporte").delegate(".ver-detalles", "click", function() {
-        $("#modalDetalles").modal();
+        $("#divM_t_curso").html($(this).data("t_curso"));
+        $("#divM_fase").html($(this).data("fase"));
+        $("#divM_cant_practicas").html($(this).data("cant_practicas"));
+        $("#divM_lectura").html($(this).data("lectura"));
         $("#divM_ejercicios").html($(this).data("ejercicios"));
         $("#divM_meta_v").html($(this).data("meta_v"));
         $("#divM_meta_c").html($(this).data("meta_c"));
@@ -472,6 +552,11 @@
         $("#divM_observacion_titular_alumno").html($(this).data("observacion_titular_alumno"));
         $("#divM_responsable").html($(this).data("responsable"));
         $("#divM_fecha_trans").html($(this).data("fecha_trans"));
+        $('#modalDetalles').modal({
+            show: true,
+            keyboard: false,
+            backdrop: 'static'
+        });
     });
 
     //Validamos el formulario antes de enviarlo por submit
@@ -508,5 +593,10 @@
         });
         return false; // Evitar ejecutar el submit del formulario
     });
-
+    //si ya se ha cargado la informacion por get, entonces apretamos el boton de consultar
+    var dni = $('#dni').val();
+    var id = $('#id').val();
+    if ((dni != "default") && (id != "")) {
+        $("#consultar_alumno").click();
+    }
 </script>

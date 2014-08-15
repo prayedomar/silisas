@@ -69,7 +69,7 @@ class Retefuente_compras extends CI_Controller {
             list($id_proveedor, $dni_proveedor) = explode("_", $this->input->post('proveedor'));
             $factura = $this->input->post('factura');
             $total = round(str_replace(",", "", $this->input->post('total')), 2);
-            if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado')) && ($this->input->post('efectivo_ingresado') != 0)) {
+            if (($this->input->post('caja')) && ($this->input->post('efectivo_ingresado'))) {
                 list($sede_caja_destino, $t_caja_destino) = explode("-", $this->input->post('caja'));
                 $efectivo_ingresado = round(str_replace(",", "", $this->input->post('efectivo_ingresado')), 2);
             } else {

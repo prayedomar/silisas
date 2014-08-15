@@ -1098,11 +1098,11 @@ class Nomina extends CI_Controller {
             //preparamos y maquetamos el contenido a crear
             $css_html = '';
             $css_html .= '<style type=text/css>';
-            $css_html .= 'h2{font-family: "times new roman", times, serif;font-size:30px;font-weight: bold;font-style: italic;line-height:40px;}';
+            $css_html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;}';
             $css_html .= 'p.b1{font-family: helvetica, sans-serif;font-size:10px;}';
             $css_html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
             $css_html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $css_html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
+            $css_html .= 'td.c1{width:420px;line-height:20px;}';
             $css_html .= 'td.c2{width:310px;}';
             $css_html .= 'td.c3{width:100px;}';
             $css_html .= 'td.c11{width:150px;}';
@@ -1139,7 +1139,7 @@ class Nomina extends CI_Controller {
             $css_html .= '</style>';
             $html = $css_html;
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'                    
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -1151,7 +1151,7 @@ class Nomina extends CI_Controller {
                     . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                     . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                     . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr><tr>'
                     . '<td class="a2 c24" colspan="2">' . $titulo . '</td>'
@@ -1205,7 +1205,7 @@ class Nomina extends CI_Controller {
                     $pdf->AddPage();
                     $html = $css_html;
                     $html .= '<table width="100%"><tr>'
-                            . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                            . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                             . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                             . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                             . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -1217,7 +1217,7 @@ class Nomina extends CI_Controller {
                             . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                             . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                             . '</td>'
-                            . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                            . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                             . '<br>'
                             . '</tr><tr>'
                             . '<td class="a2 c24" colspan="2">' . $titulo . '</td>'
@@ -1315,7 +1315,7 @@ class Nomina extends CI_Controller {
             $pdf->AddPage();
             $html = $css_html;
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -1327,7 +1327,7 @@ class Nomina extends CI_Controller {
                     . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                     . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                     . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr><tr>'
                     . '<td class="a2 c24" colspan="2">' . $titulo . '</td>'
@@ -1381,7 +1381,7 @@ class Nomina extends CI_Controller {
                     $pdf->AddPage();
                     $html = $css_html;
                     $html .= '<table width="100%"><tr>'
-                            . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                            . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                             . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                             . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                             . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -1393,7 +1393,7 @@ class Nomina extends CI_Controller {
                             . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                             . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                             . '</td>'
-                            . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                            . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                             . '<br>'
                             . '</tr><tr>'
                             . '<td class="a2 c24" colspan="2">' . $titulo . '</td>'

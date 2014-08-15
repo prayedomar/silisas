@@ -53,7 +53,7 @@
                                 <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div> 
                         </div>
-                         <div class="col-xs-2">
+                        <div class="col-xs-2">
                             <label>Cumpleaños (hasta)</label>
                             <div class="input-group">
                                 <input name="fecha_nacimiento_hasta" id="fecha_nacimiento_hasta" type="text" class="soloclick cumpleanios form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="mm-dd" value="<?= isset($_GET["fecha_nacimiento_hasta"]) ? $_GET["fecha_nacimiento_hasta"] : "" ?>">
@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-xs-2">
                             <br>
-                             <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
+                            <button title="" id="toExcel" href="#" class="btn btn-success pull-right">Exportar a excel</button>
                         </div>
                     </div>
                     <br>
@@ -106,14 +106,14 @@
                         <table class='table table-hover'>
                             <thead>
                                 <tr>
-                                    <th>Identificación</th>
-                                    <th>Nombre</th>
-                                    <th>Fecha de nacimiento</th>
-                                    <th>Domicilio</th>
-                                    <th>Teléfonos</th>
-                                    <th>Email</th>
-                                    <th>Sede ppal</th>
-                                    <th>Detalles</th>
+                                    <th class="text-center">Identificación</th>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Fecha de nacimiento</th>
+                                    <th class="text-center">Domicilio</th>
+                                    <th class="text-center">Teléfonos</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Sede ppal</th>
+                                    <th class="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTabla">
@@ -126,15 +126,17 @@
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>  
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->sede ?></td>
-                                        <td><button class="btn btn-primary btn-sm" 
-                                                    data-matricula="<?= $row->matricula ?>" 
-                                                    data-velocidadini="<?= $row->velocidad_ini ?>" 
-                                                    data-comprensionini="<?= $row->comprension_ini ?>"
-                                                    data-curso="<?= $row->nombre_curso ?>"
-                                                    data-estado="<?= $row->estado_alumno ?>"
-                                                    data-fechagrados="<?= $row->fecha_grados ?>"
-                                                    data-observacion="<?= $row->observacion ?>"
-                                                    >Ver detalles</button></td>
+                                        <td class="text-center" style="line-height:40px;">                                   
+                                                <button class="btn btn-primary btn-sm"  
+                                                        data-matricula="<?= $row->matricula ?>" 
+                                                        data-velocidadini="<?= $row->velocidad_ini ?>" 
+                                                        data-comprensionini="<?= $row->comprension_ini ?>"
+                                                        data-curso="<?= $row->nombre_curso ?>"
+                                                        data-estado="<?= $row->estado_alumno ?>"
+                                                        data-fechagrados="<?= $row->fecha_grados ?>"
+                                                        data-observacion="<?= $row->observacion ?>"
+                                                        > Ver detalles </button> <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "docente" || $_SESSION["perfil"] == "secretaria") { ?><a role="button" style="margin-top:30;" target="_blank" class="btn btn-default btn-sm" href="<?= base_url() ?>reporte_alumno/crear/<?= $row->documento . '_' . $row->dni ?>"> Crear reporte </a><?php } ?> 
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>

@@ -21,11 +21,14 @@ $(function() {
         if ($("#caja").val() != "") {
             url += "caja=" + $("#caja").val() + "&";
         }
+        if ($("#cuenta").val() != "") {
+            url += "cuenta=" + $("#cuenta").val() + "&";
+        }        
         if ($("#vigente").val() == "0") {
             url += "vigente=" + $("#vigente").val() + "&";
         }
-        if ($("#documento").val() != "") {
-            url += "documento=" + $("#documento").val() + "&";
+        if ($("#id_dni_responsable").val() != "") {
+            url += "id_dni_responsable=" + $("#id_dni_responsable").val() + "&";
         }
         if ($("#tipo_trans").val() != "") {
             url += "tipo_trans=" + $("#tipo_trans").val() + "&";
@@ -70,11 +73,14 @@ $(function() {
         if ($("#paginacion").data("caja") != "") {
             url += "caja=" + $("#paginacion").data("caja") + "&";
         }
+        if ($("#paginacion").data("cuenta") != "") {
+            url += "cuenta=" + $("#paginacion").data("cuenta") + "&";
+        }        
         if ($("#paginacion").data("vigente") == "0") {
             url += "vigente=" + $("#paginacion").data("vigente") + "&";
         }           
-        if ($("#paginacion").data("documento") != "") {
-            url += "documento=" + $("#paginacion").data("documento") + "&";
+        if ($("#paginacion").data("id_dni_responsable") != "") {
+            url += "id_dni_responsable=" + $("#paginacion").data("id_dni_responsable") + "&";
         }
         if ($("#paginacion").data("tipotrans") != "") {
             url += "tipo_trans=" + $("#paginacion").data("tipotrans") + "&";
@@ -117,11 +123,14 @@ $(function() {
         if ($("#caja").val() != "") {
             url += "caja=" + $("#caja").val() + "&";
         }
+        if ($("#cuenta").val() != "") {
+            url += "cuenta=" + $("#cuenta").val() + "&";
+        }        
         if ($("#vigente").val() == "0") {
             url += "vigente=" + $("#vigente").val() + "&";
         }
-        if ($("#documento").val() != "") {
-            url += "documento=" + $("#documento").val() + "&";
+        if ($("#id_dni_responsable").val() != "") {
+            url += "id_dni_responsable=" + $("#id_dni_responsable").val() + "&";
         }
         if ($("#tipo_trans").val() != "") {
             url += "tipo_trans=" + $("#tipo_trans").val() + "&";

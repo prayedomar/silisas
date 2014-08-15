@@ -56,6 +56,8 @@
     <script src='<?= base_url() ?>public/js/consultar_pagos_matricula.js'></script>    
 <?php } else if (isset($tab) && $tab == "consultar_matricula") { ?>
     <script src='<?= base_url() ?>public/js/consultar_matricula.js'></script>
+<?php } else if (isset($tab) && $tab == "cambiar_foto_perfil") { ?>
+    <script src='<?= base_url() ?>public/js/jquery.Jcrop.min.js'></script>    
 <?php } else if (isset($tab) && $tab == "consultar_cod_autorizacion") { ?>
     <script src='<?= base_url() ?>public/js/consultar_cod_autorizacion.js'></script>    
 <?php } ?>

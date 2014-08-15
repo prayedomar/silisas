@@ -5,21 +5,21 @@
                 <legend>Consultar reportes de alumnos <span class="help-block pull-right">(<?= $cantidadRegistros ?> reportes encontrados)</span></legend>
                 <div id="divCriterios">
                     <div class="row">
-                        <div class="col-xs-2">
-                            <label>Desde</label>
+                        <div class="col-xs-3">
+                            <label>Fecha de clase: Desde</label>
                             <div class="input-group">
-                                <input id="desde"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Desde" value="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>">
+                                <input id="desde"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de clase: Desde" value="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>">
                                 <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
-                        <div class="col-xs-2">
-                            <label>Hasta</label>
+                        <div class="col-xs-3">
+                            <label>Fecha de clase: Hasta</label>
                             <div class="input-group">
-                                <input id="hasta"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Hasta" value="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>">
+                                <input id="hasta"  type="text" class="soloclick datepicker form-control input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de clase: Hasta" value="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>">
                                 <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-xs-3">
                             <label>Sede</label>
                             <select id="sede" class="form-control">
                                 <option value="">Seleccionar...</option>
@@ -27,16 +27,62 @@
                                     <option value="<?= $row->id ?>" <?= isset($_GET["sede"]) && $_GET["sede"] == $row->id ? "selected" : "" ?>><?= $row->nombre ?></option>
                                 <?php } ?>
                             </select>
-                        </div>                    
+                        </div>
+                        <div class="col-xs-3">
+                            <label>Tipo de curso</label>
+                            <select id="t_curso" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($lista_cursos as $row) { ?>
+                                    <option value="<?= $row->id ?>" <?= isset($_GET["t_curso"]) && $_GET["t_curso"] == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>                        
+                    </div><br>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <label>Asistieron a clase</label>
+                            <select id="asistencia" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <option value="1" <?= isset($_GET["asistencia"]) && $_GET["asistencia"] == "1" ? "selected" : "" ?>>Si</option>
+                                <option value="0" <?= isset($_GET["asistencia"]) && $_GET["asistencia"] == "0" ? "selected" : "" ?>>No</option>
+                            </select>
+                        </div> 
+                        <div class="col-xs-2">
+                            <label>Realizaron prácticas</label>
+                            <select id="practicas" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <option value="1" <?= isset($_GET["practicas"]) && $_GET["practicas"] == "1" ? "selected" : "" ?>>Si</option>
+                                <option value="0" <?= isset($_GET["practicas"]) && $_GET["practicas"] == "0" ? "selected" : "" ?>>No</option>
+                            </select>
+                        </div> 
+                        <div class="col-xs-2">
+                            <label>Avanzaron de etapa</label>
+                            <select id="avanzo" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <option value="1" <?= isset($_GET["avanzo"]) && $_GET["avanzo"] == "1" ? "selected" : "" ?>>Si</option>
+                                <option value="0" <?= isset($_GET["avanzo"]) && $_GET["avanzo"] == "0" ? "selected" : "" ?>>No</option>
+                            </select>
+                        </div>
                         <div class="col-xs-3">
                             <center><label>ID Alumno</label></center>
                             <input type='text' id="id_alumno" class='form-control numerico' maxlength="13" placeholder="Identificación del Alumno" value="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>">
                         </div>
                         <div class="col-xs-3">
-                            <center><label>ID Responsable</label></center>
-                            <input type='text' id="id_responsable" class='form-control numerico' maxlength="13" placeholder="Empleado responsable" value="<?= isset($_GET["id_responsable"]) ? $_GET["id_responsable"] : "" ?>">
+                            <center><label>Responsable</label></center>
+                            <select id="id_dni_responsable" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php
+                                if (!empty($lista_empleados)) {
+                                    foreach ($lista_empleados as $row) {
+                                        ?>
+                                        <option value="<?= $row->id . "_" . $row->dni ?>" <?= isset($_GET["id_dni_responsable"]) && $_GET["id_dni_responsable"] == ($row->id . "_" . $row->dni) ? "selected" : "" ?>><?= $row->nombres ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>                           
                         </div>                   
-                    </div>
+                    </div>                    
                     <div class="row">
                         <div class="col-xs-1 col-xs-offset-5">
                             <center>
@@ -58,10 +104,10 @@
                                 <tr>
                                     <th><center>Fecha clase</center></th>
                             <th><center>Alumno</center></th>
-                            <th><center>Asistió</center></th>                        
-                            <th><center>Etapa</center></th>
-                            <th><center>Sede</center></th>
+                            <th><center>¿Asistió?</center></th>
+                            <th><center>¿Avanzó?</center></th>
                             <th><center>Observación interna</center></th>
+                            <th><center>Sede</center></th>
                             <th><center>Responsable</center></th>
                             <th><center>Detalles</center></th>
                             </tr>
@@ -71,13 +117,15 @@
                                     <tr>
                                         <td><center><?= $row->fecha_clase ?></center></td>
                                 <td><?= $row->alumno ?></td>
-                                <td><center><?= $row->asistencia == 1 ? "Asistió" : "No asistió" ?></center></td>                                
-                                <td><center><?= $row->etapa ?></center></td>
+                                <td><center><?= $row->asistencia == 1 ? "Si" : "No" ?></center></td>
+                                <td><center><?= $row->avanzo == 1 ? "Si" : "No" ?></center></td>
+                                <td><?= $row->observacion_interna ?></td>                        
                                 <td><center><?= $row->nombre_sede ?></center></td>
-                                <td><?= $row->observacion_interna ?></td>
                                 <td><?= $row->responsable ?></td>
                                 <td><center><button class="btn btn-primary btn-sm" 
+                                                    data-etapa="<?= $row->etapa ?>" 
                                                     data-fase="<?= $row->fase ?>" 
+                                                    data-practicas="<?= $row->practicas == 1 ? "Si" : "No" ?>" 
                                                     data-meta_v="<?= $row->meta_v ?>" 
                                                     data-meta_c="<?= $row->meta_c ?>"
                                                     data-meta_r="<?= $row->meta_r ?>"
@@ -90,7 +138,7 @@
                                                     data-ejercicios="<?= $row->lista_ejercicios ?>"
                                                     data-fecha_trans="<?= $row->fecha_trans ?>"
                                                     data-observacion_titular_alumno="<?= $row->observacion_titular_alumno ?>"
-                                                    >Ver detalles</button></center></td>
+                                                    > Ver + </button></center></td>
                                 </tr>
                             <?php } ?>
                             </tbody>
@@ -103,6 +151,7 @@
                              data-desde="<?= isset($_GET["desde"]) ? $_GET["desde"] : "" ?>"
                              data-hasta="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>"
                              data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
+                             data-t_curso="<?= isset($_GET["t_curso"]) ? $_GET["t_curso"] : "" ?>"
                              data-id_alumno="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>"                             
                              data-id_responsable="<?= isset($_GET["id_responsable"]) ? $_GET["id_responsable"] : "" ?>">  
                             <ul class="pagination">
@@ -131,6 +180,18 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
+                            <div class="text-right">Etapa:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divEtapa"></div></b>
+                        </div>
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
                             <div class="text-right">Fase:</div>   
                         </div>
                     </div>
@@ -140,45 +201,18 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Meta Velocidad:</div>   
+                            <div class="text-right">¿Hizo la tarea?:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divMeta_v"></div></b>
+                            <b><div id="divPracticas"></div></b>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Meta Comprensión:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divMeta_c"></div></b>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <div class="text-right">Meta Retención:</div>   
-                        </div>
-                    </div>
-                    <div class="col-xs-7">
-                        <div class="form-group">
-                            <b><div id="divMeta_r"></div></b>
-                        </div>
-                    </div>
-                </div>
+                </div>                
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
@@ -203,6 +237,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Ejercicios Realizados:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divEjercicios"></div></b>
+                        </div>
+                    </div>
+                </div>                
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
@@ -254,15 +300,39 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Ejercicios Realizados:</div>   
+                            <div class="text-right">Meta Velocidad:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="form-group">
-                            <b><div id="divEjercicios"></div></b>
+                            <b><div id="divMeta_v"></div></b>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Meta Comprensión:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divMeta_c"></div></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <div class="text-right">Meta Retención:</div>   
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="form-group">
+                            <b><div id="divMeta_r"></div></b>
+                        </div>
+                    </div>
+                </div>                                
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">

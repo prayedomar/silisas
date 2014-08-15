@@ -8,13 +8,17 @@ class Transacciones extends CI_Controller {
     }
 
     public function consultar() {
-        $this->load->model('t_dnim');
-        $this->load->model('t_cajam');
-        $this->load->model('sedem');
-        $this->load->model('t_transm');
         $data["tab"] = "consultar_transacciones";
         $this->isLogin($data["tab"]);
+        $this->load->model('t_dnim');
+        $this->load->model('t_cajam');
+        $this->load->model('cuentam');
+        $this->load->model('sedem');
+        $this->load->model('t_transm');        
+        $this->load->model('empleadom');
+        $data['lista_empleados'] = $this->empleadom->empleados_movimiento_transaccion();        
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_cuentas'] = $this->cuentam->listar_todas_las_cuentas();
         $data['lista_trans'] = $this->t_transm->listar_tipos_de_transacciones();
         if (!empty($_GET["depto"])) {
             $this->load->model('t_cargom');

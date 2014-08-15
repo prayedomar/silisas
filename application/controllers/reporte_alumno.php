@@ -11,13 +11,18 @@ class Reporte_alumno extends CI_Controller {
     }
 
 //Crear: Nomina
-    function crear() {
+    function crear($id_dni_alumno) {
         $data["tab"] = "crear_reporte_alumno";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-
+        if ($id_dni_alumno != 'new') {
+            list($id_alumno, $dni_alumno) = explode("_", $id_dni_alumno);
+            $data['id_alumno'] = $id_alumno;
+            $data['dni_alumno'] = $dni_alumno;
+        }
         $data['dni'] = $this->select_model->t_dni_alumno();
         $data['t_curso'] = $this->select_model->t_curso();
+        $data['sedes'] = $this->select_model->sede_activa_responsable($_SESSION['idResponsable'], $_SESSION['dniResponsable']);
         $data['action_validar'] = base_url() . "reporte_alumno/validar";
         $data['action_crear'] = base_url() . "reporte_alumno/insertar";
         $data['action_recargar'] = base_url() . "reporte_alumno/crear";
@@ -37,17 +42,18 @@ class Reporte_alumno extends CI_Controller {
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('fecha_clase', 'Fecha de la clase', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('sede', 'Sede del reporte de clase', 'required|callback_select_default');
             $this->form_validation->set_rules('asistencia', '¿Asistió a la clase?', 'required|callback_select_default');
             $this->form_validation->set_rules('fase', 'Fase', 'trim|xss_clean|max_length[100]');
-            $this->form_validation->set_rules('meta_v', 'Meta velocidad', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('meta_c', 'Meta comprensión', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
-            $this->form_validation->set_rules('meta_r', 'Meta Retención', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('cant_practicas', 'Cantidad de prácticas realizadas', 'trim|max_length[3]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('lectura', 'Lectura', 'trim|xss_clean|max_length[255]');
             $this->form_validation->set_rules('vlm', 'Velocidad mental actual', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('vlv', 'Velocidad verbal actual', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('c', 'Comprensión actual', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('r', 'Retención actual', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
+            $this->form_validation->set_rules('meta_v', 'Meta velocidad', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('meta_c', 'Meta comprensión', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
+            $this->form_validation->set_rules('meta_r', 'Meta Retención', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             if ($this->input->post('asistencia') == "1") {
                 $this->form_validation->set_rules('observacion_interna', 'Observación para manejo interno', 'required|trim|xss_clean|max_length[255]');
                 $this->form_validation->set_rules('observacion_titular_alumno', 'Observación para el titular y/o el alumno', 'required|trim|xss_clean|max_length[255]');
@@ -74,7 +80,7 @@ class Reporte_alumno extends CI_Controller {
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($error_ejercicios != "")) {
-                echo form_error('dni') . form_error('id') . form_error('fecha_clase') . form_error('asistencia') . form_error('fase') . form_error('meta_v') . form_error('meta_c') . form_error('meta_r') . form_error('cant_practicas') . form_error('lectura') . form_error('vlm') . form_error('vlv') . form_error('c') . form_error('r') . form_error('observacion_interna') . form_error('observacion_titular_alumno') . $error_ejercicios;
+                echo form_error('dni') . form_error('id') . form_error('fecha_clase') . form_error('sede') . form_error('asistencia') . form_error('fase') . form_error('cant_practicas') . form_error('lectura') . form_error('vlm') . form_error('vlv') . form_error('c') . form_error('r') . form_error('meta_v') . form_error('meta_c') . form_error('meta_r') . form_error('observacion_interna') . form_error('observacion_titular_alumno') . $error_ejercicios;
             } else {
                 echo "OK";
             }
@@ -85,32 +91,44 @@ class Reporte_alumno extends CI_Controller {
 
     function insertar() {
         if ($this->input->post('submit')) {
+            $this->load->model('alumnom');
             $data["tab"] = "crear_reporte_alumno";
             $this->isLogin($data["tab"]);
             $this->escapar($_POST);
             $id_alumno = $this->input->post('id');
             $dni_alumno = $this->input->post('dni');
+            $t_curso = $this->alumnom->alumno_id_dni($id_alumno, $dni_alumno)->t_curso;
             $fecha_clase = $this->input->post('fecha_clase');
             $asistencia = $this->input->post('asistencia');
+            if ($this->input->post('avanzo') == "default") {
+                $avanzo = NULL;
+            } else {
+                $avanzo = $this->input->post('avanzo');
+            }
             if ($this->input->post('etapa') == "default") {
                 $etapa = NULL;
             } else {
                 $etapa = $this->input->post('etapa');
             }
             $fase = ucfirst(mb_strtolower($this->input->post('fase')));
-            $meta_v = $this->input->post('meta_v');
-            $meta_c = $this->input->post('meta_c');
-            $meta_r = $this->input->post('meta_r');
+            if ($this->input->post('practicas') == "default") {
+                $practicas = NULL;
+            } else {
+                $practicas = $this->input->post('practicas');
+            }
             $cant_practicas = $this->input->post('cant_practicas');
             $lectura = ucfirst(mb_strtolower($this->input->post('lectura')));
             $vlm = $this->input->post('vlm');
             $vlv = $this->input->post('vlv');
             $c = $this->input->post('c');
             $r = $this->input->post('r');
+            $meta_v = $this->input->post('meta_v');
+            $meta_c = $this->input->post('meta_c');
+            $meta_r = $this->input->post('meta_r');
             $vigente = 1;
             $id_responsable = $this->session->userdata('idResponsable');
             $dni_responsable = $this->session->userdata('dniResponsable');
-            $sede = $this->select_model->empleado($id_responsable, $dni_responsable)->sede_ppal;
+            $sede = $this->input->post('sede');
             $observacion_interna = ucfirst(mb_strtolower($this->input->post('observacion_interna')));
             $observacion_titular_alumno = ucfirst(mb_strtolower($this->input->post('observacion_titular_alumno')));
             $id_reporte = ($this->select_model->nextId_reporte_alumno()->id) + 1;
@@ -118,7 +136,7 @@ class Reporte_alumno extends CI_Controller {
             $data['url_recrear'] = base_url() . "reporte_alumno/crear";
             $data['msn_recrear'] = "Crear otro reporte de enseñanza";
 
-            $error = $this->insert_model->reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $fecha_clase, $asistencia, $etapa, $fase, $meta_v, $meta_c, $meta_r, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $vigente, $observacion_interna, $observacion_titular_alumno, $sede, $id_responsable, $dni_responsable);
+            $error = $this->insert_model->reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $t_curso, $fecha_clase, $asistencia, $avanzo, $etapa, $fase, $practicas, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $meta_v, $meta_c, $meta_r, $vigente, $observacion_interna, $observacion_titular_alumno, $sede, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
@@ -155,79 +173,55 @@ class Reporte_alumno extends CI_Controller {
                     } else {
                         $asistio = "No";
                     }
-                    $this->load->model('ejercicio_ensenanzam');
-                    $ejercicios = $this->ejercicio_ensenanzam->ejercicio_reporte_ensenanza($id_reporte);
-                    $lista_ejercicios = "";
-                    foreach ($ejercicios as $row) {
-                        $lista_ejercicios .= "<b>> " . $row->habilidad . ": </b>" . $row->ejercicio . ".<br>";
-                    }
                     $asunto = "Reporte de clase - SILI S.A.S";
                     $mensaje = '<p><h2><b>Reporte de clase</b></h2></p>'
-                            . '<p>A continuación encontrará el reporte de la clase de lectura ' . $de_quien . $alumno->nombre_alumno . ', del dia: ' . $fecha_clase . '.<br/>'
+                            . '<p>A continuación encontrará el reporte de la clase de lectura ' . $de_quien . '<b>' . $alumno->nombre_alumno . '</b>, del dia: <b>' . $fecha_clase . '</b>.<br/>'
                             . '<center>'
                             . '<table>'
+                            . '<tr>'
+                            . '<td style="width:260px;"><b>Sede del reporte: </b></td>'
+                            . '<td>' . $this->select_model->sede_id($sede)->nombre . '</td>'
+                            . '</tr>'
                             . '<tr>'
                             . '<td style="width:260px;"><b>¿Asistió a clase?: </b></td>'
                             . '<td>' . $asistio . '</td>'
                             . '</tr>';
+                    if ($practicas == '1') {
+                        $mensaje .= '<tr>'
+                                . '<td><b>¿Realizó los ejercicios propuestos?: </b></td>'
+                                . '<td>Si</td>'
+                                . '</tr>';
+                        if ($cant_practicas != "") {
+                            $mensaje .= '<tr>'
+                                    . '<td><b>Ejercicios realizados: </b></td>'
+                                    . '<td>' . $cant_practicas . '</td>'
+                                    . '</tr>';
+                        }
+                    } else {
+                        if ($practicas == '0') {
+                            $mensaje .= '<tr>'
+                                    . '<td><b>¿Realizó los ejercicios propuestos?: </b></td>'
+                                    . '<td>No</td>'
+                                    . '</tr>';
+                        }
+                    }
+                    if ($avanzo == '1') {
+                        $mensaje .= '<tr>'
+                                . '<td><b>¿Avanzó de etapa?: </b></td>'
+                                . '<td>Si</td>'
+                                . '</tr>';
+                    } else {
+                        if ($avanzo == '0') {
+                            $mensaje .= '<tr>'
+                                    . '<td><b>¿Avanzó de etapa?: </b></td>'
+                                    . '<td>No</td>'
+                                    . '</tr>';
+                        }
+                    }
                     if ($etapa != "") {
                         $mensaje .= '<tr>'
                                 . '<td><b>Etapa al finalizar la clase: </b></td>'
                                 . '<td>' . $etapa . '</td>'
-                                . '</tr>';
-                    }
-                    if ($meta_v != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Meta velocidad: </b></td>'
-                                . '<td>' . $meta_v . '</td>'
-                                . '</tr>';
-                    }
-                    if ($meta_c != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Meta comprensión: </b></td>'
-                                . '<td>' . $meta_c . '</td>'
-                                . '</tr>';
-                    }
-                    if ($meta_r != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Meta retención: </b></td>'
-                                . '<td>' . $meta_r . '</td>'
-                                . '</tr>';
-                    }
-                    if ($cant_practicas != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Prácticas realizadas: </b></td>'
-                                . '<td>' . $cant_practicas . '</td>'
-                                . '</tr>';
-                    }
-                    if ($lectura != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Lectura vista en clase: </b></td>'
-                                . '<td>' . $lectura . '</td>'
-                                . '</tr>';
-                    }
-                    if ($vlv != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Velocidad verbal actual: </b></td>'
-                                . '<td>' . $vlv . '</td>'
-                                . '</tr>';
-                    }
-                    if ($c != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Comprensión actual: </b></td>'
-                                . '<td>' . $c . '</td>'
-                                . '</tr>';
-                    }
-                    if ($r != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Retención actual: </b></td>'
-                                . '<td>' . $r . '</td>'
-                                . '</tr>';
-                    }
-                    if ($lista_ejercicios != "") {
-                        $mensaje .= '<tr>'
-                                . '<td><b>Ejercicios realizados en clase: </b></td>'
-                                . '<td>' . $lista_ejercicios . '</td>'
                                 . '</tr>';
                     }
                     if ($observacion_titular_alumno != "") {
@@ -272,12 +266,11 @@ class Reporte_alumno extends CI_Controller {
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Fecha de la clase</th>                                            
+                                                <th class="text-center">Fecha de clase</th>                                            
                                                 <th class="text-center">¿Asistió?</th>
+                                                <th class="text-center">¿Avanzó?</th>
                                                 <th class="text-center">Etapa</th>
-                                                <th class="text-center">Fase</th>
-                                                <th class="text-center"># Prácticas</th>
-                                                <th class="text-center">lecturas vistas en clase</th>
+                                                <th class="text-center">¿Hizo tarea?</th>
                                                 <th class="text-center">V. Mental</th>
                                                 <th class="text-center">V. Verbal</th>
                                                 <th class="text-center">Comp.</th>
@@ -297,15 +290,18 @@ class Reporte_alumno extends CI_Controller {
                         $html_reportes .= '<tr>
                                 <td class="text-center">' . date("Y-m-d", strtotime($fila->fecha_clase)) . '</td>                             
                                 <td class="text-center">' . $fila->asistio . '</td>                            
+                                <td class="text-center">' . $fila->avanzo_etapa . '</td>
                                 <td class="text-center">' . $fila->etapa . '</td>
-                                <td>' . $fila->fase . '</td>  
-                                <td class="text-center">' . $fila->cant_practicas . '</td>                                
-                                <td>' . $fila->lectura . '</td> 
+                                <td class="text-center">' . $fila->hizo_practicas . '</td>
                                 <td class="text-center">' . $fila->vlm . ' p.p.m</td> 
                                 <td class="text-center">' . $fila->vlv . ' p.p.m</td>
                                 <td class="text-center">' . round($fila->c, 0) . '%</td> 
                                 <td class="text-center">' . round($fila->r, 0) . '%</td> 
                                 <td class="text-center"><button type="button" class="ver-detalles btn  btn-primary btn-sm" 
+                                                    data-t_curso="' . $fila->tipo_curso . '"  
+                                                    data-fase="' . $fila->fase . '" 
+                                                    data-cant_practicas="' . $fila->cant_practicas . '"                                
+                                                    data-lectura="' . $fila->lectura . '"
                                                     data-ejercicios="' . $lista_ejercicios . '"
                                                     data-meta_v="' . $fila->meta_v . ' p.p.m"
                                                     data-meta_c="' . round($fila->meta_c, 0) . '%"
@@ -448,11 +444,15 @@ class Reporte_alumno extends CI_Controller {
 
     public function consultar() {
         $this->load->model('sedem');
+        $this->load->model('empleadom');
+        $this->load->model('t_cursom');
         $this->load->model('reporte_alumnom');
         $this->load->model('ejercicio_ensenanzam');
         $data["tab"] = "consultar_reporte_alumno";
         $this->isLogin($data["tab"]);
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
+        $data['lista_cursos'] = $this->t_cursom->listar_todas_los_tipos_curso();
+        $data['lista_empleados'] = $this->empleadom->empleados_reporte_alumno();
         $filasPorPagina = 20;
         if (empty($_GET["page"])) {
             $inicio = 0;
