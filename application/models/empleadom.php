@@ -54,7 +54,7 @@ class Empleadom extends CI_Model {
     public function empleados_rrpp_concepto_pdte_responsable() {
         $query = "SELECT e.*, CONCAT(e.nombre1, ' ', e.nombre2, ' ', e.apellido1, ' ', e.apellido2) nombres "
                 . "FROM empleado e "
-                . "where ((e.id IN(SELECT id_empleado FROM concepto_nomina WHERE (estado=2))) AND (e.dni IN(SELECT dni_empleado FROM concepto_nomina WHERE (estado=2)))AND((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $_SESSION['idResponsable'] . "') AND (dni='" . $_SESSION['dniResponsable'] . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $_SESSION['idResponsable'] . "') AND (dni_empleado='" . $_SESSION['dniResponsable'] . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1'))) ORDER BY nombres";
+                . "where ((e.id IN(SELECT id_empleado FROM concepto_nomina WHERE ((estado=2)AND(sede=(SELECT sede_ppal FROM empleado WHERE (id='" . $_SESSION['idResponsable'] . "') AND (dni='" . $_SESSION['dniResponsable'] . "')))))) AND (e.dni IN(SELECT dni_empleado FROM concepto_nomina WHERE ((estado=2)AND(sede=(SELECT sede_ppal FROM empleado WHERE (id='" . $_SESSION['idResponsable'] . "') AND (dni='" . $_SESSION['dniResponsable'] . "')))))) AND ( NOT(id='1' AND dni='1'))) ORDER BY nombres";
         if ($this->db->query($query)->num_rows() > 0) {
             return $this->db->query($query)->result();
         }
@@ -105,7 +105,7 @@ class Empleadom extends CI_Model {
                   JOIN t_cargo tcargo ON e.cargo=tcargo.id
                   JOIN salario sl ON e.salario=sl.id
                   JOIN empleado e2 ON e.id_jefe=e2.id AND e.dni_jefe=e2.dni
-                  WHERE (NOT(e.id='1' AND e.dni='1')) AND e.sede_ppal IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='$id_responsable' AND dni='$dni_responsable' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='$id_responsable' AND dni_empleado='$dni_responsable' AND vigente=1) as T1) ";
+                  WHERE (NOT(e.id='1' AND e.dni='1')) ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND e.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND e.id = '{$criterios['numero_documento']}'" : "";
         $query.=(!empty($criterios['primer_nombre'])) ? "AND lower(e.nombre1) LIKE '%" . strtolower($criterios['primer_nombre']) . "%'" : " ";
@@ -141,7 +141,7 @@ class Empleadom extends CI_Model {
                   JOIN salario sl ON e.salario=sl.id
                   JOIN contrato_laboral c_l ON ((c_l.id_empleado=e.id) AND (c_l.dni_empleado=e.dni)) 
                   JOIN empleado e2 ON e.id_jefe=e2.id AND e.dni_jefe=e2.dni
-                   WHERE (NOT(e.id='1' AND e.dni='1')) AND e.sede_ppal IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='$id_responsable' AND dni='$dni_responsable' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='$id_responsable' AND dni_empleado='$dni_responsable' AND vigente=1) as T1) ";
+                   WHERE (NOT(e.id='1' AND e.dni='1')) ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND e.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND e.id = '{$criterios['numero_documento']}'" : "";
         $query.=(!empty($criterios['primer_nombre'])) ? "AND lower(e.nombre1) LIKE '%" . strtolower($criterios['primer_nombre']) . "%'" : " ";
@@ -178,7 +178,7 @@ class Empleadom extends CI_Model {
                   JOIN salario sl ON e.salario=sl.id
                   JOIN contrato_laboral c_l ON ((c_l.id_empleado=e.id) AND (c_l.dni_empleado=e.dni)) 
                   JOIN empleado e2 ON e.id_jefe=e2.id AND e.dni_jefe=e2.dni
-                   WHERE (NOT(e.id='1' AND e.dni='1')) AND e.sede_ppal IN (SELECT DISTINCT sede_ppal FROM (SELECT sede_ppal FROM empleado WHERE id='$id_responsable' AND dni='$dni_responsable' UNION SELECT sede_secundaria FROM empleado_x_sede WHERE id_empleado='$id_responsable' AND dni_empleado='$dni_responsable' AND vigente=1) as T1) ";
+                   WHERE (NOT(e.id='1' AND e.dni='1')) ";
         $query.=(!empty($criterios['tipo_documento'])) ? "AND e.dni = '{$criterios['tipo_documento']}'" : "";
         $query.=(!empty($criterios['numero_documento'])) ? "AND e.id = '{$criterios['numero_documento']}'" : "";
         $query.=(!empty($criterios['primer_nombre'])) ? "AND lower(e.nombre1) LIKE '%" . strtolower($criterios['primer_nombre']) . "%'" : " ";

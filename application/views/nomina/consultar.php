@@ -3,7 +3,7 @@
         <div class="col-xs-12 thumbnail">
             <div class="row">
                 <legend>Consultar nóminas laborales <span class="help-block pull-right">(<?= $cantidad ?> nóminas encontradas)</span></legend>
-                <input id="cant_registros" type="text" value="<?= $cantidad ?>">
+                <input id="cant_registros" type="hidden" value="<?= $cantidad ?>">
                 <input id="base_url" type="hidden" value="<?= base_url() ?>">
                 <div id="divCriterios">
                     <div  class="row">

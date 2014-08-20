@@ -54,12 +54,11 @@ class Reporte_alumno extends CI_Controller {
             $this->form_validation->set_rules('meta_v', 'Meta velocidad', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
             $this->form_validation->set_rules('meta_c', 'Meta comprensión', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('meta_r', 'Meta Retención', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
+            $this->form_validation->set_rules('observacion_titular_alumno', 'Observación para el titular y/o el alumno', 'trim|xss_clean|max_length[255]');
             if ($this->input->post('asistencia') == "1") {
                 $this->form_validation->set_rules('observacion_interna', 'Observación para manejo interno', 'required|trim|xss_clean|max_length[255]');
-                $this->form_validation->set_rules('observacion_titular_alumno', 'Observación para el titular y/o el alumno', 'required|trim|xss_clean|max_length[255]');
             } else {
                 $this->form_validation->set_rules('observacion_interna', 'Observación para manejo interno', 'trim|xss_clean|max_length[255]');
-                $this->form_validation->set_rules('observacion_titular_alumno', 'Observación para el titular y/o el alumno', 'trim|xss_clean|max_length[255]');
             }
             //Validamos los conceptos de nomina
             $error_ejercicios = "";

@@ -88,7 +88,7 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Fecha de Nacimiento<em class="required_asterisco">*</em></label>
+                                        <label>Fecha de Nacimiento</label>
                                         <div class="input-group">
                                             <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
                                             <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -167,7 +167,7 @@
                                 </div>
                             </div>                             
                             <div class="form-group">
-                                <label>Correo Electrónico<em class="required_asterisco">*</em></label>
+                                <label>Correo Electrónico</label>
                                 <input name="email" id="email" type="text" class="form-control exit_caution email" placeholder="Correo Electrónico" maxlength="80">
                             </div>                            
                             <div class="form-group">

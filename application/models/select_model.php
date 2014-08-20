@@ -954,7 +954,7 @@ class Select_model extends CI_Model {
     }
 
     public function concepto_nomina_pdte_rrpp($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT c.*, t_c.tipo as tipo_concepto, t_ca.cargo_masculino as escala FROM concepto_nomina as c, t_concepto_nomina as t_c, t_cargo as t_ca WHERE ((c.id_empleado='" . $id_empleado . "') AND (c.dni_empleado='" . $dni_empleado . "') AND (c.estado=2) AND ((c.t_concepto_nomina=28) OR (c.t_concepto_nomina=29)) AND (c.t_concepto_nomina=t_c.id) AND (c.escala_matricula=t_ca.id))";
+        $SqlInfo = "SELECT c.*, t_c.tipo as tipo_concepto, t_ca.cargo_masculino as escala FROM concepto_nomina as c, t_concepto_nomina as t_c, t_cargo as t_ca WHERE ((c.id_empleado='" . $id_empleado . "') AND (c.dni_empleado='" . $dni_empleado . "') AND (c.estado=2) AND ((c.t_concepto_nomina=28) OR (c.t_concepto_nomina=29)) AND (c.t_concepto_nomina=t_c.id) AND (c.escala_matricula=t_ca.id) AND (c.sede=(SELECT sede_ppal FROM empleado WHERE (id='" . $_SESSION['idResponsable'] . "') AND (dni='" . $_SESSION['dniResponsable'] . "'))))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

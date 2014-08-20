@@ -217,7 +217,7 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
-            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'required|xss_clean|callback_fecha_valida');
+            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
             $this->form_validation->set_rules('pais', 'País', 'required|callback_select_default');
             $this->form_validation->set_rules('provincia', 'Departamento', 'required|callback_select_default');
@@ -227,9 +227,9 @@ class Alumno extends CI_Controller {
             $this->form_validation->set_rules('barrio', 'Barrio/Sector', 'trim|xss_clean|max_length[40]');
             $this->form_validation->set_rules('telefono', 'Teléfono', 'required|trim|xss_clean|min_length[7]|max_length[40]');
             $this->form_validation->set_rules('celular', 'Celular', 'trim|xss_clean|min_length[10]|max_length[40]');
-            $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|trim|xss_clean|max_length[80]');
-            $this->form_validation->set_rules('velocidad_ini', 'Velocidad Inicial', 'required|trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('comprension_ini', 'Comprensión Inicial', 'required|trim|xss_clean|callback_miles_numeric|callback_porcentaje');
+            $this->form_validation->set_rules('email', 'Correo Electrónico', 'valid_email|trim|xss_clean|max_length[80]');
+            $this->form_validation->set_rules('velocidad_ini', 'Velocidad Inicial', 'trim|xss_clean|max_length[6]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('comprension_ini', 'Comprensión Inicial', 'trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('t_curso', 'Tipo de Curso', 'required|callback_select_default');
             $this->form_validation->set_rules('cant_clases', 'Cantidad de Clases', 'required|callback_select_default');
             $this->form_validation->set_rules('est_alumno', 'Estado del alumno', 'required|callback_select_default');

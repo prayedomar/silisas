@@ -183,21 +183,21 @@
                                                 </div>
                                             </div> 
                                             <div class="form-group">
-                                                <label>Meta velocidad</label>
+                                                <label>Meta velocidad al finalizar el curso</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">p.p.m</span>
                                                     <input type="text" name="meta_v" id="meta_v" class="form-control numerico miles" placeholder="0" maxlength="5">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Meta comprensión</label>
+                                                <label>Meta comprensión al finalizar el curso</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">%</span>
                                                     <input type="text" name="meta_c" id="meta_c" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Meta Retención</label>
+                                                <label>Meta Retención al finalizar el curso</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">%</span>
                                                     <input type="text" name="meta_r" id="meta_r" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
@@ -219,7 +219,7 @@
                                 <div class="row separar_div">
                                     <div class="col-xs-10 col-xs-offset-1">
                                         <div class="form-group">
-                                            <label class="label_observacion">Observación para manejo interno</label>
+                                            <label class="label_observacion">Observación interna</label>
                                             <label  style="display:none;" class="label_observacion_required">Observación interna<em class="required_asterisco">*</em></label>
                                             <textarea name="observacion_interna" id="observacion_interna" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación manejo interno..."style="max-width:100%;"></textarea>
                                         </div> 
@@ -228,8 +228,7 @@
                                 <div class="row separar_div">
                                     <div class="col-xs-10 col-xs-offset-1">
                                         <div class="form-group">
-                                            <label class="label_observacion">Observación para el titular y el alumno</label>
-                                            <label  style="display:none;" class="label_observacion_required">Observación para el titular y el alumno<em class="required_asterisco">*</em></label>
+                                            <label>Observación para el titular y el alumno</label>
                                             <textarea name="observacion_titular_alumno" id="observacion_titular_alumno" class="form-control exit_caution" rows="4" maxlength="250" placeholder="Observación para el titular y el alumno..."style="max-width:100%;"></textarea>
                                         </div> 
                                     </div>

@@ -463,7 +463,7 @@ class Empleado extends CI_Controller {
         $data['tipos_documentos'] = $this->select_model->t_dni_empleado();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
         $data['t_domicilio'] = $this->select_model->t_domicilio();
-        $data['sede_ppal'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
+        $data['sede_ppal'] = $this->select_model->sede_activa();
         $data['lista_dptos'] = $this->t_deptom->listar_todas_los_deptos();
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');

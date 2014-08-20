@@ -148,7 +148,7 @@
                                                                         data-apellido2jefe="<?= $row->apellido2_jefe ?>"
                                                                         data-observacion="<?= $row->observacion ?>"
                                                                         >Ver detalles</button>
-                                                                        <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "admon_sede") { ?>
+                                                                        <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "admon_sede" || $_SESSION["perfil"] == "aux_admon") { ?>
                                                 <button class="editar btn btn-success btn-xs"
                                                         data-dni="<?= $row->dni ?>"
                                                         data-id="<?= $row->documento ?>"
