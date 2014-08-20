@@ -52,6 +52,8 @@
     <script src='<?= base_url() ?>public/js/consultar_cuenta.js'></script>
 <?php } else if (isset($tab) && $tab == "consultar_transacciones") { ?>
     <script src='<?= base_url() ?>public/js/transacciones.js'></script>
+<?php } else if (isset($tab) && $tab == "consultar_nomina") { ?>
+    <script src='<?= base_url() ?>public/js/consultar_nomina.js'></script>    
 <?php } else if (isset($tab) && $tab == "consultar_pagos_matricula") { ?>
     <script src='<?= base_url() ?>public/js/consultar_pagos_matricula.js'></script>    
 <?php } else if (isset($tab) && $tab == "consultar_matricula") { ?>

@@ -134,12 +134,12 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Fecha</th>
-                                    <th class="text-center">Tipo de transacción</th>
+                                    <th class="text-center">Transacción</th>
                                     <th class="text-center">Total</th>
                                     <th class="text-center">Caja</th>
-                                    <th class="text-center">Efectivo de caja</th>
+                                    <th class="text-center">Efectivo</th>
                                     <th class="text-center">Cuenta</th>
-                                    <th class="text-center">Valor de cuenta</th>
+                                    <th class="text-center">Banco</th>
                                     <th class="text-center">Sede</th>
                                     <th class="text-center">Responsable</th>
                                     <th class="text-center">Acciones</th>
@@ -157,9 +157,9 @@
                                         <td><?= $row->fecha_trans ?></td>
                                         <td><?= $row->tipo_trans . ' ' . $row->prefijo . $row->id ?></td>
                                         <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
-                                        <td><?= ($row->caja != "") ? $row->caja : "--" ?></td>
+                                        <td><?= ($row->caja != "") ? $row->caja : "<center>--</center>" ?></td>
                                         <td><?= ($row->efectivo_caja != "") ? "$" . number_format($row->efectivo_caja, 2, '.', ',') : "--" ?></td>
-                                        <td><?= ($row->cuenta != "") ? $row->cuenta : "--" ?></td>
+                                        <td><?= ($row->cuenta != "") ? $row->cuenta : "<center>--</center>" ?></td>
                                         <td><?= ($row->valor_cuenta != "") ? "$" . number_format($row->valor_cuenta, 2, '.', ',') : "--" ?></td>
                                         <td><?= $row->sede ?></td>
                                         <td><?= $row->nombre1 . " " . $row->apellido1 ?></td>

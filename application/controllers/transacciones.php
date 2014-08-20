@@ -14,9 +14,9 @@ class Transacciones extends CI_Controller {
         $this->load->model('t_cajam');
         $this->load->model('cuentam');
         $this->load->model('sedem');
-        $this->load->model('t_transm');        
+        $this->load->model('t_transm');
         $this->load->model('empleadom');
-        $data['lista_empleados'] = $this->empleadom->empleados_movimiento_transaccion();        
+        $data['lista_empleados'] = $this->empleadom->empleados_movimiento_transaccion();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $data['lista_cuentas'] = $this->cuentam->listar_todas_las_cuentas();
         $data['lista_trans'] = $this->t_transm->listar_tipos_de_transacciones();
@@ -105,7 +105,7 @@ class Transacciones extends CI_Controller {
                 <tr>
                     <th>Fecha</th>
                     <th><?= utf8_decode("Tipo de transacción") ?></th>
-                    <th>Id</th>
+                    <th>Detalle</th>
                     <th>Total</th>
                     <th>Caja</th>
                     <th>Efectivo de caja</th>
@@ -120,8 +120,17 @@ class Transacciones extends CI_Controller {
                 <?php foreach ($data["lista"] as $row) { ?>
                     <tr>
                         <td><?= $row->fecha_trans ?></td>
-                        <td><?= utf8_decode($row->tipo_trans) ?></td>
-                        <td><?= $row->prefijo . " " . $row->id ?></td>
+                        <td><?= utf8_decode($row->tipo_trans) . ' ' . $row->prefijo . $row->id ?></td>
+                        <?php
+                        $detalles_json = "";
+                        if (is_object(json_decode($row->detalle_json))) {
+                            foreach (json_decode($row->detalle_json) as $key => $value) {
+                                $detalles_json .= $key . ': ' . $value . ' / ';
+                            }
+                        }
+                        $detalle = htmlentities($detalles_json, ENT_QUOTES, 'UTF-8');
+                        ?>
+                        <td><?= $detalle ?></td>
                         <td><?= "$" . number_format($row->total, 2, '.', ',') ?></td>
                         <td><?= ($row->caja != "") ? utf8_decode($row->caja) : "--" ?></td>
                         <td><?= ($row->efectivo_caja != "") ? "$" . number_format($row->efectivo_caja, 2, '.', ',') : "--" ?></td>
@@ -131,7 +140,7 @@ class Transacciones extends CI_Controller {
                         <td><?= utf8_decode($row->sede) ?></td>
                         <td><?= utf8_decode($row->nombre1 . " " . $row->nombre2 . " " . $row->apellido1 . " " . $row->apellido2) ?></td>
                     </tr>
-                <?php } ?>
+        <?php } ?>
             </tbody>
         </table>
         <?php

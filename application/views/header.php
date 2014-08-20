@@ -15,10 +15,11 @@
         <link rel="stylesheet" href="<?= base_url() ?>libraries/select_chosen/chosen.css"/>
         <link rel="stylesheet" href="<?= base_url() ?>public/css/global.css"/>
         <?php if (isset($tab) && $tab == "consultar_sede") { ?>
-            <link href='<?= base_url() ?>public/css/consultar_sede.css' rel='stylesheet'>   
+            <link href='<?= base_url() ?>public/css/consultar_sede.css' rel='stylesheet'/>   
         <?php } ?>
         <?php if (isset($tab) && $tab == "cambiar_foto_perfil") { ?>
-            <link href='<?= base_url() ?>public/css/jquery.Jcrop.css' rel='stylesheet'>   
+            <link href='<?= base_url() ?>public/css/jquery.Jcrop.css' rel='stylesheet'/>   
+            <link href='<?= base_url() ?>public/css/cambiar_foto_perfil.css' rel='stylesheet'/>  
         <?php } ?>            
         <!-- Js -->
         <script src="<?= base_url() ?>libraries/html5shim/html5.js"></script>
@@ -522,12 +523,9 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>ingreso/consultar">Ingreso</a></li>
                 <?php } ?>                    
-                <li class="dropdown-header" style="font-size:16px;"><u>Débitos</u>:</li>
+                <li class="dropdown-header" style="font-size:16px;"><u>Débitos</u>:</li>          
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
-                    <li><a href="<?= base_url() ?>nomina/historico_nominas">Historico de nóminas</a></li>
-                <?php } ?>           
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   
-                    <li><a href="<?= base_url() ?>nomina/consultar">Nómina laboral</a></li>
+                    <li><a href="<?= base_url() ?>nomina/consultar">Nóminas laborales</a></li>
                 <?php } ?>          
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>adelanto/consultar">Adelanto de nómina</a></li>

@@ -43,7 +43,10 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
             $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-            $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+            if (!empty($criterios['id_dni_responsable'])) {
+                list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+            }
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -63,9 +66,12 @@ class Transaccionesm extends CI_Model {
                 $query.=(!empty($criterios['hasta'])) ? "AND mt.fecha_trans <= '{$criterios['hasta']} 23:59:59' " : "";
                 $query.=(isset($criterios['sede'])) ? "AND mt.sede= '{$criterios['sede']}' " : "";
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
-                $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : 
+                $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -85,7 +91,10 @@ class Transaccionesm extends CI_Model {
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
                 $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -110,7 +119,10 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
             $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-            $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+            if (!empty($criterios['id_dni_responsable'])) {
+                list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+            }
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -132,7 +144,10 @@ class Transaccionesm extends CI_Model {
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
                 $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -152,7 +167,10 @@ class Transaccionesm extends CI_Model {
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
                 $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -178,7 +196,10 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
             $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-            $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+            if (!empty($criterios['id_dni_responsable'])) {
+                list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+            }
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -202,7 +223,10 @@ class Transaccionesm extends CI_Model {
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
                 $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -224,7 +248,10 @@ class Transaccionesm extends CI_Model {
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
                 $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
@@ -250,13 +277,16 @@ class Transaccionesm extends CI_Model {
             $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
             $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
             $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-            $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+            if (!empty($criterios['id_dni_responsable'])) {
+                list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+            }
             $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
             $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
             $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
             $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";
-            $query.=" ORDER BY mt.fecha_trans DESC";
+            $query.=" ORDER BY mt.fecha_trans";
             return $this->db->query($query)->result();
         } else {
             //Si es el jefe de cartera puede ver todos las transferencias(desde o hacia su caja), recibos de caja, abonos a matricula y facturas independientemente de quien los haga.
@@ -273,13 +303,16 @@ class Transaccionesm extends CI_Model {
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
                 $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
                 $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";
-                $query.=" ORDER BY mt.fecha_trans DESC";
+                $query.=" ORDER BY mt.fecha_trans";
                 return $this->db->query($query)->result();
             } else { //El caso de la secretaria, cartera y auxiliar administrativo           
                 $query = "SELECT CASE mt.credito_debito WHEN '1' THEN 'ing' ELSE 'egre' END ingreso_egreso, mt.*,ts.nombre_tabla tipo_trans,tc.tipo caja,s.nombre sede,e.nombre1,e.nombre2,e.apellido1,e.apellido2 ";
@@ -294,15 +327,19 @@ class Transaccionesm extends CI_Model {
                 $query.=(isset($criterios['id'])) ? "AND mt.id= '{$criterios['id']}' " : "";
                 $query.=(isset($criterios['caja'])) ? "AND mt.t_caja= '{$criterios['caja']}' " : "";
                 $query.=(isset($criterios['cuenta'])) ? "AND mt.cuenta= '{$criterios['cuenta']}' " : "";
-                $query.=(isset($criterios['id_dni_responsable'])) ? "AND mt.id_responsable= '{$criterios['id_dni_responsable']}' " : "";
+                if (!empty($criterios['id_dni_responsable'])) {
+                    list($id_responsable, $dni_responsable) = explode("_", $criterios['id_dni_responsable']);
+                    $query.= " AND mt.id_responsable = '$id_responsable' AND mt.dni_responsable = '$dni_responsable'";
+                }
                 $query.=(!isset($criterios['vigente'])) ? "AND mt.vigente= '1' " : "AND mt.vigente='0' ";
                 $query.=(isset($criterios['tipo_trans'])) ? "AND mt.t_trans= '{$criterios['tipo_trans']}' " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "e") ? " AND mt.t_caja IS NOT NULL " : "";
                 $query.=(isset($criterios['efectivo_bancos']) && $criterios['efectivo_bancos'] == "b") ? " AND mt.cuenta IS NOT NULL " : "";
                 $query.=(isset($criterios['credito_debito'])) ? "AND mt.credito_debito = '{$criterios['credito_debito']}'" : "";
-                $query.=" ORDER BY mt.fecha_trans DESC";
+                $query.=" ORDER BY mt.fecha_trans";
                 return $this->db->query($query)->result();
             }
         }
     }
+
 }

@@ -551,6 +551,7 @@ class Recibo_caja extends CI_Controller {
     }
 
     function consultar_pdf($id_recibo_caja, $salida_pdf) {
+        $this->load->model('matriculam');
         $recibo_caja_prefijo_id = $id_recibo_caja;
         $id_recibo_caja_limpio = str_replace("_", " ", $recibo_caja_prefijo_id);
         list($prefijo, $id) = explode("_", $recibo_caja_prefijo_id);
@@ -564,7 +565,8 @@ class Recibo_caja extends CI_Controller {
             } else {
                 $d_v = " - " . $recibo_caja->d_v_a_nombre_de;
             }
-
+            $forma_pago = 'Efectivo: <b>$' . number_format((float) $recibo_caja->efectivo_ingresado, 1, '.', ',') . '</b> / ' . 'Banco: <b>$' . number_format((float) $recibo_caja->valor_consignado, 1, '.', ',') . '</b>.';
+            $sede_matricula = $this->matriculam->matricula_id($recibo_caja->matricula)->sede_ppal;
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
@@ -658,6 +660,10 @@ class Recibo_caja extends CI_Controller {
                         . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $recibo_caja->direccion_a_nombre_de . '</td>'
                         . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $recibo_caja->matricula . '</td>'
                         . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Forma de pago:</b></td><td class="c23 c25">' . $forma_pago . '</td>'
+                        . '<td class="c23 c25"><b>Sede de la matrícula:</b></td><td class="c23 c25">' . $sede_matricula . '</td>'
+                        . '</tr>'                             
                         . '</table><br>'
                         . '<table border="1" class="t1">'
                         . '<tr>'
@@ -783,6 +789,10 @@ class Recibo_caja extends CI_Controller {
                     . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $recibo_caja->direccion_a_nombre_de . '</td>'
                     . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $recibo_caja->matricula . '</td>'
                     . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Forma de pago:</b></td><td class="c23 c25">' . $forma_pago . '</td>'
+                        . '<td class="c23 c25"><b>Sede de la matrícula:</b></td><td class="c23 c25">' . $sede_matricula . '</td>'
+                        . '</tr>'
                     . '</table><br>'
                     . '<table border="1" class="t1">'
                     . '<tr>'

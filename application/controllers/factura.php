@@ -13,7 +13,6 @@ class Factura extends CI_Controller {
         $data["tab"] = "crear_factura";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -557,6 +556,7 @@ class Factura extends CI_Controller {
     }
 
     function consultar_pdf($id_factura, $salida_pdf) {
+        $this->load->model('matriculam');
         $factura_prefijo_id = $id_factura;
         $id_factura_limpio = str_replace("_", " ", $factura_prefijo_id);
         list($prefijo, $id) = explode("_", $factura_prefijo_id);
@@ -570,7 +570,8 @@ class Factura extends CI_Controller {
             } else {
                 $d_v = " - " . $factura->d_v_a_nombre_de;
             }
-
+            $forma_pago = 'Efectivo: <b>$' . number_format((float) $factura->efectivo_ingresado, 1, '.', ',') . '</b> / ' . 'Banco: <b>$' . number_format((float) $factura->valor_consignado, 1, '.', ',') . '</b>.';
+            $sede_matricula = $this->matriculam->matricula_id($factura->matricula)->sede_ppal;
 
             $this->load->library('Pdf');
             $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
@@ -579,8 +580,6 @@ class Factura extends CI_Controller {
             $pdf->SetTitle('Factura de Venta ' . $id_factura_limpio . ' Sili S.A.S');
             $pdf->SetSubject('Factura de Venta ' . $id_factura_limpio . ' Sili S.A.S');
             $pdf->SetKeywords('sili, sili sas');
-
-
 //// se pueden modificar en el archivo tcpdf_config.php de libraries/config
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 //relación utilizada para ajustar la conversión de los píxeles
@@ -596,38 +595,40 @@ class Factura extends CI_Controller {
                 $pdf->AddPage();
 
                 //preparamos y maquetamos el contenido a crear
-                $html = '';
-                $html .= '<style type=text/css>';
-                $html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
-                $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
-                $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
-                $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-                $html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
-                $html .= 'td.c2{width:310px;}';
-                $html .= 'td.c3{width:112px;}';
-                $html .= 'td.c4{width:306px;}';
-                $html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
-                $html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
-                $html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
-                $html .= 'td.c21{width:190px;height:20px;line-height:20px;font-weight: bold;}';
-                $html .= 'td.c22{width:120px;height:20px;line-height:20px;font-weight: bold;}';
-                $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-                $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-                $html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
-                $html .= 'td.c26{background-color:#F5F5F5;}';
-                $html .= 'td.a1{text-align:left;}';
-                $html .= 'td.a2{text-align:center;}';
-                $html .= 'th.c26{background-color:#F5F5F5;}';
-                $html .= 'th.a1{text-align:left;}';
-                $html .= 'th.a2{text-align:center;}';
-                $html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
-                $html .= 'th.d2{width:105px;font-weight: bold;height:22px;line-height:20px;}';
-                $html .= 'th.d3{width:85px;font-weight: bold;height:22px;line-height:20px;}';
-                $html .= 'th.d4{width:105px;font-weight: bold;height:22px;line-height:20px;}';
-                $html .= 'th.d5{width:120px;font-weight: bold;height:22px;line-height:20px;}';
-                $html .= 'th.d6{width:50px;font-weight: bold;height:22px;line-height:20px;}';
-                $html .= 'table{border-spacing: 0;}';
-                $html .= 'table.t1{text-align:left;}';
+                $css_html = '';
+                $css_html .= '<style type=text/css>';
+                $css_html .= 'h2{font-family: "times new roman", times, serif;font-size:50px;font-weight: bold;font-style: italic;line-height:20px;}';
+                $css_html .= 'p.b1{font-family: helvetica, sans-serif;font-size:7px;}';
+                $css_html .= 'p.b2{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:0px;text-align:center;}';
+                $css_html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+                $css_html .= 'td.c1{width:418px;}td.c1000{line-height:100px;}';
+                $css_html .= 'td.c2{width:310px;}';
+                $css_html .= 'td.c3{width:112px;}';
+                $css_html .= 'td.c4{width:306px;}';
+                $css_html .= 'td.c5{width:306px;}';
+                $css_html .= 'td.c7{border-top-color:#FFFFFF;border-left-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+                $css_html .= 'td.c8{border-top-color:#FFFFFF;border-left-color:#000000;border-right-color:#000000;font-family: helvetica, sans-serif;font-size:12px;}';
+                $css_html .= 'td.c20{width:418px;height:20px;line-height:20px;line-height:19px;}';
+                $css_html .= 'td.c21{width:190px;height:20px;line-height:20px;font-weight: bold;}';
+                $css_html .= 'td.c22{width:120px;height:20px;line-height:20px;font-weight: bold;}';
+                $css_html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+                $css_html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+                $css_html .= 'td.c25{border-top-color:#000000;border-bottom-color:#000000;border-left-color:#000000;border-right-color:#000000;}';
+                $css_html .= 'td.c26{background-color:#F5F5F5;}';
+                $css_html .= 'td.a1{text-align:left;}';
+                $css_html .= 'td.a2{text-align:center;}';
+                $css_html .= 'th.c26{background-color:#F5F5F5;}';
+                $css_html .= 'th.a1{text-align:left;}';
+                $css_html .= 'th.a2{text-align:center;}';
+                $css_html .= 'th.d1{width:263px;font-weight: bold;height:22px;line-height:20px;}';
+                $css_html .= 'th.d2{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+                $css_html .= 'th.d3{width:85px;font-weight: bold;height:22px;line-height:20px;}';
+                $css_html .= 'th.d4{width:105px;font-weight: bold;height:22px;line-height:20px;}';
+                $css_html .= 'th.d5{width:120px;font-weight: bold;height:22px;line-height:20px;}';
+                $css_html .= 'th.d6{width:50px;font-weight: bold;height:22px;line-height:20px;}';
+                $css_html .= 'table{border-spacing: 0;}';
+                $css_html .= 'table.t1{text-align:left;}';
+                $html = $css_html;
                 $html .= '</style>';
                 $html .= '<table width="100%"><tr>'
                         . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p><p class="b2">Resolución de facturación DIAN No. 110000581182 del 28/05/2014</p>'
@@ -664,6 +665,10 @@ class Factura extends CI_Controller {
                         . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $factura->direccion_a_nombre_de . '</td>'
                         . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $factura->matricula . '</td>'
                         . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Forma de pago:</b></td><td class="c23 c25">' . $forma_pago . '</td>'
+                        . '<td class="c23 c25"><b>Sede de la matrícula:</b></td><td class="c23 c25">' . $sede_matricula . '</td>'
+                        . '</tr>'                     
                         . '</table><br>'
                         . '<table border="1" class="t1">'
                         . '<tr>'
@@ -789,6 +794,10 @@ class Factura extends CI_Controller {
                     . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $factura->direccion_a_nombre_de . '</td>'
                     . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $factura->matricula . '</td>'
                     . '</tr>'
+                        . '<tr>'
+                        . '<td class="c23 c25"><b>Forma de pago:</b></td><td class="c23 c25">' . $forma_pago . '</td>'
+                        . '<td class="c23 c25"><b>Sede de la matrícula:</b></td><td class="c23 c25">' . $sede_matricula . '</td>'
+                        . '</tr>'                       
                     . '</table><br>'
                     . '<table border="1" class="t1">'
                     . '<tr>'
@@ -901,7 +910,7 @@ class Factura extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "factura/anular";
             $data['msn_recrear'] = "Anular otra factura de venta";
-            $data['url_imprimir'] = base_url() . "factura/consultar_pdf/" . $prefijo . "_" . $id . "/I";   
+            $data['url_imprimir'] = base_url() . "factura/consultar_pdf/" . $prefijo . "_" . $id . "/I";
 
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
