@@ -9,8 +9,9 @@ class Prueba extends CI_Controller {
     }
 
     function index() {
-        $this->insert_model->movimiento_transaccion('13', 'pbld', '1', '1', '2323', '2', '1', '232323', NULL, NULL, 1, 'JSON', '2', '1128478351', '1');
-        echo 'ok';
+        $this->load->model('abono_adelantom');
+        $abono_adelanto = $this->abono_adelantom->abono_adelanto_prefijo_id('FLST', '1');
+        var_dump($abono_adelanto);
     }
 
     function detalle_transacciones_matricula() {

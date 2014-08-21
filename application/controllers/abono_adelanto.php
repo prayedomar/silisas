@@ -530,6 +530,10 @@ class Abono_adelanto extends CI_Controller {
         $data["tab"] = "anular_abono_adelanto";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        //Validamos si el responsable necesita cod de autorizacion o no. 
+        if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
+            $data['cod_required'] = '1';
+        }
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['action_validar'] = base_url() . "abono_adelanto/validar_anular";
         $data['action_crear'] = base_url() . "abono_adelanto/insertar_anular";
@@ -545,8 +549,41 @@ class Abono_adelanto extends CI_Controller {
             $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
-            if ($this->form_validation->run() == FALSE) {
-                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
+                $this->form_validation->set_rules('cod_autorizacion', 'Código de autorización', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            }
+            $error_cod = "";
+            if (($this->input->post('id')) && ($this->input->post('cod_autorizacion'))) {
+                $cod_autorizacion = $this->input->post('cod_autorizacion');
+                $this->load->model('cod_autorizacionm');
+                $check_codigo = $this->cod_autorizacionm->cod_autorizacion_id($cod_autorizacion);
+                if ($check_codigo != TRUE) {
+                    $error_cod = "<p>El código de autorización, No existe en la Base de Datos.</p>";
+                } else {
+                    $check_vigente = $this->cod_autorizacionm->cod_autorizacion_id_vigente($cod_autorizacion);
+                    if ($check_vigente != TRUE) {
+                        $error_cod = "<p>El código de autorización, No se encuentra vigente.</p>";
+                    } else {
+                        $check_autorizado = $this->cod_autorizacionm->cod_autorizacion_id_vigente_empleado_autorizado($cod_autorizacion);
+                        if ($check_autorizado != TRUE) {
+                            $error_cod = "<p>Usted no es el empleado autorizado para utilizar éste código de autorización.</p>";
+                        } else {
+                            $tabla_autorizada = '4'; //Abono a delanto                      
+                            $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_tabla($cod_autorizacion, $tabla_autorizada);
+                            if ($check_tabla != TRUE) {
+                                $error_cod = "<p>El código de autorización, no fue creado para éste tipo de transacción.</p>";
+                            } else {
+                                $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_registro($cod_autorizacion, $this->input->post('id'));
+                                if ($check_tabla != TRUE) {
+                                    $error_cod = "<p>El código de autorización, no fue creado para éste código de factura.</p>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($error_cod != "")) {
+                echo form_error('prefijo') . form_error('id') . $error_cod . form_error('cod_autorizacion') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -573,7 +610,9 @@ class Abono_adelanto extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_adelanto/anular";
             $data['msn_recrear'] = "Anular otro abono a adelanto de nómina";
-
+            if ($this->input->post('cod_autorizacion')) {
+                $this->update_model->concepto_cod_autorizacion($this->input->post('cod_autorizacion'), '0');
+            }
             $this->load->model('transaccionesm');
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
@@ -639,7 +678,7 @@ class Abono_adelanto extends CI_Controller {
                 } else {
                     $response = array(
                         'respuesta' => 'error',
-                        'mensaje' => '<p><strong><center>El abono a matrícula, ya se encuentra anulado.</center></strong></p>'
+                        'mensaje' => '<p><strong><center>El abono a adelanto de nómina, ya se encuentra anulado.</center></strong></p>'
                     );
                     echo json_encode($response);
                     return false;
@@ -647,7 +686,7 @@ class Abono_adelanto extends CI_Controller {
             } else {
                 $response = array(
                     'respuesta' => 'error',
-                    'mensaje' => '<p><strong><center>El abono a matrícula, no existe en la base de datos.</center></strong></p>'
+                    'mensaje' => '<p><strong><center>El abono a adelanto de nómina, no existe en la base de datos.</center></strong></p>'
                 );
                 echo json_encode($response);
                 return false;

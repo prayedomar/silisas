@@ -63,11 +63,11 @@ class Descuento_matricula extends CI_Controller {
                             $tabla_autorizada = '17'; //Crear un descuento especial de matricula                               
                             $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_tabla($cod_autorizacion, $tabla_autorizada);
                             if ($check_tabla != TRUE) {
-                                $error_cod = "<p>El código de autorización, no fue creado para este tipo de transacción.</p>";
+                                $error_cod = "<p>El código de autorización, no fue creado para éste tipo de transacción.</p>";
                             } else {
                                 $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_registro($cod_autorizacion, $this->input->post('id'));
                                 if ($check_tabla != TRUE) {
-                                    $error_cod = "<p>El código de autorización, no fue creado para este número de matricula.</p>";
+                                    $error_cod = "<p>El código de autorización, no fue creado para éste número de matricula.</p>";
                                 }
                             }
                         }
@@ -97,7 +97,10 @@ class Descuento_matricula extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "descuento_matricula/crear";
             $data['msn_recrear'] = "Crear otro descuento de matricula";
-
+            
+            if($this->input->post('cod_autorizacion')){
+                $this->update_model->concepto_cod_autorizacion($this->input->post('cod_autorizacion'), '0');
+            }
             $error = $this->insert_model->descuento_matricula($id_matricula, $valor, $observacion, $id_responsable, $dni_responsable);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";

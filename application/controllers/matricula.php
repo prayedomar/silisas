@@ -888,7 +888,7 @@ class MAtricula extends CI_Controller {
         $this->load->view("header", $data);
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         //Validamos si el responsable necesita cod de autorizacion o no. 
-        if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo" && $_SESSION["perfil"] != "jefe_cartera") {
+        if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
             $data['cod_required'] = '1';
         }
         $data['action_validar'] = base_url() . "matricula/validar_anular";
@@ -905,7 +905,7 @@ class MAtricula extends CI_Controller {
             $this->form_validation->set_rules('id', 'Número de Matrícula', 'required|trim|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('cant_materiales_devueltos', 'Cantidad de materiales devueltos', 'required|trim|max_length[2]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
-            if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo" && $_SESSION["perfil"] != "jefe_cartera") {
+            if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
                 $this->form_validation->set_rules('cod_autorizacion', 'Código de autorización', 'required|trim|max_length[13]|integer|callback_valor_positivo');
             }
             $error_cod = "";
@@ -973,6 +973,9 @@ class MAtricula extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "matricula/anular";
             $data['msn_recrear'] = "Anular otra matrícula";
+            if($this->input->post('cod_autorizacion')){
+                $this->update_model->concepto_cod_autorizacion($this->input->post('cod_autorizacion'), '0');
+            }            
             $error = $this->update_model->matricula_estado($id, $estado);
             if (isset($error)) {
                 $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";

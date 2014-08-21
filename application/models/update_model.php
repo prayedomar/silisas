@@ -544,6 +544,17 @@ class Update_model extends CI_Model {
             return $error;
         }
     }
+    
+    public function concepto_cod_autorizacion($id, $estado) {
+        $data = array(
+            'vigente' => $estado
+        );
+        $this->db->where('id', $id);
+        $this->db->update('cod_autorizacion', $data);
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }    
 
     public function transferencia_est_traslado($prefijo, $id, $est_traslado) {
         $data = array(

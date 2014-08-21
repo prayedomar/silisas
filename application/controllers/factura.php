@@ -668,7 +668,7 @@ class Factura extends CI_Controller {
                         . '<tr>'
                         . '<td class="c23 c25"><b>Forma de pago:</b></td><td class="c23 c25">' . $forma_pago . '</td>'
                         . '<td class="c23 c25"><b>Sede de la matrícula:</b></td><td class="c23 c25">' . $sede_matricula . '</td>'
-                        . '</tr>'                     
+                        . '</tr>'
                         . '</table><br>'
                         . '<table border="1" class="t1">'
                         . '<tr>'
@@ -794,10 +794,10 @@ class Factura extends CI_Controller {
                     . '<td class="c23 c25"><b>Dirección:</b></td><td class="c23 c25">' . $factura->direccion_a_nombre_de . '</td>'
                     . '<td class="c23 c25"><b>Número de matrícula:</b></td><td class="c23 c25">' . $factura->matricula . '</td>'
                     . '</tr>'
-                        . '<tr>'
-                        . '<td class="c23 c25"><b>Forma de pago:</b></td><td class="c23 c25">' . $forma_pago . '</td>'
-                        . '<td class="c23 c25"><b>Sede de la matrícula:</b></td><td class="c23 c25">' . $sede_matricula . '</td>'
-                        . '</tr>'                       
+                    . '<tr>'
+                    . '<td class="c23 c25"><b>Forma de pago:</b></td><td class="c23 c25">' . $forma_pago . '</td>'
+                    . '<td class="c23 c25"><b>Sede de la matrícula:</b></td><td class="c23 c25">' . $sede_matricula . '</td>'
+                    . '</tr>'
                     . '</table><br>'
                     . '<table border="1" class="t1">'
                     . '<tr>'
@@ -865,6 +865,10 @@ class Factura extends CI_Controller {
         $data["tab"] = "anular_factura";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        //Validamos si el responsable necesita cod de autorizacion o no. 
+        if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
+            $data['cod_required'] = '1';
+        }
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['action_validar'] = base_url() . "factura/validar_anular";
         $data['action_crear'] = base_url() . "factura/insertar_anular";
@@ -880,8 +884,41 @@ class Factura extends CI_Controller {
             $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
-            if ($this->form_validation->run() == FALSE) {
-                echo form_error('prefijo') . form_error('id') . form_error('observacion');
+            if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
+                $this->form_validation->set_rules('cod_autorizacion', 'Código de autorización', 'required|trim|max_length[13]|integer|callback_valor_positivo');
+            }
+            $error_cod = "";
+            if (($this->input->post('id')) && ($this->input->post('cod_autorizacion'))) {
+                $cod_autorizacion = $this->input->post('cod_autorizacion');
+                $this->load->model('cod_autorizacionm');
+                $check_codigo = $this->cod_autorizacionm->cod_autorizacion_id($cod_autorizacion);
+                if ($check_codigo != TRUE) {
+                    $error_cod = "<p>El código de autorización, No existe en la Base de Datos.</p>";
+                } else {
+                    $check_vigente = $this->cod_autorizacionm->cod_autorizacion_id_vigente($cod_autorizacion);
+                    if ($check_vigente != TRUE) {
+                        $error_cod = "<p>El código de autorización, No se encuentra vigente.</p>";
+                    } else {
+                        $check_autorizado = $this->cod_autorizacionm->cod_autorizacion_id_vigente_empleado_autorizado($cod_autorizacion);
+                        if ($check_autorizado != TRUE) {
+                            $error_cod = "<p>Usted no es el empleado autorizado para utilizar éste código de autorización.</p>";
+                        } else {
+                            $tabla_autorizada = '2'; //Anular factura                             
+                            $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_tabla($cod_autorizacion, $tabla_autorizada);
+                            if ($check_tabla != TRUE) {
+                                $error_cod = "<p>El código de autorización, no fue creado para éste tipo de transacción.</p>";
+                            } else {
+                                $check_tabla = $this->cod_autorizacionm->cod_autorizacion_id_vigente_registro($cod_autorizacion, $this->input->post('id'));
+                                if ($check_tabla != TRUE) {
+                                    $error_cod = "<p>El código de autorización, no fue creado para éste código de factura.</p>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (($this->form_validation->run() == FALSE) || ($error_cod != "")) {
+                echo form_error('prefijo') . form_error('id') . $error_cod . form_error('cod_autorizacion') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -911,7 +948,9 @@ class Factura extends CI_Controller {
             $data['url_recrear'] = base_url() . "factura/anular";
             $data['msn_recrear'] = "Anular otra factura de venta";
             $data['url_imprimir'] = base_url() . "factura/consultar_pdf/" . $prefijo . "_" . $id . "/I";
-
+            if($this->input->post('cod_autorizacion')){
+                $this->update_model->concepto_cod_autorizacion($this->input->post('cod_autorizacion'), '0');
+            }
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
             if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {

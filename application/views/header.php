@@ -396,13 +396,13 @@
                             <ul>
                                 <li class="dropdown-header"><u> Transacciones</u></li> 
                         <li class="dropdown-header" style="font-size:16px;"><u>Créditos</u>:</li>                                
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>factura/anular">Factura de venta</a></li>
                 <?php } ?>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
                     <li><a href="<?= base_url() ?>recibo_caja/anular">Recibo de Caja</a></li>     
                 <?php } ?>
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo"))) { ?>
                     <li><a href="<?= base_url() ?>abono_matricula/anular">Abono a matrícula</a></li>
                 <?php } ?>                    
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>                                       
@@ -427,7 +427,7 @@
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>
                     <li><a href="<?= base_url() ?>nota_credito/anular">Nota crédito</a></li>
                 <?php } ?>     
-                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
+                <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "jefe_cartera"))) { ?>
                     <li><a href="<?= base_url() ?>transferencia/anular">Transferencia intersede</a></li>
                 <?php } ?>       
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede"))) { ?>   

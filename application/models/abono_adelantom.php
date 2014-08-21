@@ -14,7 +14,7 @@ class Abono_adelantom extends CI_Model {
                 . "FROM abono_adelanto a_a "
                 . "LEFT JOIN sede s ON (a_a.sede_caja_destino = s.id) "
                 . "LEFT JOIN t_caja t_ca ON (a_a.t_caja_destino = t_ca.id) "
-                . "JOIN adelanto ad ON (a_a.id_adelanto = ad.id) "
+                . "JOIN adelanto ad ON ((a_a.id_adelanto = ad.id)AND(a_a.prefijo_adelanto = ad.prefijo)) "
                 . "JOIN empleado eb ON ((ad.id_empleado = eb.id) and (ad.dni_empleado = eb.dni)) "
                 . "JOIN empleado em ON ((a_a.id_responsable = em.id) and (a_a.dni_responsable = em.dni)) "
                 . "where ((a_a.prefijo='" . $prefijo . "')AND(a_a.id='" . $id . "'))";

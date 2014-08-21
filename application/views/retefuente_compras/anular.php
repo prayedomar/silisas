@@ -58,6 +58,17 @@
                                 </tbody>
                             </table>
                         </div>
+                        <?php if (isset($cod_required)) { ?>
+                            <div class="row">
+                                <div class="col-xs-4 col-xs-offset-4">
+                                    <div class="form-group">
+                                        <label>Código de autorización<em class="required_asterisco">*</em></label>
+                                        <p class="help-block"><b>> </b>Éste código de autorización, lo debe solicitar a los directivos encargados.</p>
+                                        <input name="cod_autorizacion" id="cod_autorizacion" type="text" class="form-control numerico" placeholder="Código de autorización" maxlength="13" <?php if (isset($id)) { ?> value="<?php echo $id ?>" <?php } ?>>
+                                    </div> 
+                                </div>
+                            </div>       
+                        <?php } ?>                        
                         <div class="form-group">
                             <label>Observación<em class="required_asterisco">*</em></label>
                             <textarea name="observacion" id="observacion" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Motivo de la anulación, quien autorizó, etc..."  style="max-width:100%;"></textarea>
