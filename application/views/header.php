@@ -544,7 +544,8 @@
                 <?php } ?>   
                 <li class="dropdown-header" style="font-size:16px;"><u>Crédito/Débito</u>:</li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "jefe_cartera", "cartera", "secretaria"))) { ?>
-                    <li><a href="<?= base_url() ?>transferencia/consultar">Transferencia intersede</a></li>
+                    <li><a href="<?= base_url() ?>transferencia/consultar">Transferencia exitosa</a></li>
+                    <li><a href="<?= base_url() ?>transferencia/consultar_transferencia_pendiente">Transferencia pendiente</a></li>
                 <?php } ?>                     
                 </ul>
                 </li>

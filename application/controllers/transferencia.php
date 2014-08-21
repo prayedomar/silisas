@@ -271,12 +271,106 @@ class Transferencia extends CI_Controller {
         $data["tab"] = "aprobar_transferencia";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-
         $data['action_validar'] = base_url() . "transferencia/validar_aprobar";
         $data['action_crear'] = base_url() . "transferencia/insertar_aprobar";
         $data['action_llena_transferencias'] = base_url() . "transferencia/llena_transferencias";
         $this->parser->parse('transferencia/aprobar', $data);
         $this->load->view('footer');
+    }
+
+    function consultar_transferencia_pendiente() {
+        $data["tab"] = "consultar_transferencia_pendiente";
+        $this->isLogin($data["tab"]);
+        $this->load->view("header", $data);
+        $data['action_anular_peticion'] = base_url() . "transferencia/anular_peticion_transferencia";
+        //Buscamos las transferencias pendientes del responsable
+        $transferencias = $this->transferenciam->transferencia_pdte_remitente();
+        if ($transferencias == TRUE) {
+            $data["html_transferencias"] = '<div class="overflow_tabla">
+                            <label>Transferencias pendientes por aprobar</label>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Id</th>
+                                        <th class="text-center">Valor</th>
+                                        <th class="text-center">Información de origen</th>
+                                        <th class="text-center">Información de destino</th>
+                                        <th class="text-center">Observación</th>
+                                        <th class="text-center">Fecha</th>
+                                        <th class="text-center">Acciones</th>                                         
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_transferencias">';
+            foreach ($transferencias as $fila) {
+                $data["html_transferencias"] .= '<tr>
+                            <td>' . $fila->prefijo . $fila->id . '</td>
+                            <td>$' . number_format($fila->total, 2, '.', ',') . '</td>
+                            <td>
+                            <p><b>Sede origen:</b> ' . $fila->nombre_sede_origen . '</p>
+                            <p><b>Remitente:</b> ' . $fila->nombre_remitente . '</p>';
+                if ($fila->sede_caja_origen != NULL) {
+                    $data["html_transferencias"] .= '<p><b>Nombre de la caja:</b> ' . $fila->nombre_caja_origen . '</p>
+                            <p><b>Efectivo retirado de caja:</b> $' . number_format($fila->efectivo_retirado, 2, '.', ',') . '</p>';
+                }
+                if ($fila->cuenta_origen != NULL) {
+                    $data["html_transferencias"] .= '<p><b>Número de la cuenta:</b> ' . $fila->cuenta_origen . '</p>
+                            <p><b>Valor retirado de cuenta:</b> $' . number_format($fila->valor_retirado, 2, '.', ',') . '</p>';
+                }
+                $data["html_transferencias"] .= '</td>
+                            <td>
+                            <p><b>Sede destino:</b> ' . $fila->nombre_sede_destino . '</p>';
+                if ($fila->tipo_destino == 1) {
+                    $data["html_transferencias"] .= '<p><b>Tipo destino:</b> Caja</p>
+                              <p><b>Nombre de la caja:</b> ' . $fila->nombre_caja_destino . '</p>
+                              <p><b>Efectivo enviado a la caja:</b> $' . number_format($fila->efectivo_ingresado, 2, '.', ',') . '</p>';
+                } else {
+                    $data["html_transferencias"] .= '<p><b>Tipo destino:</b> Cuenta</p>
+                              <p><b>Número de la cuenta:</b> ' . $fila->cuenta_destino . '</p>
+                              <p><b>Valor enviado a la cuenta:</b> $' . number_format($fila->valor_consignado, 2, '.', ',') . '</p>';
+                }
+                $data["html_transferencias"] .= '</td>                        
+                            <td>' . $fila->observacion . '</td>
+                            <td class="text-center">' . $fila->fecha_trans . '</td>
+                            <td class="text-center"><button class="btn btn-danger btn-sm btn_anular_peticion" id="' . $fila->prefijo . "_" . $fila->id . '"><span class="glyphicon glyphicon-remove"></span> Anular </button></td>
+                        </tr>';
+            }
+            $data["html_transferencias"] .= '</tbody>
+                                        </table>
+                                    </div>';
+        } else {
+            $data["html_transferencias"] = '<div class="row separar_submit">
+                                                <div class="col-xs-8 col-xs-offset-2">
+                                                    <div class="alert alert-warning" id="div_warning">
+                                                        <p><strong><center>Usted no tiene transferencias por aprobar en la base de datos.</center></strong></p>
+                                                    </div>
+                                                </div>
+                                            </div>';
+        }
+
+        $this->parser->parse('transferencia/consultar_transferencia_pendiente', $data);
+        $this->load->view('footer');
+    }
+
+    public function anular_peticion_transferencia() {
+        if ($this->input->is_ajax_request()) {
+            $this->escapar($_POST);
+            list($prefijo_transferencias, $id_transferencias) = explode("_", $this->input->post('transferencia'));
+            $error = $this->update_model->transferencia_estado($prefijo_transferencias, $id_transferencias, '3');
+            if (isset($error)) {
+                $response = array(
+                    'respuesta' => 'error',
+                    'mensaje' => '<p>' . $error . '</p>'
+                );
+            } else {
+                $response = array(
+                    'respuesta' => 'OK'
+                );
+            }
+            echo json_encode($response);
+            return FALSE;
+        } else {
+            redirect(base_url());
+        }
     }
 
     function validar_aprobar() {
@@ -375,9 +469,7 @@ class Transferencia extends CI_Controller {
 
     public function llena_transferencias() {
         if ($this->input->is_ajax_request()) {
-            $id_responsable = $this->session->userdata('idResponsable');
-            $dni_responsable = $this->session->userdata('dniResponsable');
-            $transferencias = $this->transferenciam->transferencia_pdte_responsable($id_responsable, $dni_responsable);
+            $transferencias = $this->transferenciam->transferencia_pdte_destinatario();
             if ($transferencias == TRUE) {
                 foreach ($transferencias as $fila) {
                     echo '<tr>
@@ -639,7 +731,7 @@ class Transferencia extends CI_Controller {
         //Validamos si el responsable necesita cod de autorizacion o no. 
         if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
             $data['cod_required'] = '1';
-        }        
+        }
         $data['sede'] = $this->select_model->sede_activa_responsable($_SESSION["idResponsable"], $_SESSION["dniResponsable"]);
         $data['action_validar'] = base_url() . "transferencia/validar_anular";
         $data['action_crear'] = base_url() . "transferencia/insertar_anular";
@@ -655,7 +747,7 @@ class Transferencia extends CI_Controller {
             $this->form_validation->set_rules('prefijo', 'Prefijo de sede', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Consecutivo', 'required|trim|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('observacion', 'Observación', 'required|trim|xss_clean|max_length[255]');
-if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
+            if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo") {
                 $this->form_validation->set_rules('cod_autorizacion', 'Código de autorización', 'required|trim|max_length[13]|integer|callback_valor_positivo');
             }
             $error_cod = "";
@@ -720,8 +812,8 @@ if ($_SESSION["perfil"] != "admon_sistema" && $_SESSION["perfil"] != "directivo"
             $data['msn_recrear'] = "Anular otra retención por compras";
             if ($this->input->post('cod_autorizacion')) {
                 $this->update_model->concepto_cod_autorizacion($this->input->post('cod_autorizacion'), '0');
-            }            
-            $this->load->model('transaccionesm');            
+            }
+            $this->load->model('transaccionesm');
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito_origen);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
             if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {

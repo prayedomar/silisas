@@ -30,8 +30,8 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">Empleados Autorizados para <u>retirar dinero</u> de la Cuenta</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
+                                <th class="text-center">Acciones</th>
+                                </tr>
                                 </thead>
                                 <tbody id="tbody_sedes_cuenta">
                                 </tbody>
@@ -62,16 +62,18 @@
             <div class="modal-body">
                 <form role="form" method="post" action="{action_anular_empleado_cuenta}" id="form_anular_empleado_cuenta">
                     <center><p>¿Está seguro que desea desautorizar la cuenta seleccionada para éste empleado?</p></center>
-                        <input type="hidden" name="id_responsable" value={id_responsable} />
-                        <input type="hidden" name="dni_responsable" value={dni_responsable} />
-                        <input type="hidden" name="empleado_cuenta" id="empleado_cuenta"/>
+                    <input type="hidden" name="id_responsable" value={id_responsable} />
+                    <input type="hidden" name="dni_responsable" value={dni_responsable} />
+                    <input type="hidden" name="empleado_cuenta" id="empleado_cuenta"/>
                 </form>
                 <div id="alert_modal_2">
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="anular_empleados_cuenta" class="btn btn-success">Desautorizar Empleado</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="cerrar_modal_2">Cerrar</button>
+                <center>
+                    <button id="anular_empleados_cuenta" class="btn btn-success">Desautorizar Empleado</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="cerrar_modal_2">Cerrar</button>
+                </center>
             </div>
         </div>
     </div>
@@ -96,8 +98,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="autorizar_empleados_cuenta" class="btn btn-success">Autorizar Cuenta para Empleados</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="cerrar_modal_3">Cerrar</button>
+                <center>
+                    <button id="autorizar_empleados_cuenta" class="btn btn-success">Autorizar Cuenta para Empleados</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="cerrar_modal_3">Cerrar</button>
+                </center>
             </div>
         </div>
     </div>
@@ -158,7 +162,7 @@
         $("#alert_modal_3").removeAttr('class')
         $("#alert_modal_3  > *").remove();
     });
-    
+
     //Activar Modal de Agregar sede
     $('.agregar_empleado_cuenta').live('click', function() {
         cuenta = $("input[name='cuenta']:checked").val();
@@ -218,10 +222,10 @@
 
     //Activar Modal de anular sede
     $('.anular_empleado_cuenta').live('click', function() {
-        $("#alert_modal_2").removeAttr('class')
+        $("#alert_modal_2").removeAttr('class');
         $("#alert_modal_2  > *").remove();
         $("#empleado_cuenta").attr('value', $(this).attr('id'));
-        $("#modalAnularSedeCuenta").modal('show')
+        $("#modalAnularSedeCuenta").modal('show');
     });
     //Anular sede Secundaria
     $('#anular_empleados_cuenta').live('click', function() {

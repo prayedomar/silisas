@@ -201,7 +201,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
     //Llenamos la cajas del responsable
     $.post('{action_llena_caja_responsable}', {
         idResposable: '{id_responsable}',
@@ -209,7 +208,6 @@
     }, function(data) {
         $("#tbody_caja_efectivo").html(data);
     });
-
     //Llenamos las cajas del responsable
     $.post('{action_llena_cuenta_responsable}', {
         idResposable: '{id_responsable}',
@@ -217,7 +215,6 @@
     }, function(data) {
         $("#tbody_cuenta_bancaria").html(data);
     });
-
     //Habilitamos input de efectivo retirado de las cajas ORIGEN
     $("table").delegate("#caja", "click", function() {
         var total = new Number($('#total').val().split(",").join(""));
