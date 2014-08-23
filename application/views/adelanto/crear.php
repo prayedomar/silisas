@@ -26,6 +26,21 @@
                                             <input type="text" name="total" id="total" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Porcentaje de descuento del valor devengado en las proximas nóminas<em class="required_asterisco">*</em></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <input type="text" name="forma_descuento" id="forma_descuento" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="5">
+                                        </div>
+                                    </div>                                      
+                                    <div class="form-group">
+                                        <label>Quién autoriza<em class="required_asterisco">*</em></label>
+                                        <input name="autoriza" id="autoriza" type="text" class="form-control exit_caution alfanumerico" placeholder="Quién autoriza..." maxlength="50">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Motivo del adelanto<em class="required_asterisco">*</em></label>
+                                        <textarea name="motivo" id="motivo" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Motivo del adelanto..."  style="max-width:100%;"></textarea>
+                                    </div>                                   
                                 </div>
                             </div>
                             <hr>
@@ -80,19 +95,6 @@
                                     <input type="text" name="valor_retirado" id="valor_retirado" class="form-control decimal decimal2 miles" placeholder="0.00" maxlength="12" readonly="readonly">
                                 </div>
                             </div>
-                            <hr>
-                            <div class="form-group">
-                                <label>Quién autoriza<em class="required_asterisco">*</em></label>
-                                <input name="autoriza" id="autoriza" type="text" class="form-control exit_caution alfanumerico" placeholder="Quién autoriza..." maxlength="50">
-                            </div>
-                            <div class="form-group">
-                                <label>Motivo del adelanto<em class="required_asterisco">*</em></label>
-                                <textarea name="motivo" id="motivo" class="form-control exit_caution alfanumerico" rows="4" maxlength="250" placeholder="Motivo del adelanto..."  style="max-width:100%;"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Forma de descuento<em class="required_asterisco">*</em></label>
-                                <textarea name="forma_descuento" id="forma_descuento" class="form-control exit_caution alfanumerico" rows="4" maxlength="208" placeholder="Forma de descuento..."  style="max-width:100%;"></textarea>
-                            </div> 
                             <div id="validacion_alert">
                             </div>                            
                             <div class="form-group separar_submit">
@@ -160,7 +162,7 @@
             var valor_retirado = new Number($('#valor_retirado').val().split(",").join(""));
             $('#efectivo_retirado').attr('value', ((total - valor_retirado).toFixed(2)));
         }
-        $('#efectivo_retirado').change();        
+        $('#efectivo_retirado').change();
     });
     //Calcula el valor contrario al modificar el efectivo retirado.
     $(".form-group").delegate("#efectivo_retirado", "blur", function() {
@@ -169,7 +171,7 @@
             var efectivo_retirado = new Number($('#efectivo_retirado').val().split(",").join(""));
             $('#valor_retirado').attr('value', ((total - efectivo_retirado).toFixed(2)));
         }
-        $('#valor_retirado').change();        
+        $('#valor_retirado').change();
     });
 
 

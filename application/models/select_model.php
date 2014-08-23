@@ -795,7 +795,7 @@ class Select_model extends CI_Model {
     public function empleado_sedes_responsable_adelantos($id_responsable, $dni_responsable) {
         $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
-        $where2 = "((id IN(SELECT id_empleado FROM adelanto WHERE (((estado=1)||(estado=2))))) AND (dni IN(SELECT dni_empleado FROM adelanto WHERE (vigente=1))))";
+        $where2 = "((id IN(SELECT id_empleado FROM adelanto WHERE (vigente=1))) AND (dni IN(SELECT dni_empleado FROM adelanto WHERE (vigente=1))))";
         $this->db->where($where2);
         $this->db->order_by('nombre1', 'asc');
         $query = $this->db->get('empleado');
@@ -1446,7 +1446,7 @@ class Select_model extends CI_Model {
 
     //adelantos vigente con saldo incluido > 0
     public function adelanto_vigente_empleado($id_empleado, $dni_empleado) {
-        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.autoriza, ad.motivo, ad.forma_descuento, ad.fecha_trans, (ad.total - (SELECT COALESCE(SUM(total), 0) FROM abono_adelanto WHERE ((prefijo_adelanto=ad.prefijo) AND (id_adelanto=ad.id) AND (vigente=1)))) AS saldo FROM adelanto AS ad, sede AS s WHERE ((ad.id_empleado='" . $id_empleado . "') AND (ad.dni_empleado='" . $dni_empleado . "') AND (ad.vigente=1) AND (ad.sede=s.id))";
+        $SqlInfo = "SELECT DISTINCT ad.prefijo AS prefijo_adelanto, ad.saldo, ad.id AS id_adelanto, ad.total, s.nombre AS sede, ad.autoriza, ad.motivo, ad.forma_descuento, ad.fecha_trans FROM adelanto AS ad, sede AS s WHERE ((ad.vigente=1) AND (ad.saldo>0) AND (ad.id_empleado='" . $id_empleado . "') AND (ad.dni_empleado='" . $dni_empleado . "') AND (ad.sede=s.id))";
         $query = $this->db->query($SqlInfo);
         if ($query->num_rows() > 0) {
             return $query->result();

@@ -141,6 +141,16 @@ class Update_model extends CI_Model {
         }
     }
 
+    public function adelanto_saldo($prefijo, $id, $abono) {
+        $this->db->set('saldo', 'saldo-' . $abono , FALSE);
+        $this->db->where('prefijo', $prefijo);
+        $this->db->where('id', $id);
+        $this->db->update('adelanto');
+        if ($error = $this->db->_error_message()) {
+            return $error;
+        }
+    }
+    
     public function matricula_estado($id, $estado) {
         $data = array(
             'estado' => $estado

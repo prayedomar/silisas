@@ -730,6 +730,7 @@ class Nomina extends CI_Controller {
                                 </div>
                             </div>';
                     }
+                    
                     echo json_encode($response);
                     return FALSE;
                 } else {

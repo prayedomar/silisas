@@ -13,7 +13,7 @@ class Adelanto extends CI_Controller {
         $data["tab"] = "crear_adelanto";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $id_responsable = $this->session->userdata('idResponsable');
@@ -35,11 +35,11 @@ class Adelanto extends CI_Controller {
             $this->form_validation->set_rules('empleado', 'Empleado', 'required|callback_select_default');
             //coloca maxlength en 15, para incluir los puntos de miles 888.777.666.273
             $this->form_validation->set_rules('total', 'Valor del Adelanto', 'required|trim|xss_clean|max_length[18]|callback_miles_numeric|callback_mayor_cero');
-            $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
-            $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('forma_descuento', 'Porcentajte de descuento', 'required|trim|xss_clean|callback_miles_numeric|callback_porcentaje');
             $this->form_validation->set_rules('autoriza', 'Quién autoriza', 'required|trim|xss_clean|max_length[50]');
             $this->form_validation->set_rules('motivo', 'Motivo del adelanto', 'required|trim|xss_clean|max_length[255]');
-            $this->form_validation->set_rules('forma_descuento', 'Forma de descuento', 'required|trim|xss_clean|max_length[210]');
+            $this->form_validation->set_rules('valor_retirado', 'Valor Retirado de la Cuenta Bancaria', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
+            $this->form_validation->set_rules('efectivo_retirado', 'Valor Retirado de la Caja de Efectivo', 'trim|xss_clean|max_length[18]|callback_miles_numeric|callback_valor_positivo');
             $error_valores = "";
             if ($this->input->post('total')) {
                 $total = round(str_replace(",", "", $this->input->post('total')), 2);
@@ -58,7 +58,7 @@ class Adelanto extends CI_Controller {
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($error_valores != "")) {
-                echo form_error('empleado') . form_error('total') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores . form_error('autoriza') . form_error('motivo') . form_error('forma_descuento');
+                echo form_error('empleado') . form_error('total') . form_error('forma_descuento') . form_error('autoriza') . form_error('motivo') . form_error('valor_retirado') . form_error('efectivo_retirado') . $error_valores;
             } else {
                 echo "OK";
             }
@@ -99,7 +99,7 @@ class Adelanto extends CI_Controller {
             $t_trans = 1; //Adelanto
             $credito_debito = 0; //Debito
             //Para tirar array a json utilizar comillas dobles, decodificar en utf8
-            $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);        
+            $empleado = $this->select_model->empleado($id_empleado, $dni_empleado);
             $detalle_array = array(
                 "Empleado_Beneficiario" => $empleado->nombre1 . " " . $empleado->nombre2 . " " . $empleado->apellido1,
                 "Id_Empleado" => $id_empleado,
@@ -107,7 +107,7 @@ class Adelanto extends CI_Controller {
                 "Motivo" => $motivo,
                 "Forma_Descuento" => $forma_descuento
             );
-            $detalle_json = json_encode($detalle_array);              
+            $detalle_json = json_encode($detalle_array);
 
             $data["tab"] = "crear_adelanto";
             $this->isLogin($data["tab"]);
@@ -342,7 +342,7 @@ class Adelanto extends CI_Controller {
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
                     . '<td class="a3"><b>Motivo del adelanto: </b>' . $adelanto->motivo . '.</td>'
                     . '</tr><tr><td class="c10"> </td></tr><tr>'
-                    . '<td class="a3"><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '.</td>'
+                    . '<td class="a3"><b>Forma de descuento: </b>' . $adelanto->forma_descuento . '% en las proximas nóminas, hasta descontar por completo el adelanto.</td>'
                     . '</tr><tr><td class="c10"> </td></tr>'
                     . '</table>'
                     . '</td>'
@@ -496,8 +496,8 @@ class Adelanto extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "adelanto/anular";
             $data['msn_recrear'] = "Anular otro adelanto de nómina";
-            
-            $this->load->model('transaccionesm');            
+
+            $this->load->model('transaccionesm');
             $movimiento_transaccion = $this->transaccionesm->movimiento_transaccion_id($t_trans, $prefijo, $id, $credito_debito);
             //Con el segundo argumento de jsondecode el true, convierto de objeto a array
             if (is_array(json_decode($movimiento_transaccion->detalle_json, true))) {

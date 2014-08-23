@@ -124,23 +124,28 @@ class Abono_adelanto extends CI_Controller {
             $data['url_recrear'] = base_url() . "abono_adelanto/crear";
             $data['msn_recrear'] = "Crear otro abono";
             $data['url_imprimir'] = base_url() . "abono_adelanto/consultar_pdf/" . $prefijo_abono . "_" . $id_abono . "/I";
-
-            $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
-            if (isset($error)) {
-                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+            $error3 = $this->update_model->adelanto_saldo($prefijo_adelanto, $id_adelanto, $total);
+            if (isset($error3)) {
+                $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->insert_model->abono_adelanto($prefijo_abono, $id_abono, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
-                if (isset($error1)) {
-                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $error = $this->insert_model->movimiento_transaccion($t_trans, $prefijo_abono, $id_abono, $credito_debito, $total, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $cuenta_destino, $valor_consignado, 1, $detalle_json, $sede, $id_responsable, $dni_responsable);
+                if (isset($error)) {
+                    $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    //Si no hubo error entonces si el saldo es igual al total abonado, entonces lo colocamos paz y salvo
-                    if ($total == $saldo) {
-                        $new_estado = 3; //Paz y Salvo Voluntario   
-                        $this->update_model->adelanto_estado($prefijo_adelanto, $id_adelanto, $new_estado);
+                    $error1 = $this->insert_model->abono_adelanto($prefijo_abono, $id_abono, $prefijo_adelanto, $id_adelanto, $total, $cuenta_destino, $valor_consignado, $sede_caja_destino, $t_caja_destino, $efectivo_ingresado, $sede, $vigente, $observacion, $id_responsable, $dni_responsable);
+                    if (isset($error1)) {
+                        $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                        $this->parser->parse('trans_error', $data);
+                    } else {
+                        //Si no hubo error entonces si el saldo es igual al total abonado, entonces lo colocamos paz y salvo
+                        if ($total == $saldo) {
+                            $new_estado = 3; //Paz y Salvo Voluntario   
+                            $this->update_model->adelanto_estado($prefijo_adelanto, $id_adelanto, $new_estado);
+                        }
+                        $this->parser->parse('trans_success_print', $data);
                     }
-                    $this->parser->parse('trans_success_print', $data);
                 }
             }
         } else {

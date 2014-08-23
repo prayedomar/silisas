@@ -729,6 +729,7 @@ class Insert_model extends CI_Model {
             'id_empleado' => $id_empleado,
             'dni_empleado' => $dni_empleado,
             'total' => $total,
+            'saldo' => $total,
             'cuenta_origen' => $cuenta_origen,
             'valor_retirado' => $valor_retirado,
             'sede_caja_origen' => $sede_caja_origen,
