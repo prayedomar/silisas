@@ -310,44 +310,45 @@ class Nota_credito extends CI_Controller {
             $pdf->AddPage();
 
             //preparamos y maquetamos el contenido a crear
-            $html = '';
-            $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
-            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'p.b4{line-height:23px;}';
-            $html .= 'p.b5{font-size:14px;}';
-            $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
-            $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:150px;}';
-            $html .= 'td.c4{width:270px;}';
-            $html .= 'td.c5{width:160px;}';
-            $html .= 'td.c6{width:150px;}';
-            $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:40px;}';
-            $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';
-            $html .= 'td.c11{font-size:12px;}';
-            $html .= 'td.c12{line-height:20px;}';
-            $html .= 'td.c13{line-height:25px;}';
-            $html .= 'td.c14{width:365px;}';
-            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;line-height:35px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-            $html .= 'td.c25{border-top-color:#000000;}';
-            $html .= 'td.c26{border-bottom-color:#000000;}';
-            $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';
-            $html .= 'td.a1{text-align:left;}';
-            $html .= 'td.a2{text-align:center;}';
-            $html .= 'td.a3{text-align:justify;}';
-            $html .= 'th.a1{text-align:left;}';
-            $html .= 'th.a2{text-align:center;}';
-            $html .= 'table{border-spacing: 0;}';
-            $html .= '</style>';
+            $css_html = '';
+            $css_html .= '<style type=text/css>';
+            $css_html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $css_html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
+            $css_html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
+            $css_html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $css_html .= 'p.b4{line-height:23px;}';
+            $css_html .= 'p.b5{font-size:14px;}';
+            $css_html .= 'p.b6{line-height:26px;}';
+            $css_html .= 'td.c1{width:420px;line-height:20px;}';
+            $css_html .= 'td.c2{width:310px;}';
+            $css_html .= 'td.c3{width:150px;}';
+            $css_html .= 'td.c4{width:270px;}';
+            $css_html .= 'td.c5{width:160px;}';
+            $css_html .= 'td.c6{width:150px;}';
+            $css_html .= 'td.c7{font-size:16px;}';
+            $css_html .= 'td.c8{line-height:40px;}';
+            $css_html .= 'td.c9{background-color:#F5F5F5;}';
+            $css_html .= 'td.c10{font-size:4px;line-height:5px;}';
+            $css_html .= 'td.c11{font-size:12px;}';
+            $css_html .= 'td.c12{line-height:20px;}';
+            $css_html .= 'td.c13{line-height:25px;}';
+            $css_html .= 'td.c14{width:365px;}';
+            $css_html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+            $css_html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;line-height:35px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $css_html .= 'td.c25{border-top-color:#000000;}';
+            $css_html .= 'td.c26{border-bottom-color:#000000;}';
+            $css_html .= 'td.c27{border-left-color:#000000;}';
+            $css_html .= 'td.c28{border-right-color:#000000;}';
+            $css_html .= 'td.a1{text-align:left;}';
+            $css_html .= 'td.a2{text-align:center;}';
+            $css_html .= 'td.a3{text-align:justify;}';
+            $css_html .= 'th.a1{text-align:left;}';
+            $css_html .= 'th.a2{text-align:center;}';
+            $css_html .= 'table{border-spacing: 0;}';
+            $css_html .= '</style>';
+            $html = $css_html;
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -359,7 +360,7 @@ class Nota_credito extends CI_Controller {
                     . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                     . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                     . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr><tr>'
                     . '<td class="c24 a2" colspan="2">NOTA CRÉDITO</td>'
@@ -413,44 +414,9 @@ class Nota_credito extends CI_Controller {
 
             $pdf->lastPage();
             $pdf->AddPage();
-            $html = '';
-            $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
-            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'p.b4{line-height:23px;}';
-            $html .= 'p.b5{font-size:14px;}';
-            $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
-            $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:150px;}';
-            $html .= 'td.c4{width:270px;}';
-            $html .= 'td.c5{width:160px;}';
-            $html .= 'td.c6{width:150px;}';
-            $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:40px;}';
-            $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';
-            $html .= 'td.c11{font-size:12px;}';
-            $html .= 'td.c12{line-height:20px;}';
-            $html .= 'td.c13{line-height:25px;}';
-            $html .= 'td.c14{width:365px;}';
-            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;line-height:35px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-            $html .= 'td.c25{border-top-color:#000000;}';
-            $html .= 'td.c26{border-bottom-color:#000000;}';
-            $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';
-            $html .= 'td.a1{text-align:left;}';
-            $html .= 'td.a2{text-align:center;}';
-            $html .= 'td.a3{text-align:justify;}';
-            $html .= 'th.a1{text-align:left;}';
-            $html .= 'th.a2{text-align:center;}';
-            $html .= 'table{border-spacing: 0;}';
-            $html .= '</style>';
+            $html = $css_html;
             $html .= '<table width="100%"><tr>'
-                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" rowspan="5" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '<p class="b1">Medellín: Calle 47D # 77 AA - 67  (Floresta)  / Tels.: 4114107 – 4126800<br>'
                     . 'Medellín: Carrera 48B # 10 SUR - 118 (Poblado) / Tels.: 3128614 – 3126060<br>'
                     . 'Cali Sur: Carrera 44 # 5A – 26 (Tequendama) / Tels.: 3818008 – 3926723<br>'
@@ -462,7 +428,7 @@ class Nota_credito extends CI_Controller {
                     . 'El Bagre: Calle 1 # 32 (Cornaliza) / Tels.: 8372645 – 8372653<br>'
                     . 'Caucasia: Carrera 8A # 22 – 48. 2do Piso (B. Kennedy) / Tels.: 8391693 - 8393582</p>'
                     . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr><tr>'
                     . '<td class="c24 a2" colspan="2">NOTA CRÉDITO</td>'

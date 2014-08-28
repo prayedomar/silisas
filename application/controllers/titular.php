@@ -13,7 +13,7 @@ class Titular extends CI_Controller {
         $data["tab"] = "crear_titular";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
-        
+
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_titular();
@@ -32,8 +32,9 @@ class Titular extends CI_Controller {
     function validar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
-            $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('dni', 'Tipo de identificación', 'required|callback_select_default');
+            $this->form_validation->set_rules('id', 'Número de identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('idV', 'Verique # de identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
@@ -54,15 +55,19 @@ class Titular extends CI_Controller {
 
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
-            if (($this->input->post('id')) && ($this->input->post('dni'))) {
-                $t_usuario = 2; //2: Titular
-                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
-                if ($check_usuario == TRUE) {
-                    $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+            if (($this->input->post('id')) && ($this->input->post('idV')) && ($this->input->post('dni') != "default")) {
+                if ($this->input->post('id') != $this->input->post('idV')) {
+                    $duplicate_key = "<p>El número de identificación y su correspondiente verificación, no coinciden.</p>";
+                } else {
+                    $t_usuario = 2; //2: Titular
+                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
+                    if ($check_usuario == TRUE) {
+                        $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+                    }
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($duplicate_key != "")) {
-                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('observacion');
+                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('idV') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -74,7 +79,10 @@ class Titular extends CI_Controller {
     function validarParaEditar() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-
+            $this->form_validation->set_rules('dni_old', 'Tipo de Identificación (Old)', 'required|callback_select_default');
+            $this->form_validation->set_rules('id_old', 'Número de Identificación (Old)', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('dni_new', 'Tipo de Identificación', 'required|callback_select_default');
+            $this->form_validation->set_rules('id_new', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
@@ -92,9 +100,19 @@ class Titular extends CI_Controller {
             //Temporalmente el email no sera obligatorio
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'valid_email|trim|xss_clean|max_length[80]');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
-
+            //Validamos que la clave primaria no este repetida
+            $duplicate_key = "";
+            if (($this->input->post('id_old')) && ($this->input->post('dni_old') != "default") && ($this->input->post('id_new')) && ($this->input->post('dni_new') != "default")) {
+                if (($this->input->post('id_old') != $this->input->post('id_new')) || ($this->input->post('dni_old') != $this->input->post('dni_new'))) {
+                    $t_usuario = 2; //2: Titular
+                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id_new'), $this->input->post('dni_new'), $t_usuario);
+                    if ($check_usuario == TRUE) {
+                        $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+                    }
+                }
+            }
             if ($this->form_validation->run() == FALSE) {
-                echo form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('observacion');
+                echo $duplicate_key . form_error('dni_old') . form_error('id_old') . form_error('dni_new') . form_error('id_new') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -256,7 +274,7 @@ class Titular extends CI_Controller {
         $this->load->model('t_deptom');
         $data["tab"] = "consultar_titular";
         $this->isLogin($data["tab"]);
-        $data['tipos_documentos'] = $this->t_dnim->listar_todas_los_tipos_de_documentos();
+        $data['tipos_documentos'] = $this->select_model->t_dni_titular();
         $data['estados_empleados'] = $this->est_empleadom->listar_todas_los_estados_de_empleado();
         $data['lista_sedes'] = $this->sedem->listar_todas_las_sedes();
         $data['lista_dptos'] = $this->t_deptom->listar_todas_los_deptos();
@@ -284,7 +302,6 @@ class Titular extends CI_Controller {
     }
 
     function actualizar() {
-
         //  var_dump($_POST);
         $this->titularm->actualizarTitular($_POST);
         redirect(base_url() . "titular/consultar");

@@ -13,16 +13,16 @@
                                         <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
                                         <select name="dni" id="dni" class="form-control exit_caution">
                                             <option value="default">Seleccione...</option>
-                                            {dni}
-                                            <option value="{id}">{tipo}</option>
-                                            {/dni}
+                                            <?php foreach ($dni as $row) { ?>
+                                                <option value="<?= $row->id ?>" <?= isset($dni_alumno) && $dni_alumno == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
+                                            <?php } ?>                                                    
                                         </select>
                                     </div>   
                                 </div>
                                 <div class="col-xs-6">  
                                     <div class="form-group">
                                         <label>Número de Identificación<em class="required_asterisco">*</em></label>
-                                        <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
+                                        <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13" value="<?= isset($id_alumno) ? $id_alumno : '' ?>">
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +372,10 @@
         });
         return false; // Evitar ejecutar el submit del formulario
     });
-
-
-
+    //si ya se ha cargado la informacion por get, entonces apretamos el boton de consultar
+    var dni = $('#dni').val();
+    var id = $('#id').val();
+    if ((dni != "default") && (id != "")) {
+        $("#consultar_alumno").click();
+    }
 </script>

@@ -8,7 +8,11 @@
                         <div class="form-group separar_div">
                             <label>Empleado<em class="required_asterisco">*</em></label>
                             <p class="help-block"><B>> </B>Sólo aparecerán los empleados de RRPP activos que pertenecen a sus sedes encargadas.</p>
-                            <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado a Modificar" class="form-control">
+                            <select name="empleado" id="empleado" data-placeholder="Seleccione Empleado a modificar" class="chosen-select form-control">
+                                <option value="default"></option>
+                                {empleado}
+                                <option value="{id}-{dni}">{nombre1} {nombre2} {apellido1} {apellido2}</option>
+                                {/empleado}
                             </select>
                         </div>
                     </div>
@@ -171,14 +175,6 @@
         } else {
             $("#div_fecha_ascenso").css("display", "none");
         }
-    });
-    //Cargar los empleados
-    $.post('{action_llena_empleado_rrpp_sedes_responsable}', {
-        idResposable: '{id_responsable}',
-        dniResposable: '{dni_responsable}'
-    }, function(data) {
-        $("#empleado").html(data);
-        $("#empleado").prepend('<option value="default" selected>Seleccione Empleado</option>');
     });
 
     //Cargar cargo y jefe de un empleado

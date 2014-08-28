@@ -7,9 +7,9 @@
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-xs-6 col-xs-offset-3">
                                     <div class="form-group">
-                                        <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
+                                        <label>Tipo de identificación<em class="required_asterisco">*</em></label>
                                         <select name="dni" id="dni" class="form-control exit_caution">
                                             <option value="default">Seleccione...</option>
                                             {dni}
@@ -18,13 +18,21 @@
                                         </select>
                                     </div>   
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-xs-6">  
                                     <div class="form-group">
-                                        <label>Número de Identificación<em class="required_asterisco">*</em></label>
+                                        <label>Número de identificación<em class="required_asterisco">*</em></label>
                                         <input name="id" id="id" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13">
                                     </div>
                                 </div>
-                            </div>
+                                <div class="col-xs-6">  
+                                    <div class="form-group">
+                                        <label>Verifique # de identificación<em class="required_asterisco">*</em></label>
+                                        <input name="idV" id="idV" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13" onpaste="return false">
+                                    </div>
+                                </div>
+                            </div>  
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
@@ -376,7 +384,7 @@
                 $("#jefe").removeAttr("disabled");
             });
         }
-    });    
+    });
     //Si modificamos sede ppal cargamos los jefes
     $(".form-group").delegate("#sede_ppal", "change", function() {
         if (($('#cargo').val() == "default") || ($('#sede_ppal').val() == "default") || ($('#depto').val() == "default")) {

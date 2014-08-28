@@ -18,7 +18,7 @@
             <link href='<?= base_url() ?>public/css/consultar_sede.css' rel='stylesheet'/>   
         <?php } ?>
         <?php if (isset($tab) && $tab == "cambiar_foto_perfil") { ?>
-            <link href='<?= base_url() ?>public/css/jquery.Jcrop.css' rel='stylesheet'/>   
+            <link href='<?= base_url() ?>public/css/jquery.Jcrop.min.css' rel='stylesheet'/>   
             <link href='<?= base_url() ?>public/css/cambiar_foto_perfil.css' rel='stylesheet'/>  
         <?php } ?>            
         <!-- Js -->
@@ -383,7 +383,7 @@
                     <ul>
                         <li class="dropdown-header"><u> Clientes</u></li>
                 <?php if (in_array($_SESSION["perfil"], array("admon_sistema", "directivo", "admon_sede", "aux_admon", "docente", "secretaria"))) { ?>                                       
-                    <li><a href="<?= base_url() ?>alumno/actualizar">Alumno</a></li>
+                    <li><a href="<?= base_url() ?>alumno/actualizar/new">Alumno</a></li>
                 <?php } ?>                                   
                 </ul>
                 </li>

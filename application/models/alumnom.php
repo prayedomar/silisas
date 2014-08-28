@@ -80,7 +80,7 @@ class Alumnom extends CI_Model {
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
         $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
-        $query.=" order by a.apellido1,a.apellido2 LIMIT $inicio,$filasPorPagina";
+        $query.=" order by a.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }
 
@@ -110,7 +110,7 @@ class Alumnom extends CI_Model {
         $query.=(isset($criterios['curso'])) ? "AND a.t_curso = '{$criterios['curso']}'" : "";
         $query.=(isset($criterios['estado'])) ? "AND a.estado = '{$criterios['estado']}'" : "";
         $query.=(isset($criterios['sede_ppal'])) ? "AND a.sede_ppal = '{$criterios['sede_ppal']}'" : "";
-        $query.=" order by a.apellido1,a.apellido2";
+        $query.=" order by a.fecha_trans DECS";
         return $this->db->query($query)->result();
     }
 

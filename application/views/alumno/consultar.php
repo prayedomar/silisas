@@ -127,15 +127,17 @@
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->sede ?></td>
                                         <td class="text-center" style="line-height:40px;">                                   
-                                                <button class="btn btn-primary btn-sm"  
-                                                        data-matricula="<?= $row->matricula ?>" 
-                                                        data-velocidadini="<?= $row->velocidad_ini ?>" 
-                                                        data-comprensionini="<?= $row->comprension_ini ?>"
-                                                        data-curso="<?= $row->nombre_curso ?>"
-                                                        data-estado="<?= $row->estado_alumno ?>"
-                                                        data-fechagrados="<?= $row->fecha_grados ?>"
-                                                        data-observacion="<?= $row->observacion ?>"
-                                                        > Ver detalles </button> <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "docente" || $_SESSION["perfil"] == "secretaria") { ?><a role="button" style="margin-top:30;" target="_blank" class="btn btn-default btn-sm" href="<?= base_url() ?>reporte_alumno/crear/<?= $row->documento . '_' . $row->dni ?>"> Crear reporte </a><?php } ?> 
+                                            <button class="btn btn-primary btn-sm"  
+                                                    data-matricula="<?= $row->matricula ?>" 
+                                                    data-velocidadini="<?= $row->velocidad_ini ?>" 
+                                                    data-comprensionini="<?= $row->comprension_ini ?>"
+                                                    data-curso="<?= $row->nombre_curso ?>"
+                                                    data-estado="<?= $row->estado_alumno ?>"
+                                                    data-fechagrados="<?= $row->fecha_grados ?>"
+                                                    data-observacion="<?= $row->observacion ?>"
+                                                    > Ver detalles </button>
+                                            <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "admon_sede" || $_SESSION["perfil"] == "aux_admon" || $_SESSION["perfil"] == "docente" || $_SESSION["perfil"] == "secretaria") { ?><a role="button" style="margin-top:30;" target="_blank" class="btn btn-success btn-sm" href="<?= base_url() ?>alumno/actualizar/<?= $row->documento . '_' . $row->dni ?>"> Editar </a><?php } ?>                                            
+                                            <?php if ($_SESSION["perfil"] == "admon_sistema" || $_SESSION["perfil"] == "directivo" || $_SESSION["perfil"] == "docente" || $_SESSION["perfil"] == "secretaria") { ?><a role="button" style="margin-top:30;" target="_blank" class="btn btn-warning btn-sm" href="<?= base_url() ?>reporte_alumno/crear/<?= $row->documento . '_' . $row->dni ?>"> Crear reporte </a><?php } ?>
                                         </td>
                                     </tr>
                                 <?php } ?>

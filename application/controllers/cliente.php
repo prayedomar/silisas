@@ -53,7 +53,7 @@ class Cliente extends CI_Controller {
 
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
-            if (($this->input->post('id')) && ($this->input->post('dni'))) {
+            if (($this->input->post('id')) && ($this->input->post('dni') != "default")) {
                 $t_usuario = 4; //4: Cliente
                 $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
                 if ($check_usuario == TRUE) {

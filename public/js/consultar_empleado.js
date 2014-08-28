@@ -45,8 +45,6 @@ $(function() {
         url = url.substr(0, url.length - 1);
         window.location.href = url;
     });
-
-
     $("#divCriterios .form-control").keypress(function(e) {
         if (e.which == 13) {
             $("#searchBtn").trigger("click");
@@ -250,6 +248,7 @@ $(function() {
         $("#observacion-modal").val($(this).data("observacion"));
 //        $("#modal-editar-empleado").modal("show");
         //PAra mostrar el modal y desactivar el click al lado del modal para cerrarlo
+        $("#validacion_alert").html("");
         $('#modal-editar-empleado').modal({
             show: true,
             keyboard: false,

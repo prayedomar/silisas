@@ -375,7 +375,7 @@ class Reporte_alumno extends CI_Controller {
     public function llena_agregar_ejercicio() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
-            if (($this->input->post('idUltimoEjercicio')) && ($this->input->post('id')) && ($this->input->post('dni'))) {
+            if (($this->input->post('idUltimoEjercicio')) && ($this->input->post('id')) && ($this->input->post('dni') != "default")) {
                 $i = $this->input->post('idUltimoEjercicio') + 1;
                 $this->load->model('t_habilidad_ensenanzam');
                 $id = $this->input->post('id');

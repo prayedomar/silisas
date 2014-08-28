@@ -154,7 +154,7 @@ class Empleadom extends CI_Model {
         $query.=(!empty($criterios['cargo'])) ? "AND e.cargo = '{$criterios['cargo']}'" : "";
         $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(e.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(e.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
-        $query.=" order by e.apellido1,e.apellido2 LIMIT $inicio,$filasPorPagina";
+        $query.=" order by e.fecha_trans DESC LIMIT $inicio,$filasPorPagina";
         return $this->db->query($query)->result();
     }
 
@@ -191,7 +191,7 @@ class Empleadom extends CI_Model {
         $query.=(!empty($criterios['cargo'])) ? "AND e.cargo = '{$criterios['cargo']}'" : "";
         $query.=(!empty($criterios['fecha_nacimiento'])) ? "AND DATE_FORMAT(e.fecha_nacimiento,'%m-%d') >= '{$criterios['fecha_nacimiento']}'" : "";
         $query.=(!empty($criterios['fecha_nacimiento_hasta'])) ? "AND DATE_FORMAT(e.fecha_nacimiento,'%m-%d') <= '{$criterios['fecha_nacimiento_hasta']}'" : "";
-        $query.=" order by e.apellido1,e.apellido2";
+        $query.=" order by e.fecha_trans DESC";
         return $this->db->query($query)->result();
     }
 
@@ -209,7 +209,6 @@ class Empleadom extends CI_Model {
             $password = $this->encrypt->encode($criterios["id_new"]); //Encriptamos el numero de identificacion  
             $this->update_model->cambiar_contraseña($criterios["id_old"], $criterios["dni_old"], '1', $password);
         }
-
         $query = "UPDATE usuario SET id='{$criterios["id_new"]}', dni='{$criterios["dni_new"]}', nombres='" . ucwords(mb_strtolower($criterios["nombre1"])) . " " . ucwords(mb_strtolower($criterios["nombre2"])) . "',genero='{$criterios["genero"]}', email='" . mb_strtolower($criterios["email"]) . "', perfil='" . $perfil . "' where id='{$criterios["id_old"]}' and dni='{$criterios["dni_old"]}' and t_usuario= 1 ";
         $this->db->query($query);
 

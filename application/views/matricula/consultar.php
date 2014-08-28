@@ -341,7 +341,7 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="form-group">
-                            <div class="text-right">Resonsable:</div>   
+                            <div class="text-right">Responsable:</div>   
                         </div>
                     </div>
                     <div class="col-xs-7">

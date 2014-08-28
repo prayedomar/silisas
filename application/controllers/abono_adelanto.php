@@ -343,45 +343,46 @@ class Abono_adelanto extends CI_Controller {
             $pdf->AddPage();
 
             //preparamos y maquetamos el contenido a crear
-            $html = '';
-            $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
-            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'p.b4{line-height:28px;}';
-            $html .= 'p.b5{font-size:14px;}';
-            $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
-            $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:170px;}';
-            $html .= 'td.c4{width:250px;}';
-            $html .= 'td.c5{width:170px;}';
-            $html .= 'td.c6{width:140px;}';
-            $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:40px;}';
-            $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';
-            $html .= 'td.c11{font-size:12px;}';
-            $html .= 'td.c12{line-height:20px;}';
-            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-            $html .= 'td.c25{border-top-color:#000000;}';
-            $html .= 'td.c26{border-bottom-color:#000000;}';
-            $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';
-            $html .= 'td.a1{text-align:left;}';
-            $html .= 'td.a2{text-align:center;}';
-            $html .= 'td.a3{text-align:justify;}';
-            $html .= 'th.a1{text-align:left;}';
-            $html .= 'th.a2{text-align:center;}';
-            $html .= 'table{border-spacing: 0;}';
-            $html .= '</style>';
+            $css_html = '';
+            $css_html .= '<style type=text/css>';
+            $css_html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
+            $css_html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
+            $css_html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
+            $css_html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
+            $css_html .= 'p.b4{line-height:28px;}';
+            $css_html .= 'p.b5{font-size:14px;}';
+            $css_html .= 'p.b6{line-height:26px;}';
+            $css_html .= 'td.c1{width:420px;line-height:20px;}';
+            $css_html .= 'td.c2{width:310px;}';
+            $css_html .= 'td.c3{width:170px;}';
+            $css_html .= 'td.c4{width:250px;}';
+            $css_html .= 'td.c5{width:170px;}';
+            $css_html .= 'td.c6{width:140px;}';
+            $css_html .= 'td.c7{font-size:16px;}';
+            $css_html .= 'td.c8{line-height:40px;}';
+            $css_html .= 'td.c9{background-color:#F5F5F5;}';
+            $css_html .= 'td.c10{font-size:4px;line-height:5px;}';
+            $css_html .= 'td.c11{font-size:12px;}';
+            $css_html .= 'td.c12{line-height:20px;}';
+            $css_html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
+            $css_html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
+            $css_html .= 'td.c25{border-top-color:#000000;}';
+            $css_html .= 'td.c26{border-bottom-color:#000000;}';
+            $css_html .= 'td.c27{border-left-color:#000000;}';
+            $css_html .= 'td.c28{border-right-color:#000000;}';
+            $css_html .= 'td.a1{text-align:left;}';
+            $css_html .= 'td.a2{text-align:center;}';
+            $css_html .= 'td.a3{text-align:justify;}';
+            $css_html .= 'th.a1{text-align:left;}';
+            $css_html .= 'th.a2{text-align:center;}';
+            $css_html .= 'table{border-spacing: 0;}';
+            $css_html .= '</style>';
+            $html = $css_html;
             $html .= '<table width="100%">'
                     . '<tr>'
-                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr>'
                     . '<tr>'
@@ -432,45 +433,12 @@ class Abono_adelanto extends CI_Controller {
 
             $pdf->lastPage();
             $pdf->AddPage();
-            $html = '';
-            $html .= '<style type=text/css>';
-            $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
-            $html .= 'p.b1{font-family: helvetica, sans-serif;font-size:9px;}';
-            $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
-            $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'p.b4{line-height:28px;}';
-            $html .= 'p.b5{font-size:14px;}';
-            $html .= 'p.b6{line-height:26px;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
-            $html .= 'td.c2{width:310px;}';
-            $html .= 'td.c3{width:170px;}';
-            $html .= 'td.c4{width:250px;}';
-            $html .= 'td.c5{width:170px;}';
-            $html .= 'td.c6{width:140px;}';
-            $html .= 'td.c7{font-size:16px;}';
-            $html .= 'td.c8{line-height:40px;}';
-            $html .= 'td.c9{background-color:#F5F5F5;}';
-            $html .= 'td.c10{font-size:4px;line-height:5px;}';
-            $html .= 'td.c11{font-size:12px;}';
-            $html .= 'td.c12{line-height:20px;}';
-            $html .= 'td.c23{font-family:helvetica,sans-serif;font-size:13px;}';
-            $html .= 'td.c24{font-family: helvetica, sans-serif;font-size:20px;font-weight: bold;line-height:15px;height:30px;line-height:25px;border-top-color:#FFFFFF;border-left-color:#FFFFFF;border-right-color:#FFFFFF;}';
-            $html .= 'td.c25{border-top-color:#000000;}';
-            $html .= 'td.c26{border-bottom-color:#000000;}';
-            $html .= 'td.c27{border-left-color:#000000;}';
-            $html .= 'td.c28{border-right-color:#000000;}';
-            $html .= 'td.a1{text-align:left;}';
-            $html .= 'td.a2{text-align:center;}';
-            $html .= 'td.a3{text-align:justify;}';
-            $html .= 'th.a1{text-align:left;}';
-            $html .= 'th.a2{text-align:center;}';
-            $html .= 'table{border-spacing: 0;}';
-            $html .= '</style>';
+            $html = $css_html;
             $html .= '<table width="100%">'
                     . '<tr>'
-                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr>'
                     . '<tr>'
@@ -601,6 +569,7 @@ class Abono_adelanto extends CI_Controller {
         if ($this->input->post('submit')) {
             $this->escapar($_POST);
             $this->load->model('update_model');
+            $this->load->model('abono_adelantom');
             $prefijo = $this->input->post('prefijo');
             $id = $this->input->post('id');
             $observacion = ucfirst(mb_strtolower($this->input->post('observacion')));
@@ -615,6 +584,7 @@ class Abono_adelanto extends CI_Controller {
             $this->load->view("header", $data);
             $data['url_recrear'] = base_url() . "abono_adelanto/anular";
             $data['msn_recrear'] = "Anular otro abono a adelanto de nómina";
+
             if ($this->input->post('cod_autorizacion')) {
                 $this->update_model->concepto_cod_autorizacion($this->input->post('cod_autorizacion'), '0');
             }
@@ -630,22 +600,31 @@ class Abono_adelanto extends CI_Controller {
             $array_detalles['Id_Responsable_Anulación'] = $id_responsable;
             $detalle_json = json_encode($array_detalles);
 
-            $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente, $detalle_json);
-            if (isset($error)) {
-                $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
+
+            //Debemos sumarle al saldo del adelanto el abono
+            $abono_adelanto = $this->abono_adelantom->abono_adelanto_prefijo_id($prefijo, $id);
+            $error3 = $this->update_model->adelanto_saldo($abono_adelanto->prefijo_adelanto, $abono_adelanto->id_adelanto, ($abono_adelanto->total * -1));
+            if (isset($error3)) {
+                $data['trans_error'] = $error3 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                 $this->parser->parse('trans_error', $data);
             } else {
-                $error1 = $this->update_model->abono_adelanto_vigente($prefijo, $id, $vigente);
-                if (isset($error1)) {
-                    $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                $error = $this->update_model->movimiento_transaccion_vigente($t_trans, $prefijo, $id, $credito_debito, $vigente, $detalle_json);
+                if (isset($error)) {
+                    $data['trans_error'] = $error . "<p>Comuníque éste error al departamento de sistemas.</p>";
                     $this->parser->parse('trans_error', $data);
                 } else {
-                    $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
-                    if (isset($error2)) {
-                        $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                    $error1 = $this->update_model->abono_adelanto_vigente($prefijo, $id, $vigente);
+                    if (isset($error1)) {
+                        $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
                         $this->parser->parse('trans_error', $data);
                     } else {
-                        $this->parser->parse('trans_success', $data);
+                        $error2 = $this->insert_model->anular_transaccion($t_trans, $prefijo, $id, $observacion, $id_responsable, $dni_responsable);
+                        if (isset($error2)) {
+                            $data['trans_error'] = $error2 . "<p>Comuníque éste error al departamento de sistemas.</p>";
+                            $this->parser->parse('trans_error', $data);
+                        } else {
+                            $this->parser->parse('trans_success', $data);
+                        }
                     }
                 }
             }

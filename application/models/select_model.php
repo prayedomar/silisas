@@ -795,7 +795,7 @@ class Select_model extends CI_Model {
     public function empleado_sedes_responsable_adelantos($id_responsable, $dni_responsable) {
         $where = "((sede_ppal IN(SELECT sede_ppal FROM empleado WHERE (id='" . $id_responsable . "') AND (dni='" . $dni_responsable . "'))) OR (sede_ppal IN(SELECT sede_secundaria FROM empleado_x_sede WHERE (id_empleado='" . $id_responsable . "') AND (dni_empleado='" . $dni_responsable . "') AND (vigente=1)))) AND ( NOT(id='1' AND dni='1')) AND (estado!='3')";
         $this->db->where($where);
-        $where2 = "((id IN(SELECT id_empleado FROM adelanto WHERE (vigente=1))) AND (dni IN(SELECT dni_empleado FROM adelanto WHERE (vigente=1))))";
+        $where2 = "((id IN(SELECT id_empleado FROM adelanto WHERE (vigente=1) AND (saldo>0))) AND (dni IN(SELECT dni_empleado FROM adelanto WHERE (vigente=1) AND (saldo>0))))";
         $this->db->where($where2);
         $this->db->order_by('nombre1', 'asc');
         $query = $this->db->get('empleado');

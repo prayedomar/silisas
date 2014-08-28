@@ -47,162 +47,179 @@
     </div>
 </div>
 <script type="text/javascript">
+ jQuery(function($){
 
-    jQuery(function($) {
+    // The variable jcrop_api will hold a reference to the
+    // Jcrop API once Jcrop is instantiated.
+    var jcrop_api;
 
-        var jcrop_api;
+    // In this example, since Jcrop may be attached or detached
+    // at the whim of the user, I've wrapped the call into a function
+    initJcrop();
+    
+    // The function is pretty simple
+    function initJcrop()//{{{
+    {
+      // Hide any interface elements that require Jcrop
+      // (This is for the local user interface portion.)
+      $('.requiresjcrop').hide();
 
-        $('#target').Jcrop({
-            bgFade: true,
-            bgOpacity: .2,
-            setSelect: [60, 70, 540, 330]
-        }, function() {
-            jcrop_api = this;
+      // Invoke Jcrop in typical fashion
+      $('#target').Jcrop({
+        onRelease: releaseCheck
+      },function(){
+
+        jcrop_api = this;
+        jcrop_api.animateTo([10,10,400,300]);
+
+        // Setup and dipslay the interface for "enabled"
+        $('#can_click,#can_move,#can_size').attr('checked','checked');
+        $('#ar_lock,#size_lock,#bg_swap').attr('checked',false);
+        $('.requiresjcrop').show();
+
+      });
+
+    };
+    //}}}
+
+    // Use the API to find cropping dimensions
+    // Then generate a random selection
+    // This function is used by setSelect and animateTo buttons
+    // Mainly for demonstration purposes
+    function getRandom() {
+      var dim = jcrop_api.getBounds();
+      return [
+        Math.round(Math.random() * dim[0]),
+        Math.round(Math.random() * dim[1]),
+        Math.round(Math.random() * dim[0]),
+        Math.round(Math.random() * dim[1])
+      ];
+    };
+
+    // This function is bound to the onRelease handler...
+    // In certain circumstances (such as if you set minSize
+    // and aspectRatio together), you can inadvertently lose
+    // the selection. This callback re-enables creating selections
+    // in such a case. Although the need to do this is based on a
+    // buggy behavior, it's recommended that you in some way trap
+    // the onRelease callback if you use allowSelect: false
+    function releaseCheck()
+    {
+      jcrop_api.setOptions({ allowSelect: true });
+      $('#can_click').attr('checked',false);
+    };
+
+    // Attach interface buttons
+    // This may appear to be a lot of code but it's simple stuff
+    $('#setSelect').click(function(e) {
+      // Sets a random selection
+      jcrop_api.setSelect(getRandom());
+    });
+    $('#animateTo').click(function(e) {
+      // Animates to a random selection
+      jcrop_api.animateTo(getRandom());
+    });
+    $('#release').click(function(e) {
+      // Release method clears the selection
+      jcrop_api.release();
+    });
+    $('#disable').click(function(e) {
+      // Disable Jcrop instance
+      jcrop_api.disable();
+      // Update the interface to reflect disabled state
+      $('#enable').show();
+      $('.requiresjcrop').hide();
+    });
+    $('#enable').click(function(e) {
+      // Re-enable Jcrop instance
+      jcrop_api.enable();
+      // Update the interface to reflect enabled state
+      $('#enable').hide();
+      $('.requiresjcrop').show();
+    });
+    $('#rehook').click(function(e) {
+      // This button is visible when Jcrop has been destroyed
+      // It performs the re-attachment and updates the UI
+      $('#rehook,#enable').hide();
+      initJcrop();
+      $('#unhook,.requiresjcrop').show();
+      return false;
+    });
+    $('#unhook').click(function(e) {
+      // Destroy Jcrop widget, restore original state
+      jcrop_api.destroy();
+      // Update the interface to reflect un-attached state
+      $('#unhook,#enable,.requiresjcrop').hide();
+      $('#rehook').show();
+      return false;
+    });
+
+    // Hook up the three image-swapping buttons
+    $('#img1').click(function(e) {
+      $(this).addClass('active').closest('.btn-group')
+        .find('button.active').not(this).removeClass('active');
+
+      jcrop_api.setImage('demo_files/sago.jpg');
+      jcrop_api.setOptions({ bgOpacity: .6 });
+      return false;
+    });
+    $('#img2').click(function(e) {
+      $(this).addClass('active').closest('.btn-group')
+        .find('button.active').not(this).removeClass('active');
+
+      jcrop_api.setImage('demo_files/pool.jpg');
+      jcrop_api.setOptions({ bgOpacity: .6 });
+      return false;
+    });
+    $('#img3').click(function(e) {
+      $(this).addClass('active').closest('.btn-group')
+        .find('button.active').not(this).removeClass('active');
+
+      jcrop_api.setImage('demo_files/sago.jpg',function(){
+        this.setOptions({
+          bgOpacity: 1,
+          outerImage: 'demo_files/sagomod.jpg'
         });
-
-        $('#fadetog').change(function() {
-            jcrop_api.setOptions({
-                bgFade: this.checked
-            });
-        }).attr('checked', 'checked');
-
-        $('#shadetog').change(function() {
-            if (this.checked)
-                $('#shadetxt').slideDown();
-            else
-                $('#shadetxt').slideUp();
-            jcrop_api.setOptions({
-                shade: this.checked
-            });
-        }).attr('checked', false);
-
-        // Define page sections
-        var sections = {
-            bgc_buttons: 'Change bgColor',
-            bgo_buttons: 'Change bgOpacity',
-            anim_buttons: 'Animate Selection'
-        };
-        // Define animation buttons
-        var ac = {
-            anim1: [217, 122, 382, 284],
-            anim2: [20, 20, 580, 380],
-            anim3: [24, 24, 176, 376],
-            anim4: [347, 165, 550, 355],
-            anim5: [136, 55, 472, 183]
-        };
-        // Define bgOpacity buttons
-        var bgo = {
-            Low: .2,
-            Mid: .5,
-            High: .8,
-            Full: 1
-        };
-        // Define bgColor buttons
-        var bgc = {
-            R: '#900',
-            B: '#4BB6F0',
-            Y: '#F0B207',
-            G: '#46B81C',
-            W: 'white',
-            K: 'black'
-        };
-        // Create fieldset targets for buttons
-        for (i in sections)
-            insertSection(i, sections[i]);
-
-        function create_btn(c) {
-            var $o = $('<button />').addClass('btn btn-small');
-            if (c)
-                $o.append(c);
-            return $o;
-        }
-
-        var a_count = 1;
-        // Create animation buttons
-        for (i in ac) {
-            $('#anim_buttons .btn-group')
-                    .append(
-                            create_btn(a_count++).click(animHandler(ac[i])),
-                            ' '
-                            );
-        }
-
-        $('#anim_buttons .btn-group').append(
-                create_btn('Bye!').click(function(e) {
-            $(e.target).addClass('active');
-            jcrop_api.animateTo(
-                    [300, 200, 300, 200],
-                    function() {
-                        this.release();
-                        $(e.target).closest('.btn-group').find('.active').removeClass('active');
-                    }
-            );
-            return false;
-        })
-                );
-
-        // Create bgOpacity buttons
-        for (i in bgo) {
-            $('#bgo_buttons .btn-group').append(
-                    create_btn(i).click(setoptHandler('bgOpacity', bgo[i])),
-                    ' '
-                    );
-        }
-        // Create bgColor buttons
-        for (i in bgc) {
-            $('#bgc_buttons .btn-group').append(
-                    create_btn(i).css({
-                background: bgc[i],
-                color: ((i == 'K') || (i == 'R')) ? 'white' : 'black'
-            }).click(setoptHandler('bgColor', bgc[i])), ' '
-                    );
-        }
-        // Function to insert named sections into interface
-        function insertSection(k, v) {
-            $('#interface').prepend(
-                    $('<fieldset></fieldset>').attr('id', k).append(
-                    $('<legend></legend>').append(v),
-                    '<div class="btn-toolbar"><div class="btn-group"></div></div>'
-                    )
-                    );
-        }
-        ;
-        // Handler for option-setting buttons
-        function setoptHandler(k, v) {
-            return function(e) {
-                $(e.target).closest('.btn-group').find('.active').removeClass('active');
-                $(e.target).addClass('active');
-                var opt = {};
-                opt[k] = v;
-                jcrop_api.setOptions(opt);
-                return false;
-            };
-        }
-        ;
-        // Handler for animation buttons
-        function animHandler(v) {
-            return function(e) {
-                $(e.target).addClass('active');
-                jcrop_api.animateTo(v, function() {
-                    $(e.target).closest('.btn-group').find('.active').removeClass('active');
-                });
-                return false;
-            };
-        }
-        ;
-
-        $('#bgo_buttons .btn:first,#bgc_buttons .btn:last').addClass('active');
-        $('#interface').show();
-
+        this.animateTo(getRandom());
+      });
+      return false;
     });
 
+    // The checkboxes simply set options based on it's checked value
+    // Options are changed by passing a new options object
 
-    //Cargar div de valor abono y cuotas  de matricula escogida     
-    $("#link_subir_foto").live("click", function() {
-        $("#foto_perfil").click();
+    // Also, to prevent strange behavior, they are initially checked
+    // This matches the default initial state of Jcrop
+
+    $('#can_click').change(function(e) {
+      jcrop_api.setOptions({ allowSelect: !!this.checked });
+      jcrop_api.focus();
     });
-    //Cargamos la vista previa de la carga    
-    $("#foto_perfil").live("change", function() {
-        alert("cargamos la vista previa de la imgane para recortarla");
+    $('#can_move').change(function(e) {
+      jcrop_api.setOptions({ allowMove: !!this.checked });
+      jcrop_api.focus();
     });
+    $('#can_size').change(function(e) {
+      jcrop_api.setOptions({ allowResize: !!this.checked });
+      jcrop_api.focus();
+    });
+    $('#ar_lock').change(function(e) {
+      jcrop_api.setOptions(this.checked?
+        { aspectRatio: 4/3 }: { aspectRatio: 0 });
+      jcrop_api.focus();
+    });
+    $('#size_lock').change(function(e) {
+      jcrop_api.setOptions(this.checked? {
+        minSize: [ 80, 80 ],
+        maxSize: [ 350, 350 ]
+      }: {
+        minSize: [ 0, 0 ],
+        maxSize: [ 0, 0 ]
+      });
+      jcrop_api.focus();
+    });
+
+  });
+
+
 </script>

@@ -183,10 +183,15 @@ class Alumno extends CI_Controller {
         }
     }
 
-    function actualizar() {
+    function actualizar($id_dni_alumno) {
         $data["tab"] = "editar_alumno";
         $this->isLogin($data["tab"]);
         $this->load->view("header", $data);
+        if ($id_dni_alumno != 'new') {
+            list($id_alumno, $dni_alumno) = explode("_", $id_dni_alumno);
+            $data['id_alumno'] = $id_alumno;
+            $data['dni_alumno'] = $dni_alumno;
+        }        
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_alumno();

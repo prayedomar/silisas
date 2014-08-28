@@ -47,6 +47,7 @@ class Empleado extends CI_Controller {
             $this->escapar($_POST);
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('idV', 'Verique # de identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
@@ -79,11 +80,15 @@ class Empleado extends CI_Controller {
             }
             //Validamos que la clave primaria no este repetida
             $duplicate_key = "";
-            if (($this->input->post('id')) && ($this->input->post('dni') != "default")) {
-                $t_usuario = 1; //1: Empleado
-                $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
-                if ($check_usuario == TRUE) {
-                    $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+            if (($this->input->post('id')) && ($this->input->post('idV')) && ($this->input->post('dni') != "default")) {
+                if ($this->input->post('id') != $this->input->post('idV')) {
+                    $duplicate_key = "<p>El número de identificación y su correspondiente verificación, no coinciden.</p>";
+                } else {
+                    $t_usuario = 1; //1: Empleado
+                    $check_usuario = $this->select_model->usuario_id_dni_t_usuario($this->input->post('id'), $this->input->post('dni'), $t_usuario);
+                    if ($check_usuario == TRUE) {
+                        $duplicate_key = "<p>La Identificación ingresada ya existe en la Base de Datos.</p>";
+                    }
                 }
             }
             $error_entre_fechas = "";
@@ -93,7 +98,7 @@ class Empleado extends CI_Controller {
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($duplicate_key != "") || ($error_entre_fechas != "")) {
-                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('sede_ppal') . form_error('depto') . form_error('fecha_ingreso') . form_error('cargo') . form_error('salario') . form_error('jefe') . form_error('t_contrato') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('observacion');
+                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('idV') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('est_civil') . form_error('pais') . form_error('provincia') . form_error('ciudad') . form_error('t_domicilio') . form_error('direccion') . form_error('barrio') . form_error('telefono') . form_error('celular') . form_error('email') . form_error('cuenta') . form_error('sede_ppal') . form_error('depto') . form_error('fecha_ingreso') . form_error('cargo') . form_error('salario') . form_error('jefe') . form_error('t_contrato') . form_error('fecha_inicio') . form_error('fecha_fin') . $error_entre_fechas . form_error('observacion');
             } else {
                 echo "OK";
             }

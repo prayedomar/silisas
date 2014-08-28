@@ -611,7 +611,7 @@ class Transferencia extends CI_Controller {
             $html .= 'h2{font-family: "times new roman", times, serif;font-size:22px;font-weight: bold;font-style: italic;line-height:20px;}';
             $html .= 'p.b2{font-family: helvetica, sans-serif;font-size:13px;font-weight: bold;line-height:0px;text-align:center;}';
             $html .= 'p.b3{font-family: helvetica, sans-serif;font-size:12px;font-weight: bold;line-height:5px;text-align:center;}';
-            $html .= 'td.c1{width:420px;line-height:20px;}td.c1000{line-height:100px;}';
+            $html .= 'td.c1{width:420px;line-height:20px;}';
             $html .= 'td.c2{width:310px;}';
             $html .= 'td.c3{width:170px;}';
             $html .= 'td.c4{width:195px;}';
@@ -637,9 +637,9 @@ class Transferencia extends CI_Controller {
             $html .= '</style>';
             $html .= '<table width="100%">'
                     . '<tr>'
-                    . '<td class="c1 a2" colspan="2"><h2></h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
+                    . '<td class="c1 a2" colspan="2"><h2>Sistema Integral Lectura Inteligente S.A.S</h2><p class="b2">Régimen Común - NIT: 900.064.309-1</p>'
                     . '</td>'
-                    . '<td class="c2 a2 c1000"  colspan="2"></td>'
+                    . '<td class="c2 a2" colspan="2"><img src="' . base_url() . 'images/logo.png" class="img-responsive"  width="180" height="100"/></td>'
                     . '<br>'
                     . '</tr>'
                     . '<tr>'

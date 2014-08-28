@@ -21,11 +21,8 @@ class Cargo_jefe_rrpp extends CI_Controller {
         $dni_responsable = $this->session->userdata('dniResponsable');
         $data['empleado'] = $this->select_model->empleado_RRPP_sedes_responsable($id_responsable, $dni_responsable);
         $data['cargo'] = $this->select_model->t_cargo();
-
         $data['action_editar_cargo'] = base_url() . "cargo_jefe_rrpp/editar_cargo_empleado";
         $data['action_editar_jefe'] = base_url() . "cargo_jefe_rrpp/editar_jefe_empleado";
-
-        $data['action_llena_empleado_rrpp_sedes_responsable'] = base_url() . "cargo_jefe_rrpp/llena_empleado_rrpp_sedes_responsable";
         $data['action_llena_cargo_empleado'] = base_url() . "cargo_jefe_rrpp/llena_cargo_empleado";
         $data['action_llena_jefe_empleado'] = base_url() . "cargo_jefe_rrpp/llena_jefe_empleado";
         $data['action_llena_jefe_faltante'] = base_url() . "cargo_jefe_rrpp/llena_jefe_faltante";

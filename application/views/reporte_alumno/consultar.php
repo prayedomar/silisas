@@ -152,8 +152,11 @@
                              data-hasta="<?= isset($_GET["hasta"]) ? $_GET["hasta"] : "" ?>"
                              data-sede="<?= isset($_GET["sede"]) ? $_GET["sede"] : "" ?>"
                              data-t_curso="<?= isset($_GET["t_curso"]) ? $_GET["t_curso"] : "" ?>"
-                             data-id_alumno="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>"                             
-                             data-id_responsable="<?= isset($_GET["id_responsable"]) ? $_GET["id_responsable"] : "" ?>">  
+                             data-id_alumno="<?= isset($_GET["id_alumno"]) ? $_GET["id_alumno"] : "" ?>"    
+                             data-asistencia="<?= isset($_GET["asistencia"]) ? $_GET["asistencia"] : "" ?>"
+                             data-practicas="<?= isset($_GET["practicas"]) ? $_GET["practicas"] : "" ?>"
+                             data-avanzo="<?= isset($_GET["avanzo"]) ? $_GET["avanzo"] : "" ?>"
+                             data-id_dni_responsable="<?= isset($_GET["id_dni_responsable"]) ? $_GET["id_dni_responsable"] : "" ?>">  
                             <ul class="pagination">
                                 <li class="<?= $paginaActiva == 1 ? "active" : "noActive"; ?>">
                                     <a data-page="1">1</a></li>

@@ -103,7 +103,7 @@
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
                                         <!--<td><?= $row->vigente == "1" ? "Si" : "No" ?></td>-->
-                                        <td class="text-center">
+                                        <td class="text-center" style="vertical-align:middle;">
                                             <button class="editar btn btn-success btn-sm"
                                                     data-dni="<?= $row->dni ?>"
                                                     data-id="<?= $row->documento ?>"
@@ -169,29 +169,27 @@
             </div> 
             <form role="form" method="post" action="actualizar" id="formularioEditarTitular">
                 <div id="bodyModalDetalles" class="modal-body">
+                    <p class="required_alert"><em class="required_asterisco">*</em> Campos Obligatorios</p> 
+                    <input type="hidden" name="id_old" id="id_old-modal" />
+                    <input type="hidden" name="dni_old" id="dni_old-modal" />                    
                     <div class="row">
-
                         <div class="col-xs-6">
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
-                                        <select name="dni" id="dni-modal" class="form-control exit_caution" readonly>
-                                            <option value="default">Seleccione...</option>
-
-                                            <option value="1">Cedula de Ciudadania</option>
-
-                                            <option value="2">Cedula de Extranjeria</option>
-
-                                            <option value="3">Pasaporte</option>
-
+                                        <label>Tipo de Identificación</label>
+                                        <select name="dni_new" id="dni-modal" class="form-control">
+                                            <option value="">Seleccionar tipo</option>
+                                            <?php foreach ($tipos_documentos as $row) { ?>
+                                                <option value="<?= $row->id ?>" <?= isset($_GET["tipo_documento"]) && $_GET["tipo_documento"] == $row->id ? "selected" : "" ?>><?= $row->tipo ?></option>
+                                            <?php } ?>
                                         </select>
                                     </div>   
                                 </div>
                                 <div class="col-xs-6">  
                                     <div class="form-group">
-                                        <label>Número de Identificación<em class="required_asterisco">*</em></label>
-                                        <input name="id" id="id-modal" type="text" class="form-control exit_caution numerico" placeholder="Número de Identificación" maxlength="13" readonly>
+                                        <label>Número de Identificación</label>
+                                        <input name="id_new" id="id-modal" type="text" class="form-control numerico" placeholder="Número de Identificación" maxlength="13">
                                     </div>
                                 </div>
                             </div>

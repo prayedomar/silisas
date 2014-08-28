@@ -134,7 +134,7 @@
                                         <td><?= $row->celular . " - " . $row->telefono ?></td>
                                         <td><?= $row->email ?></td>
                                         <td><?= $row->sede ?></td>
-                                        <td class="text-center"  style="line-height:30px;vertical-align:middle;"><button class="detalles btn btn-primary btn-xs" 
+                                        <td class="text-center" style="line-height:30px;vertical-align:middle;"><button class="detalles btn btn-primary btn-xs" 
                                                                         data-cuenta="<?= $row->cuenta ?>" 
                                                                         data-estadoempleado="<?= $row->estado_empleado ?>" 
                                                                         data-depto="<?= $row->depto ?>"

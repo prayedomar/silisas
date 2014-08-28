@@ -71,6 +71,8 @@ $(function() {
 
     $("#bodyTabla .editar").click(function() {
         document.getElementById("formularioEditarTitular").reset();
+        $("#dni_old-modal").val($(this).data("dni"));
+        $("#id_old-modal").val($(this).data("id"));
         $("#dni-modal").val($(this).data("dni"));
         $("#id-modal").val($(this).data("id"));
         $("#nombre1-modal").val($(this).data("nombre1"));
@@ -110,6 +112,7 @@ $(function() {
         $("#email-modal").val($(this).data("email"));
         $("#observacion-modal").val($(this).data("observacion"));
 //        $("#modal-editar-titular").modal("show");
+        $("#validacion_alert").html("");
         $('#modal-editar-titular').modal({
             show: true,
             keyboard: false,

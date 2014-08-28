@@ -16,7 +16,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Confirmar nueva contraseña<em class="required_asterisco">*</em></label>
-                                <input name="password_new_2" id="password_new_2" class="form-control exit_caution" type="password" maxlength="30" placeholder="Contraseña" required>
+                                <input name="password_new_2" id="password_new_2" class="form-control exit_caution" type="password" maxlength="30" placeholder="Contraseña" required onpaste="return false">
                             </div>                            
                             <div id="validacion_alert">
                             </div>
