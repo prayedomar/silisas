@@ -132,7 +132,7 @@ class Reporte_alumno extends CI_Controller {
             $observacion_titular_alumno = ucfirst(mb_strtolower($this->input->post('observacion_titular_alumno')));
             $id_reporte = ($this->select_model->nextId_reporte_alumno()->id) + 1;
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "reporte_alumno/crear";
+            $data['url_recrear'] = base_url() . "reporte_alumno/crear/new";
             $data['msn_recrear'] = "Crear otro reporte de enseñanza";
 
             $error = $this->insert_model->reporte_alumno($id_reporte, $id_alumno, $dni_alumno, $t_curso, $fecha_clase, $asistencia, $avanzo, $etapa, $fase, $practicas, $cant_practicas, $lectura, $vlm, $vlv, $c, $r, $meta_v, $meta_c, $meta_r, $vigente, $observacion_interna, $observacion_titular_alumno, $sede, $id_responsable, $dni_responsable);

@@ -15,14 +15,12 @@
                         </div> 
                         <div class="row text-center separar_submit">
                             <button type="button" class="btn btn-default" id="consultar_pagos"><span class="glyphicon glyphicon-search"></span> Consultar </button>
-                            <a href='{action_recargar}' class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span> Seleccionar otra matrícula </a>
                         </div>
                     </div>
                 </div>
-                <div class="row" style="display: none" id="div_pagos">
+                <div class="row" id="div_pagos">
                     <div class="col-xs-12">
-                        <hr>
-                        <div class="row separar_submit" id="info_matricula">
+                        <div class="row" id="info_matricula">
                         </div>
                         <div id="tabla_pagos">
                         </div>
@@ -43,16 +41,15 @@
                 var obj = JSON.parse(data);
                 if (obj.respuesta == "OK")
                 {
-                    $("#div_pagos").css("display", "block");
                     $("#tabla_pagos").html(obj.html_pagos);
-                    $("#info_matricula").html('<center><table><tr><td><h4>Sede principal: </h4></td><td><h4 class="h_negrita"> ' + obj.sede + '</h4></td></tr><tr><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.titular + '</h4></td></tr><tr><td><h4>Documento titular: </h4></td><td><h4 class="h_negrita"> ' + obj.idTitular + '</h4></td></tr><tr><td><h4>Nombre del plan: </h4></td><td><h4 class="h_negrita"> ' + obj.plan + '</h4></td></tr><tr><td><h4>Costo total: </h4></td><td><h4 class="h_negrita"> $' + obj.costo + '</h4></td></tr><tr><td><h4>Abonado al plan: </h4></td><td><h4 class="h_negrita"> $' + obj.abonado + '</h4></td></tr><tr><td><h4>Descuentos: </h4></td><td><h4 class="h_negrita"> $' + obj.descuentos + '</h4></td></tr><tr><td><h4>Saldo pendiente: </h4></td><td><h4 class="h_negrita"> $' + obj.saldo + '</h4></td></tr></table></center>');
-                    $('#id').attr('disabled', 'disabled');
-                    $('#consultar_pagos').attr('disabled', 'disabled');
+                    $("#info_matricula").html('<hr>' + '<center><table><tr><td><h4>Contrato: </h4></td><td><h4 class="h_negrita"> ' + obj.matricula + '</h4></td></tr><tr><td><h4>Estado: </h4></td><td><h4 class="h_negrita"> ' + obj.estado + '</h4></td></tr><tr><td><h4>Sede principal: </h4></td><td><h4 class="h_negrita"> ' + obj.sede + '</h4></td></tr><tr><td><h4>Nombre del titular: </h4></td><td><h4 class="h_negrita"> ' + obj.titular + '</h4></td></tr><tr><td><h4>Documento titular: </h4></td><td><h4 class="h_negrita"> ' + obj.idTitular + '</h4></td></tr><tr><td><h4>Nombre del plan: </h4></td><td><h4 class="h_negrita"> ' + obj.plan + '</h4></td></tr><tr><td><h4>Costo total: </h4></td><td><h4 class="h_negrita"> $' + obj.costo + '</h4></td></tr><tr><td><h4>Abonado al plan: </h4></td><td><h4 class="h_negrita"> $' + obj.abonado + '</h4></td></tr><tr><td><h4>Descuentos: </h4></td><td><h4 class="h_negrita"> $' + obj.descuentos + '</h4></td></tr><tr><td><h4>Saldo pendiente: </h4></td><td><h4 class="h_negrita"> $' + obj.saldo + '</h4></td></tr></table></center>' + '<br>');
                     $("#div_warning").remove();
                 } else {
                     $("#validacion_inicial").html('<div class="alert alert-warning" id="div_warning"></div>');
                     $("#div_warning").html(obj.mensaje);
                     $("#div_warning").delay(8000).fadeOut(1000);
+                    $("#tabla_pagos").html("");
+                    $("#info_matricula").html("");                    
                 }
             });
         } else {

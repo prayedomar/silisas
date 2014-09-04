@@ -213,7 +213,7 @@
             },
             error: function(data) {
                 $("#alert_modal_3").attr('class', 'alert alert-danger');
-                $("#alert_modal_3").html('<p>Hubo un error en la peticion al servidor</p>');
+                $("#alert_modal_3").html('<p><strong>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</strong></p>');
             }
         });
         return false; // Evitar ejecutar el submit del formulario
@@ -256,7 +256,7 @@
             },
             error: function(data) {
                 $("#alert_modal_2").attr('class', 'alert alert-danger');
-                $("#alert_modal_2").html('<p>Hubo un error en la peticion al servidor</p>');
+                $("#alert_modal_2").html('<p><strong>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</strong></p>');
             }
         });
         return false; // Evitar ejecutar el submit del formulario

@@ -9,7 +9,7 @@ class Nomina extends CI_Controller {
         $this->load->model('update_model');
         $this->load->model('nominam');
     }
-
+ 
 //Crear: Nomina
     function crear() {
         $data["tab"] = "crear_nomina";

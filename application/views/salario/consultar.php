@@ -86,7 +86,7 @@
 </div>
 <div class="modal" id="modalDetalles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content modal-content-minimo">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="modal-title" id="myModalLabel">Detalles</h3>

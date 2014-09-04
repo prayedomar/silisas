@@ -37,9 +37,9 @@
                     if (e.keyCode == 27)
                         return false;
                 });
-
                 //Enviar formulario por ajax
                 $('#botonValidar').live('click', function() {
+                    $('#botonValidar').attr('disabled', 'disabled');
                     //PAra desactivar el click al lado del modal para cerrarlo
                     $(function() {
                         $('#modal_loading').modal({
@@ -56,6 +56,7 @@
                         success: function(data)
                         {
                             if (data != "OK") {
+                                $('#botonValidar').removeAttr("disabled");
                                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                                 $("#div_alert").html(data);
                                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
@@ -67,10 +68,10 @@
                             }
                         },
                         error: function(data) {
+                            $('#botonValidar').removeAttr("disabled");
                             $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
-                            $('#div_alert').html('<p>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</p>');
+                            $('#div_alert').html('<p><strong>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</strong></p>');
                             $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-
                         }
                     });
                     return false; // Evitar ejecutar el submit del formulario

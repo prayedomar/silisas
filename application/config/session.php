@@ -4,7 +4,7 @@
 $config['sess_name']       = '';
 
 //Time to expire a session AND/OR regenerate the session id
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 43200;
 
 //If you want to change the session id every 'sess_expiration' seconds
 //turn this to true

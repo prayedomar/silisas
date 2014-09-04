@@ -122,7 +122,11 @@ class Liquidar_comisiones extends CI_Controller {
                     $this->insert_model->cambio_ejecutivo_matricula($id_matricula, $id_ejecutivo_original, $dni_ejecutivo_original, $id_ejecutivo_directo, $dni_ejecutivo_directo, $id_responsable, $dni_responsable);
                 }
             }
-
+            //Si el ejecutivo es encargado tambn activamos la bandera de encargado
+            $bandera_encargado = '0';
+            if ($cargo_ejecutivo_directo == '17') {
+                $bandera_encargado = '1';
+            }
             $error1 = $this->insert_model->concepto_nomina($id_ejecutivo_directo, $dni_ejecutivo_directo, NULL, NULL, $t_concepto_nomina, $detalle, $id_matricula, $plan, $cargo_ejecutivo_directo, $cargo_ejecutivo_directo, 1, $valor_unitario, $est_concepto_nomina, $sede, $id_responsable, $dni_responsable);
             if (isset($error1)) {
                 $data['trans_error'] = $error1 . "<p>Comuníque éste error al departamento de sistemas.</p>";
@@ -134,7 +138,6 @@ class Liquidar_comisiones extends CI_Controller {
                 if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
                     $t_concepto_nomina = 28; //28, 'Comisión Escala Matricula
                     $i = 0;
-                    $bandera_encargado = '0';
                     foreach ($escalas as $fila) {
                         //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
                         if ($fila != "nula") {
@@ -214,6 +217,10 @@ class Liquidar_comisiones extends CI_Controller {
                 return false;
             } else {
                 $comision = $valor_unitario->comision;
+                $bandera_encargado = '0';
+                if ($cargo_ejecutivo_directo == '17') {
+                    $bandera_encargado = '1';
+                }
                 $t_cargo_ejecutivo_directo = $this->t_cargom->t_cargo_id($cargo_ejecutivo_directo);
                 $total_comisiones = $comision;
                 $response['htmlTotalPagado'] .= '<tr>
@@ -226,7 +233,6 @@ class Liquidar_comisiones extends CI_Controller {
                 //Si hay escalas las pagamos.
                 if (($cargos_escalas == TRUE) && ($escalas == TRUE)) {
                     $i = 0;
-                    $bandera_encargado = '0';
                     foreach ($escalas as $fila) {
                         //pregutnamos si la escala es diferenete a la opcion de no se le va a pagar a nadie
                         if ($fila != "nula") {

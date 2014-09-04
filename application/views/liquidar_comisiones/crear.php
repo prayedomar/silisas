@@ -201,7 +201,7 @@
                                 },
                                 error: function(data) {
                                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
-                                    $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                                    $('#div_alert').html('<p><strong>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</strong></p>');
                                     $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
 
                                 }
@@ -271,7 +271,7 @@
                     },
                     error: function(data) {
                         $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
-                        $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                        $('#div_alert').html('<p><strong>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</strong></p>');
                         $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
 
                     }
@@ -314,7 +314,7 @@
             },
             error: function(data) {
                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
-                $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                $('#div_alert').html('<p><strong>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</strong></p>');
                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
 
             }

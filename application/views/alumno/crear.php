@@ -7,6 +7,20 @@
                     <form role="form" method="post" action="{action_crear}" id="formulario">
                         <div class="col-xs-6 col-xs-offset-3">
                             <div class="row">
+                                <div class="col-xs-6">                                                              
+                                    <div class="form-group">
+                                        <label>Número de Matrícula<em class="required_asterisco">*</em></label>
+                                        <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" placeholder="Número de Matrícula" maxlength="13">
+                                    </div>  
+                                </div>
+                                <div class="col-xs-6">                                    
+                                    <div class="form-group">
+                                        <label>Verifique # de Matrícula<em class="required_asterisco">*</em></label>
+                                        <input name="matriculaV" id="matriculaV" type="text" class="form-control exit_caution numerico" placeholder="Verifique # de Matrícula" maxlength="13"  onpaste="return false">
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Tipo de Identificación<em class="required_asterisco">*</em></label>
@@ -54,7 +68,16 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-6">                            
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Nacimiento</label>
+                                        <div class="input-group">
+                                            <input name="fecha_nacimiento" id="fecha_nacimiento" type="text" class="soloclick datepicker form-control exit_caution input_fecha" data-date-format="yyyy-mm-dd" placeholder="Fecha de Nacimiento">
+                                            <span class="input-group-addon click_input_date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
                                     <div class="form-group">
                                         <label>Género<em class="required_asterisco">*</em></label>
                                         <select name="genero" id="genero" class="form-control exit_caution">
@@ -62,18 +85,12 @@
                                             <option value="F">Mujer</option>
                                             <option value="M">Hombre</option>
                                         </select>
-                                    </div> 
+                                    </div>
                                 </div>
-                                <div class="col-xs-6">                                    
-                                    <div class="form-group">
-                                        <label>Número de Matrícula<em class="required_asterisco">*</em></label>
-                                        <input name="matricula" id="matricula" type="text" class="form-control exit_caution numerico" placeholder="Número de Matrícula" maxlength="13">
-                                    </div>  
-                                </div>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label>Sede Principal<em class="required_asterisco">*</em></label>
-                                <p class="help-block"><B>> </B>Sólo aparecerán las sedes autorizadas del responsable.</p>                                
+                                <p class="help-block"><B>> </B>La sede donde va a recibir clases</p>                                
                                 <select name="sede_ppal" id="sede_ppal" class="form-control exit_caution">
                                     <option value="default">Seleccione Sede Principal</option>
                                     {sede_ppal}

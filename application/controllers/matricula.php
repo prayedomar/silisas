@@ -785,6 +785,8 @@ class MAtricula extends CI_Controller {
                 $dni_abreviado_titular = $this->select_model->t_dni_id($matricula->dni_titular)->abreviacion;
                 $response = array(
                     'respuesta' => 'OK',
+                    'matricula' => $id_matricula,
+                    'estado' => $matricula->tipo_estado,
                     'sede' => $matricula->sede_ppal,
                     'titular' => $matricula->titular,
                     'idTitular' => $dni_abreviado_titular . ' ' . $matricula->id_titular,

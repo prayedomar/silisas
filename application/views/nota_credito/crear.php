@@ -230,6 +230,8 @@
     //Validamos el formulario antes de enviarlo por submit
     //Enviar formulario por ajax
     $('#btn_validar').live('click', function() {
+        //desabilitamos el boton de enviar para evitar que lo apreten varias veces y que hagan la peticion al servidor 2 veces, ya me pasó una vez.
+        $('#btn_validar').attr('disabled', 'disabled');        
         $('#matricula').removeAttr("disabled");
         $.ajax({
             type: "POST",
@@ -239,6 +241,7 @@
             success: function(data)
             {
                 if (data != "OK") {
+                    $('#btn_validar').removeAttr("disabled");
                     $('#matricula').attr('disabled', 'disabled');
                     $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
                     $("#div_alert").html(data);
@@ -249,9 +252,10 @@
                 }
             },
             error: function(data) {
+                $('#btn_validar').removeAttr("disabled");
                 $('#matricula').attr('disabled', 'disabled');
                 $("#validacion_alert").html('<div class="alert alert-danger" id="div_alert"></div>');
-                $('#div_alert').html('<p>Hubo un error en la peticion al servidor</p>');
+                $('#div_alert').html('<p><strong>Hubo un error en la peticion al servidor. Verifique su conexion a internet.</strong></p>');
                 $("#div_alert").prepend('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
 
             }

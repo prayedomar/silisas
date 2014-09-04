@@ -134,7 +134,7 @@ class Salario extends CI_Controller {
         $data["tab"] = "consultar_salario";
         $this->isLogin($data["tab"]);        
         $data['tipos_salarios'] = $this->t_salariom->listar_todos_los_salarios();
-        $filasPorPagina = 3;
+        $filasPorPagina = 20;
         if (empty($_GET["page"])) {
             $inicio = 0;
             $paginaActual = 1;

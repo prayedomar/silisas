@@ -27,14 +27,16 @@ class Alumno extends CI_Controller {
     function validar_crear() {
         if ($this->input->is_ajax_request()) {
             $this->escapar($_POST);
+            $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
+            $this->form_validation->set_rules('matriculaV', 'Verifique # de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('dni', 'Tipo de Identificación', 'required|callback_select_default');
             $this->form_validation->set_rules('id', 'Número de Identificación', 'required|trim|min_length[5]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('nombre1', 'Primer Nombre', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('nombre2', 'Segundo Nombre', 'trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido1', 'Primer Apellido', 'required|trim|xss_clean|max_length[30]');
             $this->form_validation->set_rules('apellido2', 'Segundo Apellido', 'trim|xss_clean|max_length[30]');
+            $this->form_validation->set_rules('fecha_nacimiento', 'Fecha de Nacimiento', 'xss_clean|callback_fecha_valida');
             $this->form_validation->set_rules('genero', 'Genero', 'required|callback_select_default');
-            $this->form_validation->set_rules('matricula', 'Número de Matrícula', 'required|trim|min_length[3]|max_length[13]|integer|callback_valor_positivo');
             $this->form_validation->set_rules('sede_ppal', 'Sede Principal', 'required|callback_select_default');
             $this->form_validation->set_rules('observacion', 'Observación', 'trim|xss_clean|max_length[255]');
 
@@ -49,19 +51,23 @@ class Alumno extends CI_Controller {
             }
             //Validamos que la matrícula insertada si exista y tenga disponibilidad de alumnos
             $error_matricula = "";
-            if ($this->input->post('matricula')) {
-                $matricula = $this->select_model->matricula_id($this->input->post('matricula'));
-                if ($matricula != TRUE) {
-                    $error_matricula = "<p>El Número de Matrícula, no existe en la base de datos.</p>";
+            if (($this->input->post('matricula')) && ($this->input->post('matriculaV'))) {
+                if ($this->input->post('matricula') != $this->input->post('matriculaV')) {
+                    $error_matricula = "<p>El número de matrícula y su correspondiente verificación, no coinciden.</p>";
                 } else {
-                    $cant_alumnos_disponibles = $matricula->cant_cupos_enseñanza - $matricula->cant_alumnos_registrados;
-                    if ($cant_alumnos_disponibles <= 0) {
-                        $error_matricula = "<p>Ya se registró la cantidad de alumnos disponibles para la matrícula.</p>";
+                    $matricula = $this->select_model->matricula_id($this->input->post('matricula'));
+                    if ($matricula != TRUE) {
+                        $error_matricula = "<p>El Número de Matrícula, no existe en la base de datos.</p>";
+                    } else {
+                        $cant_alumnos_disponibles = $matricula->cant_cupos_enseñanza - $matricula->cant_alumnos_registrados;
+                        if ($cant_alumnos_disponibles <= 0) {
+                            $error_matricula = "<p>Ya se registró la cantidad de alumnos disponibles para la matrícula.</p>";
+                        }
                     }
                 }
             }
             if (($this->form_validation->run() == FALSE) || ($duplicate_key != "") || ($error_matricula != "")) {
-                echo $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('genero') . form_error('matricula') . $error_matricula . form_error('sede_ppal') . form_error('observacion');
+                echo form_error('matricula') . form_error('matriculaV') . $error_matricula . $duplicate_key . form_error('dni') . form_error('id') . form_error('nombre1') . form_error('nombre2') . form_error('apellido1') . form_error('apellido2') . form_error('fecha_nacimiento') . form_error('genero') . form_error('sede_ppal') . form_error('observacion');
             } else {
                 echo "OK";
             }
@@ -80,7 +86,11 @@ class Alumno extends CI_Controller {
             $nombre2 = ucwords(mb_strtolower($this->input->post('nombre2')));
             $apellido1 = ucwords(mb_strtolower($this->input->post('apellido1')));
             $apellido2 = ucwords(mb_strtolower($this->input->post('apellido2')));
-            $fecha_nacimiento = NULL;
+            if ($this->input->post('fecha_nacimiento') == "") {
+                $fecha_nacimiento = NULL;
+            } else {
+                $fecha_nacimiento = $this->input->post('fecha_nacimiento');
+            }
             $genero = $this->input->post('genero');
             $pais = NULL;
             $provincia = NULL;
@@ -191,7 +201,7 @@ class Alumno extends CI_Controller {
             list($id_alumno, $dni_alumno) = explode("_", $id_dni_alumno);
             $data['id_alumno'] = $id_alumno;
             $data['dni_alumno'] = $dni_alumno;
-        }        
+        }
         $data['id_responsable'] = $this->session->userdata('idResponsable');
         $data['dni_responsable'] = $this->session->userdata('dniResponsable');
         $data['dni'] = $this->select_model->t_dni_alumno();
@@ -271,7 +281,11 @@ class Alumno extends CI_Controller {
             $nombre2 = ucwords(mb_strtolower($this->input->post('nombre2')));
             $apellido1 = ucwords(mb_strtolower($this->input->post('apellido1')));
             $apellido2 = ucwords(mb_strtolower($this->input->post('apellido2')));
-            $fecha_nacimiento = $this->input->post('fecha_nacimiento');
+            if ($this->input->post('fecha_nacimiento') == "") {
+                $fecha_nacimiento = NULL;
+            } else {
+                $fecha_nacimiento = $this->input->post('fecha_nacimiento');
+            }
             $genero = $this->input->post('genero');
             $pais = $this->input->post('pais');
             $provincia = $this->input->post('provincia');
@@ -282,8 +296,16 @@ class Alumno extends CI_Controller {
             $telefono = mb_strtolower($this->input->post('telefono'));
             $celular = $this->input->post('celular');
             $email = mb_strtolower($this->input->post('email'));
-            $velocidad_ini = str_replace(",", "", $this->input->post('velocidad_ini')); //No siempre es necesario redondear.
-            $comprension_ini = round(str_replace(",", "", $this->input->post('comprension_ini')), 2); //Redondeamos cuando es decimal lo que viene
+            if ($this->input->post('velocidad_ini') == "") {
+                $velocidad_ini = NULL;
+            } else {
+                $velocidad_ini = str_replace(",", "", $this->input->post('velocidad_ini')); //No siempre es necesario redondear.
+            }
+            if ($this->input->post('comprension_ini') == "") {
+                $comprension_ini = NULL;
+            } else {
+                $comprension_ini = round(str_replace(",", "", $this->input->post('comprension_ini')), 2); //Redondeamos cuando es decimal lo que viene
+            }
             $t_curso = $this->input->post('t_curso');
             $cant_clases = $this->input->post('cant_clases');
             $est_alumno = $this->input->post('est_alumno');
@@ -299,7 +321,7 @@ class Alumno extends CI_Controller {
             $data["tab"] = "editar_alumno";
             $this->isLogin($data["tab"]);
             $this->load->view("header", $data);
-            $data['url_recrear'] = base_url() . "alumno/actualizar";
+            $data['url_recrear'] = base_url() . "alumno/actualizar/new";
             $data['msn_recrear'] = "Actualizar otro Alumno";
 
             $error1 = $this->update_model->usuario_info($id_old, $dni_old, $id_new, $dni_new, $t_usuario, $genero, $nombres, $email);
